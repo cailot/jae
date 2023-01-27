@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="base.definition"
+		template="/WEB-INF/layouts/classic.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="header"
+			value="/WEB-INF/layouts/tiles/header.jsp" />
+		<put-attribute name="menu"
+			value="/WEB-INF/layouts/tiles/menu.jsp" />
+		<put-attribute name="body" value="" />
+	</definition>
+
+	<definition name="testPage" extends="base.definition">
+		<put-attribute name="title" value="Test Page" />
+		<put-attribute name="body"
+			value="/WEB-INF/layouts/test.jsp" />
+	</definition>
+	
+	<definition name="loginPage" extends="base.definition">
+		<put-attribute name="title" value="Login Page" />
+		<put-attribute name="body"
+			value="/WEB-INF/layouts/login.jsp" />
+	</definition>
+
+	<definition name="summaryPage" extends="base.definition">
+		<put-attribute name="title" value="Summary Page" />
+		<put-attribute name="body"
+			value="/WEB-INF/layouts/summary.jsp" />
+	</definition>
+	
+	<definition name="dashboardPage" extends="base.definition">
+		<put-attribute name="title" value="Successful Upload Document Page" />
+		<put-attribute name="body"
+			value="/WEB-INF/layouts/dashboard.jsp" />
+	</definition>
+	
+	<definition name="detailPage" extends="base.definition">
+		<put-attribute name="title" value="Exception Detail Page" />
+		<put-attribute name="body"
+			value="/WEB-INF/layouts/detail.jsp" />
+	</definition>
+	
+	<definition name="auditPage" extends="base.definition">
+		<put-attribute name="title" value="Audit Transaction Page" />
+		<put-attribute name="body"
+			value="/WEB-INF/layouts/audit.jsp" />
+	</definition>
+	
+	<definition name="userPage" extends="base.definition">
+		<put-attribute name="title" value="User Setting Page" />
+		<put-attribute name="body"
+			value="/WEB-INF/layouts/user.jsp" />
+	</definition>
+	
+	<definition name="documentPage" extends="base.definition">
+		<put-attribute name="title" value="Document Page" />
+		<put-attribute name="body"
+			value="/WEB-INF/layouts/document.jsp" />
+	</definition>
+	
+</tiles-definitions>
