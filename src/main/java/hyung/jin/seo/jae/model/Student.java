@@ -8,21 +8,30 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
+
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name="Student")
 public class Student implements Serializable{
     
-    private long id;
-    private String firstName;
-    private String lastName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     
-    public Student(Long id, String first, String last){
-        this.id = id;
-        this.firstName = first;
-        this.lastName = last;
-    }
+    @Column(length = 200, nullable = false)
+    private String firstName;
+    
+    @Column(length = 200, nullable = false)
+    private String lastName;
     
 }
