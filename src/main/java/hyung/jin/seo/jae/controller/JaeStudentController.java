@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hyung.jin.seo.jae.model.Student;
+import hyung.jin.seo.jae.repository.StudentRepository;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -25,62 +26,53 @@ import java.util.ArrayList;
 @RestController
 public class JaeStudentController {
 
-	//@Autowired
-	//private AuxiliaryInformationService auxiliaryInformationService;
+	@Autowired
+	private StudentRepository studentRepository;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(JaeStudentController.class);
 	
-	//private ObjectMapper mapper = new ObjectMapper();
-
-    private List<Student> students = new ArrayList<Student>();
-    
 	@GetMapping("/students")
 	List<Student> allStudents() {
-        //List<Student> list = new ArrayList<Student>();
-        // students.add(new Student(1, "Jin", "Seo"));
-        // list.add(new Student(2, "Alex", "Kim"));
-        // list.add(new Student(3, "Diniel", "Lee"));
+        List<Student> students = studentRepository.findAll();
+        /*
+        students.forEach((student) -> {
+            System.out.println(student);
+        });
+        */
         return students;
 	}
 	
     @GetMapping("/student/{id}")
 	Student getStudent(@PathVariable Long id) {
-		return new Student(id, "Andrew", "Bogards");
+		Student std = studentRepository.findById(id).get();
+        //System.out.println(std);
+        return std;
 	}
 	
     @PostMapping("/student")
-	Student addStudent(@RequestBody Student std) {
-		students.add(std);
-        return std;
+	void addStudent(@RequestBody Student std) {
+        Student saved = studentRepository.save(std);
+        //System.out.println(saved);
 	}
     
     
     @PutMapping("/student/{id}")
-	Student updateStudent(@RequestBody Student newStudent, @PathVariable Long id) {
-		if(students!=null){
-            for(Student st : students){
-                if(st.getId()==id){
-                    st.setFirstName(newStudent.getFirstName());
-                    st.setLastName(newStudent.getLastName());
-                    break;
-                    //return newStudent;
-                }
-            }
-            return newStudent;
-        }else{
-            return null;
-        }
-	}
+	void updateStudent(@RequestBody Student newStudent, @PathVariable Long id) {
+		// search by getId
+        Student existing = studentRepository.findById(id).get();
+        // Update info
+        existing.setFirstName(newStudent.getFirstName());
+        // update the existing record
+        Student updated = studentRepository.save(existing);
+        //System.out.println(updated);
+     }
     
     @DeleteMapping("/student/{id}")
 	void deleteStudent(@PathVariable Long id) {
-		if(students!=null){
-           for(Student st : students){
-               if(st.getId()==id){
-                   students.remove(st);
-                   break;
-               }
-           } 
+        try{
+		    studentRepository.deleteById(id);
+        }catch(org.springframework.dao.EmptyResultDataAccessException e){
+            System.out.println("Nothing to delete");
         }
 	}
     

@@ -2,6 +2,9 @@ package hyung.jin.seo.jae.model;
 
 import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -25,7 +29,7 @@ import javax.persistence.Column;
 public class Student implements Serializable{
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
     @Column(length = 200, nullable = false)
@@ -33,5 +37,11 @@ public class Student implements Serializable{
     
     @Column(length = 200, nullable = false)
     private String lastName;
+    
+    @CreationTimestamp
+    private LocalDateTime dateCreated;
+    
+    @UpdateTimestamp
+    private LocalDateTime dateUpdated;
     
 }
