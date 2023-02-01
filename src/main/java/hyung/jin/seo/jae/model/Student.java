@@ -30,18 +30,18 @@ public class Student implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
-    private Long id;
+    public Long id;
     
     @Column(length = 200, nullable = false)
-    private String firstName;
+    public String firstName;
     
     @Column(length = 200, nullable = false)
-    private String lastName;
+    public String lastName;
     
     @CreationTimestamp
-    private LocalDateTime dateCreated;
+    public LocalDateTime dateCreated;
     
     @UpdateTimestamp
-    private LocalDateTime dateUpdated;
+    public LocalDateTime dateUpdated;
     
 }

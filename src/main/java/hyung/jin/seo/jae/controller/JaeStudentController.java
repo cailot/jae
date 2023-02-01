@@ -55,6 +55,12 @@ public class JaeStudentController {
         //System.out.println(saved);
 	}
     
+    @GetMapping("/count")
+	long checkCount() {
+        long count = studentRepository.count();
+        return count;
+	}
+    
     
     @PutMapping("/student/{id}")
 	void updateStudent(@RequestBody Student newStudent, @PathVariable Long id) {
