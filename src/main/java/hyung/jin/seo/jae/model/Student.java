@@ -39,45 +39,45 @@ public class Student implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
-    public Long id;
+    private Long id;
     
     @Column(length = 200, nullable = false)
-    public String firstName;
+    private String firstName;
     
     @Column(length = 200, nullable = false)
-    public String lastName;
+    private String lastName;
     
     @Column(length = 10, nullable = false)
-    public String grade;
+    private String grade;
     
     @Column(length = 200, nullable = false)
-    public String contactNo1;
+    private String contactNo1;
     
     @Column(length = 200, nullable = false)
-    public String contactNo2;
+    private String contactNo2;
     
     @Column(length = 300, nullable = false)
-    public String email;
+    private String email;
     
     @Column(length = 500, nullable = false)
-    public String address;
+    private String address;
     
     @Column(length = 3, nullable = false)
-    public String state;
+    private String state;
     
     @Column(length = 50, nullable = false)
-    public String branch;
+    private String branch;
     
     @Column(length = 1000, nullable = false)
-    public String memo;
+    private String memo;
     
     @CreationTimestamp
-    public LocalDate registerDate;
+    private LocalDate registerDate;
     
     @UpdateTimestamp
-    public LocalDate enrolmentDate;
+    private LocalDate enrolmentDate;
     
     @CreatedDate
-    public LocalDate endDate;
+    private LocalDate endDate;
     
 }
