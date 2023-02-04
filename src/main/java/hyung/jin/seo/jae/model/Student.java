@@ -161,25 +161,25 @@ public class Student implements Serializable{
     @Column(length = 10, nullable = false)
     private String grade;
     
-    @Column(length = 200, nullable = false)
+    @Column(length = 200, nullable = true)
     private String contactNo1;
     
-    @Column(length = 200, nullable = false)
+    @Column(length = 200, nullable = true)
     private String contactNo2;
     
-    @Column(length = 300, nullable = false)
+    @Column(length = 300, nullable = true)
     private String email;
     
-    @Column(length = 500, nullable = false)
+    @Column(length = 500, nullable = true)
     private String address;
     
-    @Column(length = 3, nullable = false)
+    @Column(length = 3, nullable = true)
     private String state;
     
-    @Column(length = 50, nullable = false)
+    @Column(length = 50, nullable = true)
     private String branch;
     
-    @Column(length = 1000, nullable = false)
+    @Column(length = 1000, nullable = true)
     private String memo;
     
     @CreationTimestamp

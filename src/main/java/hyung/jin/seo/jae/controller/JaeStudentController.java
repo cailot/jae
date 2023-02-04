@@ -26,19 +26,21 @@ import java.util.ArrayList;
 @RestController
 public class JaeStudentController {
 
+	
 	@Autowired
 	private StudentRepository studentRepository;
+	
 	
 	private static final Logger LOG = LoggerFactory.getLogger(JaeStudentController.class);
 	
 	@GetMapping("/students")
 	List<Student> allStudents() {
         List<Student> students = studentRepository.findAll();
-        /*
-        students.forEach((student) -> {
-            System.out.println(student);
-        });
-        */
+       
+//        students.forEach((student) -> {
+//            System.out.println(student);
+//        });
+       
         return students;
 	}
 	
