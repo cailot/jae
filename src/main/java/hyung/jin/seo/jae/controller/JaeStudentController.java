@@ -1,5 +1,6 @@
 package hyung.jin.seo.jae.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,69 +20,60 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.StudentRepository;
+import hyung.jin.seo.jae.service.StudentService;
+
 import java.util.List;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 @RestController
 public class JaeStudentController {
 
-	
 	@Autowired
-	private StudentRepository studentRepository;
-	
+	private StudentService studentService;
 	
 	private static final Logger LOG = LoggerFactory.getLogger(JaeStudentController.class);
 	
 	@GetMapping("/students")
 	List<Student> allStudents() {
-        List<Student> students = studentRepository.findAll();
-       
-//        students.forEach((student) -> {
-//            System.out.println(student);
-//        });
-       
+        List<Student> students = studentService.allStudents();
         return students;
 	}
 	
     @GetMapping("/student/{id}")
 	Student getStudent(@PathVariable Long id) {
-		Student std = studentRepository.findById(id).get();
-        //System.out.println(std);
+		Student std = studentService.getStudent(id);
         return std;
 	}
 	
     @PostMapping("/student")
 	void addStudent(@RequestBody Student std) {
-        Student saved = studentRepository.save(std);
-        //System.out.println(saved);
+        studentService.addStudent(std);
 	}
     
     @GetMapping("/count")
 	long checkCount() {
-        long count = studentRepository.count();
+        long count = studentService.checkCount();
         return count;
 	}
     
     
     @PutMapping("/student/{id}")
-	void updateStudent(@RequestBody Student newStudent, @PathVariable Long id) {
-		// search by getId
-        Student existing = studentRepository.findById(id).get();
-        // Update info
-        existing.setFirstName(newStudent.getFirstName());
-        // update the existing record
-        Student updated = studentRepository.save(existing);
-        //System.out.println(updated);
-     }
+	Student updateStudent(@RequestBody Student newStudent, @PathVariable Long id) {
+    	Student updated = studentService.updateStudent(newStudent, id);
+    	return updated;
+    }
+    
+    @PutMapping("/student/discharge/{id}")
+	void dischargeStudent(@PathVariable Long id) {
+    	studentService.dischargeStudent(id);
+    }
     
     @DeleteMapping("/student/{id}")
 	void deleteStudent(@PathVariable Long id) {
-        try{
-		    studentRepository.deleteById(id);
-        }catch(org.springframework.dao.EmptyResultDataAccessException e){
-            System.out.println("Nothing to delete");
-        }
+		studentService.deleteStudent(id);
 	}
     
     

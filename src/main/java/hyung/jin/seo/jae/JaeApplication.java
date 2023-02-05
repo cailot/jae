@@ -17,8 +17,8 @@ import org.springframework.boot.CommandLineRunner;
 public class JaeApplication extends SpringBootServletInitializer implements CommandLineRunner{
 
     
-	@Autowired
-	StudentRepository studentRepository;
+	//@Autowired
+	//StudentRepository studentRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(JaeApplication.class, args);
@@ -31,7 +31,8 @@ public class JaeApplication extends SpringBootServletInitializer implements Comm
     
     @Override
     public void run(String... args) throws Exception{
-        System.out.println("TEST");
+        /*
+    	System.out.println("TEST");
         Student std = new Student();
         std.setFirstName("Sammy");
         std.setLastName("Sosa");
@@ -44,6 +45,7 @@ public class JaeApplication extends SpringBootServletInitializer implements Comm
         std.setAddress("Balwn");
         std.setBranch("box");
         studentRepository.save(std);
+        */
     }
 	
 }
