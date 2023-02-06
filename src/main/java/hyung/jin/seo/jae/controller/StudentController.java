@@ -29,12 +29,12 @@ import java.util.Date;
 
 
 @RestController
-public class JaeStudentController {
+public class StudentController {
 
 	@Autowired
 	private StudentService studentService;
 	
-	private static final Logger LOG = LoggerFactory.getLogger(JaeStudentController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StudentController.class);
 	
 	@GetMapping("/students")
 	List<Student> allStudents() {
@@ -53,7 +53,7 @@ public class JaeStudentController {
         studentService.addStudent(std);
 	}
     
-    @GetMapping("/count")
+    @GetMapping("/student/count")
 	long checkCount() {
         long count = studentService.checkCount();
         return count;
