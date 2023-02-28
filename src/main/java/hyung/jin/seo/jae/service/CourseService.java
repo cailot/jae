@@ -6,7 +6,6 @@ import hyung.jin.seo.jae.model.Course;
 import hyung.jin.seo.jae.model.Student;
 
 public interface CourseService {
-
 	List<Course> allCourses();
 	
 	public Course getCourse(Long id);

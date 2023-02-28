@@ -8,13 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hyung.jin.seo.jae.model.Course;
-import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.CourseRepository;
-import hyung.jin.seo.jae.repository.StudentRepository;
 
 @Service
 public class CourseServiceImpl implements CourseService {
-
 	@Autowired
 	private CourseRepository courseRepository;
 
@@ -79,5 +76,4 @@ public class CourseServiceImpl implements CourseService {
             System.out.println("Nothing to delete");
         }
 	}
-
 }
