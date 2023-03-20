@@ -6,11 +6,21 @@ import hyung.jin.seo.jae.model.Student;
 
 public interface StudentService {
 
+	// bring all students
 	List<Student> allStudents();
 	
-	public Student getStudent(Long id);
+	// bring active students
+	List<Student> currentStudents();
 	
-    void addStudent(Student std);
+	// bring inactive students
+	List<Student> stoppedStudents();
+	
+	
+	List<Student> listStudents(String state, String branch, String grade, String year, String active);
+	
+	Student getStudent(Long id);
+	
+    Student addStudent(Student std);
     
  	long checkCount();
     

@@ -6,7 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -179,7 +179,7 @@ public class Student implements Serializable{
     @Column(length = 500, nullable = true)
     private String address;
     
-    @Column(length = 3, nullable = true)
+    @Column(length = 30, nullable = true)
     private String state;
     
     @Column(length = 50, nullable = true)
@@ -191,11 +191,13 @@ public class Student implements Serializable{
     @CreationTimestamp
     private LocalDate registerDate;
     
-    @UpdateTimestamp
+    //@UpdateTimestamp
+    @DateTimeFormat
     private LocalDate enrolmentDate;
     
     @CreatedDate
     private LocalDate endDate;
+
     
     @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
     @JoinTable(name="Student_Course",

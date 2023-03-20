@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -37,8 +38,9 @@ public class StudentController {
 	private static final Logger LOG = LoggerFactory.getLogger(StudentController.class);
 	
 	@GetMapping("/students")
-	List<Student> allStudents() {
-        List<Student> students = studentService.allStudents();
+	List<Student> allStudents(@RequestParam("state") String state, @RequestParam("branch") String branch, @RequestParam("grade") String grade, @RequestParam("year") String year, @RequestParam("active") String active) {
+        System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
+		List<Student> students = studentService.listStudents(state, branch, grade, year, active);
         return students;
 	}
 	
@@ -49,8 +51,9 @@ public class StudentController {
 	}
 	
     @PostMapping("/student")
-	void addStudent(@RequestBody Student std) {
-        studentService.addStudent(std);
+	Student addStudent(@RequestBody Student std) {
+        Student add = studentService.addStudent(std);
+        return add;
 	}
     
     @GetMapping("/student/count")

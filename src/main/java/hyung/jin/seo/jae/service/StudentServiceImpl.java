@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.StudentRepository;
+import hyung.jin.seo.jae.specification.StudentSpecification;
+import hyung.jin.seo.utils.JaeConstants;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -21,95 +24,154 @@ public class StudentServiceImpl implements StudentService {
 		List<Student> students = studentRepository.findAll();
 		return students;
 	}
+	
+	@Override
+	public List<Student> currentStudents() {
+		List<Student> students = studentRepository.findAllByEndDateIsNull();
+		return students;
+	}
+
+	@Override
+	public List<Student> stoppedStudents() {
+		List<Student> students = studentRepository.findAllByEndDateIsNotNull();
+		return students;
+	}
+
+
+
+	@Override
+	public List<Student> listStudents(String state, String branch, String grade, String year, String active) {
+		List<Student> students = null;// studentRepository.findAll();
+
+		Specification<Student> spec = Specification.where(null);
+		
+		if((StringUtils.isNotBlank(state))&&(!StringUtils.equals(state, JaeConstants.ALL))) {
+			spec = spec.and(StudentSpecification.stateEquals(state));
+		}
+		if(StringUtils.isNotBlank(branch)&&(!StringUtils.equals(branch, JaeConstants.ALL))) {
+			spec = spec.and(StudentSpecification.branchEquals(branch));
+		}
+		if(StringUtils.isNotBlank(grade)&&(!StringUtils.equals(grade, JaeConstants.ALL))) {
+			spec = spec.and(StudentSpecification.gradeEquals(grade));
+		}
+		if(StringUtils.isNotBlank(year)) {
+			spec = spec.and(StudentSpecification.yearRange(year));
+		}
+		
+		switch (active) {
+
+		case JaeConstants.CURRENT_STUDENT:
+			
+			spec = spec.and(StudentSpecification.hasNullVaule("endDate"));
+			students = studentRepository.findAll(spec);
+
+			break;
+
+		case JaeConstants.STOPPED_STUDENT:
+			spec = spec.and(StudentSpecification.hasNotNullVaule("endDate"));
+			students = studentRepository.findAll(spec);
+			break;
+
+		case JaeConstants.ALL:
+			students = studentRepository.findAll(spec);
+
+		}
+		return students;
+	}
 
 	@Override
 	public Student getStudent(Long id) {
-		Student std = studentRepository.findById(id).get();
+		Student std = studentRepository.findByIdAndEndDateIsNull(id);// .get();
 		return std;
 	}
 
 	@Override
-	public void addStudent(Student std) {
-		studentRepository.save(std);
+	public Student addStudent(Student std) {
+		Student add = studentRepository.save(std);
+		return add;
 	}
 
 	@Override
 	public long checkCount() {
-		long count = studentRepository.count();
+		long count = studentRepository.countByEndDateIsNull();
 		return count;
 	}
 
 	@Override
 	public Student updateStudent(Student newStudent, Long id) {
 		// search by getId
-        Student existing = studentRepository.findById(id).get();
-        // Update info
-        String newFirstName = StringUtils.defaultString(newStudent.getFirstName());
-        if(StringUtils.isNotBlank(newFirstName)){
-        	existing.setFirstName(newFirstName);
-        }
-        String newLastName = StringUtils.defaultString(newStudent.getLastName());
-        if(StringUtils.isNotBlank(newLastName)){
-        	existing.setLastName(newLastName);
-        }
-        String newGrade = StringUtils.defaultString(newStudent.getGrade());
-        if(StringUtils.isNotBlank(newGrade)){
-        	existing.setGrade(newGrade);
-        }
-        String newContactNo1 = StringUtils.defaultString(newStudent.getContactNo1());
-        if(StringUtils.isNotBlank(newContactNo1)){
-        	existing.setContactNo1(newContactNo1);
-        }
-        String newContactNo2 = StringUtils.defaultString(newStudent.getContactNo2());
-        if(StringUtils.isNotBlank(newContactNo2)){
-        	existing.setContactNo2(newContactNo2);
-        }
-        String newEmail = StringUtils.defaultString(newStudent.getEmail());
-        if(StringUtils.isNotBlank(newEmail)){
-        	existing.setEmail(newEmail);
-        }
-        String newAddress = StringUtils.defaultString(newStudent.getAddress());
-        if(StringUtils.isNotBlank(newAddress)){
-        	existing.setAddress(newAddress);
-        }
-        String newState = StringUtils.defaultString(newStudent.getState());
-        if(StringUtils.isNotBlank(newState)){
-        	existing.setState(newState);
-        }
-        String newBranch = StringUtils.defaultString(newStudent.getBranch());
-        if(StringUtils.isNotBlank(newBranch)){
-        	existing.setBranch(newBranch);
-        }
-        String newMemo = StringUtils.defaultString(newStudent.getMemo());
-        if(StringUtils.isNotBlank(newMemo)){
-        	existing.setMemo(newMemo);
-        }
-        
-        // update the existing record
-        Student updated = studentRepository.save(existing);
-        return updated;
+		Student existing = studentRepository.findById(id).get();
+		// Update info
+		String newFirstName = StringUtils.defaultString(newStudent.getFirstName());
+		if (StringUtils.isNotBlank(newFirstName)) {
+			existing.setFirstName(newFirstName);
+		}
+		String newLastName = StringUtils.defaultString(newStudent.getLastName());
+		if (StringUtils.isNotBlank(newLastName)) {
+			existing.setLastName(newLastName);
+		}
+		String newGrade = StringUtils.defaultString(newStudent.getGrade());
+		if (StringUtils.isNotBlank(newGrade)) {
+			existing.setGrade(newGrade);
+		}
+		String newContactNo1 = StringUtils.defaultString(newStudent.getContactNo1());
+		if (StringUtils.isNotBlank(newContactNo1)) {
+			existing.setContactNo1(newContactNo1);
+		}
+		String newContactNo2 = StringUtils.defaultString(newStudent.getContactNo2());
+		if (StringUtils.isNotBlank(newContactNo2)) {
+			existing.setContactNo2(newContactNo2);
+		}
+		String newEmail = StringUtils.defaultString(newStudent.getEmail());
+		if (StringUtils.isNotBlank(newEmail)) {
+			existing.setEmail(newEmail);
+		}
+		String newAddress = StringUtils.defaultString(newStudent.getAddress());
+		if (StringUtils.isNotBlank(newAddress)) {
+			existing.setAddress(newAddress);
+		}
+		String newState = StringUtils.defaultString(newStudent.getState());
+		if (StringUtils.isNotBlank(newState)) {
+			existing.setState(newState);
+		}
+		String newBranch = StringUtils.defaultString(newStudent.getBranch());
+		if (StringUtils.isNotBlank(newBranch)) {
+			existing.setBranch(newBranch);
+		}
+		String newMemo = StringUtils.defaultString(newStudent.getMemo());
+		if (StringUtils.isNotBlank(newMemo)) {
+			existing.setMemo(newMemo);
+		}
+		if (newStudent.getEnrolmentDate() != null) {
+			LocalDate newEnrolDate = newStudent.getEnrolmentDate();
+			existing.setEnrolmentDate(newEnrolDate);
+		}
+
+		// update the existing record
+		Student updated = studentRepository.save(existing);
+		return updated;
 	}
 
 	@Override
 	public void dischargeStudent(Long id) {
-		try{
-		    //studentRepository.deleteById(id);
-        	Student end = studentRepository.findById(id).get();
-        	end.setEndDate(LocalDate.now());
-        	studentRepository.save(end);
-        }catch(org.springframework.dao.EmptyResultDataAccessException e){
-            System.out.println("Nothing to delete");
-        }
+		try {
+			// studentRepository.deleteById(id);
+			Student end = studentRepository.findByIdAndEndDateIsNull(id);
+			end.setEndDate(LocalDate.now());
+			studentRepository.save(end);
+		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
+			System.out.println("Nothing to discharge");
+		}
 	}
 
 	@Override
 	public void deleteStudent(Long id) {
-		try{
-		    studentRepository.deleteById(id);
-        }catch(org.springframework.dao.EmptyResultDataAccessException e){
-            System.out.println("Nothing to delete");
-        }
-		
+		try {
+			studentRepository.deleteById(id);
+		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
+			System.out.println("Nothing to delete");
+		}
+
 	}
 
 }

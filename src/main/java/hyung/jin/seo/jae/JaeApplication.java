@@ -14,12 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 
 @SpringBootApplication
-//@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 public class JaeApplication extends SpringBootServletInitializer implements CommandLineRunner{
 
     
-	//@Autowired
-	//StudentRepository studentRepository;
+	@Autowired
+	StudentRepository studentRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(JaeApplication.class, args);
@@ -47,6 +46,7 @@ public class JaeApplication extends SpringBootServletInitializer implements Comm
         std.setBranch("box");
         studentRepository.save(std);
         */
+        
     }
 	
 }
