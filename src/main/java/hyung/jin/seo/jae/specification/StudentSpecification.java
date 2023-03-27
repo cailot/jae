@@ -14,6 +14,12 @@ import hyung.jin.seo.jae.model.Student;
 
 public interface StudentSpecification {
 	
+	
+	// Id
+	static Specification<Student> idEquals(String keyword){
+		return (root, query, cb) -> cb.equal(root.get("id"), Integer.parseInt(keyword));
+	}
+		
 	// first name
 	static Specification<Student> firstNameContains(String keyword){
 		return (root, query, cb) -> cb.like(root.get("firstName"), "%" + keyword + "%");
@@ -24,6 +30,19 @@ public interface StudentSpecification {
 		return (root, query, cb) -> cb.like(root.get("lastName"), "%" + keyword + "%");
 	}
 
+	// name
+	static Specification<Student> nameContains(String keyword) {
+	    return (root, query, builder) -> {
+	        String keywordLike = "%" + keyword + "%";
+	        return builder.or(
+	                builder.like(root.get("firstName"), keywordLike),
+	                builder.like(root.get("lastName"), keywordLike)
+	        );
+	    };
+	}
+
+	
+	
 	// state
 	static Specification<Student> stateEquals(String keyword){
 		return (root, query, cb) -> cb.equal(root.get("state"), keyword);

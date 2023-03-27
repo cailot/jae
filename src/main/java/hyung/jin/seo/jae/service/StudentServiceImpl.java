@@ -78,6 +78,22 @@ public class StudentServiceImpl implements StudentService {
 		}
 		return students;
 	}
+	
+	@Override
+	public List<Student> searchStudents(String keyword) {
+		List<Student> students = null;
+		Specification<Student> spec = Specification.where(null);
+		
+		if(StringUtils.isNumericSpace(keyword)) {
+			spec = spec.and(StudentSpecification.idEquals(keyword));
+		}else {
+			// firstName or lastName search
+			spec = spec.and(StudentSpecification.nameContains(keyword));
+		}
+		spec = spec.and(StudentSpecification.hasNullVaule("endDate")); // among current students
+		students = studentRepository.findAll(spec);
+		return students;
+	}
 
 	@Override
 	public Student getStudent(Long id) {
@@ -173,5 +189,7 @@ public class StudentServiceImpl implements StudentService {
 		}
 
 	}
+
+	
 
 }

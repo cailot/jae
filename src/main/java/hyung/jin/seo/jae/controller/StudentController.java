@@ -49,7 +49,15 @@ public class StudentController {
 		Student std = studentService.getStudent(id);
         return std;
 	}
-	
+    
+    @GetMapping("/student")
+    List<Student> searchStudents(@RequestParam("keyword") String keyword) {
+        System.out.println(keyword);
+		List<Student> students = studentService.searchStudents(keyword);
+        return students;
+	}
+    
+    
     @PostMapping("/student")
 	Student addStudent(@RequestBody Student std) {
         Student add = studentService.addStudent(std);
