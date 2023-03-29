@@ -1,4 +1,4 @@
-package hyung.jin.seo.jae.controller;
+package hyung.jin.seo.jae.controller.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

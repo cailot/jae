@@ -1,0 +1,226 @@
+package hyung.jin.seo.jae.model;
+
+import java.io.Serializable;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+
+public class StudentDTO implements Serializable{
+    
+    private String id;
+    
+    private String firstName;
+    
+    private String lastName;
+    
+    private String grade;
+    
+    private String contactNo1;
+    
+    private String contactNo2;
+    
+    private String email;
+    
+    private String address;
+    
+    private String state;
+    
+    private String branch;
+    
+    private String memo;
+    
+    private String registerDate;
+    
+    private String enrolmentDate;
+    
+    private String endDate;
+    
+    public StudentDTO() {}
+
+    public StudentDTO(Student std) {
+    	this.id = std.getId().toString();
+        this.firstName = std.getFirstName();
+        this.lastName = std.getLastName();
+        this.grade = std.getGrade();
+        this.contactNo1 = std.getContactNo1();
+        this.contactNo2 = std.getContactNo2();
+        this.email = std.getEmail();
+        this.address = std.getAddress();
+        this.state = std.getState();
+        this.branch = std.getBranch();
+        this.memo = std.getMemo();
+        this.registerDate = std.getRegisterDate().toString();
+        this.enrolmentDate = std.getEnrolmentDate().toString();
+        this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
+        //this.endDate = std.getEndDate().toString();
+    }
+    
+    public Student convertToStudent() {
+    	Student std = new Student();
+    	std.setId(Long.parseLong(this.id));
+    	std.setFirstName(this.firstName);
+    	std.setLastName(this.lastName);
+    	std.setGrade(this.grade);
+    	std.setContactNo1(this.contactNo1);
+    	std.setContactNo2(this.contactNo2);
+    	std.setEmail(this.email);
+    	std.setAddress(this.address);
+    	std.setState(this.state);
+    	std.setBranch(this.branch);
+    	std.setMemo(this.memo);
+    	std.setRegisterDate(LocalDate.parse(registerDate));
+    	std.setEnrolmentDate(LocalDate.parse(enrolmentDate));
+    	std.setEndDate(LocalDate.parse(endDate));
+    	return std;
+    }
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getGrade() {
+		return grade;
+	}
+
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+
+	public String getContactNo1() {
+		return contactNo1;
+	}
+
+	public void setContactNo1(String contactNo1) {
+		this.contactNo1 = contactNo1;
+	}
+
+	public String getContactNo2() {
+		return contactNo2;
+	}
+
+	public void setContactNo2(String contactNo2) {
+		this.contactNo2 = contactNo2;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+
+	public String getMemo() {
+		return memo;
+	}
+
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
+
+	public String getRegisterDate() {
+		return registerDate;
+	}
+
+	public void setRegisterDate(String registerDate) {
+		this.registerDate = registerDate;
+	}
+
+	public String getEnrolmentDate() {
+		return enrolmentDate;
+	}
+
+	public void setEnrolmentDate(String enrolmentDate) {
+		this.enrolmentDate = enrolmentDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
+	@Override
+	public String toString() {
+		return "StudentDTO [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", grade=" + grade
+				+ ", contactNo1=" + contactNo1 + ", contactNo2=" + contactNo2 + ", email=" + email + ", address="
+				+ address + ", state=" + state + ", branch=" + branch + ", memo=" + memo + ", registerDate="
+				+ registerDate + ", enrolmentDate=" + enrolmentDate + ", endDate=" + endDate + "]";
+	}
+        
+}
