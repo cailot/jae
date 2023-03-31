@@ -67,21 +67,20 @@ public class StudentDTO implements Serializable{
     public StudentDTO() {}
 
     public StudentDTO(Student std) {
-    	this.id = std.getId().toString();
-        this.firstName = std.getFirstName();
-        this.lastName = std.getLastName();
-        this.grade = std.getGrade();
-        this.contactNo1 = std.getContactNo1();
-        this.contactNo2 = std.getContactNo2();
-        this.email = std.getEmail();
-        this.address = std.getAddress();
-        this.state = std.getState();
-        this.branch = std.getBranch();
-        this.memo = std.getMemo();
-        this.registerDate = std.getRegisterDate().toString();
-        this.enrolmentDate = std.getEnrolmentDate().toString();
+    	this.id = (std.getId()!=null) ? std.getId().toString() : "";
+        this.firstName = (std.getFirstName()!=null) ? std.getFirstName() : "";
+        this.lastName = (std.getLastName()!=null) ? std.getLastName() : "";
+        this.grade = (std.getGrade()!=null) ? std.getGrade() : "";
+        this.contactNo1 = (std.getContactNo1()!=null) ? std.getContactNo1() : "";
+        this.contactNo2 = (std.getContactNo2()!=null) ? std.getContactNo2() : "";
+        this.email = (std.getEmail()!=null) ? std.getEmail() : "";
+        this.address = (std.getAddress()!=null) ? std.getAddress() : "";
+        this.state = (std.getState()!=null) ? std.getState() : "";
+        this.branch = (std.getBranch()!=null) ? std.getBranch() : "";
+        this.memo = (std.getMemo()!=null) ? std.getMemo() : "";
+        this.registerDate = (std.getRegisterDate()!=null) ? std.getRegisterDate().toString() : "";
+        this.enrolmentDate = (std.getEnrolmentDate()!=null) ? std.getEnrolmentDate().toString() : "";
         this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
-        //this.endDate = std.getEndDate().toString();
     }
     
     public Student convertToStudent() {
