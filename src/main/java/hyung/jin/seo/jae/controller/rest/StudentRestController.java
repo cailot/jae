@@ -30,12 +30,12 @@ import java.util.Date;
 
 
 @RestController
-public class StudentController {
+public class StudentRestController {
 
 	@Autowired
 	private StudentService studentService;
 	
-	private static final Logger LOG = LoggerFactory.getLogger(StudentController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(StudentRestController.class);
 	
 	@GetMapping("/students")
 	List<Student> allStudents(@RequestParam("state") String state, @RequestParam("branch") String branch, @RequestParam("grade") String grade, @RequestParam("year") String year, @RequestParam("active") String active) {

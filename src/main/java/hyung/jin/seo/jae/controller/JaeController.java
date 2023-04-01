@@ -1,6 +1,8 @@
 package hyung.jin.seo.jae.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
@@ -22,6 +25,7 @@ import hyung.jin.seo.jae.model.StudentDTO;
 import hyung.jin.seo.jae.service.StudentService;
 
 @Controller
+@RequestMapping("student")
 public class JaeController {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(JaeController.class);
@@ -40,30 +44,26 @@ public class JaeController {
 		return "testPage";
 	}
 	
+	// register new student
 	@PostMapping("/register")
 	@ResponseBody
-	public StudentDTO registerStudent(@RequestBody String formData) {
-		String detail = "[From Server] : " + formData;
-		//System.out.println(detail);
-		Student std = studentService.getStudent(1L);
-		
-//		StudentDTO dto = new StudentDTO();
-//		dto.setId("1");
-//		dto.setFirstName("Jin");
-//		dto.setLastName("Seo");
-//		dto.setAddress("38 Belmore Rd, Balwyn");
-//		dto.setBranch("boxhill");
-//		dto.setContactNo1("0433 195 038");
-//		dto.setContactNo2("0433 195 056");
-//		dto.setEmail("jinhyung.seo@gmail.com");
-//		dto.setEnrolmentDate("11/03/2023");
-//		dto.setGrade("s7");
-//		dto.setMemo("This is long long memo\n And second row starts...\n3rd row...");
-//		dto.setState("nt");
-		
+	public StudentDTO registerStudent(@RequestBody StudentDTO formData) {
+		Student std = formData.convertToStudent();
+		std = studentService.addStudent(std);	       
 		StudentDTO dto = new StudentDTO(std);
-		System.out.println("Before : " + detail + "\nAfter : " + dto);
-		
 		return dto;
+	}
+	
+	// search student with keyword - ID, firstName & lastName
+	@GetMapping("/search")
+	@ResponseBody
+    List<StudentDTO> searchStudents(@RequestParam("keyword") String keyword) {
+        System.out.println(keyword);
+		List<Student> students = studentService.searchStudents(keyword);
+		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
+		for(Student std : students) {
+			dtos.add(new StudentDTO(std));
+		}
+        return dtos;
 	}
 }

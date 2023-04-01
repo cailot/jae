@@ -2,18 +2,14 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 
-<div class="jae-background-color container-fluid">
-
-
-
-
+<div class="jae-background-color w-100">
 
 
 <c:set var="currentPage" value="${requestScope['javax.servlet.forward.request_uri']}" />
 
 <div class="menu-style" >
  	<nav class="navbar">
- 		<a href="${pageContext.request.contextPath}/dashboard" class="menu-nav ${currentPage.endsWith('/dashboard') ? 'menu-active' : ''}" ><i class="fa fa-pie-chart fa-lg"></i>
+ 		<a href="${pageContext.request.contextPath}/dashboard" class="menu-nav ${currentPage.endsWith('/test') ? 'menu-active' : ''}" ><i class="fa fa-pie-chart fa-lg"></i>
  		&nbsp;Student
  		</a>
  	</nav>

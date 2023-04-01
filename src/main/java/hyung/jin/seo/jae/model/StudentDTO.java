@@ -28,6 +28,7 @@ import javax.persistence.Column;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
@@ -85,20 +86,20 @@ public class StudentDTO implements Serializable{
     
     public Student convertToStudent() {
     	Student std = new Student();
-    	std.setId(Long.parseLong(this.id));
-    	std.setFirstName(this.firstName);
-    	std.setLastName(this.lastName);
-    	std.setGrade(this.grade);
-    	std.setContactNo1(this.contactNo1);
-    	std.setContactNo2(this.contactNo2);
-    	std.setEmail(this.email);
-    	std.setAddress(this.address);
-    	std.setState(this.state);
-    	std.setBranch(this.branch);
-    	std.setMemo(this.memo);
-    	std.setRegisterDate(LocalDate.parse(registerDate));
-    	std.setEnrolmentDate(LocalDate.parse(enrolmentDate));
-    	std.setEndDate(LocalDate.parse(endDate));
+    	if(StringUtils.isNotBlank(id)) std.setId(Long.parseLong(this.id));
+    	if(StringUtils.isNotBlank(firstName)) std.setFirstName(this.firstName);
+    	if(StringUtils.isNotBlank(lastName)) std.setLastName(this.lastName);
+    	if(StringUtils.isNotBlank(grade)) std.setGrade(this.grade);
+    	if(StringUtils.isNotBlank(contactNo1)) std.setContactNo1(this.contactNo1);
+    	if(StringUtils.isNotBlank(contactNo2)) std.setContactNo2(this.contactNo2);
+    	if(StringUtils.isNotBlank(email)) std.setEmail(this.email);
+    	if(StringUtils.isNotBlank(address)) std.setAddress(this.address);
+    	if(StringUtils.isNotBlank(state)) std.setState(this.state);
+    	if(StringUtils.isNotBlank(branch)) std.setBranch(this.branch);
+    	if(StringUtils.isNotBlank(memo)) std.setMemo(this.memo);
+    	if(StringUtils.isNotBlank(registerDate)) std.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	if(StringUtils.isNotBlank(endDate)) std.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	return std;
     }
 

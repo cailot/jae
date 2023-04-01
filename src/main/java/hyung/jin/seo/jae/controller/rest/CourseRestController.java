@@ -19,12 +19,12 @@ import java.util.List;
 
 
 @RestController
-public class CourseController {
+public class CourseRestController {
 
 	@Autowired
 	private CourseService courseService;
 	
-	private static final Logger LOG = LoggerFactory.getLogger(CourseController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CourseRestController.class);
 	
 	@GetMapping("/courses")
 	List<Course> allCourses() {
