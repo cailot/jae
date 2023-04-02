@@ -4,10 +4,10 @@
 
 <script>
 	$(document).ready(function() {
-
+	
 		// Set default date format
 		$.fn.datepicker.defaults.format = 'dd/mm/yyyy';
-
+	
 		$('.datepicker').datepicker({
 			//format: 'dd/mm/yyyy',
 			autoclose : true,
@@ -16,6 +16,9 @@
 		
 	});
 
+	
+	
+	// Register Student
 	function addStudent() {
 		// Get from form data
 		var std = {
@@ -41,7 +44,9 @@
 			success : function(student) {
 				console.log('Success : ' + student);
 				// Display the success alert
+				$('#success-alert .modal-body').text('Your action has been completed successfully.');
 				$('#success-alert').modal('show');
+				// Update display info
 				$("#formId").val(student.id);
 				$("#formFirstName").val(student.firstName);
 				$("#formLastName").val(student.lastName);
@@ -66,11 +71,51 @@
 	}
 	
 	
+	// Search Student with Keyword	
+	function searchStudent(){
+		//warn if keyword is empty
+		if( $("#formKeyword").val()==''){
+			$('#warning-alert .modal-body').text('Please fill in keyword before search');
+			$('#warning-alert').modal('show');
+			return;
+		}
+		
+		// send query to controller
+		$('#studentListResultTable tbody').empty();
+		$.ajax({
+			url : 'search',
+			type : 'GET',
+			data : { keyword : $("#formKeyword").val()},
+			success : function(data) {
+				$.each(data, function(index, value) {
+			          var row = $("<tr onclick='displayStudentInfo("+ JSON.stringify(value) + ")''>");
+			          row.append($('<td>').text(value.id));
+			          row.append($('<td>').text(value.firstName));
+			          row.append($('<td>').text(value.lastName));
+			          row.append($('<td>').text(value.grade));
+			          row.append($('<td>').text(value.registerDate));
+			          row.append($('<td>').text(value.endDate));
+			          row.append($('<td>').text(value.email));
+			          row.append($('<td>').text(value.contactNo1));
+			          row.append($('<td>').text(value.contactNo2));
+			          row.append($('<td>').text(value.address));
+			          
+			          $('#studentListResultTable > tbody').append(row);
+			        }
+				);
+			},
+			error : function(xhr, status, error) {
+				console.log('Error : ' + error);
+			}
+		});
+		$('#studentListResult').modal('show');
+		
+	}
 	
-	
+	// Display selected student in student search
 	function displayStudentInfo(value)
 	{
-		
+		clearForm();
 		$("#formId").val(value['id']);
 		$("#formFirstName").val(value['firstName']);
 		$("#formLastName").val(value['lastName']);
@@ -91,57 +136,74 @@
 		// clear search keyword
 		$("#formKeyword").val('');
 	}
+
 	
-	
-	
-	
-	
-	
-function searchStudent(){
-	//warn if keyword is empty
-	if( $("#formKeyword").val()==''){
-		$('#nokeyword-alert').modal('show');
-		return;
-	}
-	
-	// send query to controller
-	//$('#studentListResultTable').empty();
-	$('#studentListResultTable tbody').empty();
-	$.ajax({
-		url : 'search',
-		type : 'GET',
-		data : { keyword : $("#formKeyword").val()},
-		success : function(data) {
-			$.each(data, function(index, value) {
-		          var row = $("<tr onclick='displayStudentInfo("+ JSON.stringify(value) + ")''>");
-		          row.append($('<td>').text(value.id));
-		          row.append($('<td>').text(value.firstName));
-		          row.append($('<td>').text(value.lastName));
-		          row.append($('<td>').text(value.grade));
-		          row.append($('<td>').text(value.startDate));
-		          row.append($('<td>').text(value.endDate));
-		          row.append($('<td>').text(value.email));
-		          row.append($('<td>').text(value.contactNo1));
-		          row.append($('<td>').text(value.contactNo2));
-		          row.append($('<td>').text(value.address));
-		          
-		          $('#studentListResultTable > tbody').append(row);
-		        }
-			);
-		},
-		error : function(xhr, status, error) {
-			console.log('Error : ' + error);
+	// Update existing student
+	function updateStudentInfo(){
+		//warn if Id is empty
+		if( $("#formId").val()==''){
+			$('#warning-alert .modal-body').text('Please search student record before update');
+			$('#warning-alert').modal('show');
+			return;
 		}
-	});
-	$('#studentListResult').modal('show');
-	
+		
+		// get from formData
+		var std = {
+			id: $('#formId').val(),
+			firstName : $("#formFirstName").val(),
+			lastName : $("#formLastName").val(),
+			email : $("#formEmail").val(),
+			address : $("#formAddress").val(),
+			contactNo1 : $("#formContact1").val(),
+			contactNo2 : $("#formContact2").val(),
+			memo : $("#formMemo").val(),
+			state : $("#formState").val(),
+			branch : $("#formBranch").val(),
+			grade : $("#formGrade").val(),
+			enrolmentDate: $("#formEnrolment").val()
+		}
+		// send query to controller
+		$.ajax({
+			url : 'update',
+			type : 'PUT',
+			dataType : 'json',
+			data : JSON.stringify(std),
+			contentType : 'application/json',
+			success : function(value) {
+				// Display success alert
+				$('#success-alert .modal-body').text('ID : ' + value.id + ' is updated successfully.');
+				$('#success-alert').modal('show');
+				
+				// Update display info
+				clearForm();
+				$("#formId").val(value.id);
+				$("#formFirstName").val(value.firstName);
+				$("#formLastName").val(value.lastName);
+				$("#formEmail").val(value.email);
+				$("#formAddress").val(value.address);
+				$("#formContact1").val(value.contactNo1);
+				$("#formContact2").val(value.contactNo2);
+				$("#formMemo").val(value.memo);
+				$("#formState").val(value.state);
+				$("#formBranch").val(value.branch);
+				$("#formGrade").val(value.grade);
+				// Set date value
+				var date = new Date(value.enrolmentDate); // Replace with your date value
+				$("#formEnrolment").datepicker('setDate', date);		
+				// clear search keyword
+				$("#formKeyword").val('');
+				
+			},
+			error : function(xhr, status, error) {
+				console.log('Error : ' + error);
+			}
+		});
 	}
 	
+	// Clear all form
 	function clearForm(){
 		document.getElementById("studentInfo").reset();
 	}
-	
-	
 	
   	
 </script>
@@ -157,8 +219,7 @@ function searchStudent(){
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">Your action has been completed
-				successfully.</div>
+			<div class="modal-body"></div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
@@ -166,7 +227,7 @@ function searchStudent(){
 	</div>
 </div>
 <!-- No Keyword Modal -->
-<div class="modal fade" id="nokeyword-alert" tabindex="-1"
+<div class="modal fade" id="warning-alert" tabindex="-1"
 	aria-labelledby="successModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -177,7 +238,7 @@ function searchStudent(){
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">Please fill in keyword before search</div>
+			<div class="modal-body"></div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
@@ -392,8 +453,7 @@ function searchStudent(){
 							data-target="#registerModal">New</button>
 					</div>
 					<div class="col-md-2">
-						<button type="button" class="btn btn-primary" data-toggle="modal"
-							data-target="#myModal">Update</button>
+						<button type="button" class="btn btn-primary" onclick="updateStudentInfo()">Update</button>
 					</div>
 					<div class="col-md-2">
 						<button type="button" class="btn btn-primary" data-toggle="modal"
