@@ -58,6 +58,7 @@ public interface StudentSpecification {
 		return (root, query, cb) -> cb.equal(root.get("grade"), keyword);
 	}
 	
+	// year
 	static Specification<Student> yearRange(String year){
 		LocalDate startDate = LocalDate.of(Integer.parseInt(year), 1, 1);
 		LocalDate endDate = LocalDate.of(Integer.parseInt(year), 12, 31);
@@ -70,6 +71,12 @@ public interface StudentSpecification {
 			
 		};
 	}
+	
+	// start date
+	static Specification<Student> startDateEquals(LocalDate date) {
+		  return (root, query, cb) -> cb.equal(root.get("registerDate"), date);
+		}
+
 	
 	// is not null 
 	static Specification<Student> hasNotNullVaule(String column){

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ import com.google.gson.Gson;
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.model.StudentDTO;
 import hyung.jin.seo.jae.service.StudentService;
+import hyung.jin.seo.utils.JaeConstants;
 
 @Controller
 @RequestMapping("student")
@@ -59,7 +61,6 @@ public class JaeController {
 	@GetMapping("/search")
 	@ResponseBody
 	List<StudentDTO> searchStudents(@RequestParam("keyword") String keyword) {
-		System.out.println(keyword);
 		List<Student> students = studentService.searchStudents(keyword);
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
@@ -82,5 +83,22 @@ public class JaeController {
 		std = studentService.updateStudent(std, std.getId());
 		StudentDTO dto = new StudentDTO(std);
 		return dto;
+	}
+
+	// de-activate student by Id
+	@PutMapping("/inactivate/{id}")
+	@ResponseBody
+	public void inactivateStudent(@PathVariable Long id) {
+		studentService.dischargeStudent(id);
+	}
+	
+	
+	// search student list with state, branch, grade, start date or active
+	@GetMapping("/list")
+	@ResponseBody
+	List<Student> listStudents(@RequestParam("state") String state, @RequestParam("branch") String branch, @RequestParam("grade") String grade, @RequestParam("start") String start, @RequestParam("active") String active) {
+        System.out.println(state+"\t"+branch+"\t"+grade+"\t"+start+"\t"+active+"\t");
+		List<Student> students = studentService.listStudents(state, branch, grade, "", active);
+        return students;
 	}
 }

@@ -18,193 +18,6 @@
 
 	
 	
-	// Register Student
-	function addStudent() {
-		// Get from form data
-		var std = {
-			firstName : $("#addFirstName").val(),
-			lastName : $("#addLastName").val(),
-			email : $("#addEmail").val(),
-			address : $("#addAddress").val(),
-			contactNo1 : $("#addContact1").val(),
-			contactNo2 : $("#addContact2").val(),
-			memo : $("#addMemo").val(),
-			state : $("#addState").val(),
-			branch : $("#addBranch").val(),
-			grade : $("#addGrade").val(),
-			enrolmentDate: $("#addEnrolment").val()
-		}
-		// Send AJAX to server
-		$.ajax({
-			url : 'register',
-			type : 'POST',
-			dataType : 'json',
-			data : JSON.stringify(std),
-			contentType : 'application/json',
-			success : function(student) {
-				console.log('Success : ' + student);
-				// Display the success alert
-				$('#success-alert .modal-body').text('Your action has been completed successfully.');
-				$('#success-alert').modal('show');
-				// Update display info
-				$("#formId").val(student.id);
-				$("#formFirstName").val(student.firstName);
-				$("#formLastName").val(student.lastName);
-				$("#formEmail").val(student.email);
-				$("#formAddress").val(student.address);
-				$("#formContact1").val(student.contactNo1);
-				$("#formContact2").val(student.contactNo2);
-				$("#formMemo").val(student.memo);
-				$("#formState").val(student.state);
-				$("#formBranch").val(student.branch);
-				$("#formGrade").val(student.grade);
-				// Set date value
-				var date = new Date(student.enrolmentDate); // Replace with your date value
-				$("#formEnrolment").datepicker('setDate', date);
-
-			},
-			error : function(xhr, status, error) {
-				console.log('Error : ' + error);
-			}
-		});
-		$('#registerModal').modal('hide');
-	}
-	
-	
-	// Search Student with Keyword	
-	function searchStudent(){
-		//warn if keyword is empty
-		if( $("#formKeyword").val()==''){
-			$('#warning-alert .modal-body').text('Please fill in keyword before search');
-			$('#warning-alert').modal('show');
-			return;
-		}
-		
-		// send query to controller
-		$('#studentListResultTable tbody').empty();
-		$.ajax({
-			url : 'search',
-			type : 'GET',
-			data : { keyword : $("#formKeyword").val()},
-			success : function(data) {
-				$.each(data, function(index, value) {
-			          var row = $("<tr onclick='displayStudentInfo("+ JSON.stringify(value) + ")''>");
-			          row.append($('<td>').text(value.id));
-			          row.append($('<td>').text(value.firstName));
-			          row.append($('<td>').text(value.lastName));
-			          row.append($('<td>').text(value.grade));
-			          row.append($('<td>').text(value.registerDate));
-			          row.append($('<td>').text(value.endDate));
-			          row.append($('<td>').text(value.email));
-			          row.append($('<td>').text(value.contactNo1));
-			          row.append($('<td>').text(value.contactNo2));
-			          row.append($('<td>').text(value.address));
-			          
-			          $('#studentListResultTable > tbody').append(row);
-			        }
-				);
-			},
-			error : function(xhr, status, error) {
-				console.log('Error : ' + error);
-			}
-		});
-		$('#studentListResult').modal('show');
-		
-	}
-	
-	// Display selected student in student search
-	function displayStudentInfo(value)
-	{
-		clearForm();
-		$("#formId").val(value['id']);
-		$("#formFirstName").val(value['firstName']);
-		$("#formLastName").val(value['lastName']);
-		$("#formEmail").val(value['email']);
-		$("#formAddress").val(value['address']);
-		$("#formContact1").val(value['contactNo1']);
-		$("#formContact2").val(value['contactNo2']);
-		$("#formMemo").val(value['memo']);
-		$("#formState").val(value['state']);
-		$("#formBranch").val(value['branch']);
-		$("#formGrade").val(value['grade']);
-		// Set date value
-		var date = new Date(value['enrolmentDate']); // Replace with your date value
-		$("#formEnrolment").datepicker('setDate', date);
-		
-		// dispose modal
-		$('#studentListResult').modal('hide');
-		// clear search keyword
-		$("#formKeyword").val('');
-	}
-
-	
-	// Update existing student
-	function updateStudentInfo(){
-		//warn if Id is empty
-		if( $("#formId").val()==''){
-			$('#warning-alert .modal-body').text('Please search student record before update');
-			$('#warning-alert').modal('show');
-			return;
-		}
-		
-		// get from formData
-		var std = {
-			id: $('#formId').val(),
-			firstName : $("#formFirstName").val(),
-			lastName : $("#formLastName").val(),
-			email : $("#formEmail").val(),
-			address : $("#formAddress").val(),
-			contactNo1 : $("#formContact1").val(),
-			contactNo2 : $("#formContact2").val(),
-			memo : $("#formMemo").val(),
-			state : $("#formState").val(),
-			branch : $("#formBranch").val(),
-			grade : $("#formGrade").val(),
-			enrolmentDate: $("#formEnrolment").val()
-		}
-		// send query to controller
-		$.ajax({
-			url : 'update',
-			type : 'PUT',
-			dataType : 'json',
-			data : JSON.stringify(std),
-			contentType : 'application/json',
-			success : function(value) {
-				// Display success alert
-				$('#success-alert .modal-body').text('ID : ' + value.id + ' is updated successfully.');
-				$('#success-alert').modal('show');
-				
-				// Update display info
-				clearForm();
-				$("#formId").val(value.id);
-				$("#formFirstName").val(value.firstName);
-				$("#formLastName").val(value.lastName);
-				$("#formEmail").val(value.email);
-				$("#formAddress").val(value.address);
-				$("#formContact1").val(value.contactNo1);
-				$("#formContact2").val(value.contactNo2);
-				$("#formMemo").val(value.memo);
-				$("#formState").val(value.state);
-				$("#formBranch").val(value.branch);
-				$("#formGrade").val(value.grade);
-				// Set date value
-				var date = new Date(value.enrolmentDate); // Replace with your date value
-				$("#formEnrolment").datepicker('setDate', date);		
-				// clear search keyword
-				$("#formKeyword").val('');
-				
-			},
-			error : function(xhr, status, error) {
-				console.log('Error : ' + error);
-			}
-		});
-	}
-	
-	// Clear all form
-	function clearForm(){
-		document.getElementById("studentInfo").reset();
-	}
-	
   	
 </script>
 <!-- Success Modal -->
@@ -434,7 +247,7 @@
 
 
 
-
+<%--
 <!-- Main Body -->
 <div class="row">
 	<div class="modal-body">
@@ -456,8 +269,7 @@
 						<button type="button" class="btn btn-primary" onclick="updateStudentInfo()">Update</button>
 					</div>
 					<div class="col-md-2">
-						<button type="button" class="btn btn-primary" data-toggle="modal"
-							data-target="#registerModal">Delete</button>
+						<button type="button" class="btn btn-primary" onclick="inactivateStudent()">Suspend</button>
 					</div>
 					
 					<div class="col-md-1">
@@ -586,6 +398,27 @@
 			</div>
 		</form>
 	</div>
+</div>
+--%>
+
+<div>
+	<ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#admin">Student Administration</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#list">Student List</a>
+      </li>
+     </ul>
+
+	<div class="tab-content">
+      <div id="admin" class="tab-pane fade show active">
+	 	<jsp:include page="student/admin.jsp"></jsp:include>
+	  </div>
+      <div id="list" class="tab-pane fade">
+      	<jsp:include page="student/list.jsp"></jsp:include>
+      </div>
+     </div>
 </div>
 
 
