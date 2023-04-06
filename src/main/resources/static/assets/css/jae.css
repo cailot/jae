@@ -58,3 +58,9 @@
 .menu-active {
 	color: #007bff !important;
 }
+
+.label-form {
+	font-size: 10; 
+	margin-bottom: 0.1rem;
+	color : #0000FF;
+}
