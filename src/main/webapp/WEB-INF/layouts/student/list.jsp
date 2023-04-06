@@ -1,3 +1,6 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/printThis.js"></script>
 
 <script>
 
@@ -47,6 +50,10 @@ function listStudents(){
 		type : 'GET',
 		data : params,
 		success: function(data){
+			// Display the success alert
+			$('#success-alert .modal-body').text(data.length + ' student record(s) found.');
+			$('#success-alert').modal('show');
+			
 			$.each(data, function(i, item){
 				var row = $('<tr></tr>');
 				//row.append($('<td></td>').text(i+1));
@@ -89,7 +96,54 @@ function getWeek(enrol){
 	return weekNumber;
 } 
 
+
+
+function exportTableToExcel(tableId){
+    var downloadLink;
+    var dataType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableId);
+    
+    
+    
+    var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+    // Specify the filename
+    filename = 'Student_List.xls';
+
+    // Create download link element
+    downloadLink = document.createElement("a");
+
+    document.body.appendChild(downloadLink);
+
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTML], {
+            type: dataType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+        // Setting the file name
+        downloadLink.download = filename;
+
+        //triggering the function
+        downloadLink.click();
+    }
+}
+
+function printTable() {
+    $("#studentListTable").printThis(
+  		{
+  			  importCSS: true,
+  			  printContainer: true,
+  			  header: "<center><h3>Student List</h3></center>"
+  		}		
+    );
+}
+
 </script>
+
 
 <!-- List Body -->
 <div class="row">
@@ -174,11 +228,11 @@ function getWeek(enrol){
 					</div>
 					<div class="col-md-1">
 						<button type="button" class="btn btn-primary"
-							onclick="searchStudent()">Download</button>
+							onclick="exportTableToExcel('studentListTable')">Download</button>
 					</div>
 					<div class="col-md-1">
 						<button type="button" class="btn btn-primary"
-							onclick="searchStudent()">Print</button>
+							onclick="printTable()">Print</button>
 					</div>
 				</div>
 			</div>
