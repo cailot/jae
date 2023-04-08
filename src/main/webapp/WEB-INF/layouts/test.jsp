@@ -241,73 +241,193 @@
 
 
 
-
-
-
+<!-- 1st Row -->
 <div class="row">
+	<!-- Student Admin -->
+	<div class="col-md-4">
+		<div class="card mb-4 shadow-sm">
+			<div class="card-body">
+			<h5>Student Information</h5>
+				<jsp:include page="student/admin.jsp"></jsp:include>
+			</div>
+		</div>
+	</div>
+
+	<!-- Course Registration -->
+	<div class="col-md-5">
+		<div class="card mb-4 shadow-sm">
+			<div class="card-body">
+				<h5 class="card-title">Course Registration</h5>
+				<div class="modal-body">
+					<form id="">
+						<div class="form-group">
+							<div class="form-row">
+								<div class="col-md-3">
+									<label for="formGrade" class="label-form">Grade</label> <select
+										class="form-control form-control-sm">
+										<option value="p2">P2</option>
+										<option value="p3">P3</option>
+										<option value="p4">P4</option>
+										<option value="p5">P5</option>
+										<option value="p6">P6</option>
+										<option value="s7">S7</option>
+										<option value="s8">S8</option>
+										<option value="s9">S9</option>
+										<option value="s10">S10</option>
+										<option value="s10e">S10E</option>
+										<option value="vce">VCE</option>
+										<option value="tt6">TT6</option>
+										<option value="tt8">TT8</option>
+										<option value="tt8e">TT8E</option>
+										<option value="jmss">JMSS</option>
+									</select>
+								</div>
+								<div class="col-md-7">
+									<p>Class change is possible after changing Please click
+										Apply button</p>
+								</div>
+								<div class="col-md-2">
+									<button type="button" class="btn btn-block btn-primary btn-sm"
+										data-toggle="modal" data-target="#registerModal">Apply</button>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="form-row">
+								<textarea class="form-control" rows="13"></textarea>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Attendance -->
+	<div class="col-md-3">
+		<div class="card mb-4 shadow-sm">
+			<div class="card-body">
+				<h5 class="card-title">Attendance</h5>
+				<div class="modal-body">
+					<form id="">
+						<div class="form-group">
+							<div class="form-row">
+								<textarea class="form-control" rows="15"></textarea>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<!-- 2nd Row -->
+<div class="row">
+	<!-- Registered Course -->
 	<div class="col-md-4">
 		<div class="card mb-4 shadow-sm">
 
 			<div class="card-body">
-				<!-- <h4 class="card-title">Student Information</h4> -->
-				<div class="d-flex justify-content-between align-items-center">
-					<div>
-						<ul class="nav nav-tabs">
-							<li class="nav-item"><a class="nav-link active"
-								data-toggle="tab" href="#admin">Student Administration</a></li>
-							<li class="nav-item"><a class="nav-link" data-toggle="tab"
-								href="#list">Student List</a></li>
-						</ul>
-						<div class="tab-content">
-							<div id="admin" class="tab-pane fade show active">
-								<jsp:include page="student/admin.jsp"></jsp:include>
-							</div>
-							<div id="list" class="tab-pane fade">
-								<jsp:include page="student/list.jsp"></jsp:include>
+
+				<div class="modal-body">
+					<form>
+
+						<div class="form-group">
+							<div class="form-row">
+
+								<div class="col-md-3">
+									<label for="formGrade" class="label-form">Grade</label> <select
+										class="form-control form-control-sm">
+										<option value="p2">P2</option>
+										<option value="p3">P3</option>
+										<option value="p4">P4</option>
+										<option value="p5">P5</option>
+										<option value="p6">P6</option>
+										<option value="s7">S7</option>
+										<option value="s8">S8</option>
+										<option value="s9">S9</option>
+										<option value="s10">S10</option>
+										<option value="s10e">S10E</option>
+										<option value="vce">VCE</option>
+										<option value="tt6">TT6</option>
+										<option value="tt8">TT8</option>
+										<option value="tt8e">TT8E</option>
+										<option value="jmss">JMSS</option>
+									</select>
+								</div>
+								<div class="col md-3">
+									<button type="button" class="btn btn-block btn-primary btn-sm"
+										onclick="clearForm()">Reset</button>
+								</div>
+								<div class="col-md-6">
+									<label for="" class="label-form">Select to add subject</label>
+									<select class="form-control form-control-sm">
+										<option value="p2">Click to add a subject</option>
+									</select>
+								</div>
+
 							</div>
 						</div>
-					</div>
 
+
+						<div class="form-group">
+							<div class="form-row">
+								<textarea class="form-control form-control-sm" rows="10"></textarea>
+							</div>
+						</div>
+					</form>
 				</div>
+
 			</div>
 		</div>
 	</div>
-	<div class="col-md-5">
+
+	<!-- Invoice -->
+	<div class="col-md-8">
 		<div class="card mb-4 shadow-sm">
-			<img class="card-img-top" src="https://via.placeholder.com/300x200"
-				alt="Card image cap">
 			<div class="card-body">
-				<h4 class="card-title">Card title</h4>
-				<p class="card-text">This is a longer card with supporting text
-					below as a natural lead-in to additional content. This content is a
-					little bit longer.</p>
-				<div class="d-flex justify-content-between align-items-center">
-					<div class="btn-group">
-						<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-						<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-					</div>
-					<small class="text-muted">9 mins</small>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<div class="form-row">
+								<div class="col-md-6">
+									<p>Receivable Amt: 740.00 OUtstanding: 0.00</p>
+								</div>
+								<div class="col md-auto">
+									<button type="button" class="btn btn-block btn-primary btn-sm"
+										data-toggle="modal" data-target="#registerModal">Payment</button>
+								</div>
+								<div class="col md-auto">
+									<button type="button" class="btn btn-block btn-primary btn-sm"
+										onclick="updateStudentInfo()">Invoice</button>
+								</div>
+								<div class="col md-auto">
+									<button type="button" class="btn btn-block btn-primary btn-sm"
+										onclick="inactivateStudent()">Email</button>
+								</div>
+
+								<div class="col md-auto">
+									<button type="button" class="btn btn-block btn-primary btn-sm"
+										onclick="clearForm()">Record</button>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="form-row">
+								<textarea class="form-control" rows="8"></textarea>
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-3">
-		<div class="card mb-4 shadow-sm">
-			<img class="card-img-top" src="https://via.placeholder.com/300x200"
-				alt="Card image cap">
-			<div class="card-body">
-				<h4 class="card-title">Card title</h4>
-				<p class="card-text">This is a longer card with supporting text
-					below as a natural lead-in to additional content. This content is a
-					little bit longer.</p>
-				<div class="d-flex justify-content-between align-items-center">
-					<div class="btn-group">
-						<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-						<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-					</div>
-					<small class="text-muted">9 mins</small>
-				</div>
-			</div>
-		</div>
-	</div>
+
 </div>

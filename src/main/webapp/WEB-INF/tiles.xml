@@ -18,5 +18,10 @@
 		<put-attribute name="body"
 			value="/WEB-INF/layouts/test.jsp" />
 	</definition>
+	<definition name="listPage" extends="base.definition">
+		<put-attribute name="title" value="List Page" />
+		<put-attribute name="body"
+			value="/WEB-INF/layouts/list.jsp" />
+	</definition>
 	
 </tiles-definitions>

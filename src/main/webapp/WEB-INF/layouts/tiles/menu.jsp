@@ -9,7 +9,7 @@
 
 <div class="menu-style" >
  	<nav class="navbar">
- 		<a href="${pageContext.request.contextPath}/dashboard" class="menu-nav ${currentPage.endsWith('/test') ? 'menu-active' : ''}" ><i class="fa fa-pie-chart fa-lg"></i>
+ 		<a href="${pageContext.request.contextPath}/test" class="menu-nav ${currentPage.endsWith('/test') ? 'menu-active' : ''}" ><i class="fa fa-pie-chart fa-lg"></i>
  		&nbsp;Student
  		</a>
  	</nav>
@@ -39,6 +39,13 @@
  	<nav class="navbar">
  		<a href="${pageContext.request.contextPath}/dashboard" class="menu-nav ${currentPage.endsWith('/dashboard') ? 'menu-active' : ''}" ><i class="fa fa-pie-chart fa-lg"></i>
  		&nbsp;User
+ 		</a>
+ 	</nav>
+</div>
+<div class="menu-style" >
+ 	<nav class="navbar">
+ 		<a href="${pageContext.request.contextPath}/list" class="menu-nav ${currentPage.endsWith('/list') ? 'menu-active' : ''}" ><i class="fa fa-pie-chart fa-lg"></i>
+ 		&nbsp;List
  		</a>
  	</nav>
 </div>

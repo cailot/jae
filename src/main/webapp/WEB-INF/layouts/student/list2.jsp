@@ -28,6 +28,10 @@ $(document).ready(function() {
 	  function getCellValue(row, index) {
 	    return $(row).children('td').eq(index).text();
 	  }
+	  
+	  $("#search-icon").click(function(){
+		  listStudents();
+	  });
 });
 	
 
@@ -60,13 +64,13 @@ function listStudents(){
 				row.append($('<td></td>').text(item.id));
 				row.append($('<td></td>').text(item.firstName));
 				row.append($('<td></td>').text(item.lastName));
-				row.append($('<td></td>').text(item.grade));
-				row.append($('<td></td>').text(item.registerDate));
-				row.append($('<td></td>').text(getWeek(item.registerDate)));
-				row.append($('<td></td>').text(item.endDate));
-				row.append($('<td></td>').text(getWeek(item.endDate)));
-				row.append($('<td></td>').text(item.email));
-				row.append($('<td></td>').text(item.contactNo1));
+				//row.append($('<td></td>').text(item.grade));
+				//row.append($('<td></td>').text(item.registerDate));
+				//row.append($('<td></td>').text(getWeek(item.registerDate)));
+				//row.append($('<td></td>').text(item.endDate));
+				//row.append($('<td></td>').text(getWeek(item.endDate)));
+				//row.append($('<td></td>').text(item.email));
+				//row.append($('<td></td>').text(item.contactNo1));
 				body.append(row);
 			});
 		}
@@ -145,14 +149,24 @@ function printTable() {
 </script>
 
 
+
+
+
+
+
+
+
+
+
+
 <!-- List Body -->
 <div class="row">
 	<div class="modal-body">
 		<form id="studentList">
 			<div class="form-group">
 				<div class="form-row">
-					<div class="col-md-2">
-						<select class="form-control" id="listState" name="listState">
+					<div class="col-md-4">
+						<select class="form-control form-control-sm" id="listState" name="listState">
 							<option value="All">All State</option>
 							<option value="vic">Victoria</option>
 							<option value="nsw">New South Wales</option>
@@ -164,8 +178,8 @@ function printTable() {
 							<option value="act">ACT</option>
 						</select>
 					</div>
-					<div class="col-md-2">
-						<select class="form-control" id="listBranch" name="listBranch">
+					<div class="col-md-5">
+						<select class="form-control form-control-sm" id="listBranch" name="listBranch">
 							<option value="All">All Branch</option>
 							<option value="braybrook">Braybrook</option>
 							<option value="epping">Epping</option>
@@ -191,8 +205,8 @@ function printTable() {
 							<option value="packenham">Packenham</option>
 						</select>
 					</div>
-					<div class="col-md-1">
-						<select class="form-control" id="listGrade" name="listGrade">
+					<div class="col-md-3">
+						<select class="form-control form-control-sm" id="listGrade" name="listGrade">
 							<option value="All">All</option>
 							<option value="p2">P2</option>
 							<option value="p3">P3</option>
@@ -211,44 +225,68 @@ function printTable() {
 							<option value="jmss">JMSS</option>
 						</select>
 					</div>
-					<div class="col-md-2">
-						<select class="form-control" id="listActive" name="listActive">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="form-row">
+					<div class="col-md-5">
+						<select class="form-control form-control-sm" id="listActive" name="listActive">
 							<option value="All">All Students</option>
 							<option value="Current">Current Students</option>
 							<option value="Stopped">Stopped Students</option>
 						</select>
 					</div>
-					<div class="col-md-2">
-						<input type="text" class="form-control datepicker" id="listStart"
+					<div class="col-md-4">
+						<input type="text" class="form-control form-control-sm datepicker" id="listStart"
 							name="listStart" placeholder="Start Date" required>
 					</div>
 					<div class="col-md-1">
-						<button type="button" class="btn btn-primary"
+					<span class="fas fas fa-search text-primary fa-lg" id="search-icon"></span>
+					<!-- 
+						<button type="button" class="btn btn-primary btn-sm"
 							onclick="listStudents()">Search</button>
+					-->
+					
+					
+					
 					</div>
 					<div class="col-md-1">
-						<button type="button" class="btn btn-primary"
+						<!-- 
+						<button type="button" class="btn btn-primary btn-sm"
 							onclick="exportTableToExcel('studentListTable')">Download</button>
+							-->
+							<span class="fas fa-file-download text-primary fa-lg" id="download-icon"></span>
 					</div>
 					<div class="col-md-1">
-						<button type="button" class="btn btn-primary"
+						<!-- 
+						<button type="button" class="btn btn-primary btn-sm"
 							onclick="printTable()">Print</button>
+						-->
+						<span class="fas fa-print text-primary fa-lg" id="print-icon"></span>
 					</div>
 				</div>
 			</div>
+			
+			
+			
+			
+		
+			
 			
 			
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-12">
 					<div class="table-wrap">
-						<table id="studentListTable" class="table table-striped table-bordered">
+						<table id="studentListTable" class="table table-sm table-striped table-bordered">
 							<thead class="table-primary">
 								<tr>
-									<%--<th scope="col">No</th>  --%>
+									<!--<th scope="col">No</th>  -->
 									<th scope="col">ID</th>
 									<th scope="col">First Name</th>
 									<th scope="col">Last Name</th>
+									<!-- 
 									<th scope="col">Grade</th>
 									<th scope="col">Start Date</th>
 									<th scope="col">Week</th>
@@ -256,6 +294,7 @@ function printTable() {
 									<th scope="col">Week</th>
 									<th scope="col">Email</th>
 									<th scope="col">Contact</th>
+									-->
 								</tr>
 							</thead>
 							<tbody id="list-student-body">
@@ -266,6 +305,13 @@ function printTable() {
 				</div>
 			</div>
 			
+			
+			
+			
+			
+		
+		
+		
 		</form>
 	</div>
 </div>

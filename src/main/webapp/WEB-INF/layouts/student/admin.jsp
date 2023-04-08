@@ -17,7 +17,7 @@
 		}
 		// Send AJAX to server
 		$.ajax({
-			url : 'register',
+			url : 'student/register',
 			type : 'POST',
 			dataType : 'json',
 			data : JSON.stringify(std),
@@ -65,7 +65,7 @@
 		// send query to controller
 		$('#studentListResultTable tbody').empty();
 		$.ajax({
-			url : 'search',
+			url : 'student/search',
 			type : 'GET',
 			data : {
 				keyword : $("#formKeyword").val()
@@ -156,7 +156,7 @@
 		}
 		// send query to controller
 		$.ajax({
-			url : 'update',
+			url : 'student/update',
 			type : 'PUT',
 			dataType : 'json',
 			data : JSON.stringify(std),
@@ -206,7 +206,7 @@
 		}
 		// send query to controller
 		$.ajax({
-			url : 'inactivate/' + id,
+			url : 'student/inactivate/' + id,
 			type : 'PUT',
 			success : function(data) {
 				// clear existing form

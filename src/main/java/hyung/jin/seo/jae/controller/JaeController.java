@@ -29,7 +29,6 @@ import hyung.jin.seo.jae.service.StudentService;
 import hyung.jin.seo.utils.JaeConstants;
 
 @Controller
-@RequestMapping("student")
 public class JaeController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(JaeController.class);
@@ -37,68 +36,17 @@ public class JaeController {
 	@Autowired
 	private StudentService studentService;
 
-	// private static Gson gson = new Gson();
-
 	@GetMapping("/test")
-	public String uploads(HttpSession session) {
-
-//		Student std = studentService.getStudent(1L);
-//		session.setAttribute("std", new StudentDTO(std));
+	public String student(HttpSession session) {
 		return "testPage";
 	}
-
-	// register new student
-	@PostMapping("/register")
-	@ResponseBody
-	public StudentDTO registerStudent(@RequestBody StudentDTO formData) {
-		Student std = formData.convertToStudent();
-		std = studentService.addStudent(std);
-		StudentDTO dto = new StudentDTO(std);
-		return dto;
-	}
-
-	// search student with keyword - ID, firstName & lastName
-	@GetMapping("/search")
-	@ResponseBody
-	List<StudentDTO> searchStudents(@RequestParam("keyword") String keyword) {
-		List<Student> students = studentService.searchStudents(keyword);
-		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
-		for (Student std : students) {
-			StudentDTO dto = new StudentDTO(std);
-			if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
-			{
-				String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
-				dto.setMemo(newMemo);
-			}
-			dtos.add(dto);
-		}
-		return dtos;
-	}
-
-	// register new student
-	@PutMapping("/update")
-	@ResponseBody
-	public StudentDTO updateStudent(@RequestBody StudentDTO formData) {
-		Student std = formData.convertToStudent();
-		std = studentService.updateStudent(std, std.getId());
-		StudentDTO dto = new StudentDTO(std);
-		return dto;
-	}
-
-	// de-activate student by Id
-	@PutMapping("/inactivate/{id}")
-	@ResponseBody
-	public void inactivateStudent(@PathVariable Long id) {
-		studentService.dischargeStudent(id);
-	}
 	
 	
-	// search student list with state, branch, grade, start date or active
 	@GetMapping("/list")
-	@ResponseBody
-	List<Student> listStudents(@RequestParam("state") String state, @RequestParam("branch") String branch, @RequestParam("grade") String grade, @RequestParam("start") String start, @RequestParam("active") String active) {
-        System.out.println(state+"\t"+branch+"\t"+grade+"\t"+start+"\t"+active+"\t");
-		List<Student> students = studentService.listStudents(state, branch, grade, "", active);
-        return students;
+	public String list(HttpSession session) {
+		return "listPage";
 	}
+
+
+	
 }
