@@ -57,36 +57,21 @@ public class Course implements Serializable{
 		this.name = name;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getGrade() {
+		return grade;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setGrade(String grade) {
+		this.grade = grade;
 	}
 
-	public String getAbr() {
-		return abr;
-	}
-
-	public void setAbr(String abr) {
-		this.abr = abr;
-	}
-
+	
 	public LocalDate getRegisterDate() {
 		return registerDate;
 	}
 
 	public void setRegisterDate(LocalDate registerDate) {
 		this.registerDate = registerDate;
-	}
-
-	public LocalDate getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(LocalDate startDate) {
-		this.startDate = startDate;
 	}
 
 	public LocalDate getEndDate() {
@@ -97,27 +82,24 @@ public class Course implements Serializable{
 		this.endDate = endDate;
 	}
 
+
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
+    @Column(length = 10, nullable = false)
+    private String grade;
+    
     @Column(length = 200, nullable = false)
     private String name;
-    
-    @Column(length = 400, nullable = false)
-    private String description;
-    
-    @Column(length = 10, nullable = false)
-    private String abr;
-    
+       
     @CreationTimestamp
     private LocalDate registerDate;
     
     @CreatedDate
-    private LocalDate startDate;
-    
-    @CreatedDate
     private LocalDate endDate;
+    
     
     public List<Student> getStudents() {
 		return students;

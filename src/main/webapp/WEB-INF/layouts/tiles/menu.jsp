@@ -51,7 +51,7 @@
 </div>
 <div class="menu-style" >
  	<nav class="navbar">
- 		<a href="${pageContext.request.contextPath}/dashboard" class="menu-nav ${currentPage.endsWith('/dashboard') ? 'menu-active' : ''}" ><i class="fa fa-pie-chart fa-lg"></i>
+ 		<a href="${pageContext.request.contextPath}/setting" class="menu-nav ${currentPage.endsWith('/setting') ? 'menu-active' : ''}" ><i class="fa fa-pie-chart fa-lg"></i>
  		&nbsp;Setting
  		</a>
  	</nav>

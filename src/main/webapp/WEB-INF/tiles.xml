@@ -23,5 +23,10 @@
 		<put-attribute name="body"
 			value="/WEB-INF/layouts/list.jsp" />
 	</definition>
+	<definition name="settingPage" extends="base.definition">
+		<put-attribute name="title" value="Setting Page" />
+		<put-attribute name="body"
+			value="/WEB-INF/layouts/setting.jsp" />
+	</definition>
 	
 </tiles-definitions>

@@ -186,11 +186,15 @@
 									<option value="s9">S9</option>
 									<option value="s10">S10</option>
 									<option value="s10e">S10E</option>
-									<option value="vce">VCE</option>
 									<option value="tt6">TT6</option>
 									<option value="tt8">TT8</option>
 									<option value="tt8e">TT8E</option>
+									<option value="srw4">SRW4</option>
+									<option value="srw5">SRW5</option>
+									<option value="srw6">SRW6</option>
+									<option value="srw8">SRW8</option>
 									<option value="jmss">JMSS</option>
+									<option value="vce">VCE</option>
 								</select>
 							</div>
 						</div>
@@ -266,20 +270,24 @@
 									<label for="formGrade" class="label-form">Grade</label> <select
 										class="form-control form-control-sm">
 										<option value="p2">P2</option>
-										<option value="p3">P3</option>
-										<option value="p4">P4</option>
-										<option value="p5">P5</option>
-										<option value="p6">P6</option>
-										<option value="s7">S7</option>
-										<option value="s8">S8</option>
-										<option value="s9">S9</option>
-										<option value="s10">S10</option>
-										<option value="s10e">S10E</option>
-										<option value="vce">VCE</option>
-										<option value="tt6">TT6</option>
-										<option value="tt8">TT8</option>
-										<option value="tt8e">TT8E</option>
-										<option value="jmss">JMSS</option>
+								<option value="p3">P3</option>
+								<option value="p4">P4</option>
+								<option value="p5">P5</option>
+								<option value="p6">P6</option>
+								<option value="s7">S7</option>
+								<option value="s8">S8</option>
+								<option value="s9">S9</option>
+								<option value="s10">S10</option>
+								<option value="s10e">S10E</option>
+								<option value="tt6">TT6</option>
+								<option value="tt8">TT8</option>
+								<option value="tt8e">TT8E</option>
+								<option value="srw4">SRW4</option>
+								<option value="srw5">SRW5</option>
+								<option value="srw6">SRW6</option>
+								<option value="srw8">SRW8</option>
+								<option value="jmss">JMSS</option>
+								<option value="vce">VCE</option>
 									</select>
 								</div>
 								<div class="col-md-7">
@@ -331,58 +339,8 @@
 	<!-- Registered Course -->
 	<div class="col-md-4">
 		<div class="card mb-4 shadow-sm">
-
 			<div class="card-body">
-
-				<div class="modal-body">
-					<form>
-
-						<div class="form-group">
-							<div class="form-row">
-
-								<div class="col-md-3">
-									<label for="formGrade" class="label-form">Grade</label> <select
-										class="form-control form-control-sm">
-										<option value="p2">P2</option>
-										<option value="p3">P3</option>
-										<option value="p4">P4</option>
-										<option value="p5">P5</option>
-										<option value="p6">P6</option>
-										<option value="s7">S7</option>
-										<option value="s8">S8</option>
-										<option value="s9">S9</option>
-										<option value="s10">S10</option>
-										<option value="s10e">S10E</option>
-										<option value="vce">VCE</option>
-										<option value="tt6">TT6</option>
-										<option value="tt8">TT8</option>
-										<option value="tt8e">TT8E</option>
-										<option value="jmss">JMSS</option>
-									</select>
-								</div>
-								<div class="col md-3">
-									<button type="button" class="btn btn-block btn-primary btn-sm"
-										onclick="clearForm()">Reset</button>
-								</div>
-								<div class="col-md-6">
-									<label for="" class="label-form">Select to add subject</label>
-									<select class="form-control form-control-sm">
-										<option value="p2">Click to add a subject</option>
-									</select>
-								</div>
-
-							</div>
-						</div>
-
-
-						<div class="form-group">
-							<div class="form-row">
-								<textarea class="form-control form-control-sm" rows="10"></textarea>
-							</div>
-						</div>
-					</form>
-				</div>
-
+				<jsp:include page="course/associate.jsp"></jsp:include>
 			</div>
 		</div>
 	</div>
@@ -413,7 +371,7 @@
 
 								<div class="col md-auto">
 									<button type="button" class="btn btn-block btn-primary btn-sm"
-										onclick="clearForm()">Record</button>
+										onclick="ntForm()">Record</button>
 								</div>
 
 							</div>

@@ -76,7 +76,7 @@
 					$('#warning-alert .modal-body').text(
 							'No record found with ' + $("#formKeyword").val());
 					$('#warning-alert').modal('show');
-					clearForm();
+					clearStudentForm();
 					return;
 				}
 				$.each(data, function(index, value) {
@@ -107,7 +107,7 @@
 
 	// Display selected student in student search
 	function displayStudentInfo(value) {
-		clearForm();
+		clearStudentForm();
 		$("#formId").val(value['id']);
 		$("#formFirstName").val(value['firstName']);
 		$("#formLastName").val(value['lastName']);
@@ -168,7 +168,7 @@
 				$('#success-alert').modal('show');
 
 				// Update display info
-				clearForm();
+				clearStudentForm();
 				$("#formId").val(value.id);
 				$("#formFirstName").val(value.firstName);
 				$("#formLastName").val(value.lastName);
@@ -213,7 +213,7 @@
 				$('#success-alert .modal-body').text(
 						'ID : ' + id + ' is now inactivated');
 				$('#success-alert').modal('show');
-				clearForm();
+				clearStudentForm();
 			},
 			error : function(xhr, status, error) {
 				console.log('Error : ' + error);
@@ -222,7 +222,7 @@
 	}
 
 	// Clear all form
-	function clearForm() {
+	function clearStudentForm() {
 		document.getElementById("studentInfo").reset();
 	}
 </script>
@@ -263,7 +263,7 @@
 
 					<div class="col mx-auto">
 						<button type="button" class="btn btn-block btn-primary btn-sm"
-							onclick="clearForm()">Clear</button>
+							onclick="clearStudentForm()">Clear</button>
 					</div>
 				</div>
 			</div>
@@ -335,11 +335,15 @@
 								<option value="s9">S9</option>
 								<option value="s10">S10</option>
 								<option value="s10e">S10E</option>
-								<option value="vce">VCE</option>
 								<option value="tt6">TT6</option>
 								<option value="tt8">TT8</option>
 								<option value="tt8e">TT8E</option>
+								<option value="srw4">SRW4</option>
+								<option value="srw5">SRW5</option>
+								<option value="srw6">SRW6</option>
+								<option value="srw8">SRW8</option>
 								<option value="jmss">JMSS</option>
+								<option value="vce">VCE</option>
 							</select>
 					</div>
 					<div class="col-md-6">

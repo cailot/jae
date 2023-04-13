@@ -47,6 +47,9 @@ public class JaeController {
 		return "listPage";
 	}
 
-
+	@GetMapping("/setting")
+	public String setting(HttpSession session) {
+		return "settingPage";
+	}
 	
 }
