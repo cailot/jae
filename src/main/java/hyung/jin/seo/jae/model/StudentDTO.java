@@ -30,6 +30,7 @@ import javax.persistence.TemporalType;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -65,7 +66,17 @@ public class StudentDTO implements Serializable{
     
     private String endDate;
     
-    public StudentDTO() {}
+    private List<CourseDTO> courses;
+    
+    public List<CourseDTO> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(List<CourseDTO> courses) {
+		this.courses = courses;
+	}
+
+	public StudentDTO() {}
 
     public StudentDTO(Student std) {
     	this.id = (std.getId()!=null) ? std.getId().toString() : "";
@@ -82,6 +93,12 @@ public class StudentDTO implements Serializable{
         this.registerDate = (std.getRegisterDate()!=null) ? std.getRegisterDate().toString() : "";
         this.enrolmentDate = (std.getEnrolmentDate()!=null) ? std.getEnrolmentDate().toString() : "";
         this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
+        if((std.getCourses()!=null) && (std.getCourses().size()>0)){
+        	courses = new ArrayList<CourseDTO>();
+        	for(Course crs : std.getCourses()) {
+        		courses.add(new CourseDTO(crs));
+        	}
+        }
     }
     
     public Student convertToStudent() {
@@ -100,6 +117,11 @@ public class StudentDTO implements Serializable{
     	if(StringUtils.isNotBlank(registerDate)) std.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(endDate)) std.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	if((courses!=null) && (courses.size() > 0)) {
+    		for(CourseDTO dto : courses) {
+    			std.getCourses().add(dto.convertToCourse());
+    		}
+    	}
     	return std;
     }
 
@@ -220,7 +242,10 @@ public class StudentDTO implements Serializable{
 		return "StudentDTO [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", grade=" + grade
 				+ ", contactNo1=" + contactNo1 + ", contactNo2=" + contactNo2 + ", email=" + email + ", address="
 				+ address + ", state=" + state + ", branch=" + branch + ", memo=" + memo + ", registerDate="
-				+ registerDate + ", enrolmentDate=" + enrolmentDate + ", endDate=" + endDate + "]";
+				+ registerDate + ", enrolmentDate=" + enrolmentDate + ", endDate=" + endDate + ", courses=" + courses
+				+ "]";
 	}
+
+	
         
 }

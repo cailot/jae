@@ -44,6 +44,8 @@ public class CourseDTO implements Serializable{
     private String registerDate;
     
     private String endDate;
+    
+    private List<StudentDTO> students;
 
 	public String getEndDate() {
 		return endDate;
@@ -85,20 +87,34 @@ public class CourseDTO implements Serializable{
 		this.registerDate = registerDate;
 	}
 
-	@Override
-	public String toString() {
-		return "CourseDTO [id=" + id + ", grade=" + grade + ", name=" + name + ", registerDate=" + registerDate
-				+ ", endDate=" + endDate + "]";
+
+	public List<StudentDTO> getStudents() {
+		return students;
 	}
-	
+
+	public void setStudents(List<StudentDTO> students) {
+		this.students = students;
+	}
+
 	public CourseDTO() {}
 
-    public CourseDTO(Course crs) {
+    @Override
+	public String toString() {
+		return "CourseDTO [id=" + id + ", grade=" + grade + ", name=" + name + ", registerDate=" + registerDate
+				+ ", endDate=" + endDate + ", students=" + students + "]";
+	}
+
+	public CourseDTO(Course crs) {
     	this.id = (crs.getId()!=null) ? crs.getId().toString() : "";
     	this.grade = (crs.getGrade()!=null) ? crs.getGrade() : "";
     	this.name = (crs.getName()!=null) ? crs.getName() : "";
         this.registerDate = (crs.getRegisterDate()!=null) ? crs.getRegisterDate().toString() : "";
         this.endDate = (crs.getEndDate()!=null) ? crs.getEndDate().toString() : ""; 
+//        if((crs.getStudents()!=null) && (crs.getStudents().size()>0)) {
+//        	for(Student std : crs.getStudents()) {
+//        		students.add(new StudentDTO(std));
+//        	}
+//        }
     }
     
     public Course convertToCourse() {
@@ -108,6 +124,11 @@ public class CourseDTO implements Serializable{
     	if(StringUtils.isNotBlank(name)) crs.setName(this.name);
     	if(StringUtils.isNotBlank(registerDate)) crs.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(endDate)) crs.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+//    	if((students!=null)&&(students.size()>0)) {
+//    		for(StudentDTO dto : students) {
+//    			crs.getStudents().add(dto.convertToStudent());
+//    		}
+//    	}
     	return crs;
     }
 

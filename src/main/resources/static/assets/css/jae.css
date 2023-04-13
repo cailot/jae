@@ -64,3 +64,9 @@
 	margin-bottom: 0.1rem;
 	color : #0000FF;
 }
+
+
+
+.hidden-column{
+    display: none !important;
+}

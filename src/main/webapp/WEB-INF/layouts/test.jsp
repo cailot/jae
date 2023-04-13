@@ -340,7 +340,7 @@
 	<div class="col-md-4">
 		<div class="card mb-4 shadow-sm">
 			<div class="card-body">
-				<jsp:include page="course/associate.jsp"></jsp:include>
+			<%--	<jsp:include page="course/associate.jsp"></jsp:include> --%>
 			</div>
 		</div>
 	</div>
