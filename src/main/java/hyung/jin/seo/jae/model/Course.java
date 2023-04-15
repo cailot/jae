@@ -29,7 +29,10 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 //@Getter
 //@Setter
@@ -82,6 +85,14 @@ public class Course implements Serializable{
 		this.endDate = endDate;
 	}
 
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
 
 
 	@Id
@@ -93,7 +104,11 @@ public class Course implements Serializable{
     
     @Column(length = 200, nullable = false)
     private String name;
-       
+    
+    @Column(length = 10, nullable = true)
+    private String year;
+    
+    
     @CreationTimestamp
     private LocalDate registerDate;
     
@@ -101,15 +116,15 @@ public class Course implements Serializable{
     private LocalDate endDate;
     
     
-    public List<Student> getStudents() {
+    public Set<Student> getStudents() {
 		return students;
 	}
 
-	public void setStudents(List<Student> students) {
+	public void setStudents(Set<Student> students) {
 		this.students = students;
 	}
 
-	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="courses")
-    private List<Student> students;
+	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH, mappedBy="courses")
+    private Set<Student> students = new LinkedHashSet<>();
     
 }

@@ -33,7 +33,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class StudentDTO implements Serializable{
@@ -66,13 +69,13 @@ public class StudentDTO implements Serializable{
     
     private String endDate;
     
-    private List<CourseDTO> courses;
+    private Set<CourseDTO> courses = new LinkedHashSet<>();
     
-    public List<CourseDTO> getCourses() {
+    public Set<CourseDTO> getCourses() {
 		return courses;
 	}
 
-	public void setCourses(List<CourseDTO> courses) {
+	public void setCourses(Set<CourseDTO> courses) {
 		this.courses = courses;
 	}
 
@@ -94,7 +97,6 @@ public class StudentDTO implements Serializable{
         this.enrolmentDate = (std.getEnrolmentDate()!=null) ? std.getEnrolmentDate().toString() : "";
         this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
         if((std.getCourses()!=null) && (std.getCourses().size()>0)){
-        	courses = new ArrayList<CourseDTO>();
         	for(Course crs : std.getCourses()) {
         		courses.add(new CourseDTO(crs));
         	}
@@ -118,6 +120,7 @@ public class StudentDTO implements Serializable{
     	if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(endDate)) std.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if((courses!=null) && (courses.size() > 0)) {
+    		
     		for(CourseDTO dto : courses) {
     			std.getCourses().add(dto.convertToCourse());
     		}

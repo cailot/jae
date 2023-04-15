@@ -30,7 +30,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class CourseDTO implements Serializable{
@@ -40,12 +43,22 @@ public class CourseDTO implements Serializable{
     private String grade;
     
     private String name;
-       
-    private String registerDate;
+    
+    private String year;
+    
+    public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+
+	private String registerDate;
     
     private String endDate;
     
-    private List<StudentDTO> students;
+    private Set<StudentDTO> students = new LinkedHashSet<>();
 
 	public String getEndDate() {
 		return endDate;
@@ -88,26 +101,27 @@ public class CourseDTO implements Serializable{
 	}
 
 
-	public List<StudentDTO> getStudents() {
+	public Set<StudentDTO> getStudents() {
 		return students;
 	}
 
-	public void setStudents(List<StudentDTO> students) {
+	public void setStudents(Set<StudentDTO> students) {
 		this.students = students;
 	}
 
 	public CourseDTO() {}
 
-    @Override
+	@Override
 	public String toString() {
-		return "CourseDTO [id=" + id + ", grade=" + grade + ", name=" + name + ", registerDate=" + registerDate
-				+ ", endDate=" + endDate + ", students=" + students + "]";
+		return "CourseDTO [id=" + id + ", grade=" + grade + ", name=" + name + ", year=" + year + ", registerDate="
+				+ registerDate + ", endDate=" + endDate + ", students=" + students + "]";
 	}
 
 	public CourseDTO(Course crs) {
     	this.id = (crs.getId()!=null) ? crs.getId().toString() : "";
     	this.grade = (crs.getGrade()!=null) ? crs.getGrade() : "";
     	this.name = (crs.getName()!=null) ? crs.getName() : "";
+    	this.year = (crs.getYear()!=null) ? crs.getYear(): "";
         this.registerDate = (crs.getRegisterDate()!=null) ? crs.getRegisterDate().toString() : "";
         this.endDate = (crs.getEndDate()!=null) ? crs.getEndDate().toString() : ""; 
 //        if((crs.getStudents()!=null) && (crs.getStudents().size()>0)) {
@@ -122,6 +136,7 @@ public class CourseDTO implements Serializable{
     	if(StringUtils.isNotBlank(id)) crs.setId(Long.parseLong(this.id));
     	if(StringUtils.isNotBlank(grade)) crs.setGrade(this.grade);
     	if(StringUtils.isNotBlank(name)) crs.setName(this.name);
+    	if(StringUtils.isNotBlank(year)) crs.setYear(this.year);
     	if(StringUtils.isNotBlank(registerDate)) crs.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(endDate)) crs.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 //    	if((students!=null)&&(students.size()>0)) {

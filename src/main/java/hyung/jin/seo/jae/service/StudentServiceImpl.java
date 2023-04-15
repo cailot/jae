@@ -3,10 +3,13 @@ package hyung.jin.seo.jae.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.StudentRepository;
@@ -114,9 +117,10 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
+	//@Transactional
 	public Student updateStudent(Student newStudent, Long id) {
 		// search by getId
-		Student existing = studentRepository.findById(id).get();
+		Student existing = studentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Student not found"));
 		// Update info
 		String newFirstName = StringUtils.defaultString(newStudent.getFirstName());
 		if (StringUtils.isNotBlank(newFirstName)) {
@@ -161,6 +165,11 @@ public class StudentServiceImpl implements StudentService {
 		if (newStudent.getEnrolmentDate() != null) {
 			LocalDate newEnrolDate = newStudent.getEnrolmentDate();
 			existing.setEnrolmentDate(newEnrolDate);
+		}
+		
+		// update course
+		if((newStudent.getCourses()!=null) && (newStudent.getCourses().size() > 0)) {
+			existing.setCourses(newStudent.getCourses());
 		}
 
 		// update the existing record

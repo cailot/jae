@@ -16,6 +16,10 @@
 
 	});
 </script>
+
+
+
+
 <!-- Success Modal -->
 <div class="modal fade" id="success-alert" tabindex="-1"
 	aria-labelledby="successModalLabel" aria-hidden="true">
@@ -245,23 +249,40 @@
 
 
 
-<!-- 1st Row -->
-<div class="row">
-	<!-- Student Admin -->
-	<div class="col-md-4">
-		<div class="card mb-4 shadow-sm">
-			<div class="card-body">
-			<h5>Student Information</h5>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card-body">
+      	<h5>Student Information</h5>
 				<jsp:include page="student/admin.jsp"></jsp:include>
 			</div>
-		</div>
-	</div>
-
-	<!-- Course Registration -->
-	<div class="col-md-5">
-		<div class="card mb-4 shadow-sm">
+      </div>
+    
+ 	 <div class="col-lg-8 bg-warning">
+      	<div class="row">
+			<div class="col-lg-8 bg-warning">
 			<div class="card-body">
-				<h5 class="card-title">Course Registration</h5>
+				<h5>Course Registration</h5>
 				<div class="modal-body">
 					<form id="">
 						<div class="form-group">
@@ -309,14 +330,14 @@
 						</div>
 					</form>
 				</div>
+			
+		
+			 </div>
 			</div>
-		</div>
-	</div>
-	<!-- Attendance -->
-	<div class="col-md-3">
-		<div class="card mb-4 shadow-sm">
-			<div class="card-body">
-				<h5 class="card-title">Attendance</h5>
+			
+			<div class="col-lg-4 bg-success">
+			 <div class="card-body">
+			 <h5 class="card-title">Attendance</h5>
 				<div class="modal-body">
 					<form id="">
 						<div class="form-group">
@@ -326,31 +347,14 @@
 						</div>
 					</form>
 				</div>
+			 
+			 </div>
 			</div>
-		</div>
-	</div>
-</div>
-
-
-
-
-<!-- 2nd Row -->
-<div class="row">
-	<!-- Registered Course -->
-	<div class="col-md-4">
-		<div class="card mb-4 shadow-sm">
-			<div class="card-body">
-			<%--	<jsp:include page="course/associate.jsp"></jsp:include> --%>
-			</div>
-		</div>
-	</div>
-
-	<!-- Invoice -->
-	<div class="col-md-8">
-		<div class="card mb-4 shadow-sm">
-			<div class="card-body">
-				<div class="modal-body">
-					<form>
+      	</div>
+      	<div class="row">
+      		<div class="col-lg-12 bg-primary">
+      		<div class="card-body">
+      				<form>
 						<div class="form-group">
 							<div class="form-row">
 								<div class="col-md-6">
@@ -376,16 +380,26 @@
 
 							</div>
 						</div>
-
 						<div class="form-group">
 							<div class="form-row">
 								<textarea class="form-control" rows="8"></textarea>
 							</div>
 						</div>
 					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-
+      			</div>
+      		</div>
+      	</div>  
+      	
+      	
+      	   </div>
+    </div>
+ 
 </div>
+
+
+
+
+
+
+
+

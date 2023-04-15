@@ -31,7 +31,10 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 //@Getter
 //@Setter
@@ -199,18 +202,18 @@ public class Student implements Serializable{
     private LocalDate endDate;
 
     
-    @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH)
     @JoinTable(name="Student_Course",
     	joinColumns = {@JoinColumn(name="student_id")},
     	inverseJoinColumns = {@JoinColumn(name="course_id")}
     )
-    private List<Course> courses;
+    private Set<Course> courses = new LinkedHashSet<>();
 
-	public List<Course> getCourses() {
+	public Set<Course> getCourses() {
 		return courses;
 	}
 
-	public void setCourses(List<Course> courses) {
+	public void setCourses(Set<Course> courses) {
 		this.courses = courses;
 	}
     

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -59,30 +60,30 @@ public class JaeController {
 	}
 	
 	
-	@PostMapping("/associateCourse")
-    @ResponseBody
-    public StudentDTO updateCourses(@RequestParam long studentId, @RequestParam("courseId[]") long[] courseId) {
-        System.out.println(studentId + Arrays.toString(courseId));
-        // 1. get Student by Id
-        Student std = studentService.getStudent((long)studentId);
-        // 2. get Course Set in retrieved Student
-        List courses = std.getCourses();
-        // 3. make course info clear in Student
-        courses.clear();
-        if(courseId.length > 0) {
-	        for(long cid : courseId) {
-	        	// 4. get Course by Id
-	        	Course crs = courseService.getCourse(cid);
-	        	// 5. associate Student with Course
-	        	crs.getStudents().add(std);
-	        	// 6. associate Course into Student
-	        	courses.add(crs);
-	        }
-        }
-        // 6. update Student
-        std = studentService.updateStudent(std, std.getId());
-		StudentDTO dto = new StudentDTO(std);
-		return dto;
-    }
+//	@PostMapping("/associateCourse")
+//    @ResponseBody
+//    public StudentDTO updateCourses(@RequestParam long studentId, @RequestParam("courseId[]") long[] courseId) {
+//        System.out.println(studentId + Arrays.toString(courseId));
+//        // 1. get Student by Id
+//        Student std = studentService.getStudent((long)studentId);
+//        // 2. get Course Set in retrieved Student
+//        Set courses = std.getCourses();
+//        // 3. make course info clear in Student
+//        courses.clear();
+//        if(courseId.length > 0) {
+//	        for(long cid : courseId) {
+//	        	// 4. get Course by Id
+//	        	Course crs = courseService.getCourse(cid);
+//	        	// 5. associate Student with Course
+//	        	crs.getStudents().add(std);
+//	        	// 6. associate Course into Student
+//	        	courses.add(crs);
+//	        }
+//        }
+//        // 6. update Student
+//        std = studentService.updateStudent(std, std.getId());
+//		StudentDTO dto = new StudentDTO(std);
+//		return dto;
+//    }
 	
 }

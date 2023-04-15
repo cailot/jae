@@ -17,8 +17,10 @@
 				var val = selectedOptionText.split("...");
 				var cell1 = row.insertCell(1);
 				cell1.innerHTML = val[0];
+				$(cell1).addClass('small');
 				var cell2 = row.insertCell(2);
 				cell2.innerHTML = val[1];
+				$(cell2).addClass('small');
 				var cell3 = row.insertCell(3);
 				cell3.innerHTML = '<a href="javascript:void(0)" title="Delete Course"><i class="fa fa-trash"></i></a>';
 				
@@ -58,7 +60,6 @@
 			data : JSON.stringify(std),
 			contentType : 'application/json',
 			success : function(student) {
-				console.log('Success : ' + student);
 				// Display the success alert
 				$('#success-alert .modal-body').text(
 						'Your action has been completed successfully.');
@@ -75,6 +76,7 @@
 				$("#formState").val(student.state);
 				$("#formBranch").val(student.branch);
 				$("#formGrade").val(student.grade);
+				$("#courseGrade").val(student.grade);
 				// Set date value
 				var date = new Date(student.enrolmentDate); // Replace with your date value
 				$("#formEnrolment").datepicker('setDate', date);
@@ -85,6 +87,10 @@
 			}
 		});
 		$('#registerModal').modal('hide');
+		// ready to associate
+		listCourses(std.grade);
+		// flush all registered data
+		document.getElementById("studentRegister").reset();
 	}
 
 	// Search Student with Keyword	
@@ -142,10 +148,7 @@
 
 	// Display selected student in student search
 	function displayStudentInfo(value) {
-		const crss = value.courses;
-		for(let i=0; i<crss.length; i++){
-			console.log(crss[i].id);
-		}
+		
 		clearStudentForm();
 		$("#formId").val(value['id']);
 		$("#formFirstName").val(value['firstName']);
@@ -168,6 +171,22 @@
 		$('#studentListResult').modal('hide');
 		// clear search keyword
 		$("#formKeyword").val('');
+		
+		// Course Info
+		const crss = value.courses;
+		if(crss != null){
+			var body = $('#list-grade-associate-body');
+			for(let i=0; i<crss.length; i++){
+				console.log(crss[i].id + ' ' + crss[i].grade + ' ' + crss[i].name);
+				var row = $('<tr></tr>');
+				row.append($('<td class="hidden-column"></td>').text(crss[i].id));
+				row.append($('<td class="small"></td>')
+						.text(crss[i].grade.toUpperCase()));
+				row.append($('<td class="small"></td>').text(crss[i].name));
+				row.append($('<td><a href="javascript:void(0)" title="Delete Course"><i class="fa fa-trash"></i></a></td>'));
+				body.append(row);
+			}
+		}
 	}
 
 	// Update existing student
@@ -193,13 +212,27 @@
 			state : $("#formState").val(),
 			branch : $("#formBranch").val(),
 			grade : $("#formGrade").val(),
-			enrolmentDate : $("#formEnrolment").val()
+			enrolmentDate : $("#formEnrolment").val(),
+			courses : []
 		}
+		
+		// associate course info
+		var cId = [];
+		$("#gradeAssociateCourseTable tbody tr").each(function() {
+		  cId.push($(this).find("td").eq(0).text());
+		  var crs = {
+				  id : $(this).find("td").eq(0).text()
+		  };
+		  std.courses.push(crs);
+		});
+		
 		// send query to controller
 		$.ajax({
-			url : 'student/update',
+			url : 'student/update1',
 			type : 'PUT',
 			dataType : 'json',
+			//data : JSON.stringify(std, cId),
+			
 			data : JSON.stringify(std),
 			contentType : 'application/json',
 			success : function(value) {
@@ -207,32 +240,48 @@
 				$('#success-alert .modal-body').text(
 						'ID : ' + value.id + ' is updated successfully.');
 				$('#success-alert').modal('show');
-
-				// Update display info
-				clearStudentForm();
-				$("#formId").val(value.id);
-				$("#formFirstName").val(value.firstName);
-				$("#formLastName").val(value.lastName);
-				$("#formEmail").val(value.email);
-				$("#formAddress").val(value.address);
-				$("#formContact1").val(value.contactNo1);
-				$("#formContact2").val(value.contactNo2);
-				$("#formMemo").val(value.memo);
-				$("#formState").val(value.state);
-				$("#formBranch").val(value.branch);
-				$("#formGrade").val(value.grade);
-				// Set date value
-				var date = new Date(value.enrolmentDate); // Replace with your date value
-				$("#formEnrolment").datepicker('setDate', date);
-				// clear search keyword
-				$("#formKeyword").val('');
-
+				// Display returned result
+				displayStudentInfo(value);
 			},
 			error : function(xhr, status, error) {
 				console.log('Error : ' + error);
 			}
 		});
 	}
+	
+	
+	
+	// associate course
+	 /* function associateCourse(){
+		var sId = $("#formId").val();
+		//console.log(id);
+		var cId = [];
+		$("#gradeAssociateCourseTable tbody tr").each(function() {
+		  cId.push($(this).find("td").eq(0).text());
+		});
+		
+		$.ajax({
+		    url: "/associateCourse",
+		    method: "POST",
+		    data: {
+		        "studentId": sId,
+		        "courseId": cId
+		    },
+		    dataType: "json",
+		    success: function(response) {
+		        console.log("AJAX request successful:");
+		        console.log(response);
+		    },
+		    error: function(xhr, status, error) {
+		        console.log("AJAX request failed:");
+		        console.log(xhr.responseText);
+		    }
+		});
+	}
+	 
+	 */
+	
+	
 
 	function inactivateStudent() {
 
@@ -266,14 +315,17 @@
 	function clearStudentForm() {
 		document.getElementById("studentInfo").reset();
 		$('#list-grade-associate-body').empty();
+		// flush courses and re-list all
+		availableCourses();
 	}
 	
 	
 	// Course Info
 	// Get list of courses by grade
-	function listCourses() {
+	function listCourses(grade) {
 		var body = $('#list-grade-associate-body');
-		var grade = $("#courseGrade").val();
+		//var grade = $("#courseGrade").val();
+		console.log(grade);
 		const dropdown = document.getElementById("courseDropdown");
 		body.empty();
 		// remove all options before fetching new list
@@ -292,9 +344,9 @@
 					if (item.grade == grade) {
 						var row = $('<tr></tr>');
 						row.append($('<td class="hidden-column"></td>').text(item.id));
-						row.append($('<td></td>')
+						row.append($('<td class="small"></td>')
 								.text(item.grade.toUpperCase()));
-						row.append($('<td></td>').text(item.name));
+						row.append($('<td class="small"></td>').text(item.name));
 						row.append($('<td><a href="javascript:void(0)" title="Delete Course"><i class="fa fa-trash"></i></a></td>'));
 						
 						body.append(row);
@@ -311,33 +363,33 @@
 		});
 	}
 	
-	// associate course
-	function associateCourse(){
-		var sId = $("#formId").val();
-		//console.log(id);
-		var cId = [];
-		$("#gradeAssociateCourseTable tbody tr").each(function() {
-		  cId.push($(this).find("td").eq(0).text());
-		});
-		
+	// Get list of available courses
+	function availableCourses() {
+		var body = $('#list-grade-associate-body');
+		const dropdown = document.getElementById("courseDropdown");
+		body.empty();
+		// remove all options before fetching new list
+		while (dropdown.options.length > 0) {
+			dropdown.remove(0);
+		}
+		const title = document.createElement("option");
+		title.textContent = "Click to add a subject";
+		dropdown.appendChild(title);
 		$.ajax({
-		    url: "/associateCourse",
-		    method: "POST",
-		    data: {
-		        "studentId": sId,
-		        "courseId": cId
-		    },
-		    dataType: "json",
-		    success: function(response) {
-		        console.log("AJAX request successful:");
-		        console.log(response);
-		    },
-		    error: function(xhr, status, error) {
-		        console.log("AJAX request failed:");
-		        console.log(xhr.responseText);
-		    }
+			url : "course/available",
+			type : 'GET',
+			success : function(data) {
+				$.each(data, function(i, item) {
+						//console.log(item.id);
+					const option = document.createElement("option");
+					option.value = item.id;
+					option.textContent = item.grade.toUpperCase() + "..." + item.name;
+					dropdown.appendChild(option);
+				});
+			}
 		});
 	}
+	
 	
 </script>
 
@@ -368,7 +420,7 @@
 					</div>
 					<div class="col mx-auto">
 						<button type="button" class="btn btn-block btn-primary btn-sm"
-							onclick="updateStudentInfo()">Update</button>
+							onclick="updateStudentInfo()">Save</button>
 					</div>
 					<div class="col mx-auto">
 						<button type="button" class="btn btn-block btn-primary btn-sm"
@@ -518,10 +570,6 @@
 				</div>
 			</div>
 			
-			
-			
-			
-			
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-3">
@@ -549,37 +597,35 @@
 						</select>
 					</div>
 					<div class="col-md-2">
+						<label for="" class="label-form">Course</label>
 						<button type="button" class="btn btn-block btn-primary btn-sm"
-							onclick="listCourses()">Search</button>
+							onclick="listCourses(document.getElementById('courseGrade').value)">Search</button>
 					</div>
-					<div class="col-md-5">
+					<div class="col-md-7">
 						<label for="" class="label-form">Select to add subject</label> <select
 							class="form-control form-control-sm" id="courseDropdown"
 							name="courseDropdown">
 							<option value="p2">Click to add a subject</option>
 						</select>
 					</div>
-					<div class="col-md-2">
+					<!-- <div class="col-md-2">
 						<button type="button" class="btn btn-block btn-primary btn-sm"
 							onclick="associateCourse()">save</button>
-					</div>
+					</div> -->
 				</div>
 			</div>
-			
-			
 			
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-12">
 						<div class="table-wrap">
-							<table id="gradeAssociateCourseTable" data-toggle="table">
+							<table id="gradeAssociateCourseTable" data-toggle="table" data-header-style="headerStyle">
 								<thead class="table-primary">
 									<tr>
 										<th class="hidden-column"></th>
-										<th>Grade</th>
-										<th>eLearning Subject</th>
-										<th>Delete</th>
-										
+										<th data-field="grade">Grade</th>
+										<th data-field="name">eLearning Subject</th>
+										<th data-field="delete">Delete</th>
 									</tr>
 								</thead>
 								<tbody id="list-grade-associate-body">
@@ -589,8 +635,27 @@
 					</div>
 				</div>
 			</div>
-			
-			
+<style>
+.course-title {
+  font-weight : fw-bold;
+  font-size : 0.75rem;
+}
+</style>			
+<script>
+  function headerStyle(column) {
+    return {
+      grade: {
+        classes : 'course-title'
+      },
+      name: {
+    	classes : 'course-title'
+      },
+      delete: {
+      	classes : 'course-title'
+      }
+    }[column.field]
+  }
+</script>			
 			
 			
 		</form>
