@@ -91,16 +91,6 @@ public class JaeStudentController {
 		}
 		return dtos;
 	}
-
-//	// update existing student
-//	@PutMapping("/update")
-//	@ResponseBody
-//	public StudentDTO updateStudent(@RequestBody StudentDTO formData) {
-//		Student std = formData.convertToStudent();
-//		std = studentService.updateStudent(std, std.getId());
-//		StudentDTO dto = new StudentDTO(std);
-//		return dto;
-//	}
 	
 	// update existing student
 	@PutMapping("/update")
