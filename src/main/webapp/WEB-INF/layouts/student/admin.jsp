@@ -177,7 +177,7 @@
 		if(crss != null){
 			var body = $('#list-grade-associate-body');
 			for(let i=0; i<crss.length; i++){
-				console.log(crss[i].id + ' ' + crss[i].grade + ' ' + crss[i].name);
+				//console.log(crss[i].id + ' ' + crss[i].grade + ' ' + crss[i].name);
 				var row = $('<tr></tr>');
 				row.append($('<td class="hidden-column"></td>').text(crss[i].id));
 				row.append($('<td class="small"></td>')
@@ -228,7 +228,7 @@
 		
 		// send query to controller
 		$.ajax({
-			url : 'student/update1',
+			url : 'student/update',
 			type : 'PUT',
 			dataType : 'json',
 			//data : JSON.stringify(std, cId),
@@ -325,7 +325,7 @@
 	function listCourses(grade) {
 		var body = $('#list-grade-associate-body');
 		//var grade = $("#courseGrade").val();
-		console.log(grade);
+		//console.log(grade);
 		const dropdown = document.getElementById("courseDropdown");
 		body.empty();
 		// remove all options before fetching new list
@@ -415,20 +415,20 @@
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-primary btn-sm"
+						<button type="button" class="btn btn-block btn-success btn-sm"
 							data-toggle="modal" data-target="#registerModal">New</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-primary btn-sm"
+						<button type="button" class="btn btn-block btn-warning btn-sm"
 							onclick="updateStudentInfo()">Save</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-primary btn-sm"
+						<button type="button" class="btn btn-block btn-danger btn-sm"
 							onclick="inactivateStudent()">Suspend</button>
 					</div>
 
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-primary btn-sm"
+						<button type="button" class="btn btn-block btn-info btn-sm"
 							onclick="clearStudentForm()">Clear</button>
 					</div>
 				</div>
@@ -596,12 +596,12 @@
 							<option value="vce">VCE</option>
 						</select>
 					</div>
-					<div class="col-md-2">
+					<div class="col-md-3">
 						<label for="" class="label-form">Course</label>
 						<button type="button" class="btn btn-block btn-primary btn-sm"
 							onclick="listCourses(document.getElementById('courseGrade').value)">Search</button>
 					</div>
-					<div class="col-md-7">
+					<div class="col-md-6">
 						<label for="" class="label-form">Select to add subject</label> <select
 							class="form-control form-control-sm" id="courseDropdown"
 							name="courseDropdown">

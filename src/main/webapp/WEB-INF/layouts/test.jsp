@@ -107,14 +107,12 @@
 
 
 <!-- Register Form Dialogue -->
-<div class="modal fade" id="registerModal" tabindex="-1" role="dialog"
-	aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title" id="myModalLabel">Student Enrolment</h4>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-hidden="true">&times;</button>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
 			<div class="modal-body">
 				<form id="studentRegister">
@@ -161,10 +159,17 @@
 								</select>
 							</div>
 							<div class="col-md-3">
-								<label for="datepicker">Enrolment</label> <input type="text"
-									class="form-control datepicker" id="addEnrolment"
-									name="addEnrolment" placeholder="dd/mm/yyyy">
+								<label for="datepicker">Enrolment</label> 
+								<input type="text" class="form-control datepicker" id="addEnrolment" name="addEnrolment" placeholder="dd/mm/yyyy">
 							</div>
+							<script>
+								var today = new Date();
+								var day = today.getDate();
+								var month = today.getMonth() + 1; // Note: January is 0
+								var year = today.getFullYear();
+								var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
+								document.getElementById('addEnrolment').value = formattedDate;
+							</script>
 						</div>
 					</div>
 					<div class="form-group">
