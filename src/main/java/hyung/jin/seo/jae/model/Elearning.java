@@ -40,8 +40,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Course")
-public class Course implements Serializable{
+@Table(name="Elearning")
+public class Elearning implements Serializable{
     
     
 	public Long getId() {
@@ -108,7 +108,6 @@ public class Course implements Serializable{
     @Column(length = 10, nullable = true)
     private String year;
     
-    
     @CreationTimestamp
     private LocalDate registerDate;
     
@@ -124,7 +123,7 @@ public class Course implements Serializable{
 		this.students = students;
 	}
 
-	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH, mappedBy="courses")
+	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH, mappedBy="elearnings")
     private Set<Student> students = new LinkedHashSet<>();
     
 }

@@ -203,18 +203,18 @@ public class Student implements Serializable{
 
     
     @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH)
-    @JoinTable(name="Student_Course",
+    @JoinTable(name="Student_Elearning",
     	joinColumns = {@JoinColumn(name="student_id")},
-    	inverseJoinColumns = {@JoinColumn(name="course_id")}
+    	inverseJoinColumns = {@JoinColumn(name="elearning_id")}
     )
-    private Set<Course> courses = new LinkedHashSet<>();
+    private Set<Elearning> elearnings = new LinkedHashSet<>();
 
-	public Set<Course> getCourses() {
-		return courses;
+	public Set<Elearning> getElearnings() {
+		return elearnings;
 	}
 
-	public void setCourses(Set<Course> courses) {
-		this.courses = courses;
+	public void setElearnings(Set<Elearning> elearnings) {
+		this.elearnings = elearnings;
 	}
     
 }

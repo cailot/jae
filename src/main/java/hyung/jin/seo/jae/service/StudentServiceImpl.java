@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.StudentRepository;
@@ -168,8 +167,8 @@ public class StudentServiceImpl implements StudentService {
 		}
 		
 		// update course
-		if((newStudent.getCourses()!=null) && (newStudent.getCourses().size() > 0)) {
-			existing.setCourses(newStudent.getCourses());
+		if((newStudent.getElearnings()!=null) && (newStudent.getElearnings().size() > 0)) {
+			existing.setElearnings(newStudent.getElearnings());
 		}
 
 		// update the existing record

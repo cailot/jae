@@ -1,10 +1,7 @@
 package hyung.jin.seo.jae.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,48 +14,41 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
-
-import hyung.jin.seo.jae.model.Course;
-import hyung.jin.seo.jae.model.CourseDTO;
-import hyung.jin.seo.jae.model.Student;
-import hyung.jin.seo.jae.model.StudentDTO;
-import hyung.jin.seo.jae.service.CourseService;
-import hyung.jin.seo.jae.service.StudentService;
-import hyung.jin.seo.utils.JaeConstants;
+import hyung.jin.seo.jae.model.Elearning;
+import hyung.jin.seo.jae.model.ElearningDTO;
+import hyung.jin.seo.jae.service.ElearningService;
 
 @Controller
-@RequestMapping("course")
-public class JaeCourseController {
+@RequestMapping("elearning")
+public class JaeElearningController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JaeCourseController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JaeElearningController.class);
 
 	@Autowired
-	private CourseService courseService;
+	private ElearningService elearningService;
 
 	
 	// register new student
 	@PostMapping("/register")
 	@ResponseBody
-	public CourseDTO registerStudent(@RequestBody CourseDTO formData) {
-		Course crs = formData.convertToCourse();
-		crs = courseService.addCourse(crs);
-		CourseDTO dto = new CourseDTO(crs);
+	public ElearningDTO registerStudent(@RequestBody ElearningDTO formData) {
+		Elearning crs = formData.convertToCourse();
+		crs = elearningService.addElearning(crs);
+		ElearningDTO dto = new ElearningDTO(crs);
 		return dto;
 	}
 
 	// search course with grade
 	@GetMapping("/gradeCourse")
 	@ResponseBody
-	List<CourseDTO> listCourses(@RequestParam("grade") String keyword) {
-		List<Course> crss = courseService.gradeCourses(keyword);
-		List<CourseDTO> dtos = new ArrayList<CourseDTO>();
-		for (Course crs : crss) {
-			CourseDTO dto = new CourseDTO(crs);
+	List<ElearningDTO> listCourses(@RequestParam("grade") String keyword) {
+		List<Elearning> crss = elearningService.gradeElearnings(keyword);
+		List<ElearningDTO> dtos = new ArrayList<ElearningDTO>();
+		for (Elearning crs : crss) {
+			ElearningDTO dto = new ElearningDTO(crs);
 			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
 			{
 				String newName = dto.getName().replaceAll("\'", "&#39;");
@@ -72,11 +62,11 @@ public class JaeCourseController {
 	// search course with grade
 	@GetMapping("/grade")
 	@ResponseBody
-	List<CourseDTO> gradeCourses(@RequestParam("grade") String keyword) {
-		List<Course> crss = courseService.gradeCourses(keyword);
-		List<CourseDTO> dtos = new ArrayList<CourseDTO>();
-		for (Course crs : crss) {
-			CourseDTO dto = new CourseDTO(crs);
+	List<ElearningDTO> gradeCourses(@RequestParam("grade") String keyword) {
+		List<Elearning> crss = elearningService.gradeElearnings(keyword);
+		List<ElearningDTO> dtos = new ArrayList<ElearningDTO>();
+		for (Elearning crs : crss) {
+			ElearningDTO dto = new ElearningDTO(crs);
 			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
 			{
 				String newName = dto.getName().replaceAll("\'", "&#39;");
@@ -91,11 +81,11 @@ public class JaeCourseController {
 	// search course with grade
 	@GetMapping("/no_grade")
 	@ResponseBody
-	List<CourseDTO> noGradeCourses(@RequestParam("grade") String keyword) {
-		List<Course> crss = courseService.notGradeCourses(keyword);
-		List<CourseDTO> dtos = new ArrayList<CourseDTO>();
-		for (Course crs : crss) {
-			CourseDTO dto = new CourseDTO(crs);
+	List<ElearningDTO> noGradeCourses(@RequestParam("grade") String keyword) {
+		List<Elearning> crss = elearningService.notGradeElearnings(keyword);
+		List<ElearningDTO> dtos = new ArrayList<ElearningDTO>();
+		for (Elearning crs : crss) {
+			ElearningDTO dto = new ElearningDTO(crs);
 			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
 			{
 				String newName = dto.getName().replaceAll("\'", "&#39;");
@@ -110,10 +100,10 @@ public class JaeCourseController {
 	// update existing course
 	@PutMapping("/update")
 	@ResponseBody
-	public CourseDTO updateStudent(@RequestBody CourseDTO formData) {
-		Course crs = formData.convertToCourse();
-		crs = courseService.updateCourse(crs, crs.getId());
-		CourseDTO dto = new CourseDTO(crs);
+	public ElearningDTO updateStudent(@RequestBody ElearningDTO formData) {
+		Elearning crs = formData.convertToCourse();
+		crs = elearningService.updateElearning(crs, crs.getId());
+		ElearningDTO dto = new ElearningDTO(crs);
 		return dto;
 	}
 
@@ -121,18 +111,18 @@ public class JaeCourseController {
 	@PutMapping("/inactivate/{id}")
 	@ResponseBody
 	public void inactivateCourse(@PathVariable Long id) {
-		courseService.dischargeCourse(id);
+		elearningService.dischargeElearning(id);
 	}
 	
 	
 	// list all courses
 	@GetMapping("/list")
 	@ResponseBody
-	List<CourseDTO> allCourses() {
-		List<Course> crss = courseService.availableCourses();
-		List<CourseDTO> dtos = new ArrayList<CourseDTO>();
-		for(Course crs : crss) {
-			CourseDTO dto = new CourseDTO(crs);
+	List<ElearningDTO> allCourses() {
+		List<Elearning> crss = elearningService.availableElearnings();
+		List<ElearningDTO> dtos = new ArrayList<ElearningDTO>();
+		for(Elearning crs : crss) {
+			ElearningDTO dto = new ElearningDTO(crs);
 			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
 			{
 				String newName = dto.getName().replaceAll("\'", "&#39;");
@@ -146,11 +136,11 @@ public class JaeCourseController {
 	// list available courses
 	@GetMapping("/available")
 	@ResponseBody
-	List<CourseDTO> availableCourses() {
-		List<Course> crss = courseService.availableCourses();
-		List<CourseDTO> dtos = new ArrayList<CourseDTO>();
-		for(Course crs : crss) {
-			CourseDTO dto = new CourseDTO(crs);
+	List<ElearningDTO> availableCourses() {
+		List<Elearning> crss = elearningService.availableElearnings();
+		List<ElearningDTO> dtos = new ArrayList<ElearningDTO>();
+		for(Elearning crs : crss) {
+			ElearningDTO dto = new ElearningDTO(crs);
 			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
 			{
 				String newName = dto.getName().replaceAll("\'", "&#39;");

@@ -1,13 +1,10 @@
 package hyung.jin.seo.jae.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,19 +17,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
-
-import hyung.jin.seo.jae.model.Course;
-import hyung.jin.seo.jae.model.CourseDTO;
+import hyung.jin.seo.jae.model.Elearning;
+import hyung.jin.seo.jae.model.ElearningDTO;
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.model.StudentDTO;
-import hyung.jin.seo.jae.service.CourseService;
+import hyung.jin.seo.jae.service.ElearningService;
 import hyung.jin.seo.jae.service.StudentService;
-import hyung.jin.seo.utils.JaeConstants;
 
 @Controller
 @RequestMapping("student")
@@ -44,25 +37,8 @@ public class JaeStudentController {
 	private StudentService studentService;
 	
 	@Autowired
-	private CourseService courseService;
+	private ElearningService elearningService;
 	
-
-//	// private static Gson gson = new Gson();
-//
-//	@GetMapping("/test")
-//	public String student(HttpSession session) {
-//
-////		Student std = studentService.getStudent(1L);
-////		session.setAttribute("std", new StudentDTO(std));
-//		return "testPage";
-//	}
-//	
-//	
-//	@GetMapping("/list")
-//	public String list(HttpSession session) {
-//		return "testPage";
-//	}
-
 
 	// register new student
 	@PostMapping("/register")
@@ -98,21 +74,21 @@ public class JaeStudentController {
 	public StudentDTO updateStudent(@RequestBody StudentDTO formData) {
 		Student std = formData.convertToStudent();
 		
-		if((std.getCourses() != null) && (std.getCourses().size() > 0)) {
+		if((std.getElearnings() != null) && (std.getElearnings().size() > 0)) {
 			// 1. check if any related courses come
-			Set<CourseDTO> crss = formData.getCourses();
+			Set<ElearningDTO> crss = formData.getElearnings();
 			Set<Long> cidList = new HashSet<Long>(); // extract Course Id
-			for(CourseDTO crsDto : crss) {
+			for(ElearningDTO crsDto : crss) {
 				cidList.add(Long.parseLong(crsDto.getId()));
 			}
 			long[] courseId = cidList.stream().mapToLong(Long::longValue).toArray();
 			// 2. get Course in Student
-			Set courses = std.getCourses();
+			Set courses = std.getElearnings();
 			// 3. clear existing course
 			courses.clear();
 			for(long cid : courseId) {
 				// 4. get course info
-				Course crs = courseService.getCourse(cid);
+				Elearning crs = elearningService.getElearning(cid);
 				// 6. add Student to Course
 				crs.getStudents().add(std);
 				// 5. add Course to Student

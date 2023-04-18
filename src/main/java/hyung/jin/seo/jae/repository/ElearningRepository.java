@@ -6,16 +6,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import hyung.jin.seo.jae.model.Course;
+import hyung.jin.seo.jae.model.Elearning;
 import hyung.jin.seo.jae.model.Student;
 
-public interface CourseRepository extends JpaRepository<Course, Long>, JpaSpecificationExecutor<Course>{  
+public interface ElearningRepository extends JpaRepository<Elearning, Long>, JpaSpecificationExecutor<Elearning>{  
 	
-	List<Course> findAllByEndDateIsNull();
+	List<Elearning> findAllByEndDateIsNull();
 	
-	List<Course> findAllByEndDateIsNotNull();
+	List<Elearning> findAllByEndDateIsNotNull();
 	
-	Course findByIdAndEndDateIsNull(Long id);
+	Elearning findByIdAndEndDateIsNull(Long id);
 	
 	long countByEndDateIsNull();
 }

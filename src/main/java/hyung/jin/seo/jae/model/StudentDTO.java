@@ -69,14 +69,14 @@ public class StudentDTO implements Serializable{
     
     private String endDate;
     
-    private Set<CourseDTO> courses = new LinkedHashSet<>();
+    private Set<ElearningDTO> elearnings = new LinkedHashSet<>();
     
-    public Set<CourseDTO> getCourses() {
-		return courses;
+    public Set<ElearningDTO> getElearnings() {
+		return elearnings;
 	}
 
-	public void setCourses(Set<CourseDTO> courses) {
-		this.courses = courses;
+	public void setElearnings(Set<ElearningDTO> elearnings) {
+		this.elearnings = elearnings;
 	}
 
 	public StudentDTO() {}
@@ -96,9 +96,9 @@ public class StudentDTO implements Serializable{
         this.registerDate = (std.getRegisterDate()!=null) ? std.getRegisterDate().toString() : "";
         this.enrolmentDate = (std.getEnrolmentDate()!=null) ? std.getEnrolmentDate().toString() : "";
         this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
-        if((std.getCourses()!=null) && (std.getCourses().size()>0)){
-        	for(Course crs : std.getCourses()) {
-        		courses.add(new CourseDTO(crs));
+        if((std.getElearnings()!=null) && (std.getElearnings().size()>0)){
+        	for(Elearning crs : std.getElearnings()) {
+        		elearnings.add(new ElearningDTO(crs));
         	}
         }
     }
@@ -119,10 +119,10 @@ public class StudentDTO implements Serializable{
     	if(StringUtils.isNotBlank(registerDate)) std.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(endDate)) std.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	if((courses!=null) && (courses.size() > 0)) {
+    	if((elearnings!=null) && (elearnings.size() > 0)) {
     		
-    		for(CourseDTO dto : courses) {
-    			std.getCourses().add(dto.convertToCourse());
+    		for(ElearningDTO dto : elearnings) {
+    			std.getElearnings().add(dto.convertToCourse());
     		}
     	}
     	return std;
@@ -245,7 +245,7 @@ public class StudentDTO implements Serializable{
 		return "StudentDTO [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", grade=" + grade
 				+ ", contactNo1=" + contactNo1 + ", contactNo2=" + contactNo2 + ", email=" + email + ", address="
 				+ address + ", state=" + state + ", branch=" + branch + ", memo=" + memo + ", registerDate="
-				+ registerDate + ", enrolmentDate=" + enrolmentDate + ", endDate=" + endDate + ", courses=" + courses
+				+ registerDate + ", enrolmentDate=" + enrolmentDate + ", endDate=" + endDate + ", elearnings=" + elearnings
 				+ "]";
 	}
 

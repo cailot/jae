@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class CourseDTO implements Serializable{
+public class ElearningDTO implements Serializable{
     
 	private String id;
     
@@ -109,7 +109,7 @@ public class CourseDTO implements Serializable{
 		this.students = students;
 	}
 
-	public CourseDTO() {}
+	public ElearningDTO() {}
 
 	@Override
 	public String toString() {
@@ -117,7 +117,7 @@ public class CourseDTO implements Serializable{
 				+ registerDate + ", endDate=" + endDate + ", students=" + students + "]";
 	}
 
-	public CourseDTO(Course crs) {
+	public ElearningDTO(Elearning crs) {
     	this.id = (crs.getId()!=null) ? crs.getId().toString() : "";
     	this.grade = (crs.getGrade()!=null) ? crs.getGrade() : "";
     	this.name = (crs.getName()!=null) ? crs.getName() : "";
@@ -131,8 +131,8 @@ public class CourseDTO implements Serializable{
 //        }
     }
     
-    public Course convertToCourse() {
-    	Course crs = new Course();
+    public Elearning convertToCourse() {
+    	Elearning crs = new Elearning();
     	if(StringUtils.isNotBlank(id)) crs.setId(Long.parseLong(this.id));
     	if(StringUtils.isNotBlank(grade)) crs.setGrade(this.grade);
     	if(StringUtils.isNotBlank(name)) crs.setName(this.name);

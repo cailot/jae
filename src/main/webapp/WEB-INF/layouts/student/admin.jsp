@@ -1,14 +1,12 @@
-<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css">
-<script src="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.js"></script>
 <script>
 	$(document).ready(
 		function() {
-			$('#courseDropdown').on('change',function() {
+			$('#elearingDropdown').on('change',function() {
 				var selectedOptionText = $(this).find(
 						'option:selected').text();
 				// add new row into table
 				var table = document.getElementById(
-						"gradeAssociateCourseTable")
+						"gradeAssociateElearningTable")
 						.getElementsByTagName('tbody')[0];
 				var row = table.insertRow(0);
 				var cell0 = row.insertCell(0);
@@ -22,11 +20,11 @@
 				cell2.innerHTML = val[1];
 				$(cell2).addClass('small');
 				var cell3 = row.insertCell(3);
-				cell3.innerHTML = '<a href="javascript:void(0)" title="Delete Course"><i class="fa fa-trash"></i></a>';
+				cell3.innerHTML = '<a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a>';
 				
 			});
 			
-			$('#gradeAssociateCourseTable').on('click', 'a', function() {
+			$('#gradeAssociateElearningTable').on('click', 'a', function() {
 		    	var row = $(this).closest('tr');
 		    	var name = row.find('td:eq(1)').text();
 		      	if (confirm('Are you sure you want to remove ' + name + '?')) {
@@ -75,8 +73,8 @@
 				$("#formMemo").val(student.memo);
 				$("#formState").val(student.state);
 				$("#formBranch").val(student.branch);
-				$("#formGrade").val(student.grade);
-				$("#courseGrade").val(student.grade);
+				//$("#formGrade").val(student.grade);
+				$("#elearningGrade").val(student.grade);
 				// Set date value
 				var date = new Date(student.enrolmentDate); // Replace with your date value
 				$("#formEnrolment").datepicker('setDate', date);
@@ -88,7 +86,7 @@
 		});
 		$('#registerModal').modal('hide');
 		// ready to associate
-		listCourses(std.grade);
+		listElearnings(std.grade);
 		// flush all registered data
 		document.getElementById("studentRegister").reset();
 	}
@@ -160,8 +158,10 @@
 		$("#formMemo").val(value['memo']);
 		$("#formState").val(value['state']);
 		$("#formBranch").val(value['branch']);
-		$("#formGrade").val(value['grade']);
-		$("#courseGrade").val(value['grade']);
+		//$("#formGrade").val(value['grade']);
+		$("#elearningGrade").val(value['grade']);
+		// display same selected grade to Course Register section
+		$("#registerGrade").val(value['grade']);
 		
 		// Set date value
 		var date = new Date(value['enrolmentDate']); // Replace with your date value
@@ -172,18 +172,17 @@
 		// clear search keyword
 		$("#formKeyword").val('');
 		
-		// Course Info
-		const crss = value.courses;
+		// eLearning Info
+		const crss = value.elearnings;
 		if(crss != null){
 			var body = $('#list-grade-associate-body');
 			for(let i=0; i<crss.length; i++){
-				//console.log(crss[i].id + ' ' + crss[i].grade + ' ' + crss[i].name);
 				var row = $('<tr></tr>');
 				row.append($('<td class="hidden-column"></td>').text(crss[i].id));
 				row.append($('<td class="small"></td>')
 						.text(crss[i].grade.toUpperCase()));
 				row.append($('<td class="small"></td>').text(crss[i].name));
-				row.append($('<td><a href="javascript:void(0)" title="Delete Course"><i class="fa fa-trash"></i></a></td>'));
+				row.append($('<td><a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a></td>'));
 				body.append(row);
 			}
 		}
@@ -211,19 +210,20 @@
 			memo : $("#formMemo").val(),
 			state : $("#formState").val(),
 			branch : $("#formBranch").val(),
-			grade : $("#formGrade").val(),
+			//grade : $("#formGrade").val(),
+			grade : $("#elearningGrade").val(),
 			enrolmentDate : $("#formEnrolment").val(),
-			courses : []
+			elearnings : []
 		}
 		
 		// associate course info
 		var cId = [];
-		$("#gradeAssociateCourseTable tbody tr").each(function() {
+		$("#gradeAssociateElearningTable tbody tr").each(function() {
 		  cId.push($(this).find("td").eq(0).text());
 		  var crs = {
 				  id : $(this).find("td").eq(0).text()
 		  };
-		  std.courses.push(crs);
+		  std.elearnings.push(crs);
 		});
 		
 		// send query to controller
@@ -250,39 +250,6 @@
 	}
 	
 	
-	
-	// associate course
-	 /* function associateCourse(){
-		var sId = $("#formId").val();
-		//console.log(id);
-		var cId = [];
-		$("#gradeAssociateCourseTable tbody tr").each(function() {
-		  cId.push($(this).find("td").eq(0).text());
-		});
-		
-		$.ajax({
-		    url: "/associateCourse",
-		    method: "POST",
-		    data: {
-		        "studentId": sId,
-		        "courseId": cId
-		    },
-		    dataType: "json",
-		    success: function(response) {
-		        console.log("AJAX request successful:");
-		        console.log(response);
-		    },
-		    error: function(xhr, status, error) {
-		        console.log("AJAX request failed:");
-		        console.log(xhr.responseText);
-		    }
-		});
-	}
-	 
-	 */
-	
-	
-
 	function inactivateStudent() {
 
 		var id = $("#formId").val();
@@ -316,17 +283,20 @@
 		document.getElementById("studentInfo").reset();
 		$('#list-grade-associate-body').empty();
 		// flush courses and re-list all
-		availableCourses();
+		availableElearnings();
+		//////////////////////////////////////////////////////////////////////////
+		// clear grade info on Course Registration section
+		
 	}
 	
 	
 	// Course Info
 	// Get list of courses by grade
-	function listCourses(grade) {
+	function listElearnings(grade) {
 		var body = $('#list-grade-associate-body');
-		//var grade = $("#courseGrade").val();
+		//var grade = $("#elearningGrade").val();
 		//console.log(grade);
-		const dropdown = document.getElementById("courseDropdown");
+		const dropdown = document.getElementById("elearingDropdown");
 		body.empty();
 		// remove all options before fetching new list
 		while (dropdown.options.length > 0) {
@@ -336,7 +306,7 @@
 		title.textContent = "Click to add a subject";
 		dropdown.appendChild(title);
 		$.ajax({
-			url : "course/list",
+			url : "elearning/list",
 			type : 'GET',
 			data : grade,
 			success : function(data) {
@@ -347,7 +317,7 @@
 						row.append($('<td class="small"></td>')
 								.text(item.grade.toUpperCase()));
 						row.append($('<td class="small"></td>').text(item.name));
-						row.append($('<td><a href="javascript:void(0)" title="Delete Course"><i class="fa fa-trash"></i></a></td>'));
+						row.append($('<td><a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a></td>'));
 						
 						body.append(row);
 					} else {
@@ -364,9 +334,9 @@
 	}
 	
 	// Get list of available courses
-	function availableCourses() {
+	function availableElearnings() {
 		var body = $('#list-grade-associate-body');
-		const dropdown = document.getElementById("courseDropdown");
+		const dropdown = document.getElementById("elearingDropdown");
 		body.empty();
 		// remove all options before fetching new list
 		while (dropdown.options.length > 0) {
@@ -376,7 +346,7 @@
 		title.textContent = "Click to add a subject";
 		dropdown.appendChild(title);
 		$.ajax({
-			url : "course/available",
+			url : "elearning/available",
 			type : 'GET',
 			success : function(data) {
 				$.each(data, function(i, item) {
@@ -401,42 +371,32 @@
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-8">
-						<input type="text" class="form-control form-control-sm"
-							style="background-color: #FCF7CA;" id="formKeyword"
-							name="formKeyword" placeholder="ID or Name" />
+						<input type="text" class="form-control form-control-sm" style="background-color: #FCF7CA;" id="formKeyword" name="formKeyword" placeholder="ID or Name" />
 					</div>
 					<div class="col-md-4">
-						<button type="button" class="btn btn-block btn-primary btn-sm"
-							onclick="searchStudent()">Search</button>
+						<button type="button" class="btn btn-block btn-primary btn-sm" onclick="searchStudent()">Search</button>
 					</div>
 				</div>
 			</div>
-
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-success btn-sm"
-							data-toggle="modal" data-target="#registerModal">New</button>
+						<button type="button" class="btn btn-block btn-success btn-sm" data-toggle="modal" data-target="#registerModal">New</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-warning btn-sm"
-							onclick="updateStudentInfo()">Save</button>
+						<button type="button" class="btn btn-block btn-warning btn-sm" onclick="updateStudentInfo()">Save</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-danger btn-sm"
-							onclick="inactivateStudent()">Suspend</button>
+						<button type="button" class="btn btn-block btn-danger btn-sm" onclick="inactivateStudent()">Suspend</button>
 					</div>
-
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-info btn-sm"
-							onclick="clearStudentForm()">Clear</button>
+						<button type="button" class="btn btn-block btn-info btn-sm" onclick="clearStudentForm()">Clear</button>
 					</div>
 				</div>
 			</div>
-
 			<div class="form-group">
 				<div class="form-row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<label for="formState" class="label-form">State</label> <select class="form-control form-control-sm"
 							id="formState" name="formState">
 							<option value="vic">Victoria</option>
@@ -449,7 +409,7 @@
 							<option value="act">ACT</option>
 						</select>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<label for="formBranch" class="label-form">Branch</label> <select
 							class="form-control form-control-sm" id="formBranch" name="formBranch">
 							<option value="braybrook">Braybrook</option>
@@ -476,58 +436,26 @@
 							<option value="packenham">Packenham</option>
 						</select>
 					</div>
+					<div class="col-md-4">
+						<label for="datepicker" class="label-form">Enrolment</label> <input type="text" class="form-control form-control-sm datepicker" id="formEnrolment" name="formEnrolment" placeholder="Select a date" required>
+					</div>
 
 				</div>
 			</div>
 
+
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-3">
-						<label for="formId" class="label-form">ID</label>
+<!-- 						<label for="formId" class="label-form">ID</label> -->
 						<input type="text"
-							class="form-control form-control-sm" id="formId" name="formId" readonly>
+							class="form-control form-control-sm" id="formId" name="formId" placeholder="ID" readonly>
 					</div>
-
-					<div class="col-md-3">
-						<label for="formGrade" class="label-form">Grade</label> <select
-							class="form-control form-control-sm" id="formGrade" name="formGrade">
-								<option value="p2">P2</option>
-								<option value="p3">P3</option>
-								<option value="p4">P4</option>
-								<option value="p5">P5</option>
-								<option value="p6">P6</option>
-								<option value="s7">S7</option>
-								<option value="s8">S8</option>
-								<option value="s9">S9</option>
-								<option value="s10">S10</option>
-								<option value="s10e">S10E</option>
-								<option value="tt6">TT6</option>
-								<option value="tt8">TT8</option>
-								<option value="tt8e">TT8E</option>
-								<option value="srw4">SRW4</option>
-								<option value="srw5">SRW5</option>
-								<option value="srw6">SRW6</option>
-								<option value="srw8">SRW8</option>
-								<option value="jmss">JMSS</option>
-								<option value="vce">VCE</option>
-							</select>
-					</div>
-					<div class="col-md-6">
-						<label for="datepicker" class="label-form">Enrolment</label> <input type="text"
-							class="form-control form-control-sm datepicker" id="formEnrolment"
-							name="formEnrolment" placeholder="Select a date" required>
-					</div>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="form-row">
-
-					<div class="col-md-6">
+					<div class="col-md-5">
 						<input type="text"
 							class="form-control form-control-sm" id="formFirstName" name="formFirstName" placeholder="First Name">
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<input type="text"
 							class="form-control form-control-sm" id="formLastName" name="formLastName" placeholder="Last Name">
 					</div>
@@ -566,15 +494,17 @@
 
 			<div class="form-group">
 				<div class="form-row">
-					<textarea class="form-control form-control-sm" id="formMemo" name="formMemo" placeholder="Memo"></textarea>
+					<div class="col-md-12">
+						<textarea class="form-control form-control-sm" id="formMemo" name="formMemo" placeholder="Memo"></textarea>
+					</div>
 				</div>
 			</div>
-			
+			<!-- eLearning List -->
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-3">
-						<label for="formGrade" class="label-form">Grade</label> 
-						<select class="form-control form-control-sm" id="courseGrade" name="courseGrade">
+						<label for="elearningGrade" class="label-form">Grade</label> 
+						<select class="form-control form-control-sm" id="elearningGrade" name="elearningGrade">
 							<option value="p2">P2</option>
 							<option value="p3">P3</option>
 							<option value="p4">P4</option>
@@ -599,19 +529,15 @@
 					<div class="col-md-3">
 						<label for="" class="label-form">Course</label>
 						<button type="button" class="btn btn-block btn-primary btn-sm"
-							onclick="listCourses(document.getElementById('courseGrade').value)">Search</button>
+							onclick="listElearnings(document.getElementById('elearningGrade').value)">Search</button>
 					</div>
 					<div class="col-md-6">
 						<label for="" class="label-form">Select to add subject</label> <select
-							class="form-control form-control-sm" id="courseDropdown"
-							name="courseDropdown">
+							class="form-control form-control-sm" id="elearingDropdown"
+							name="elearingDropdown">
 							<option value="p2">Click to add a subject</option>
 						</select>
 					</div>
-					<!-- <div class="col-md-2">
-						<button type="button" class="btn btn-block btn-primary btn-sm"
-							onclick="associateCourse()">save</button>
-					</div> -->
 				</div>
 			</div>
 			
@@ -619,7 +545,7 @@
 				<div class="form-row">
 					<div class="col-md-12">
 						<div class="table-wrap">
-							<table id="gradeAssociateCourseTable" data-toggle="table" data-header-style="headerStyle">
+							<table id="gradeAssociateElearningTable" data-toggle="table" data-header-style="headerStyle">
 								<thead class="table-primary">
 									<tr>
 										<th class="hidden-column"></th>
@@ -635,28 +561,27 @@
 					</div>
 				</div>
 			</div>
-<style>
-.course-title {
-  font-weight : fw-bold;
-  font-size : 0.75rem;
-}
-</style>			
-<script>
-  function headerStyle(column) {
-    return {
-      grade: {
-        classes : 'course-title'
-      },
-      name: {
-    	classes : 'course-title'
-      },
-      delete: {
-      	classes : 'course-title'
-      }
-    }[column.field]
-  }
-</script>			
-			
+			<style>
+			.course-title {
+			  font-weight : fw-bold;
+			  font-size : 0.75rem;
+			}
+			</style>			
+			<script>
+			  function headerStyle(column) {
+			    return {
+			      grade: {
+			        classes : 'course-title'
+			      },
+			      name: {
+			    	classes : 'course-title'
+			      },
+			      delete: {
+			      	classes : 'course-title'
+			      }
+			    }[column.field]
+			  }
+			</script>			
 			
 		</form>
 	</div>
