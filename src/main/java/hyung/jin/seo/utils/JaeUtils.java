@@ -2,7 +2,9 @@ package hyung.jin.seo.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,20 +23,18 @@ public class JaeUtils {
 	
 	static {
 		 ACADEMIC_START_DAY = new HashMap();
-		 ACADEMIC_START_DAY.put("2020", "14/06");
-		 ACADEMIC_START_DAY.put("2021", "13/06");
-		 ACADEMIC_START_DAY.put("2022", "12/06");
-		 ACADEMIC_START_DAY.put("2023", "11/06");
-		 ACADEMIC_START_DAY.put("2024", "09/06");
-		 ACADEMIC_START_DAY.put("2025", "08/06");
-		 ACADEMIC_START_DAY.put("2026", "07/06");
-		 ACADEMIC_START_DAY.put("2027", "06/06");
-		 ACADEMIC_START_DAY.put("2028", "04/06");
-		 ACADEMIC_START_DAY.put("2029", "03/06");
-		 ACADEMIC_START_DAY.put("2030", "02/06");
-		 ACADEMIC_START_DAY.put("2031", "01/06");
-		 ACADEMIC_START_DAY.put("2032", "30/05");
-		 ACADEMIC_START_DAY.put("2033", "29/05");
+		 ACADEMIC_START_DAY.put("2020", "15/06");
+		 ACADEMIC_START_DAY.put("2021", "14/06");
+		 ACADEMIC_START_DAY.put("2022", "13/06");
+		 ACADEMIC_START_DAY.put("2023", "12/06");
+		 ACADEMIC_START_DAY.put("2024", "10/06");
+		 ACADEMIC_START_DAY.put("2025", "09/06");
+		 ACADEMIC_START_DAY.put("2026", "08/06");
+		 ACADEMIC_START_DAY.put("2027", "07/06");
+		 ACADEMIC_START_DAY.put("2028", "05/06");
+		 ACADEMIC_START_DAY.put("2029", "04/06");
+		 ACADEMIC_START_DAY.put("2030", "03/06");
+		 ACADEMIC_START_DAY.put("2031", "02/06");
 	}
 	
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -65,17 +65,93 @@ public class JaeUtils {
 		return academicYear;
 	}
 	
+	// return acadamicYear based on passed date
+	public static int academicYear(String date) throws ParseException {
+		Date ds = dateFormat.parse(date); // ex> 20/04/2023
+		Calendar specific = Calendar.getInstance();
+		specific.setTime(ds);
+		
+		int specificYear = specific.get(Calendar.YEAR);
+		int academicYear = specificYear;
+		
+		String academicDate = (String) ACADEMIC_START_DAY.get(Integer.toString(specificYear));
+		String dateString = academicDate + "/" + specificYear;
+		//SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		Date specifiedDate = dateFormat.parse(dateString);
+		Calendar speicifedAcademic = Calendar.getInstance();
+		speicifedAcademic.setTime(specifiedDate);
+		
+		if(specific.before(speicifedAcademic)) { // return 'currentYear - 1'
+			academicYear = specificYear-1;
+		}
+		return academicYear;
+	}
 	
-	public static int academicWeeks() {
-		Calendar today = Calendar.getInstance();
-		int currentYear = today.get(Calendar.YEAR);
+	// return weeks number based on academic year
+	public static int academicWeeks() throws ParseException {
+		LocalDate today = LocalDate.now();
+		int currentYear = today.getYear();
 		int academicYear = academicYear();
 		int weeks = 0;
-		if(currentYear==academicYear) {
-			
-		}else {
+		if(currentYear==academicYear) { // from June to December
+			// bring academic start date
+			String academicDate = (String) ACADEMIC_START_DAY.get(Integer.toString(currentYear));
+			String academicString = academicDate + "/" + currentYear;
+			Date interim = dateFormat.parse(academicString);
+			LocalDate academicStart = interim.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			// set X-mas
+			LocalDate xmas = LocalDate.of(currentYear, 12, 25);
+			// compare today's date with Xmas
+			if(today.isBefore(xmas)) { // simply calculate weeks
+				weeks = (int) ChronoUnit.WEEKS.between(academicStart, today);
+			}else { // set weeks as xmas week
+				weeks = (int) ChronoUnit.WEEKS.between(academicStart, xmas);
+			}
+		}else { // from January to June
+			// simply calculate since last year starting date - 3 weeks (xmas holidays)
+			// bring academic start date
+			String academicDate = (String) ACADEMIC_START_DAY.get(Integer.toString(academicYear));
+			String academicString = academicDate + "/" + Integer.toString(academicYear);
+			Date interim = dateFormat.parse(academicString);
+			LocalDate academicStart = interim.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			weeks = ((int) ChronoUnit.WEEKS.between(academicStart, today)) - 3;
 			
 		}
-		return weeks;
+		return (weeks+1); // calculation must start from 1 not 0
+	}
+	
+	
+	// return weeks number based on academic year
+	public static int academicWeeks(String date) throws ParseException {
+		String[] ds = date.split("/"); // ex> 20/04/2023
+		LocalDate specific = LocalDate.of(Integer.parseInt(ds[2]), Integer.parseInt(ds[1]), Integer.parseInt(ds[0]));
+		int currentYear = Integer.parseInt(ds[2]);
+		int academicYear = academicYear(date);
+		int weeks = 0;
+		if(currentYear==academicYear) { // from June to December
+			// bring academic start date
+			String academicDate = (String) ACADEMIC_START_DAY.get(Integer.toString(currentYear));
+			String academicString = academicDate + "/" + currentYear;
+			Date interim = dateFormat.parse(academicString);
+			LocalDate academicStart = interim.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			// set X-mas
+			LocalDate xmas = LocalDate.of(currentYear, 12, 25);
+			// compare today's date with Xmas
+			if(specific.isBefore(xmas)) { // simply calculate weeks
+				weeks = (int) ChronoUnit.WEEKS.between(academicStart, specific);
+			}else { // set weeks as xmas week
+				weeks = (int) ChronoUnit.WEEKS.between(academicStart, xmas);
+			}
+		}else { // from January to June
+			// simply calculate since last year starting date - 3 weeks (xmas holidays)
+			// bring academic start date
+			String academicDate = (String) ACADEMIC_START_DAY.get(Integer.toString(academicYear));
+			String academicString = academicDate + "/" + Integer.toString(academicYear);
+			Date interim = dateFormat.parse(academicString);
+			LocalDate academicStart = interim.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			weeks = ((int) ChronoUnit.WEEKS.between(academicStart, specific)) - 3;
+			
+		}
+		return (weeks+1); // calculation must start from 1 not 0
 	}
 }

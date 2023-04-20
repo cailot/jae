@@ -9,6 +9,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.StudentRepository;
+import hyung.jin.seo.utils.JaeUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,22 +32,9 @@ public class JaeApplication extends SpringBootServletInitializer implements Comm
     
     @Override
     public void run(String... args) throws Exception{
-        /*
-    	System.out.println("TEST");
-        Student std = new Student();
-        std.setFirstName("Sammy");
-        std.setLastName("Sosa");
-        std.setContactNo1("0433");
-        std.setContactNo2("195");
-        std.setEmail("abc@abc.net");
-        std.setGrade("P5");
-        std.setMemo("Nothing");
-        std.setState("QLD");
-        std.setAddress("Balwn");
-        std.setBranch("box");
-        studentRepository.save(std);
-        */
-        
+//        String date = "11/06/2023";
+//        int weeks = JaeUtils.academicWeeks(date);
+//        System.out.println(weeks);
     }
 	
 }

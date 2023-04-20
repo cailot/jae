@@ -29,39 +29,39 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 //@Getter
 //@Setter
-@ToString
+//@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="CourseFee")
-public class CourseFee implements Serializable{
-
+@Table(name="Course")
+public class Course implements Serializable{
+    
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
-    @Column(length = 30, nullable = false)
+    @Column(length = 100, nullable = false)
     private String name;
     
     @Column(length = 10, nullable = false)
     private String grade;
+
+    @Column(length = 30, nullable = true)
+    private String state;
     
     @Column(length = 50, nullable = true)
-    private String subjects;
+    private String branch;
     
-    @Column(columnDefinition = "DECIMAL(10,2)")
-    private double price;
+    @Column(length = 400, nullable = false)
+    private String description;
     
-    @Column(length = 10, nullable = true)
-    private String year;
-    
+    @Column(length = 10, nullable = false)
+    private String day;
+
     @CreationTimestamp
     private LocalDate registerDate;
 
@@ -81,14 +81,44 @@ public class CourseFee implements Serializable{
 		this.name = name;
 	}
 
-	
-
-	public String getYear() {
-		return year;
+	public String getGrade() {
+		return grade;
 	}
 
-	public void setYear(String year) {
-		this.year = year;
+	public void setGrade(String grade) {
+		this.grade = grade;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getBranch() {
+		return branch;
+	}
+
+	public void setBranch(String branch) {
+		this.branch = branch;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDay() {
+		return day;
+	}
+
+	public void setDay(String day) {
+		this.day = day;
 	}
 
 	public LocalDate getRegisterDate() {
@@ -99,35 +129,10 @@ public class CourseFee implements Serializable{
 		this.registerDate = registerDate;
 	}
 
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public String getGrade() {
-		return grade;
-	}
-
-	public void setGrade(String grade) {
-		this.grade = grade;
-	}
-
-	public String getSubjects() {
-		return subjects;
-	}
-
-	public void setSubjects(String subjects) {
-		this.subjects = subjects;
-	}
-
 	@Override
 	public String toString() {
-		return "CourseFee [id=" + id + ", name=" + name + ", grade=" + grade + ", subjects=" + subjects + ", price="
-				+ price + ", year=" + year + ", registerDate=" + registerDate + "]";
+		return "Course [id=" + id + ", name=" + name + ", grade=" + grade + ", state=" + state + ", branch=" + branch
+				+ ", description=" + description + ", day=" + day + ", registerDate=" + registerDate + "]";
 	}
 
-	
-}
+ }

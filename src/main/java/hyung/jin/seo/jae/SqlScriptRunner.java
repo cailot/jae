@@ -28,8 +28,11 @@ public class SqlScriptRunner {
     	// run scripts only for 'create-drop'
     	if("create-drop".equalsIgnoreCase(ddl)) { 
 	        Connection connection = dataSource.getConnection();
-	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/elearning.sql"));
-	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/braybrook_student.sql"));
+	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/elearning.sql")); // eLearning 
+	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/course.sql")); // Course
+	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/course_fee.sql")); // Course Fee
+	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/course_etc.sql")); // Course Fee
+	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/braybrook_student.sql")); // Student
     	}
     }
 }

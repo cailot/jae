@@ -1,3 +1,63 @@
+<script>
+$(document).ready(
+	function() {
+		$('#registerGrade').on('change',function() {
+			var grade = $(this).val()
+			listFees(grade);
+		});
+		
+		$('#gradeAssociateElearningTable').on('click', 'a', function() {
+	    	var row = $(this).closest('tr');
+	    	var name = row.find('td:eq(1)').text();
+	      	if (confirm('Are you sure you want to remove ' + name + '?')) {
+	        row.remove();
+      	}
+    });
+});
+	
+//Search Fees based on Grade	
+function listFees(grade) {
+	
+	// clear 'courseFeeTable' table body
+	$('#courseFeeTable tbody').empty();
+	$.ajax({
+		url : 'courseFee/listGrade',
+		type : 'GET',
+		data : {
+			grade : grade,
+		},
+		success : function(data) {
+			console.log('search - ' + data + ' , ' + grade);
+			if (data == '') {
+				$('#warning-alert .modal-body').text(
+						'No fee found with ' + $("#formKeyword").val());
+				$('#warning-alert').modal('show');
+				return;
+			}
+			
+			$.each(data, function(index, value) {
+				//var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")''>");
+				//row.append($('<td>').text(value.id));
+				//row.append($('<td>').text(value.grade.toUpperCase()));
+				var row = $('<tr>');
+				row.append($('<td>').text(value.name));
+				row.append($('<td>').text(value.subjects));
+				row.append($('<td>').text(value.price));				
+				
+				
+				$('#courseFeeTable > tbody').append(row);
+			});
+			//$('#studentListResult').modal('show');
+ 
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+
+}
+	
+</script>
 <h5>Course Registration</h5>
 <div class="modal-body">
 	<form id="">
@@ -39,17 +99,6 @@
 		<div class="form-group">
 			<div class="form-row">
 				<div class="col-md-12">
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
 					<nav>
                           <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                               <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Fees</a>
@@ -59,40 +108,17 @@
                       </nav>
                       <div class="tab-content" id="nav-tabContent">
                           <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                              <table class="table" cellspacing="0">
+                              <table class="table" id="courseFeeTable" name="courseFeeTable">
                                   <thead>
                                       <tr>
-                                          <th>Abb.</th>
+                                          <!-- <th>Abb.</th> -->
                                           <th>Description</th>
                                           <th>Subjects</th>
                                           <th>Price</th>
                                       </tr>
                                   </thead>
                                   <tbody>
-                                      <tr>
-                                          <td>P2</td>
-                                          <td>[P2] 3 Subjects</td>
-                                          <td>ENG, MA, GA</td>
-                                          <td>67</td>
-                                      </tr>
-                                      <tr>
-                                          <td>P2</td>
-                                          <td>[P2] Online - 3 Subjects</td>
-                                          <td>ENG, MA, GA</td>
-                                          <td>46</td>
-                                      </tr>
-                                      <tr>
-                                          <td>P2</td>
-                                          <td>[P2] 3 Subjects (From New Academic Year)</td>
-                                          <td>ENG, MA, GA</td>
-                                          <td>70</td>
-                                      </tr>
-                                      <tr>
-                                          <td>P2</td>
-                                          <td>[P2] Online - 3 Subjects (From New Academic Year)</td>
-                                          <td>ENG, MA, GA</td>
-                                          <td>49</td>
-                                      </tr>
+                                      
                                   </tbody>
                               </table>
                           </div>

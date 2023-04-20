@@ -29,10 +29,7 @@ import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 //@Getter
 //@Setter
@@ -40,27 +37,18 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="CourseFee")
-public class CourseFee implements Serializable{
-
+@Table(name="CourseEtc")
+public class CourseEtc implements Serializable{
+    
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
-    @Column(length = 30, nullable = false)
+    @Column(length = 200, nullable = false)
     private String name;
-    
-    @Column(length = 10, nullable = false)
-    private String grade;
-    
-    @Column(length = 50, nullable = true)
-    private String subjects;
     
     @Column(columnDefinition = "DECIMAL(10,2)")
     private double price;
-    
-    @Column(length = 10, nullable = true)
-    private String year;
     
     @CreationTimestamp
     private LocalDate registerDate;
@@ -81,14 +69,12 @@ public class CourseFee implements Serializable{
 		this.name = name;
 	}
 
-	
-
-	public String getYear() {
-		return year;
+	public double getPrice() {
+		return price;
 	}
 
-	public void setYear(String year) {
-		this.year = year;
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	public LocalDate getRegisterDate() {
@@ -99,35 +85,9 @@ public class CourseFee implements Serializable{
 		this.registerDate = registerDate;
 	}
 
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
-
-	public String getGrade() {
-		return grade;
-	}
-
-	public void setGrade(String grade) {
-		this.grade = grade;
-	}
-
-	public String getSubjects() {
-		return subjects;
-	}
-
-	public void setSubjects(String subjects) {
-		this.subjects = subjects;
-	}
-
 	@Override
 	public String toString() {
-		return "CourseFee [id=" + id + ", name=" + name + ", grade=" + grade + ", subjects=" + subjects + ", price="
-				+ price + ", year=" + year + ", registerDate=" + registerDate + "]";
+		return "CourseEtc [id=" + id + ", name=" + name + ", price=" + price + ", registerDate=" + registerDate + "]";
 	}
-
-	
+    
 }
