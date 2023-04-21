@@ -10,8 +10,11 @@ public interface CourseEtcService {
 	List<CourseEtc> allEtc();
 	
 	// list etc not belong to grade
-	List<CourseEtc> notGradeEtc(String grade);
+//	List<CourseEtc> notNameEtc(String grade);
 	
 	// get total number of etc
- 	long checkCount();    
+ 	long checkCount();
+
+ 	// list etc not belong to grade
+	List<CourseEtc> notNameEtc();    
 }

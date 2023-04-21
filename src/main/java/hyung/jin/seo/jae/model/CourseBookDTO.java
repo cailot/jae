@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class CourseFeeDTO implements Serializable{
+public class CourseBookDTO implements Serializable{
     
 	private String id;
     
@@ -52,11 +52,11 @@ public class CourseFeeDTO implements Serializable{
     
     private String registerDate;
     
-	public CourseFeeDTO() {}
+	public CourseBookDTO() {}
 
 	@Override
 	public String toString() {
-		return "CourseFeeDTO [id=" + id + ", grade=" + grade + ", name=" + name + ", year=" + year + ", subjects="
+		return "CourseBookDTO [id=" + id + ", grade=" + grade + ", name=" + name + ", year=" + year + ", subjects="
 				+ subjects + ", price=" + price + ", registerDate=" + registerDate + "]";
 	}
 
@@ -116,25 +116,25 @@ public class CourseFeeDTO implements Serializable{
 		this.registerDate = registerDate;
 	}
 
-	public CourseFeeDTO(CourseFee cf) {
-    	this.id = (cf.getId()!=null) ? cf.getId().toString() : "";
-    	this.grade = (cf.getGrade()!=null) ? cf.getGrade() : "";
-    	this.name = (cf.getName()!=null) ? cf.getName() : "";
-    	this.year = (cf.getYear()!=null) ? cf.getYear(): "";
-    	this.subjects = (cf.getSubjects()!=null) ? cf.getSubjects() : "";
-    	this.price = (cf.getPrice()!=0.0) ? Double.toString(cf.getPrice()): "0.0";
-    	this.registerDate = (cf.getRegisterDate()!=null) ? cf.getRegisterDate().toString() : "";
+	public CourseBookDTO(CourseBook cb) {
+    	this.id = (cb.getId()!=null) ? cb.getId().toString() : "";
+    	this.grade = (cb.getGrade()!=null) ? cb.getGrade() : "";
+    	this.name = (cb.getName()!=null) ? cb.getName() : "";
+    	this.year = (cb.getYear()!=null) ? cb.getYear(): "";
+    	this.subjects = (cb.getSubjects()!=null) ? cb.getSubjects() : "";
+    	this.price = (cb.getPrice()!=0.0) ? Double.toString(cb.getPrice()): "0.0";
+    	this.registerDate = (cb.getRegisterDate()!=null) ? cb.getRegisterDate().toString() : "";
     }
     
-    public CourseFee convertToCourseFee() {
-    	CourseFee cf = new CourseFee();
-    	if(StringUtils.isNotBlank(id)) cf.setId(Long.parseLong(this.id));
-    	if(StringUtils.isNotBlank(grade)) cf.setGrade(this.grade);
-    	if(StringUtils.isNotBlank(name)) cf.setName(this.name);
-    	if(StringUtils.isNotBlank(year)) cf.setYear(this.year);
-    	if(StringUtils.isNotBlank(subjects)) cf.setSubjects(this.subjects);
-    	if(StringUtils.isNotBlank(price)) cf.setPrice(Double.parseDouble(this.price));
-    	if(StringUtils.isNotBlank(registerDate)) cf.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	return cf;
+    public CourseBook convertToCourseBook() {
+    	CourseBook cb = new CourseBook();
+    	if(StringUtils.isNotBlank(id)) cb.setId(Long.parseLong(this.id));
+    	if(StringUtils.isNotBlank(grade)) cb.setGrade(this.grade);
+    	if(StringUtils.isNotBlank(name)) cb.setName(this.name);
+    	if(StringUtils.isNotBlank(year)) cb.setYear(this.year);
+    	if(StringUtils.isNotBlank(subjects)) cb.setSubjects(this.subjects);
+    	if(StringUtils.isNotBlank(price)) cb.setPrice(Double.parseDouble(this.price));
+    	if(StringUtils.isNotBlank(registerDate)) cb.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	return cb;
     }
 }

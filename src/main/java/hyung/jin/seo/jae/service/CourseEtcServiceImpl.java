@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import hyung.jin.seo.jae.model.CourseEtc;
 import hyung.jin.seo.jae.repository.CourseEtcRepository;
 import hyung.jin.seo.jae.specification.CourseEtcSpecification;
+import hyung.jin.seo.utils.JaeConstants;
 
 @Service
 public class CourseEtcServiceImpl implements CourseEtcService {
@@ -29,10 +30,10 @@ public class CourseEtcServiceImpl implements CourseEtcService {
 	}
 	
 	@Override
-	public List<CourseEtc> notGradeEtc(String grade) {
+	public List<CourseEtc> notNameEtc() {
 		List<CourseEtc> courses = null;
 		Specification<CourseEtc> spec = Specification.where(null);
-		spec = spec.and(CourseEtcSpecification.gradeNotEquals(grade));
+		spec = spec.and(CourseEtcSpecification.nameNotStarts(JaeConstants.VSSE));
 		courses = courseEtcRepository.findAll(spec);
 		return courses;
 	}

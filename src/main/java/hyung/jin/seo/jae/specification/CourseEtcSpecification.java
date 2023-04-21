@@ -7,7 +7,7 @@ import hyung.jin.seo.jae.model.CourseEtc;
 public interface CourseEtcSpecification {
 	
 	// grade not equal
-	static Specification<CourseEtc> gradeNotEquals(String keyword){
-		return (root, query, cb) -> cb.notEqual(root.get("grade"), keyword);
+	static Specification<CourseEtc> nameNotStarts(String keyword){
+		return (root, query, cb) -> cb.notLike(root.get("name"), keyword + "%");
 	}
 }

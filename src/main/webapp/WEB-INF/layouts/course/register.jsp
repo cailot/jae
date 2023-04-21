@@ -4,6 +4,8 @@ $(document).ready(
 		$('#registerGrade').on('change',function() {
 			var grade = $(this).val()
 			listFees(grade);
+			listBooks(grade);
+			listEtcs(grade);
 		});
 		
 		$('#gradeAssociateElearningTable').on('click', 'a', function() {
@@ -17,7 +19,6 @@ $(document).ready(
 	
 //Search Fees based on Grade	
 function listFees(grade) {
-	
 	// clear 'courseFeeTable' table body
 	$('#courseFeeTable tbody').empty();
 	$.ajax({
@@ -27,14 +28,13 @@ function listFees(grade) {
 			grade : grade,
 		},
 		success : function(data) {
-			console.log('search - ' + data + ' , ' + grade);
+			/* console.log('search - ' + data + ' , ' + grade);
 			if (data == '') {
 				$('#warning-alert .modal-body').text(
 						'No fee found with ' + $("#formKeyword").val());
 				$('#warning-alert').modal('show');
 				return;
-			}
-			
+			} */
 			$.each(data, function(index, value) {
 				//var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")''>");
 				//row.append($('<td>').text(value.id));
@@ -43,8 +43,6 @@ function listFees(grade) {
 				row.append($('<td>').text(value.name));
 				row.append($('<td>').text(value.subjects));
 				row.append($('<td>').text(value.price));				
-				
-				
 				$('#courseFeeTable > tbody').append(row);
 			});
 			//$('#studentListResult').modal('show');
@@ -54,9 +52,82 @@ function listFees(grade) {
 			console.log('Error : ' + error);
 		}
 	});
-
 }
-	
+
+//Search Book based on Grade	
+function listBooks(grade) {
+	// clear 'courseEtcTable' table body
+	$('#courseBookTable tbody').empty();
+	$.ajax({
+		url : 'courseBook/listGrade',
+		type : 'GET',
+		data : {
+			grade : grade,
+		},
+		success : function(data) {
+			/* console.log('search - ' + data + ' , ' + grade);
+			if (data == '') {
+				$('#warning-alert .modal-body').text(
+						'No fee found with ' + $("#formKeyword").val());
+				$('#warning-alert').modal('show');
+				return;
+			} */
+			$.each(data, function(index, value) {
+				//var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")''>");
+				//row.append($('<td>').text(value.id));
+				//row.append($('<td>').text(value.grade.toUpperCase()));
+				var row = $('<tr>');
+				row.append($('<td>').text(value.name));
+				row.append($('<td>').text(value.subjects));
+				row.append($('<td>').text(value.price));
+				$('#courseBookTable > tbody').append(row);
+			});
+			//$('#studentListResult').modal('show');
+
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+}
+
+//Search Etc based on Grade	
+function listEtcs(grade) {
+	// clear 'courseEtcTable' table body
+	$('#courseEtcTable tbody').empty();
+	$.ajax({
+		url : 'courseEtc/list',
+		type : 'GET',
+		data : {
+			grade : grade,
+		},
+		success : function(data) {
+			/* console.log('search - ' + data + ' , ' + grade);
+			if (data == '') {
+				$('#warning-alert .modal-body').text(
+						'No fee found with ' + $("#formKeyword").val());
+				$('#warning-alert').modal('show');
+				return;
+			} */
+			$.each(data, function(index, value) {
+				//var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")''>");
+				//row.append($('<td>').text(value.id));
+				//row.append($('<td>').text(value.grade.toUpperCase()));
+				var row = $('<tr>');
+				row.append($('<td>').text(value.name));
+				row.append($('<td>').text(value.price));				
+				
+				$('#courseEtcTable > tbody').append(row);
+			});
+			//$('#studentListResult').modal('show');
+
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+}
+
 </script>
 <h5>Course Registration</h5>
 <div class="modal-body">
@@ -123,90 +194,27 @@ function listFees(grade) {
                               </table>
                           </div>
                           <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                              <table class="table" cellspacing="0">
+                              <table class="table" cellspacing="0" id="courseBookTable" name="courseBookTable">
                                   <thead>
                                       <tr>
-                                          <th>Abb.</th>
                                           <th>Description</th>
                                           <th>Subjects</th>
                                           <th>Price</th>
                                       </tr>
                                   </thead>
                                   <tbody>
-                                      <tr>
-                                          <td>P2</td>
-                                          <td>[V1] Primary Workbooks</td>
-                                          <td>English, Maths, General Ability</td>
-                                          <td>65</td>
-                                      </tr>
-                                      <tr>
-                                          <td>P2</td>
-                                          <td>[V2] Primary Workbooks</td>
-                                          <td>English, Maths, General Ability</td>
-                                          <td>65</td>
-                                      </tr>
-                                      <tr>
-                                          <td>P2</td>
-                                          <td>[V3] Primary Workbooks</td>
-                                          <td>English, Maths, General Ability</td>
-                                          <td>65</td>
-                                      </tr>
-                                      <tr>
-                                          <td>P2</td>
-                                          <td>[V4] Primary Workbooks</td>
-                                          <td>English, Maths, General Ability</td>
-                                          <td>65</td>
-                                      </tr>
-                                      <tr>
-                                          <td>P2</td>
-                                          <td>[V5] Primary Workbooks</td>
-                                          <td>English, Maths, General Ability</td>
-                                          <td>65</td>
-                                      </tr>
-                                      <tr>
-                                          <td>P2 WB</td>
-                                          <td>Primary Workbooks</td>
-                                          <td>English, Maths, General Ability</td>
-                                          <td>13</td>
-                                      </tr>
                                   </tbody>
                               </table>
                           </div>
                           <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                              <table class="table" cellspacing="0">
+                              <table class="table" cellspacing="0" id="courseEtcTable" name="courseEtcTable">
 								<thead>
                                       <tr>
-                                          <th>Abb.</th>
                                           <th>Description</th>
-                                          <th>Subjects</th>
                                           <th>Price</th>
                                       </tr>
                                   </thead>
                                   <tbody>
-                                      <tr>
-                                          <td>Postage</td>
-                                          <td>Postage</td>
-                                          <td>Postage</td>
-                                          <td>9.9</td>
-                                      </tr>
-                                      <tr>
-                                          <td>Voucher</td>
-                                          <td>Voucher - $50.00</td>
-                                          <td>Voucher</td>
-                                          <td>-50</td>
-                                      </tr>
-                                      <tr>
-                                          <td>Discount</td>
-                                          <td>Discount</td>
-                                          <td>Discount</td>
-                                          <td>0</td>
-                                      </tr>
-                                      <tr>
-                                          <td>Extra</td>
-                                          <td>Extra</td>
-                                          <td>Extra</td>
-                                          <td>0</td>
-                                      </tr>
                                   </tbody>                                  
                               </table>
                           </div>

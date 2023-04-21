@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import hyung.jin.seo.jae.model.CourseEtc;
 import hyung.jin.seo.jae.model.CourseEtcDTO;
 import hyung.jin.seo.jae.service.CourseEtcService;
+import hyung.jin.seo.utils.JaeConstants;
 
 @Controller
 @RequestMapping("courseEtc")
@@ -33,7 +34,7 @@ public class JaeCourseEtcController {
 	List<CourseEtcDTO> gradeEtc(@RequestParam("grade") String keyword) {
 		List<CourseEtcDTO> dtos = new ArrayList<CourseEtcDTO>();
 		
-		if(StringUtils.equalsIgnoreCase(keyword, "tt8")){
+		if(StringUtils.equalsIgnoreCase(keyword, JaeConstants.TT8)){
 			List<CourseEtc> ces = courseEtcService.allEtc();
 			for (CourseEtc ce : ces) {
 				CourseEtcDTO dto = new CourseEtcDTO(ce);
@@ -45,7 +46,7 @@ public class JaeCourseEtcController {
 				dtos.add(dto);
 			}
 		}else { // exclude VSSEs
-			List<CourseEtc> ces = courseEtcService.notGradeEtc(keyword);
+			List<CourseEtc> ces = courseEtcService.notNameEtc();
 			for (CourseEtc ce : ces) {
 				CourseEtcDTO dto = new CourseEtcDTO(ce);
 				if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
