@@ -24,8 +24,8 @@ import hyung.jin.seo.jae.model.Elearning;
 import hyung.jin.seo.jae.model.ElearningDTO;
 import hyung.jin.seo.jae.service.CourseFeeService;
 import hyung.jin.seo.jae.service.ElearningService;
-import hyung.jin.seo.utils.JaeConstants;
-import hyung.jin.seo.utils.JaeUtils;
+import hyung.jin.seo.jae.utils.JaeConstants;
+import hyung.jin.seo.jae.utils.JaeUtils;
 
 @Controller
 @RequestMapping("courseFee")

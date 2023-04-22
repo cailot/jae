@@ -1,4 +1,4 @@
-package hyung.jin.seo.utils;
+package hyung.jin.seo.jae.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +38,7 @@ public class JaeUtils {
 	}
 	
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	public static SimpleDateFormat displayFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
 	// return academic year.
 	// for example, today is 17/04/2023 while academic year in 2023 is 11/06/2023 then it will return '2022'
@@ -123,6 +124,8 @@ public class JaeUtils {
 	
 	// return weeks number based on academic year
 	public static int academicWeeks(String date) throws ParseException {
+		// if not formatted date passed, return 0
+		if(!isValidDateFormat(date)) return 0;
 		String[] ds = date.split("/"); // ex> 20/04/2023
 		LocalDate specific = LocalDate.of(Integer.parseInt(ds[2]), Integer.parseInt(ds[1]), Integer.parseInt(ds[0]));
 		int currentYear = Integer.parseInt(ds[2]);
@@ -153,5 +156,25 @@ public class JaeUtils {
 			
 		}
 		return (weeks+1); // calculation must start from 1 not 0
+	}
+	
+	// convert date format from yyyy-MM-dd to dd/MM/yyyy, for example 2023-04-22 to 22/04/2023
+	public static String convertToddMMyyyyFormat(String date) throws ParseException {
+		String formatted = "";
+		if(StringUtils.isNotBlank(date)) {
+			Date display = displayFormat.parse(date);
+			formatted = dateFormat.format(display);
+		}
+		return formatted;
+	}
+	
+	public static boolean isValidDateFormat(String date) {
+		dateFormat.setLenient(false);
+		try {
+			Date d = dateFormat.parse(date);
+			return true;
+		}catch(ParseException e) {
+			return false;
+		}
 	}
 }

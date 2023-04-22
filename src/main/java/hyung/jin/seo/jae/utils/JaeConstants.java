@@ -1,4 +1,4 @@
-package hyung.jin.seo.utils;
+package hyung.jin.seo.jae.utils;
 
 public interface JaeConstants {
 

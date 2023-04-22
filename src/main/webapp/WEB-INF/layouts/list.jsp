@@ -1,52 +1,88 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page import="hyung.jin.seo.jae.model.StudentDTO"%>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/printThis.js"></script>
+<%@page import="hyung.jin.seo.jae.utils.JaeUtils"%>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
 <script>
-	// sorting
-	$(document).ready(
-			function() {
-				$('#studentListTable th').click(
-						function() {
-							var table = $(this).parents('table').eq(0);
-							var rows = table.find('tr:gt(0)').toArray().sort(
-									compare($(this).index()));
-							this.asc = !this.asc;
-							if (!this.asc) {
-								rows = rows.reverse();
-							}
-							for (var i = 0; i < rows.length; i++) {
-								table.append(rows[i]);
-							}
-						});
-				function compare(index) {
-					return function(a, b) {
-						var valA = getCellValue(a, index), valB = getCellValue(
-								b, index);
-						return $.isNumeric(valA) && $.isNumeric(valB) ? valA
-								- valB : valA.toString().localeCompare(valB);
-					};
-				}
-				function getCellValue(row, index) {
-					return $(row).children('td').eq(index).text();
-				}
-			});
+$(document).ready(function () {
+    $('#studentListTable').DataTable();
+});
 
-	function listStudents() {
+<%-- 
+function listStudents() {
 
-		var body = $('#list-student-body');
-		body.empty();
+	var body = $('#list-student-body');
+	body.empty();
+	var params = {
+		state : $("#listState").val(),
+		branch : $("#listBranch").val(),
+		grade : $("#listGrade").val(),
+		start : $("#listStart").val(),
+		active : $("#listActive").val(),
+
+	}
+
+	$.ajax({
+		url : "student/list",
+		type : 'GET',
+		data : params,
+		success : function(data) {
+			// Display the success alert
+			$('#success-alert .modal-body').text(
+					data.length + ' student record(s) found.');
+			$('#success-alert').modal('show');
+
+			$.each(data,
+					function(i, item) {
+						var row = $('<tr></tr>');
+						row.append($('<td></td>').text(item.id));
+						row.append($('<td></td>').text(item.firstName));
+						row.append($('<td></td>').text(item.lastName));
+						row.append($('<td></td>').text(item.grade));
+						row.append($('<td></td>').text(item.registerDate));
+						row.append($('<td></td>').text(<%= JaeUtils.academicWeeks()%>));
+						row.append($('<td></td>').text(item.endDate));
+						row.append($('<td></td>').text(<%= JaeUtils.academicWeeks()%>));
+						row.append($('<td></td>').text(item.email));
+						row.append($('<td></td>').text(item.contactNo1));
+						body.append(row);
+					});
+		}
+	});
+
+}
+ --%>
+ function listStudents() {
+
+		var table = $('#student-table').DataTable({
+			"destroy": true,
+			"searching": false,
+			"ordering": true,
+			"paging": true,
+			"info": true,
+			"columns": [
+				{ "data": "id" },
+				{ "data": "firstName" },
+				{ "data": "lastName" },
+				{ "data": "grade" },
+				{ "data": "registerDate" },
+				{ "data": ""},
+				{ "data": "endDate" },
+				{ "data": ""},
+				{ "data": "email" },
+				{ "data": "contactNo1" }
+			]
+		});
+
 		var params = {
 			state : $("#listState").val(),
 			branch : $("#listBranch").val(),
 			grade : $("#listGrade").val(),
 			start : $("#listStart").val(),
 			active : $("#listActive").val(),
-
 		}
 
 		$.ajax({
@@ -59,80 +95,17 @@
 						data.length + ' student record(s) found.');
 				$('#success-alert').modal('show');
 
-				$.each(data,
-						function(i, item) {
-							var row = $('<tr></tr>');
-							//row.append($('<td></td>').text(i+1));
-							row.append($('<td></td>').text(item.id));
-							row.append($('<td></td>').text(item.firstName));
-							row.append($('<td></td>').text(item.lastName));
-							row.append($('<td></td>').text(item.grade));
-							row.append($('<td></td>').text(item.registerDate));
-							row.append($('<td></td>').text(
-									getWeek(item.registerDate)));
-							row.append($('<td></td>').text(item.endDate));
-							row.append($('<td></td>').text(
-									getWeek(item.endDate)));
-							row.append($('<td></td>').text(item.email));
-							row.append($('<td></td>').text(item.contactNo1));
-							body.append(row);
-						});
+				table.clear().rows.add(data).draw();
 			}
 		});
 
 	}
-	var old = new Date('1970-01-01');
-	// return week info based on financial year
-	function getWeek(enrol) {
-		enrolDate = new Date(enrol);
-		// if no date then return ''	
-		if (enrolDate.getTime() == old.getTime()) {
-			return '';
-		}
-		if (enrolDate.getMonth() > 5) {
-			startDate = new Date(enrolDate.getFullYear(), 5, 30);
-		} else {
-			startDate = new Date(enrolDate.getFullYear() - 1, 5, 30);
-		}
-		var days = Math.floor((enrolDate - startDate) / (24 * 60 * 60 * 1000));
+function validate(){
+	return true;
+}
 
-		var weekNumber = Math.ceil(days / 7);
-		//console.log("Week number of " + enrolDate + " is :   " + weekNumber);
-		return weekNumber;
-	}
-	function exportTableToExcel(tableId) {
-		var downloadLink;
-		var dataType = 'application/vnd.ms-excel';
-		var tableSelect = document.getElementById(tableId);
-
-		var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-		// Specify the filename
-		filename = 'Student_List.xls';
-		// Create download link element
-		downloadLink = document.createElement("a");
-		document.body.appendChild(downloadLink);
-		if (navigator.msSaveOrOpenBlob) {
-			var blob = new Blob([ '\ufeff', tableHTML ], {
-				type : dataType
-			});
-			navigator.msSaveOrOpenBlob(blob, filename);
-		} else {
-			// Create a link to the file
-			downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-			// Setting the file name
-			downloadLink.download = filename;
-			//triggering the function
-			downloadLink.click();
-		}
-	}
-	function printTable() {
-		$("#studentListTable").printThis({
-			importCSS : true,
-			printContainer : true,
-			header : "<center><h3>Student List</h3></center>"
-		});
-	}
 </script>
+
 
 
 <!-- Success Modal -->
@@ -157,11 +130,10 @@
 
 
 
-
 <!-- List Body -->
 <div class="row">
 	<div class="modal-body">
-		<form id="studentList">
+		<form id="studentList" method="get" action="${pageContext.request.contextPath}/student/list">
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-2">
@@ -217,11 +189,11 @@
 							<option value="s9">S9</option>
 							<option value="s10">S10</option>
 							<option value="s10e">S10E</option>
-							<option value="vce">VCE</option>
 							<option value="tt6">TT6</option>
 							<option value="tt8">TT8</option>
 							<option value="tt8e">TT8E</option>
 							<option value="jmss">JMSS</option>
+							<option value="vce">VCE</option>
 						</select>
 					</div>
 					<div class="col-md-2">
@@ -236,8 +208,7 @@
 							name="listStart" placeholder="Start Date" required>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-primary btn-block"
-							onclick="listStudents()">Search</button>
+						<button type="submit" class="btn btn-primary btn-block" onclick="return validate()">Search</button>
 					</div>
 					<div class="col mx-auto">
 						<button type="button" class="btn btn-primary btn-block"
@@ -255,24 +226,46 @@
 				<div class="form-row">
 					<div class="col-md-12">
 						<div class="table-wrap">
-							<table id="studentListTable"
-								class="table table-striped table-bordered">
-								<thead class="table-primary">
+							<table id="studentListTable" class="table table-striped table-bordered"><thead class="table-primary">
 									<tr>
 										<%--<th scope="col">No</th>  --%>
-										<th scope="col">ID</th>
-										<th scope="col">First Name</th>
-										<th scope="col">Last Name</th>
-										<th scope="col">Grade</th>
-										<th scope="col">Start Date</th>
-										<th scope="col">Week</th>
-										<th scope="col">End Date</th>
-										<th scope="col">Week</th>
-										<th scope="col">Email</th>
-										<th scope="col">Contact</th>
-									</tr>
+										<th data-field="sListid" data-sortable="true">ID</th>
+										<th data-field="sListfirstName" data-sortable="true">First Name</th>
+										<th data-field="sListlastName" data-sortable="true">Last Name</th>
+										<!-- <th data-field="sListgrade" data-sortable="true">Grade</th>
+										<th data-field="sListStartDate" data-sortable="true">Start Date</th>
+										<th data-field="sListStartWeek" data-sortable="true">Week</th>
+										<th data-field="sListEndDate" data-sortable="true">End Date</th>
+										<th data-field="sListEndWeek" data-sortable="true">Week</th>
+										<th data-field="sListEmail" data-sortable="true">Email</th>
+										<th data-field="sListContact" data-sortable="true">Contact</th>
+									 --></tr>
 								</thead>
 								<tbody id="list-student-body">
+								<c:choose>
+									<c:when test="${sl != null}">No records found
+									</c:when>
+									<c:otherwise>
+									
+										<c:forEach items="${sl}" var="details">
+											<tr>
+												<td class="small ellipsis"><span><c:out value="${details.id}" /></span></td>
+												<c:set var="description" scope="session" value="${details.firstName}" />
+												<td class="small ellipsis">
+													<a href="#" class="text-dark" style="cursor:default;" data-toggle="tooltip" data-placement="auto" data-html="true"
+														title="<div class='text-left'><c:out value='${description}' escapeXml='true'/></div>"
+													> 
+													<span><c:out value="${description}"/></span>
+													</a>
+												</td>
+												<td class="center-cell"><i class="fa fa-envelope-o text-info" onclick="showMessage('${details.lastName}')" style="cursor:hand;" data-target="#layerpopMessage" data-toggle="modal"></i></td>
+											</tr>
+										</c:forEach>
+									
+									
+									
+									</c:otherwise>
+								</c:choose>
 								</tbody>
 							</table>
 						</div>
@@ -283,3 +276,19 @@
 		</form>
 	</div>
 </div>
+<script>
+  function customSort(sortName, sortOrder, data) {
+    var order = sortOrder === 'desc' ? -1 : 1
+    data.sort(function (a, b) {
+      var aa = +((a[sortName] + '').replace(/[^\d]/g, ''))
+      var bb = +((b[sortName] + '').replace(/[^\d]/g, ''))
+      if (aa < bb) {
+        return order * -1
+      }
+      if (aa > bb) {
+        return order
+      }
+      return 0
+    })
+  }
+</script>

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import hyung.jin.seo.jae.model.CourseEtc;
 import hyung.jin.seo.jae.model.CourseEtcDTO;
 import hyung.jin.seo.jae.service.CourseEtcService;
-import hyung.jin.seo.utils.JaeConstants;
+import hyung.jin.seo.jae.utils.JaeConstants;
 
 @Controller
 @RequestMapping("courseEtc")

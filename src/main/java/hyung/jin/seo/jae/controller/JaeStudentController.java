@@ -1,10 +1,12 @@
 package hyung.jin.seo.jae.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,6 +28,7 @@ import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.model.StudentDTO;
 import hyung.jin.seo.jae.service.ElearningService;
 import hyung.jin.seo.jae.service.StudentService;
+import hyung.jin.seo.jae.utils.JaeUtils;
 
 @Controller
 @RequestMapping("student")
@@ -112,10 +115,32 @@ public class JaeStudentController {
 	
 	// search student list with state, branch, grade, start date or active
 	@GetMapping("/list")
-	@ResponseBody
-	List<Student> listStudents(@RequestParam("state") String state, @RequestParam("branch") String branch, @RequestParam("grade") String grade, @RequestParam("start") String start, @RequestParam("active") String active) {
+	//@ResponseBody
+	public String listStudents(@RequestParam("listState") String state, @RequestParam("listBranch") String branch, @RequestParam("listGrade") String grade, @RequestParam(value="listStart", required=false) String start, @RequestParam("listActive") String active, HttpSession session) {
         System.out.println(state+"\t"+branch+"\t"+grade+"\t"+start+"\t"+active+"\t");
 		List<Student> students = studentService.listStudents(state, branch, grade, "", active);
-        return students;
+		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
+		for (Student std : students) {
+			StudentDTO dto = new StudentDTO(std);
+			if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
+			{
+				String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
+				dto.setMemo(newMemo);
+			}
+			try {
+				// convert date format to dd/MM/yyyy
+				dto.setRegisterDate(JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate()));
+				dto.setEnrolmentDate(JaeUtils.convertToddMMyyyyFormat(dto.getEnrolmentDate()));
+				dto.setEndDate(JaeUtils.convertToddMMyyyyFormat(dto.getEndDate()));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			dtos.add(dto);
+		}
+		session.setAttribute("sl", dtos);
+		return "listPage";
 	}
 }

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.StudentRepository;
 import hyung.jin.seo.jae.specification.StudentSpecification;
-import hyung.jin.seo.utils.JaeConstants;
+import hyung.jin.seo.jae.utils.JaeConstants;
 
 @Service
 public class StudentServiceImpl implements StudentService {
