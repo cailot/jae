@@ -19,10 +19,11 @@ import hyung.jin.seo.jae.model.StudentDTO;
 
 public class JaeUtils {
 
-	public static Map ACADEMIC_START_DAY;
+	public static Map<String, String> ACADEMIC_START_DAY;
 	
 	static {
-		 ACADEMIC_START_DAY = new HashMap();
+		 ACADEMIC_START_DAY = new HashMap<String, String>();
+		 ACADEMIC_START_DAY.put("2019", "17/06");
 		 ACADEMIC_START_DAY.put("2020", "15/06");
 		 ACADEMIC_START_DAY.put("2021", "14/06");
 		 ACADEMIC_START_DAY.put("2022", "13/06");
@@ -87,6 +88,18 @@ public class JaeUtils {
 		}
 		return academicYear;
 	}
+	
+
+	// return last date of academic year
+	public static LocalDate lastAcademicDate(String year) {
+		int tempYear = Integer.parseInt(year)+1;
+		String academicDate = (String) ACADEMIC_START_DAY.get(Integer.toString(tempYear));
+		String[] dates = StringUtils.split(academicDate, '/');
+		LocalDate nextAcademicStart = LocalDate.of(tempYear, Integer.parseInt(dates[1]), Integer.parseInt(dates[0])); 
+		LocalDate lastAcademicDate = nextAcademicStart.minusDays(1);
+		return lastAcademicDate;
+	}
+		
 	
 	// return weeks number based on academic year
 	public static int academicWeeks() throws ParseException {

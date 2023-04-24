@@ -71,6 +71,20 @@ public class JaeStudentController {
 		return dtos;
 	}
 	
+	// search student with keyword - ID, firstName & lastName
+	@GetMapping("/get")
+	@ResponseBody
+	StudentDTO getStudents(@RequestParam("id") String id) {
+		Student std = studentService.getStudent(Long.parseLong(id));
+		StudentDTO dto = new StudentDTO(std);
+		if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
+		{
+			String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
+			dto.setMemo(newMemo);
+		}
+		return dto;
+	}
+	
 	// update existing student
 	@PutMapping("/update")
 	@ResponseBody
@@ -116,9 +130,9 @@ public class JaeStudentController {
 	// search student list with state, branch, grade, start date or active
 	@GetMapping("/list")
 	//@ResponseBody
-	public String listStudents(@RequestParam("listState") String state, @RequestParam("listBranch") String branch, @RequestParam("listGrade") String grade, @RequestParam(value="listStart", required=false) String start, @RequestParam("listActive") String active, HttpSession session) {
-        System.out.println(state+"\t"+branch+"\t"+grade+"\t"+start+"\t"+active+"\t");
-		List<Student> students = studentService.listStudents(state, branch, grade, "", active);
+	public String listStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, HttpSession session) {
+        System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
+		List<Student> students = studentService.listStudents(state, branch, grade, year, active);
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
@@ -129,7 +143,9 @@ public class JaeStudentController {
 			}
 			try {
 				// convert date format to dd/MM/yyyy
-				dto.setRegisterDate(JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate()));
+				String startDate = JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate());
+				int startWeek = JaeUtils.academicWeeks(startDate);
+				dto.setRegisterDate(startDate+"|"+startWeek);
 				dto.setEnrolmentDate(JaeUtils.convertToddMMyyyyFormat(dto.getEnrolmentDate()));
 				dto.setEndDate(JaeUtils.convertToddMMyyyyFormat(dto.getEndDate()));
 			} catch (ParseException e) {
@@ -140,7 +156,7 @@ public class JaeStudentController {
 			
 			dtos.add(dto);
 		}
-		session.setAttribute("sl", dtos);
+		session.setAttribute("StudentList", dtos);
 		return "listPage";
 	}
 }

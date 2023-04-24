@@ -72,10 +72,22 @@ public interface StudentSpecification {
 		};
 	}
 	
-	// start date
+	// start date equal
 	static Specification<Student> startDateEquals(LocalDate date) {
 		  return (root, query, cb) -> cb.equal(root.get("registerDate"), date);
-		}
+	}
+
+	
+	// start date before
+	static Specification<Student> startDateLessThanOrEqualTo(LocalDate date) {
+	    return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("registerDate"), date);
+	}
+
+	
+	// start date after
+	static Specification<Student> startDateAfter(LocalDate date) {
+	    return (root, query, cb) -> cb.greaterThan(root.get("registerDate"), date);
+	}
 
 	
 	// is not null 

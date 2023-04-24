@@ -1,6 +1,9 @@
 package hyung.jin.seo.jae.service;
 
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -14,6 +17,7 @@ import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.StudentRepository;
 import hyung.jin.seo.jae.specification.StudentSpecification;
 import hyung.jin.seo.jae.utils.JaeConstants;
+import hyung.jin.seo.jae.utils.JaeUtils;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -56,11 +60,24 @@ public class StudentServiceImpl implements StudentService {
 		if(StringUtils.isNotBlank(grade)&&(!StringUtils.equals(grade, JaeConstants.ALL))) {
 			spec = spec.and(StudentSpecification.gradeEquals(grade));
 		}
-		if(StringUtils.isNotBlank(year)) {
-			spec = spec.and(StudentSpecification.yearRange(year));
+		if(StringUtils.isNotBlank(year)&&(!StringUtils.equals(year, JaeConstants.ALL))) {
+			LocalDate lastDate = JaeUtils.lastAcademicDate(year);
+			spec = spec.and(StudentSpecification.startDateLessThanOrEqualTo(lastDate) );
 		}
-		
-		switch (active) {
+//		if(StringUtils.isNotBlank(start) && JaeUtils.isValidDateFormat(start)) {
+//			
+//			Date date = null;
+//			try {
+//				date = JaeUtils.dateFormat.parse(start);
+//				LocalDate startDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//				spec = spec.and(StudentSpecification.startDateAfter(startDate));
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+
+		switch ((active==null) ? JaeConstants.ALL : active) {
 
 		case JaeConstants.CURRENT_STUDENT:
 			
@@ -92,7 +109,7 @@ public class StudentServiceImpl implements StudentService {
 			// firstName or lastName search
 			spec = spec.and(StudentSpecification.nameContains(keyword));
 		}
-		spec = spec.and(StudentSpecification.hasNullVaule("endDate")); // among current students
+//		spec = spec.and(StudentSpecification.hasNullVaule("endDate")); // among current students
 		students = studentRepository.findAll(spec);
 		return students;
 	}
