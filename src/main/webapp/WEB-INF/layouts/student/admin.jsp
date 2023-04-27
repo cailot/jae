@@ -52,7 +52,7 @@
 		}
 		// Send AJAX to server
 		$.ajax({
-			url : 'student/register',
+			url : '${pageContext.request.contextPath}/student/register',
 			type : 'POST',
 			dataType : 'json',
 			data : JSON.stringify(std),
@@ -104,7 +104,7 @@
 		// send query to controller
 		$('#studentListResultTable tbody').empty();
 		$.ajax({
-			url : 'student/search',
+			url : '${pageContext.request.contextPath}/student/search',
 			type : 'GET',
 			data : {
 				keyword : $("#formKeyword").val()
@@ -119,8 +119,9 @@
 					return;
 				}
 				$.each(data, function(index, value) {
+					console.log(value);
 					var row = $("<tr onclick='displayStudentInfo("
-							+ JSON.stringify(value) + ")''>");
+							+ JSON.stringify(value) + ")'>");
 					row.append($('<td>').text(value.id));
 					row.append($('<td>').text(value.firstName));
 					row.append($('<td>').text(value.lastName));
@@ -149,13 +150,24 @@
 		
 		clearStudentForm();
 		$("#formId").val(value['id']);
-		$("#formFirstName").val(value['firstName']);
-		$("#formLastName").val(value['lastName']);
-		$("#formEmail").val(value['email']);
-		$("#formAddress").val(value['address']);
-		$("#formContact1").val(value['contactNo1']);
-		$("#formContact2").val(value['contactNo2']);
-		$("#formMemo").val(value['memo']);
+		
+		if(value['endDate']===''){ // active student
+			$("#formFirstName").val(value['firstName']).css("color", "black");
+			$("#formLastName").val(value['lastName']).css("color", "black");
+			$("#formEmail").val(value['email']).css("color", "black");
+			$("#formAddress").val(value['address']).css("color", "black");
+			$("#formContact1").val(value['contactNo1']).css("color", "black");
+			$("#formContact2").val(value['contactNo2']).css("color", "black");
+			$("#formMemo").val(value['memo']).css("color", "black");
+		}else{ // inactive student
+			$("#formFirstName").val(value['firstName']).css("color", "red");
+			$("#formLastName").val(value['lastName']).css("color", "red");
+			$("#formEmail").val(value['email']).css("color", "red");
+			$("#formAddress").val(value['address']).css("color", "red");
+			$("#formContact1").val(value['contactNo1']).css("color", "red");
+			$("#formContact2").val(value['contactNo2']).css("color", "red");
+			$("#formMemo").val(value['memo']).css("color", "red");
+		}
 		$("#formState").val(value['state']);
 		$("#formBranch").val(value['branch']);
 		//$("#formGrade").val(value['grade']);
@@ -228,7 +240,7 @@
 		
 		// send query to controller
 		$.ajax({
-			url : 'student/update',
+			url : '${pageContext.request.contextPath}/student/update',
 			type : 'PUT',
 			dataType : 'json',
 			//data : JSON.stringify(std, cId),
@@ -249,11 +261,9 @@
 		});
 	}
 	
-	
+	// de-activate student
 	function inactivateStudent() {
-
 		var id = $("#formId").val();
-
 		//warn if Id is empty
 		if (id == '') {
 			$('#warning-alert .modal-body').text(
@@ -261,23 +271,29 @@
 			$('#warning-alert').modal('show');
 			return;
 		}
-		// send query to controller
-		$.ajax({
-			url : 'student/inactivate/' + id,
-			type : 'PUT',
-			success : function(data) {
-				// clear existing form
-				$('#success-alert .modal-body').text(
-						'ID : ' + id + ' is now inactivated');
-				$('#success-alert').modal('show');
-				clearStudentForm();
-			},
-			error : function(xhr, status, error) {
-				console.log('Error : ' + error);
-			}
-		});
+		if(confirm("Are you sure you want to de-activate this student?")){
+			// send query to controller
+			$.ajax({
+				url : '${pageContext.request.contextPath}/student/inactivate/' + id,
+				type : 'PUT',
+				success : function(data) {
+					// clear existing form
+					$('#success-alert .modal-body').text(
+							'ID : ' + id + ' is now inactivated');
+					$('#success-alert').modal('show');
+					clearStudentForm();
+				},
+				error : function(xhr, status, error) {
+					console.log('Error : ' + error);
+				}
+			}); 
+		}else{
+			return;
+		}
 	}
 
+	
+	
 	// Clear all form
 	function clearStudentForm() {
 		document.getElementById("studentInfo").reset();
@@ -306,7 +322,7 @@
 		title.textContent = "Click to add a subject";
 		dropdown.appendChild(title);
 		$.ajax({
-			url : "elearning/list",
+			url : "${pageContext.request.contextPath}/elearning/list",
 			type : 'GET',
 			data : grade,
 			success : function(data) {
@@ -346,7 +362,7 @@
 		title.textContent = "Click to add a subject";
 		dropdown.appendChild(title);
 		$.ajax({
-			url : "elearning/available",
+			url : "${pageContext.request.contextPath}/elearning/available",
 			type : 'GET',
 			success : function(data) {
 				$.each(data, function(i, item) {

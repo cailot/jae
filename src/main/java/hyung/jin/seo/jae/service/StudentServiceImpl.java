@@ -116,7 +116,9 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Student getStudent(Long id) {
-		Student std = studentRepository.findByIdAndEndDateIsNull(id);// .get();
+		//Student std = studentRepository.findByIdAndEndDateIsNull(id);// .get();
+		Student std = studentRepository.findById(id).get();
+		
 		return std;
 	}
 
@@ -198,6 +200,7 @@ public class StudentServiceImpl implements StudentService {
 		try {
 			// studentRepository.deleteById(id);
 			Student end = studentRepository.findByIdAndEndDateIsNull(id);
+			if(end==null) return; // if not found, terminate.
 			end.setEndDate(LocalDate.now());
 			studentRepository.save(end);
 		} catch (org.springframework.dao.EmptyResultDataAccessException e) {

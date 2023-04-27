@@ -40,63 +40,19 @@ $(document).ready(function () {
 		//pageLength: 20
     });
     
-    
-    
-    $('table .edit').on('click', function(){
-		var stdId = $(this).parent().find('#studentId').val();
-		console.log(stdId);
-		document.getElementById("studentEdit").reset();
-		$.ajax({
-			type: 'GET',
-			url: '${pageContext.request.contextPath}/student/get',
-			data : {
-				id : stdId
-			},
-			success: function(std){
-				$('#editStudentModal #studentEditState').val(std.state);
-				$('#editStudentModal #studentEditFirstName').val(std.firstname);
-				$('#editStudentModal #studentEditFirstName').val(std.lastname);
-				
-				
-				
-				/* 
-				$("#formId").val(value['id']);
-				$("#formFirstName").val(value['firstName']);
-				$("#formLastName").val(value['lastName']);
-				$("#formEmail").val(value['email']);
-				$("#formAddress").val(value['address']);
-				$("#formContact1").val(value['contactNo1']);
-				$("#formContact2").val(value['contactNo2']);
-				$("#formMemo").val(value['memo']);
-				$("#formState").val(value['state']);
-				$("#formBranch").val(value['branch']);
-				//$("#formGrade").val(value['grade']);
-				$("#elearningGrade").val(value['grade']);
-				// display same selected grade to Course Register section
-				$("#registerGrade").val(value['grade']);
-				 */
-				// Set date value
-/* 				var date = new Date(value['enrolmentDate']); // Replace with your date value
-				$("#studentEditEnrolment").datepicker('setDate', date);
- */
-				
-				
-				
-				
-				
-			}	
-		});
-	});
-    
 
 	$('table .password').on('click', function(){
 		var username = $(this).parent().find('#username').val();
 		$('#passwordModal #usernamepassword').val(username);
 	});
 	
-	$('table .delete').on('click', function(){
-		var username = $(this).parent().find('#username').val();
-		$('#deleteUserModal #usernameDelete').val(username);
+	// Set default date format
+	$.fn.datepicker.defaults.format = 'dd/mm/yyyy';
+
+	$('.datepicker').datepicker({
+		//format: 'dd/mm/yyyy',
+		autoclose : true,
+		todayHighlight : true
 	});
 
     
@@ -118,9 +74,11 @@ function addStudent() {
 		grade : $("#addGrade").val(),
 		enrolmentDate : $("#addEnrolment").val()
 	}
+	console.log(std);
+	
 	// Send AJAX to server
 	$.ajax({
-		url : 'student/register',
+		url : '${pageContext.request.contextPath}/student/register',
 		type : 'POST',
 		dataType : 'json',
 		data : JSON.stringify(std),
@@ -153,11 +111,93 @@ function addStudent() {
 		}
 	});
 	$('#registerModal').modal('hide');
-	// ready to associate
-	listElearnings(std.grade);
 	// flush all registered data
 	document.getElementById("studentRegister").reset();
 }
+
+
+// de-activate student
+function inactivateStudent(id) {
+	if(confirm("Are you sure you want to de-activate this student?")){
+		// send query to controller
+		$.ajax({
+			url : '${pageContext.request.contextPath}/student/inactivate/' + id,
+			type : 'PUT',
+			success : function(data) {
+				// clear existing form
+				$('#success-alert .modal-body').text(
+						'ID : ' + id + ' is now inactivated');
+				$('#success-alert').modal('show');
+				//clearStudentForm();
+			},
+			error : function(xhr, status, error) {
+				console.log('Error : ' + error);
+			}
+		}); 
+	}else{
+		return;
+	}
+}
+
+
+
+
+
+
+
+
+//Search Student with Keyword	
+function retreiveStudentInfo(std) {
+	// send query to controller
+	$.ajax({
+		url : '${pageContext.request.contextPath}/student/get/' + std,
+		type : 'GET',
+		success : function(student) {
+			$('#editStudentModal').modal('show');
+			// Update display info
+			$("#studentEditId").val(student.id);
+			$("#studentEditFirstName").val(student.firstName);
+			$("#studentEditLastName").val(student.lastName);
+			$("#studentEditEmail").val(student.email);
+			$("#studentEditAddress").val(student.address);
+			$("#studentEditContact1").val(student.contactNo1);
+			$("#studentEditContact2").val(student.contactNo2);
+			$("#studentEditMemo").val(student.memo);
+			$("#studentEditState").val(student.state);
+			$("#studentEditBranch").val(student.branch);
+			//$("#formGrade").val(student.grade);
+			$("#studentEditGrade").val(student.grade);
+			// Set date value
+			var date = new Date(student.enrolmentDate); // Replace with your date value
+			$("#studentEditEnrolment").datepicker('setDate', date);
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+}
+
+
+function updateStudentInfo(){
+	
+	
+	
+	
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
 
@@ -279,7 +319,11 @@ function addStudent() {
 									
 										<c:forEach items="${StudentList}" var="student">
 											<tr>
-												<td class="small ellipsis"><span><c:out value="${student.id}" /></span></td>
+											
+<!-- 											<tr onclick='displayStudentInfo("	+ JSON.stringify(value) + ")'> -->
+											
+											
+												<td class="small ellipsis" id="studentId" name="studentId"><span><c:out value="${student.id}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${student.firstName}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${student.lastName}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${fn:toUpperCase(student.grade)}" /></span></td>
@@ -294,10 +338,11 @@ function addStudent() {
 												<td class="small ellipsis"><span><c:out value="${student.contactNo1}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${student.contactNo2}" /></span></td>
 												<td>
-													<a href="#editStudentModal" class="edit" data-toggle="modal"><i class="fa fa-edit text-primary" data-toggle="tooltip" title="Edit"></i></a>&nbsp;
+													<i class="fa fa-edit text-primary" data-toggle="tooltip" title="Edit" onclick="retreiveStudentInfo('${student.id}')"></i>&nbsp;
 													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;
-													<a href="#deleteStudentModal" class="delete" data-toggle="modal"><i class="fa fa-trash text-danger" data-toggle="tooltip" title="Delete"></i></a>
-												</td>
+				 									<i class="fa fa-trash text-danger" data-toggle="tooltip" title="Delete" onclick="inactivateStudent('${student.id}')"></i>
+													<%-- <input type="hidden" data-id="listStudentId" value="${student.id}" />
+				 								 --%></td>
 											</tr>
 										</c:forEach>
 									
@@ -325,7 +370,7 @@ function addStudent() {
 
 
 
-<!-- Register Form Dialogue -->
+<!-- Add Form Dialogue -->
 <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -529,23 +574,20 @@ function addStudent() {
 								<label for="datepicker">Enrolment</label> 
 								<input type="text" class="form-control datepicker" id="studentEditEnrolment" name="studentEditEnrolment" placeholder="dd/mm/yyyy">
 							</div>
-							<script>
-								var today = new Date();
-								var day = today.getDate();
-								var month = today.getMonth() + 1; // Note: January is 0
-								var year = today.getFullYear();
-								var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
-								document.getElementById('studentEditEnrolment').value = formattedDate;
-							</script>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-5">
+							<div class="col-md-2">
+								<label for="name">ID:</label> <input type="text"
+									class="form-control" id="studentEditId" name="studentEditId">
+							</div>
+							
+							<div class="col-md-4">
 								<label for="name">First Name:</label> <input type="text"
 									class="form-control" id="studentEditFirstName" name="studentEditFirstName">
 							</div>
-							<div class="col-md-5">
+							<div class="col-md-4">
 								<label for="name">Last Name:</label> <input type="text"
 									class="form-control" id="studentEditLastName" name="studentEditLastName">
 							</div>
@@ -610,7 +652,7 @@ function addStudent() {
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary" onclick="editStudent()">Save</button>
+				<button type="submit" class="btn btn-primary" onclick="updateStudentInfo()">Save</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->
@@ -625,39 +667,6 @@ function addStudent() {
 
 
 
-
-
-<!--  Edit Modal HTML -->
-<div id="editStudentModal" class="modal fade">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<form method="POST" action="${pageContext.request.contextPath}/editUser">
-				<div class="modal-header">
-					<h4 class="modal-title">Edit User</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<label>Username</label> <input type="text" class="form-control" required="required" name="usernameEdit" id="usernameEdit" readonly/>
-					</div>
-					<div class="form-group">
-						<label>First Name</label> <input type="text" class="form-control" required="required" name="firstnameEdit" id="firstnameEdit"/>
-					</div>
-					<div class="form-group">
-						<label>Last Name</label> <input type="text" class="form-control" required="required" name="lastnameEdit"  id="lastnameEdit"/>
-					</div>
-					<div class="form-group">
-						<label>Organisation</label>
-							<input type="text" class="form-control" required="required" name="roleEdit" id="roleEdit" />
-					</div>
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel"><input type="submit" class="btn btn-info" value="Save">
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
 
 
 
@@ -688,28 +697,45 @@ function addStudent() {
 	</div>
 </div>
 
-<!--  Delete Modal HTML -->
-<div id="deleteStudentModal" class="modal fade">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Success Message Modal -->
+<div class="modal fade" id="success-alert" tabindex="-1"
+	aria-labelledby="successModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form method="POST" action="${pageContext.request.contextPath}/deleteUser">
-				<div class="modal-header">
-					<h4 class="modal-title">Delete User</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</div>
-				<div class="modal-body">
-					<div class="form-group">
-						<p>Are you sure you want to delete this user ?</p>
-						<p class="text-warning"><small>This action cannot be undone.</small></p>	
-					</div>
-				</div>
-				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel"><input type="submit" class="btn btn-danger" value="Delete">
-					<input type="hidden" name="usernameDelete" id="usernameDelete"/> 
-				</div>
-			</form>
+			<div class="modal-header">
+				<h5 class="modal-title" id="successModalLabel">Success!</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body"></div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
 		</div>
 	</div>
 </div>
-
-

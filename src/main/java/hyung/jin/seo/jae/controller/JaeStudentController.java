@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +30,7 @@ import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.model.StudentDTO;
 import hyung.jin.seo.jae.service.ElearningService;
 import hyung.jin.seo.jae.service.StudentService;
+import hyung.jin.seo.jae.utils.JaeConstants;
 import hyung.jin.seo.jae.utils.JaeUtils;
 
 @Controller
@@ -71,11 +74,14 @@ public class JaeStudentController {
 		return dtos;
 	}
 	
-	// search student with keyword - ID, firstName & lastName
-	@GetMapping("/get")
+	
+
+	// search student by ID
+	@GetMapping("/get/{id}")
 	@ResponseBody
-	StudentDTO getStudents(@RequestParam("id") String id) {
-		Student std = studentService.getStudent(Long.parseLong(id));
+	StudentDTO getStudents(@PathVariable Long id) {
+		Student std = studentService.getStudent(id);
+		if(std==null) return new StudentDTO(); // return empty if not found
 		StudentDTO dto = new StudentDTO(std);
 		if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
 		{
@@ -119,6 +125,52 @@ public class JaeStudentController {
 		return dto;
 	}
 	
+	
+	// update existing student
+	@PutMapping("/updateOnlyStudent")
+	@ResponseBody
+	public StudentDTO updateOnlyStudent(@RequestBody StudentDTO formData) {
+		Student std = formData.convertToStudent();
+		
+//		if((std.getElearnings() != null) && (std.getElearnings().size() > 0)) {
+//			// 1. check if any related courses come
+//			Set<ElearningDTO> crss = formData.getElearnings();
+//			Set<Long> cidList = new HashSet<Long>(); // extract Course Id
+//			for(ElearningDTO crsDto : crss) {
+//				cidList.add(Long.parseLong(crsDto.getId()));
+//			}
+//			long[] courseId = cidList.stream().mapToLong(Long::longValue).toArray();
+//			// 2. get Course in Student
+//			Set courses = std.getElearnings();
+//			// 3. clear existing course
+//			courses.clear();
+//			for(long cid : courseId) {
+//				// 4. get course info
+//				Elearning crs = elearningService.getElearning(cid);
+//				// 6. add Student to Course
+//				crs.getStudents().add(std);
+//				// 5. add Course to Student
+//				courses.add(crs);
+//			}
+//		}
+		// 7. update Student
+		std = studentService.updateStudent(std, std.getId());
+		// 8. convert Student to StudentDTO
+		StudentDTO dto = new StudentDTO(std);
+		return dto;
+	}
+	
+	
+//	// de-activate student by Id
+//	@PostMapping("/inactivate")
+////	@ResponseBody
+//	public String inactivateStudent(HttpServletRequest request) {
+//		String stdId = request.getParameter("studentDeleteId");
+//		studentService.dischargeStudent(Long.parseLong(stdId));
+//		return "listPage";
+//	}
+	
+	
 	// de-activate student by Id
 	@PutMapping("/inactivate/{id}")
 	@ResponseBody
@@ -130,7 +182,7 @@ public class JaeStudentController {
 	// search student list with state, branch, grade, start date or active
 	@GetMapping("/list")
 	//@ResponseBody
-	public String listStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, HttpSession session) {
+	public String listStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
         System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
 		List<Student> students = studentService.listStudents(state, branch, grade, year, active);
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
@@ -152,11 +204,9 @@ public class JaeStudentController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
 			dtos.add(dto);
 		}
-		session.setAttribute("StudentList", dtos);
+		model.addAttribute(JaeConstants.STUDENT_LIST, dtos);
 		return "listPage";
 	}
 }

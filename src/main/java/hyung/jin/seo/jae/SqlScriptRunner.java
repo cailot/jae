@@ -1,5 +1,6 @@
 package hyung.jin.seo.jae;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
@@ -25,8 +26,8 @@ public class SqlScriptRunner {
     @PostConstruct
     public void runSqlScripts() throws SQLException {
     	String ddl = env.getProperty("spring.jpa.hibernate.ddl-auto");
-    	// run scripts only for 'create-drop'
-    	if("create-drop".equalsIgnoreCase(ddl)) { 
+    	// run scripts only for 'create-drop' or 'create'
+    	if(StringUtils.startsWithIgnoreCase(ddl, "create")){
 	        Connection connection = dataSource.getConnection();
 	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/elearning.sql")); // eLearning 
 	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/course.sql")); // Course

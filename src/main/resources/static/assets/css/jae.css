@@ -70,3 +70,7 @@
 .hidden-column{
     display: none !important;
 }
+
+.deactived-user{
+	color: red !important;
+}
