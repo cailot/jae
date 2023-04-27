@@ -64,7 +64,7 @@ public class JaeStudentController {
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
-			if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
+			if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote for JSON
 			{
 				String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
 				dto.setMemo(newMemo);
@@ -83,11 +83,11 @@ public class JaeStudentController {
 		Student std = studentService.getStudent(id);
 		if(std==null) return new StudentDTO(); // return empty if not found
 		StudentDTO dto = new StudentDTO(std);
-		if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
-		{
-			String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
-			dto.setMemo(newMemo);
-		}
+//		if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
+//		{
+//			String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
+//			dto.setMemo(newMemo);
+//		}
 		return dto;
 	}
 	
@@ -122,6 +122,11 @@ public class JaeStudentController {
 		std = studentService.updateStudent(std, std.getId());
 		// 8. convert Student to StudentDTO
 		StudentDTO dto = new StudentDTO(std);
+//		if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
+//		{
+//			String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
+//			dto.setMemo(newMemo);
+//		}
 		return dto;
 	}
 	
@@ -131,45 +136,17 @@ public class JaeStudentController {
 	@ResponseBody
 	public StudentDTO updateOnlyStudent(@RequestBody StudentDTO formData) {
 		Student std = formData.convertToStudent();
-		
-//		if((std.getElearnings() != null) && (std.getElearnings().size() > 0)) {
-//			// 1. check if any related courses come
-//			Set<ElearningDTO> crss = formData.getElearnings();
-//			Set<Long> cidList = new HashSet<Long>(); // extract Course Id
-//			for(ElearningDTO crsDto : crss) {
-//				cidList.add(Long.parseLong(crsDto.getId()));
-//			}
-//			long[] courseId = cidList.stream().mapToLong(Long::longValue).toArray();
-//			// 2. get Course in Student
-//			Set courses = std.getElearnings();
-//			// 3. clear existing course
-//			courses.clear();
-//			for(long cid : courseId) {
-//				// 4. get course info
-//				Elearning crs = elearningService.getElearning(cid);
-//				// 6. add Student to Course
-//				crs.getStudents().add(std);
-//				// 5. add Course to Student
-//				courses.add(crs);
-//			}
-//		}
-		// 7. update Student
+		// update Student
 		std = studentService.updateStudent(std, std.getId());
-		// 8. convert Student to StudentDTO
+		// convert Student to StudentDTO
 		StudentDTO dto = new StudentDTO(std);
+//		if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
+//		{
+//			String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
+//			dto.setMemo(newMemo);
+//		}
 		return dto;
 	}
-	
-	
-//	// de-activate student by Id
-//	@PostMapping("/inactivate")
-////	@ResponseBody
-//	public String inactivateStudent(HttpServletRequest request) {
-//		String stdId = request.getParameter("studentDeleteId");
-//		studentService.dischargeStudent(Long.parseLong(stdId));
-//		return "listPage";
-//	}
-	
 	
 	// de-activate student by Id
 	@PutMapping("/inactivate/{id}")

@@ -209,8 +209,7 @@ function updateStudentInfo(){
 			$('#success-alert .modal-body').text(
 					'ID : ' + value.id + ' is updated successfully.');
 			$('#success-alert').modal('show');
-			// Display returned result
-			displayStudentInfo(value);
+			
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
