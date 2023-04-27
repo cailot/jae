@@ -18,9 +18,7 @@
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
 
  
- 
-
- 
+  
 <script>
 $(document).ready(function () {
     $('#studentListTable').DataTable({
@@ -110,7 +108,7 @@ function addStudent() {
 			console.log('Error : ' + error);
 		}
 	});
-	$('#registerModal').modal('hide');
+	$('#registerStudentModal').modal('hide');
 	// flush all registered data
 	document.getElementById("studentRegister").reset();
 }
@@ -180,7 +178,48 @@ function retreiveStudentInfo(std) {
 
 function updateStudentInfo(){
 	
+	// get from formData
+	var std = {
+		id : $('#studentEditId').val(),
+		firstName : $("#studentEditFirstName").val(),
+		lastName : $("#studentEditLastName").val(),
+		email : $("#studentEditEmail").val(),
+		address : $("#studentEditAddress").val(),
+		contactNo1 : $("#studentEditContact1").val(),
+		contactNo2 : $("#studentEditContact2").val(),
+		memo : $("#studentEditMemo").val(),
+		state : $("#studentEditState").val(),
+		branch : $("#studentEditBranch").val(),
+		//grade : $("#studentEditGrade").val(),
+		grade : $("#elearningGrade").val(),
+		enrolmentDate : $("#studentEditEnrolment").val(),
+		elearnings : []
+	}
 	
+	
+	// send query to controller
+	$.ajax({
+		url : '${pageContext.request.contextPath}/student/updateOnlyStudent',
+		type : 'PUT',
+		dataType : 'json',
+		data : JSON.stringify(std),
+		contentType : 'application/json',
+		success : function(value) {
+			// Display success alert
+			$('#success-alert .modal-body').text(
+					'ID : ' + value.id + ' is updated successfully.');
+			$('#success-alert').modal('show');
+			// Display returned result
+			displayStudentInfo(value);
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+	
+	$('#editStudentModal').modal('hide');
+	// flush all registered data
+	document.getElementById("studentEdit").reset();
 	
 	
 	
@@ -199,8 +238,6 @@ function updateStudentInfo(){
 
 
 </script>
-
-
 
 <!-- List Body -->
 <div class="row">
@@ -288,7 +325,7 @@ function updateStudentInfo(){
 						<button type="submit" class="btn btn-primary btn-block" onclick="return validate()">Search</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerModal">New</button>
+						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerStudentModal">New</button>
 					</div>
 				</div>
 			</div>
@@ -320,8 +357,6 @@ function updateStudentInfo(){
 										<c:forEach items="${StudentList}" var="student">
 											<tr>
 											
-<!-- 											<tr onclick='displayStudentInfo("	+ JSON.stringify(value) + ")'> -->
-											
 											
 												<td class="small ellipsis" id="studentId" name="studentId"><span><c:out value="${student.id}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${student.firstName}" /></span></td>
@@ -341,8 +376,7 @@ function updateStudentInfo(){
 													<i class="fa fa-edit text-primary" data-toggle="tooltip" title="Edit" onclick="retreiveStudentInfo('${student.id}')"></i>&nbsp;
 													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;
 				 									<i class="fa fa-trash text-danger" data-toggle="tooltip" title="Delete" onclick="inactivateStudent('${student.id}')"></i>
-													<%-- <input type="hidden" data-id="listStudentId" value="${student.id}" />
-				 								 --%></td>
+												</td>
 											</tr>
 										</c:forEach>
 									
@@ -359,19 +393,8 @@ function updateStudentInfo(){
 	</div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
 <!-- Add Form Dialogue -->
-<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="registerStudentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -515,8 +538,6 @@ function updateStudentInfo(){
 	<!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-
-
 
 <!-- Edit Form Dialogue -->
 <div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
