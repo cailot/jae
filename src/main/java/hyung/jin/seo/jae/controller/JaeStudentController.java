@@ -64,11 +64,14 @@ public class JaeStudentController {
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
-			if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote for JSON
-			{
-				String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
-				dto.setMemo(newMemo);
-			}
+			// replace escape character single quote for JSON
+			dto = JaeUtils.safeJsonStudentInfo(dto);
+//			
+//			if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote for JSON
+//			{
+//				String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
+//				dto.setMemo(newMemo);
+//			}
 			dtos.add(dto);
 		}
 		return dtos;
@@ -83,11 +86,6 @@ public class JaeStudentController {
 		Student std = studentService.getStudent(id);
 		if(std==null) return new StudentDTO(); // return empty if not found
 		StudentDTO dto = new StudentDTO(std);
-//		if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
-//		{
-//			String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
-//			dto.setMemo(newMemo);
-//		}
 		return dto;
 	}
 	
@@ -122,11 +120,6 @@ public class JaeStudentController {
 		std = studentService.updateStudent(std, std.getId());
 		// 8. convert Student to StudentDTO
 		StudentDTO dto = new StudentDTO(std);
-//		if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
-//		{
-//			String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
-//			dto.setMemo(newMemo);
-//		}
 		return dto;
 	}
 	
@@ -140,11 +133,6 @@ public class JaeStudentController {
 		std = studentService.updateStudent(std, std.getId());
 		// convert Student to StudentDTO
 		StudentDTO dto = new StudentDTO(std);
-//		if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
-//		{
-//			String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
-//			dto.setMemo(newMemo);
-//		}
 		return dto;
 	}
 	
@@ -158,18 +146,17 @@ public class JaeStudentController {
 	
 	// search student list with state, branch, grade, start date or active
 	@GetMapping("/list")
-	//@ResponseBody
 	public String listStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
         System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
 		List<Student> students = studentService.listStudents(state, branch, grade, year, active);
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
-			if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
-			{
-				String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
-				dto.setMemo(newMemo);
-			}
+//			if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
+//			{
+//				String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
+//				dto.setMemo(newMemo);
+//			}
 			try {
 				// convert date format to dd/MM/yyyy
 				String startDate = JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate());

@@ -181,6 +181,7 @@ public class JaeUtils {
 		return formatted;
 	}
 	
+	// check if string date is formatted 'dd/MM/yyyy'
 	public static boolean isValidDateFormat(String date) {
 		dateFormat.setLenient(false);
 		try {
@@ -190,4 +191,52 @@ public class JaeUtils {
 			return false;
 		}
 	}
+	
+	// replace escape character ' to &#39; for JSON
+	public static StudentDTO safeJsonStudentInfo(StudentDTO dto) {
+		// check firstName
+		if (StringUtils.isNotBlank(dto.getFirstName()))
+		{
+			String newFirst = dto.getFirstName().replaceAll("\'", "&#39;");
+			dto.setFirstName(newFirst);
+		}
+		// check lastName
+		if (StringUtils.isNotBlank(dto.getLastName()))
+		{
+			String newLast = dto.getLastName().replaceAll("\'", "&#39;");
+			dto.setLastName(newLast);
+		}
+		// check email
+		if (StringUtils.isNotBlank(dto.getEmail()))
+		{
+			String newEmail = dto.getEmail().replaceAll("\'", "&#39;");
+			dto.setEmail(newEmail);
+		}
+		// check address
+		if (StringUtils.isNotBlank(dto.getAddress()))
+		{
+			String newAddr = dto.getAddress().replaceAll("\'", "&#39;");
+			dto.setAddress(newAddr);
+		}
+		// check contact 1
+		if (StringUtils.isNotBlank(dto.getContactNo1()))
+		{
+			String newCon1 = dto.getContactNo1().replaceAll("\'", "&#39;");
+			dto.setContactNo1(newCon1);
+		}
+		// check contact 2
+		if (StringUtils.isNotBlank(dto.getContactNo2()))
+		{
+			String newCon2 = dto.getContactNo2().replaceAll("\'", "&#39;");
+			dto.setContactNo2(newCon2);
+		}
+		// check memo
+		if (StringUtils.isNotBlank(dto.getMemo()))
+		{
+			String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
+			dto.setMemo(newMemo);
+		}
+		return dto;
+	}
+	
 }
