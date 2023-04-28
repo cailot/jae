@@ -14,28 +14,20 @@ import hyung.jin.seo.jae.service.StudentService;
 @Controller
 public class JaeController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JaeController.class);
-
-	@Autowired
-	private StudentService studentService;
-
-	@Autowired
-	private ElearningService elearningService;
 
 	@GetMapping("/test")
 	public String student(HttpSession session) {
 		return "testPage";
 	}
 	
-	
 	@GetMapping("/list")
 	public String list(HttpSession session) {
 		return "listPage";
 	}
 
-	@GetMapping("/setting")
+	@GetMapping("/teacher")
 	public String setting(HttpSession session) {
-		return "settingPage";
+		return "teacherPage";
 	}
 	
 }

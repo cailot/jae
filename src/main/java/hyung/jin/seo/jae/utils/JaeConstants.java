@@ -4,9 +4,9 @@ public interface JaeConstants {
 
 	String ALL = "All";
 	
-	String CURRENT_STUDENT = "Current";
+	String CURRENT = "Current";
 	
-	String STOPPED_STUDENT = "Stopped";
+	String STOPPED = "Stopped";
 	
 	int ACADEMIC_START_COMMING_WEEKS = 29;
 	
@@ -81,6 +81,7 @@ public interface JaeConstants {
 	
 	String STUDENT_LIST = "StudentList";
 	
+	String TEACHER_LIST = "TeacherList";
 	
 	
 	

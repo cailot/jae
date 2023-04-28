@@ -20,7 +20,7 @@ import hyung.jin.seo.jae.utils.JaeConstants;
 import hyung.jin.seo.jae.utils.JaeUtils;
 
 @Service
-public class StudentServiceImpl implements StudentService {
+public class TeacherServiceImpl implements StudentService {
 
 	@Autowired
 	private StudentRepository studentRepository;
