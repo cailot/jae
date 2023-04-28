@@ -65,13 +65,7 @@ public class JaeStudentController {
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
 			// replace escape character single quote for JSON
-			dto = JaeUtils.safeJsonStudentInfo(dto);
-//			
-//			if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote for JSON
-//			{
-//				String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
-//				dto.setMemo(newMemo);
-//			}
+//			dto = JaeUtils.safeJsonStudentInfo(dto);
 			dtos.add(dto);
 		}
 		return dtos;
@@ -152,11 +146,6 @@ public class JaeStudentController {
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
-//			if (StringUtils.isNotBlank(dto.getMemo())) // replace escape character single quote
-//			{
-//				String newMemo = dto.getMemo().replaceAll("\'", "&#39;");
-//				dto.setMemo(newMemo);
-//			}
 			try {
 				// convert date format to dd/MM/yyyy
 				String startDate = JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate());

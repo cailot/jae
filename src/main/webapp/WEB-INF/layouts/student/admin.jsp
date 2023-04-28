@@ -119,9 +119,8 @@
 					return;
 				}
 				$.each(data, function(index, value) {
-					
-					var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")'>");
-							
+					var escapedValue = JSON.stringify(value).replace(/'/g, '&#39;');
+					var row = $("<tr onclick='displayStudentInfo(" + escapedValue + ")'>");		
 					row.append($('<td>').text(value.id));
 					row.append($('<td>').text(value.firstName));
 					row.append($('<td>').text(value.lastName));
@@ -144,7 +143,13 @@
 		});
 
 	}
-
+	
+	// Display selected student in student search
+	function display(value) {
+		
+		console.log(value.id);
+	}
+	
 	// Display selected student in student search
 	function displayStudentInfo(value) {
 		
