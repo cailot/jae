@@ -119,9 +119,9 @@
 					return;
 				}
 				$.each(data, function(index, value) {
-					console.log(value);
-					var row = $("<tr onclick='displayStudentInfo("
-							+ JSON.stringify(value) + ")'>");
+					
+					var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")'>");
+							
 					row.append($('<td>').text(value.id));
 					row.append($('<td>').text(value.firstName));
 					row.append($('<td>').text(value.lastName));
@@ -375,6 +375,9 @@
 			}
 		});
 	}
+	
+	
+	
 	
 	
 </script>
