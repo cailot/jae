@@ -1,10 +1,8 @@
 package hyung.jin.seo.jae.service;
 
-import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -13,203 +11,195 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import hyung.jin.seo.jae.model.Student;
-import hyung.jin.seo.jae.repository.StudentRepository;
+import hyung.jin.seo.jae.model.Teacher;
+import hyung.jin.seo.jae.repository.TeacherRepository;
 import hyung.jin.seo.jae.specification.StudentSpecification;
+import hyung.jin.seo.jae.specification.TeacherSpecification;
 import hyung.jin.seo.jae.utils.JaeConstants;
-import hyung.jin.seo.jae.utils.JaeUtils;
 
 @Service
-public class TeacherServiceImpl implements StudentService {
+public class TeacherServiceImpl implements TeacherService {
 
 	@Autowired
-	private StudentRepository studentRepository;
+	private TeacherRepository teacherRepository;
 
 	@Override
-	public List<Student> allStudents() {
-		List<Student> students = studentRepository.findAll();
-		return students;
+	public List<Teacher> allTeachers() {
+		List<Teacher> teachers = teacherRepository.findAll();
+		return teachers;
 	}
 	
 	@Override
-	public List<Student> currentStudents() {
-		List<Student> students = studentRepository.findAllByEndDateIsNull();
-		return students;
+	public List<Teacher> currentTeachers() {
+		List<Teacher> teachers = teacherRepository.findAllByEndDateIsNull();
+		return teachers;
 	}
 
 	@Override
-	public List<Student> stoppedStudents() {
-		List<Student> students = studentRepository.findAllByEndDateIsNotNull();
-		return students;
+	public List<Teacher> stoppedTeachers() {
+		List<Teacher> teachers = teacherRepository.findAllByEndDateIsNotNull();
+		return teachers;
 	}
 
-
-
 	@Override
-	public List<Student> listStudents(String state, String branch, String grade, String year, String active) {
-		List<Student> students = null;// studentRepository.findAll();
+	public List<Teacher> listTeachers(String state, String branch, String active) {
+		List<Teacher> teachers = null;// studentRepository.findAll();
 
-		Specification<Student> spec = Specification.where(null);
+		Specification<Teacher> spec = Specification.where(null);
 		
 		if((StringUtils.isNotBlank(state))&&(!StringUtils.equals(state, JaeConstants.ALL))) {
-			spec = spec.and(StudentSpecification.stateEquals(state));
+			spec = spec.and(TeacherSpecification.stateEquals(state));
 		}
 		if(StringUtils.isNotBlank(branch)&&(!StringUtils.equals(branch, JaeConstants.ALL))) {
-			spec = spec.and(StudentSpecification.branchEquals(branch));
+			spec = spec.and(TeacherSpecification.branchEquals(branch));
 		}
-		if(StringUtils.isNotBlank(grade)&&(!StringUtils.equals(grade, JaeConstants.ALL))) {
-			spec = spec.and(StudentSpecification.gradeEquals(grade));
-		}
-		if(StringUtils.isNotBlank(year)&&(!StringUtils.equals(year, JaeConstants.ALL))) {
-			LocalDate lastDate = JaeUtils.lastAcademicDate(year);
-			spec = spec.and(StudentSpecification.startDateLessThanOrEqualTo(lastDate) );
-		}
-//		if(StringUtils.isNotBlank(start) && JaeUtils.isValidDateFormat(start)) {
-//			
-//			Date date = null;
-//			try {
-//				date = JaeUtils.dateFormat.parse(start);
-//				LocalDate startDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//				spec = spec.and(StudentSpecification.startDateAfter(startDate));
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
 
 		switch ((active==null) ? JaeConstants.ALL : active) {
 
 		case JaeConstants.CURRENT:
-			spec = spec.and(StudentSpecification.hasNullVaule("endDate"));
-			students = studentRepository.findAll(spec);
+			spec = spec.and(TeacherSpecification.hasNullVaule("endDate"));
+			teachers = teacherRepository.findAll(spec);
 			break;
 
 		case JaeConstants.STOPPED:
-			spec = spec.and(StudentSpecification.hasNotNullVaule("endDate"));
-			students = studentRepository.findAll(spec);
+			spec = spec.and(TeacherSpecification.hasNotNullVaule("endDate"));
+			teachers = teacherRepository.findAll(spec);
 			break;
 
 		case JaeConstants.ALL:
-			students = studentRepository.findAll(spec);
+			teachers = teacherRepository.findAll(spec);
 
 		}
-		return students;
+		return teachers;
 	}
 	
 	@Override
-	public List<Student> searchStudents(String keyword) {
-		List<Student> students = null;
-		Specification<Student> spec = Specification.where(null);
+	public List<Teacher> searchTeachers(String keyword) {
+		List<Teacher> teachers = null;
+		Specification<Teacher> spec = Specification.where(null);
 		
 		if(StringUtils.isNumericSpace(keyword)) {
-			spec = spec.and(StudentSpecification.idEquals(keyword));
+			spec = spec.and(TeacherSpecification.idEquals(keyword));
 		}else {
 			// firstName or lastName search
-			spec = spec.and(StudentSpecification.nameContains(keyword));
+			spec = spec.and(TeacherSpecification.nameContains(keyword));
 		}
-//		spec = spec.and(StudentSpecification.hasNullVaule("endDate")); // among current students
-		students = studentRepository.findAll(spec);
-		return students;
+		teachers = teacherRepository.findAll(spec);
+		return teachers;
 	}
 
 	@Override
-	public Student getStudent(Long id) {
-		//Student std = studentRepository.findByIdAndEndDateIsNull(id);// .get();
-		Student std = studentRepository.findById(id).get();
-		
-		return std;
+	public Teacher getTeacher(Long id) {
+		Teacher teacher = teacherRepository.findById(id).get();
+		return teacher;
 	}
 
 	@Override
-	public Student addStudent(Student std) {
-		Student add = studentRepository.save(std);
+	public Teacher addTeacher(Teacher teacher) {
+		Teacher add = teacherRepository.save(teacher);
 		return add;
 	}
 
 	@Override
 	public long checkCount() {
-		long count = studentRepository.countByEndDateIsNull();
+		long count = teacherRepository.count();
 		return count;
 	}
 
 	@Override
 	//@Transactional
-	public Student updateStudent(Student newStudent, Long id) {
+	public Teacher updateTeacher(Teacher newVal, Long id) {
 		// search by getId
-		Student existing = studentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Student not found"));
+		Teacher existing = teacherRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Teacher not found"));
 		// Update info
-		String newFirstName = StringUtils.defaultString(newStudent.getFirstName());
+		String newFirstName = StringUtils.defaultString(newVal.getFirstName());
 		if (StringUtils.isNotBlank(newFirstName)) {
 			existing.setFirstName(newFirstName);
 		}
-		String newLastName = StringUtils.defaultString(newStudent.getLastName());
+		String newLastName = StringUtils.defaultString(newVal.getLastName());
 		if (StringUtils.isNotBlank(newLastName)) {
 			existing.setLastName(newLastName);
 		}
-		String newGrade = StringUtils.defaultString(newStudent.getGrade());
-		if (StringUtils.isNotBlank(newGrade)) {
-			existing.setGrade(newGrade);
+		String newTitle = StringUtils.defaultString(newVal.getTitle());
+		if (StringUtils.isNotBlank(newTitle)) {
+			existing.setTitle(newTitle);
 		}
-		String newContactNo1 = StringUtils.defaultString(newStudent.getContactNo1());
-		if (StringUtils.isNotBlank(newContactNo1)) {
-			existing.setContactNo1(newContactNo1);
+		String newPhone = StringUtils.defaultString(newVal.getPhone());
+		if (StringUtils.isNotBlank(newPhone)) {
+			existing.setPhone(newPhone);
 		}
-		String newContactNo2 = StringUtils.defaultString(newStudent.getContactNo2());
-		if (StringUtils.isNotBlank(newContactNo2)) {
-			existing.setContactNo2(newContactNo2);
-		}
-		String newEmail = StringUtils.defaultString(newStudent.getEmail());
+		String newEmail = StringUtils.defaultString(newVal.getEmail());
 		if (StringUtils.isNotBlank(newEmail)) {
 			existing.setEmail(newEmail);
 		}
-		String newAddress = StringUtils.defaultString(newStudent.getAddress());
+		String newAddress = StringUtils.defaultString(newVal.getAddress());
 		if (StringUtils.isNotBlank(newAddress)) {
 			existing.setAddress(newAddress);
 		}
-		String newState = StringUtils.defaultString(newStudent.getState());
+		String newState = StringUtils.defaultString(newVal.getState());
 		if (StringUtils.isNotBlank(newState)) {
 			existing.setState(newState);
 		}
-		String newBranch = StringUtils.defaultString(newStudent.getBranch());
+		String newBranch = StringUtils.defaultString(newVal.getBranch());
 		if (StringUtils.isNotBlank(newBranch)) {
 			existing.setBranch(newBranch);
 		}
-		String newMemo = StringUtils.defaultString(newStudent.getMemo());
+		String newMemo = StringUtils.defaultString(newVal.getMemo());
 		if (StringUtils.isNotBlank(newMemo)) {
 			existing.setMemo(newMemo);
 		}
-		if (newStudent.getEnrolmentDate() != null) {
-			LocalDate newEnrolDate = newStudent.getEnrolmentDate();
-			existing.setEnrolmentDate(newEnrolDate);
-		}
 		
-		// update course
-		if((newStudent.getElearnings()!=null) && (newStudent.getElearnings().size() > 0)) {
-			existing.setElearnings(newStudent.getElearnings());
+		String newBank = StringUtils.defaultString(newVal.getBank());
+		if (StringUtils.isNotBlank(newBank)) {
+			existing.setBank(newBank);
+		}
+		String newBsb = StringUtils.defaultString(newVal.getBsb());
+		if (StringUtils.isNotBlank(newBsb)) {
+			existing.setBsb(newBsb);
+		}
+		Long newAccountNumber = (newVal.getAccountNumber())!=null ? (newVal.getAccountNumber()) : 0;
+		existing.setAccountNumber(newAccountNumber);
+		String newsuperannuation = StringUtils.defaultString(newVal.getSuperannuation());
+		if (StringUtils.isNotBlank(newsuperannuation)) {
+			existing.setSuperannuation(newsuperannuation);
+		}
+		String newSuperMember = StringUtils.defaultString(newVal.getSuperMember());
+		if (StringUtils.isNotBlank(newSuperMember)) {
+			existing.setSuperMember(newSuperMember);
+		}
+		Long newTaxNumber = (newVal.getTfn())!=null ? (newVal.getTfn()) : 0;
+		existing.setAccountNumber(newTaxNumber);
+		if (newVal.getStartDate() != null) {
+			LocalDate newStartDate = newVal.getStartDate();
+			existing.setStartDate(newStartDate);
+		}
+		if (newVal.getEndDate() != null) {
+			LocalDate newEndDate = newVal.getEndDate();
+			existing.setEndDate(newEndDate);
 		}
 
 		// update the existing record
-		Student updated = studentRepository.save(existing);
+		Teacher updated = teacherRepository.save(existing);
 		return updated;
 	}
 
 	@Override
-	public void dischargeStudent(Long id) {
+	public void dischargeTeacher(Long id) {
 		try {
-			// studentRepository.deleteById(id);
-			Student end = studentRepository.findByIdAndEndDateIsNull(id);
-			if(end==null) return; // if not found, terminate.
-			end.setEndDate(LocalDate.now());
-			studentRepository.save(end);
+			Optional<Teacher> end = teacherRepository.findById(id);
+			if(!end.isPresent()) return; // if not found, terminate.
+			Teacher teacher = end.get();
+			teacher.setEndDate(LocalDate.now());
+			teacherRepository.save(teacher);
 		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
 			System.out.println("Nothing to discharge");
 		}
 	}
 
 	@Override
-	public void deleteStudent(Long id) {
+	public void deleteTeacher(Long id) {
 		try {
-			studentRepository.deleteById(id);
+			teacherRepository.deleteById(id);
 		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
 			System.out.println("Nothing to delete");
 		}

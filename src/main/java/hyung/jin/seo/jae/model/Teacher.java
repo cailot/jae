@@ -42,10 +42,68 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Student")
+@Table(name="Teacher")
 public class Teacher implements Serializable{
     
-    public Long getId() {
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
+    private Long id;
+    
+    @Column(length = 200, nullable = false)
+    private String firstName;
+    
+    @Column(length = 200, nullable = false)
+    private String lastName;
+    
+    @Column(length = 5, nullable = true)
+    private String title;
+    
+    @Column(length = 200, nullable = true)
+    private String phone;
+    
+    @Column(length = 300, nullable = true)
+    private String email;
+    
+    @Column(length = 500, nullable = true)
+    private String address;
+    
+    @Column(length = 30, nullable = true)
+    private String state;
+    
+    @Column(length = 50, nullable = true)
+    private String branch;
+    
+    @Column(length = 1000, nullable = true)
+    private String memo;
+    
+    @Column(length = 50, nullable = true)
+    private String bank;
+        
+    @Column(length = 10, nullable = true)
+    private String bsb;
+
+    @Column(length = 15, nullable = true)
+    private Long accountNumber;
+    
+    @Column(length = 50, nullable = true)
+    private String superannuation;
+    
+    @Column(length = 20, nullable = true)
+    private String superMember;
+    
+    @Column(length = 15, nullable = true)
+    private Long tfn;
+    
+    @Override
+	public String toString() {
+		return "Teacher [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", title=" + title
+				+ ", phone=" + phone + ", email=" + email + ", address=" + address + ", state=" + state + ", branch="
+				+ branch + ", memo=" + memo + ", bank=" + bank + ", bsb=" + bsb + ", accountNumber=" + accountNumber
+				+ ", superannuation=" + superannuation + ", superMember=" + superMember + ", tfn=" + tfn
+				+ ", startDate=" + startDate + ", endDate=" + endDate + "]";
+	}
+
+	public Long getId() {
 		return id;
 	}
 
@@ -69,28 +127,20 @@ public class Teacher implements Serializable{
 		this.lastName = lastName;
 	}
 
-	public String getGrade() {
-		return grade;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setGrade(String grade) {
-		this.grade = grade;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getContactNo1() {
-		return contactNo1;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setContactNo1(String contactNo1) {
-		this.contactNo1 = contactNo1;
-	}
-
-	public String getContactNo2() {
-		return contactNo2;
-	}
-
-	public void setContactNo2(String contactNo2) {
-		this.contactNo2 = contactNo2;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public String getEmail() {
@@ -133,20 +183,60 @@ public class Teacher implements Serializable{
 		this.memo = memo;
 	}
 
-	public LocalDate getRegisterDate() {
-		return registerDate;
+	public String getBank() {
+		return bank;
 	}
 
-	public void setRegisterDate(LocalDate registerDate) {
-		this.registerDate = registerDate;
+	public void setBank(String bank) {
+		this.bank = bank;
 	}
 
-	public LocalDate getEnrolmentDate() {
-		return enrolmentDate;
+	public String getBsb() {
+		return bsb;
 	}
 
-	public void setEnrolmentDate(LocalDate enrolmentDate) {
-		this.enrolmentDate = enrolmentDate;
+	public void setBsb(String bsb) {
+		this.bsb = bsb;
+	}
+
+	public Long getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(Long account) {
+		this.accountNumber = account;
+	}
+
+	public String getSuperannuation() {
+		return superannuation;
+	}
+
+	public void setSuperannuation(String superannuation) {
+		this.superannuation = superannuation;
+	}
+
+	public String getSuperMember() {
+		return superMember;
+	}
+
+	public void setSuperMember(String superMember) {
+		this.superMember = superMember;
+	}
+
+	public Long getTfn() {
+		return tfn;
+	}
+
+	public void setTfn(Long tfn) {
+		this.tfn = tfn;
+	}
+
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
 	}
 
 	public LocalDate getEndDate() {
@@ -157,64 +247,10 @@ public class Teacher implements Serializable{
 		this.endDate = endDate;
 	}
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
-    private Long id;
-    
-    @Column(length = 200, nullable = false)
-    private String firstName;
-    
-    @Column(length = 200, nullable = false)
-    private String lastName;
-    
-    @Column(length = 10, nullable = false)
-    private String grade;
-    
-    @Column(length = 200, nullable = true)
-    private String contactNo1;
-    
-    @Column(length = 200, nullable = true)
-    private String contactNo2;
-    
-    @Column(length = 300, nullable = true)
-    private String email;
-    
-    @Column(length = 500, nullable = true)
-    private String address;
-    
-    @Column(length = 30, nullable = true)
-    private String state;
-    
-    @Column(length = 50, nullable = true)
-    private String branch;
-    
-    @Column(length = 1000, nullable = true)
-    private String memo;
-    
-    @CreationTimestamp
-    private LocalDate registerDate;
-    
-    //@UpdateTimestamp
-    @DateTimeFormat
-    private LocalDate enrolmentDate;
+	@CreationTimestamp
+    private LocalDate startDate;
     
     @CreatedDate
     private LocalDate endDate;
-
     
-    @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH)
-    @JoinTable(name="Student_Elearning",
-    	joinColumns = {@JoinColumn(name="student_id")},
-    	inverseJoinColumns = {@JoinColumn(name="elearning_id")}
-    )
-    private Set<Elearning> elearnings = new LinkedHashSet<>();
-
-	public Set<Elearning> getElearnings() {
-		return elearnings;
-	}
-
-	public void setElearnings(Set<Elearning> elearnings) {
-		this.elearnings = elearnings;
-	}
-    
-}
+   }

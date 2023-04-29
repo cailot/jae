@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -197,10 +198,11 @@ public class StudentServiceImpl implements StudentService {
 	public void dischargeStudent(Long id) {
 		try {
 			// studentRepository.deleteById(id);
-			Student end = studentRepository.findByIdAndEndDateIsNull(id);
-			if(end==null) return; // if not found, terminate.
-			end.setEndDate(LocalDate.now());
-			studentRepository.save(end);
+			Optional<Student> end = studentRepository.findById(id);
+			if(!end.isPresent()) return; // if not found, terminate.
+			Student std = end.get();
+			std.setEndDate(LocalDate.now());
+			studentRepository.save(std);
 		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
 			System.out.println("Nothing to discharge");
 		}

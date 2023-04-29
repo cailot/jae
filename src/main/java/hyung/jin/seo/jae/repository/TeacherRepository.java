@@ -1,19 +1,23 @@
 package hyung.jin.seo.jae.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import hyung.jin.seo.jae.model.Student;
+import hyung.jin.seo.jae.model.Teacher;
 
-public interface TeacherRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student>{  
+public interface TeacherRepository extends JpaRepository<Teacher, Long>, JpaSpecificationExecutor<Teacher>{  
 	
-	List<Student> findAllByEndDateIsNull();
+	List<Teacher> findAll();
 	
-	List<Student> findAllByEndDateIsNotNull();
+	List<Teacher> findAllByEndDateIsNull();
 	
-	Student findByIdAndEndDateIsNull(Long id);
+	List<Teacher> findAllByEndDateIsNotNull();
 	
-	long countByEndDateIsNull();
+	Optional<Teacher> findById(Long id);
+	
+	long count();
 }

@@ -2,6 +2,7 @@ package hyung.jin.seo.jae.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,9 +75,11 @@ public class ElearningServiceImpl implements ElearningService {
 	@Override
 	public void dischargeElearning(Long id) {
 		try {
-			Elearning end = elearningRepository.findByIdAndEndDateIsNull(id);
-			end.setEndDate(LocalDate.now());
-			elearningRepository.save(end);	
+			Optional<Elearning> end = elearningRepository.findById(id);
+			if(!end.isPresent()) return;
+			Elearning elearn = end.get();
+			elearn.setEndDate(LocalDate.now());
+			elearningRepository.save(elearn);	
 		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
 			System.out.println("Nothing to discharge");
 		}

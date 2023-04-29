@@ -47,11 +47,9 @@ public class TeacherDTO implements Serializable{
     
     private String lastName;
     
-    private String grade;
+    private String title;
     
-    private String contactNo1;
-    
-    private String contactNo2;
+    private String phone;
     
     private String email;
     
@@ -63,72 +61,23 @@ public class TeacherDTO implements Serializable{
     
     private String memo;
     
-    private String registerDate;
+    private String bank;
     
-    private String enrolmentDate;
+    private String bsb;
+    
+    private String accountNumber;
+    
+    private String superannuation;
+    
+    private String superMember;
+    
+    private String tfn;
+    
+    private String startDate;
     
     private String endDate;
     
-    private Set<ElearningDTO> elearnings = new LinkedHashSet<>();
-    
-    public Set<ElearningDTO> getElearnings() {
-		return elearnings;
-	}
-
-	public void setElearnings(Set<ElearningDTO> elearnings) {
-		this.elearnings = elearnings;
-	}
-
-	public TeacherDTO() {}
-
-    public TeacherDTO(Student std) {
-    	this.id = (std.getId()!=null) ? std.getId().toString() : "";
-        this.firstName = (std.getFirstName()!=null) ? std.getFirstName() : "";
-        this.lastName = (std.getLastName()!=null) ? std.getLastName() : "";
-        this.grade = (std.getGrade()!=null) ? std.getGrade() : "";
-        this.contactNo1 = (std.getContactNo1()!=null) ? std.getContactNo1() : "";
-        this.contactNo2 = (std.getContactNo2()!=null) ? std.getContactNo2() : "";
-        this.email = (std.getEmail()!=null) ? std.getEmail() : "";
-        this.address = (std.getAddress()!=null) ? std.getAddress() : "";
-        this.state = (std.getState()!=null) ? std.getState() : "";
-        this.branch = (std.getBranch()!=null) ? std.getBranch() : "";
-        this.memo = (std.getMemo()!=null) ? std.getMemo() : "";
-        this.registerDate = (std.getRegisterDate()!=null) ? std.getRegisterDate().toString() : "";
-        this.enrolmentDate = (std.getEnrolmentDate()!=null) ? std.getEnrolmentDate().toString() : "";
-        this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
-        if((std.getElearnings()!=null) && (std.getElearnings().size()>0)){
-        	for(Elearning crs : std.getElearnings()) {
-        		elearnings.add(new ElearningDTO(crs));
-        	}
-        }
-    }
-    
-    public Student convertToStudent() {
-    	Student std = new Student();
-    	if(StringUtils.isNotBlank(id)) std.setId(Long.parseLong(this.id));
-    	if(StringUtils.isNotBlank(firstName)) std.setFirstName(this.firstName);
-    	if(StringUtils.isNotBlank(lastName)) std.setLastName(this.lastName);
-    	if(StringUtils.isNotBlank(grade)) std.setGrade(this.grade);
-    	if(StringUtils.isNotBlank(contactNo1)) std.setContactNo1(this.contactNo1);
-    	if(StringUtils.isNotBlank(contactNo2)) std.setContactNo2(this.contactNo2);
-    	if(StringUtils.isNotBlank(email)) std.setEmail(this.email);
-    	if(StringUtils.isNotBlank(address)) std.setAddress(this.address);
-    	if(StringUtils.isNotBlank(state)) std.setState(this.state);
-    	if(StringUtils.isNotBlank(branch)) std.setBranch(this.branch);
-    	if(StringUtils.isNotBlank(memo)) std.setMemo(this.memo);
-    	if(StringUtils.isNotBlank(registerDate)) std.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	if(StringUtils.isNotBlank(endDate)) std.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	if((elearnings!=null) && (elearnings.size() > 0)) {
-    		
-    		for(ElearningDTO dto : elearnings) {
-    			std.getElearnings().add(dto.convertToCourse());
-    		}
-    	}
-    	return std;
-    }
-
-	public String getId() {
+    public String getId() {
 		return id;
 	}
 
@@ -152,28 +101,20 @@ public class TeacherDTO implements Serializable{
 		this.lastName = lastName;
 	}
 
-	public String getGrade() {
-		return grade;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setGrade(String grade) {
-		this.grade = grade;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getContactNo1() {
-		return contactNo1;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setContactNo1(String contactNo1) {
-		this.contactNo1 = contactNo1;
-	}
-
-	public String getContactNo2() {
-		return contactNo2;
-	}
-
-	public void setContactNo2(String contactNo2) {
-		this.contactNo2 = contactNo2;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public String getEmail() {
@@ -216,20 +157,60 @@ public class TeacherDTO implements Serializable{
 		this.memo = memo;
 	}
 
-	public String getRegisterDate() {
-		return registerDate;
+	public String getBank() {
+		return bank;
 	}
 
-	public void setRegisterDate(String registerDate) {
-		this.registerDate = registerDate;
+	public void setBank(String bank) {
+		this.bank = bank;
 	}
 
-	public String getEnrolmentDate() {
-		return enrolmentDate;
+	public String getBsb() {
+		return bsb;
 	}
 
-	public void setEnrolmentDate(String enrolmentDate) {
-		this.enrolmentDate = enrolmentDate;
+	public void setBsb(String bsb) {
+		this.bsb = bsb;
+	}
+
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	public String getSuperannuation() {
+		return superannuation;
+	}
+
+	public void setSuperannuation(String superannuation) {
+		this.superannuation = superannuation;
+	}
+
+	public String getSuperMember() {
+		return superMember;
+	}
+
+	public void setSuperMember(String superMember) {
+		this.superMember = superMember;
+	}
+
+	public String getTfn() {
+		return tfn;
+	}
+
+	public void setTfn(String tfn) {
+		this.tfn = tfn;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
 	}
 
 	public String getEndDate() {
@@ -242,13 +223,56 @@ public class TeacherDTO implements Serializable{
 
 	@Override
 	public String toString() {
-		return "StudentDTO [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", grade=" + grade
-				+ ", contactNo1=" + contactNo1 + ", contactNo2=" + contactNo2 + ", email=" + email + ", address="
-				+ address + ", state=" + state + ", branch=" + branch + ", memo=" + memo + ", registerDate="
-				+ registerDate + ", enrolmentDate=" + enrolmentDate + ", endDate=" + endDate + ", elearnings=" + elearnings
-				+ "]";
+		return "TeacherDTO [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", title=" + title
+				+ ", phone=" + phone + ", email=" + email + ", address=" + address + ", state=" + state + ", branch="
+				+ branch + ", memo=" + memo + ", bank=" + bank + ", bsb=" + bsb + ", accountNumber=" + accountNumber
+				+ ", superannuation=" + superannuation + ", superMember=" + superMember + ", taxNumber=" + tfn
+				+ ", startDate=" + startDate + ", endDate=" + endDate + "]";
 	}
 
-	
-        
+	public TeacherDTO() {}
+
+    public TeacherDTO(Teacher teacher) {
+    	this.id = (teacher.getId()!=null) ? teacher.getId().toString() : "";
+        this.firstName = (teacher.getFirstName()!=null) ? teacher.getFirstName() : "";
+        this.lastName = (teacher.getLastName()!=null) ? teacher.getLastName() : "";
+        this.title = (teacher.getTitle()!=null) ? teacher.getTitle() : "";
+        this.phone = (teacher.getPhone()!=null) ? teacher.getPhone() : "";
+        this.email = (teacher.getEmail()!=null) ? teacher.getEmail() : "";
+        this.address = (teacher.getAddress()!=null) ? teacher.getAddress() : "";
+        this.state = (teacher.getState()!=null) ? teacher.getState() : "";
+        this.branch = (teacher.getBranch()!=null) ? teacher.getBranch() : "";
+        this.memo = (teacher.getMemo()!=null) ? teacher.getMemo() : "";
+        this.bank = (teacher.getBank()!=null) ? teacher.getBank() : "";
+        this.bsb = (teacher.getBsb()!=null) ? teacher.getBsb() : "";
+        this.accountNumber = (teacher.getAccountNumber()!=null) ? teacher.getAccountNumber().toString() : "";
+        this.superannuation = (teacher.getSuperannuation()!=null) ? teacher.getSuperannuation() : "";
+        this.superMember = (teacher.getSuperMember()!=null) ? teacher.getSuperMember() : "";
+        this.tfn = (teacher.getTfn()!=null) ? teacher.getTfn().toString() : "";
+        this.startDate = (teacher.getStartDate()!=null) ? teacher.getStartDate().toString() : "";
+        this.endDate = (teacher.getEndDate()!=null) ? teacher.getEndDate().toString() : ""; 
+    }
+    
+    public Teacher convertToTeacher() {
+    	Teacher teacher = new Teacher();
+    	if(StringUtils.isNotBlank(id)) teacher.setId(Long.parseLong(this.id));
+    	if(StringUtils.isNotBlank(firstName)) teacher.setFirstName(this.firstName);
+    	if(StringUtils.isNotBlank(lastName)) teacher.setLastName(this.lastName);
+    	if(StringUtils.isNotBlank(title)) teacher.setTitle(this.title);
+    	if(StringUtils.isNotBlank(phone)) teacher.setPhone(this.phone);
+    	if(StringUtils.isNotBlank(email)) teacher.setEmail(this.email);
+    	if(StringUtils.isNotBlank(address)) teacher.setAddress(this.address);
+    	if(StringUtils.isNotBlank(state)) teacher.setState(this.state);
+    	if(StringUtils.isNotBlank(branch)) teacher.setBranch(this.branch);
+    	if(StringUtils.isNotBlank(memo)) teacher.setMemo(this.memo);
+    	if(StringUtils.isNotBlank(bank)) teacher.setBank(this.bank);
+    	if(StringUtils.isNotBlank(bsb)) teacher.setBsb(this.bsb);
+    	if(StringUtils.isNotBlank(accountNumber)) teacher.setAccountNumber(Long.parseLong(this.accountNumber));
+    	if(StringUtils.isNotBlank(superannuation)) teacher.setSuperannuation(this.superannuation);
+    	if(StringUtils.isNotBlank(superMember)) teacher.setSuperMember(this.superMember);
+    	if(StringUtils.isNotBlank(tfn)) teacher.setTfn(Long.parseLong(this.tfn));
+    	if(StringUtils.isNotBlank(startDate)) teacher.setStartDate(LocalDate.parse(startDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	if(StringUtils.isNotBlank(endDate)) teacher.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	return teacher;
+    }
 }

@@ -2,34 +2,34 @@ package hyung.jin.seo.jae.service;
 
 import java.util.List;
 
-import hyung.jin.seo.jae.model.Student;
+import hyung.jin.seo.jae.model.Teacher;
 
 public interface TeacherService {
 
 	// bring all students
-	List<Student> allStudents();
+	List<Teacher> allTeachers();
 	
 	// bring active students
-	List<Student> currentStudents();
+	List<Teacher> currentTeachers();
 	
 	// bring inactive students
-	List<Student> stoppedStudents();
+	List<Teacher> stoppedTeachers();
 	
 	// bring student list base on the condition
-	List<Student> listStudents(String state, String branch, String grade, String year, String active);
+	List<Teacher> listTeachers(String state, String branch, String active);
 	
 	// search student list base on keyword where id, firstName or lastName
-	List<Student> searchStudents(String keyword);
+	List<Teacher> searchTeachers(String keyword);
 		
-	Student getStudent(Long id);
+	Teacher getTeacher(Long id);
 	
-    Student addStudent(Student std);
+	Teacher addTeacher(Teacher std);
     
  	long checkCount();
     
-	Student updateStudent(Student newStudent, Long id);
+ 	Teacher updateTeacher(Teacher newTeacher, Long id);
 
-	void dischargeStudent(Long id);
+	void dischargeTeacher(Long id);
 	
-	void deleteStudent(Long id);
+	void deleteTeacher(Long id);
 }
