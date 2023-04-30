@@ -159,6 +159,7 @@ public class TeacherServiceImpl implements TeacherService {
 		}
 		Long newAccountNumber = (newVal.getAccountNumber())!=null ? (newVal.getAccountNumber()) : 0;
 		existing.setAccountNumber(newAccountNumber);
+		
 		String newsuperannuation = StringUtils.defaultString(newVal.getSuperannuation());
 		if (StringUtils.isNotBlank(newsuperannuation)) {
 			existing.setSuperannuation(newsuperannuation);
@@ -168,7 +169,7 @@ public class TeacherServiceImpl implements TeacherService {
 			existing.setSuperMember(newSuperMember);
 		}
 		Long newTaxNumber = (newVal.getTfn())!=null ? (newVal.getTfn()) : 0;
-		existing.setAccountNumber(newTaxNumber);
+		existing.setTfn(newTaxNumber);
 		if (newVal.getStartDate() != null) {
 			LocalDate newStartDate = newVal.getStartDate();
 			existing.setStartDate(newStartDate);

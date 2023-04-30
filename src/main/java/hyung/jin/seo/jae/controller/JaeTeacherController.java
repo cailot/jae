@@ -71,7 +71,8 @@ public class JaeTeacherController {
 	@ResponseBody
 	public TeacherDTO updateTeacher(@RequestBody TeacherDTO formData) {
 		Teacher teacher = formData.convertToTeacher();
-		
+		System.out.println(formData);
+		System.out.println(teacher);
 //		if((teacher.getElearnings() != null) && (teacher.getElearnings().size() > 0)) {
 //			// 1. check if any related courses come
 //			Set<ElearningDTO> crss = formData.getElearnings();
@@ -100,19 +101,7 @@ public class JaeTeacherController {
 		return dto;
 	}
 	
-	
-	// update existing teacher info
-	@PutMapping("/updateOnlyTeacher")
-	@ResponseBody
-	public TeacherDTO updateOnlyTeacher(@RequestBody TeacherDTO formData) {
-		Teacher teacher = formData.convertToTeacher();
-		// update Teacher
-		teacher = teacherService.updateTeacher(teacher, teacher.getId());
-		// convert Teacher to TeacherDTO
-		TeacherDTO dto = new TeacherDTO(teacher);
-		return dto;
-	}
-	
+		
 	// de-activate teacher by Id
 	@PutMapping("/inactivate/{id}")
 	@ResponseBody

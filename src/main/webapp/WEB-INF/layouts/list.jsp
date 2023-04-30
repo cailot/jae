@@ -600,7 +600,7 @@ function updateStudentInfo(){
 						<div class="form-row">
 							<div class="col-md-2">
 								<label for="name">ID:</label> <input type="text"
-									class="form-control" id="studentEditId" name="studentEditId">
+									class="form-control" id="studentEditId" name="studentEditId" readonly>
 							</div>
 							
 							<div class="col-md-4">

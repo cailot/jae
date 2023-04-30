@@ -90,23 +90,6 @@ function addTeacher() {
 			$('#success-alert .modal-body').text(
 					'Your action has been completed successfully.');
 			$('#success-alert').modal('show');
-//			// Update display info
-//			$("#formId").val(teacher.id);
-//			$("#formFirstName").val(teacher.firstName);
-//			$("#formLastName").val(teacher.lastName);
-//			$("#formEmail").val(teacher.email);
-//			$("#formAddress").val(teacher.address);
-//			$("#formContact1").val(teacher.contactNo1);
-//			$("#formContact2").val(teacher.contactNo2);
-//			$("#formMemo").val(teacher.memo);
-//			$("#formState").val(teacher.state);
-//			$("#formBranch").val(teacher.branch);
-//			//$("#formGrade").val(teacher.grade);
-//			$("#elearningGrade").val(teacher.grade);
-//			// Set date value
-//			var date = new Date(teacher.enrolmentDate); // Replace with your date value
-//			$("#formEnrolment").datepicker('setDate', date);
-
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
@@ -118,8 +101,91 @@ function addTeacher() {
 }
 
 
-// de-activate teacher
-function inactivateStudent(id) {
+//Search Student with Keyword	
+function retreiveTeacherInfo(std) {
+	// send query to controller
+	$.ajax({
+		url : '${pageContext.request.contextPath}/teacher/get/' + std,
+		type : 'GET',
+		success : function(teacher) {
+			$('#editTeacherModal').modal('show');
+			// Update display info
+			$("#editId").val(teacher.id);
+			$("#editFirstName").val(teacher.firstName);
+			$("#editLastName").val(teacher.lastName);
+			$("#editEmail").val(teacher.email);
+			$("#editTitle").val(teacher.title);
+			$("#editAddress").val(teacher.address);
+			$("#editPhone").val(teacher.phone);
+			$("#editState").val(teacher.state);
+			$("#editBranch").val(teacher.branch);
+			$("#editBank").val(teacher.bank);
+			$("#editBsb").val(teacher.bsb);
+			$("#editAccountNumber").val(teacher.accountNumber);
+			$("#editSuperannuation").val(teacher.superannuation);
+			$("#editSuperMember").val(teacher.superMember);
+			$("#editTfn").val(teacher.tfn);
+			$("#editMemo").val(teacher.memo);
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+}
+
+
+function updateTeacherInfo(){
+	
+	// get from formData
+	var teacher = {
+		id : $('#editId').val(),
+		firstName : $("#editFirstName").val(),
+		lastName : $("#editLastName").val(),
+		email : $("#editEmail").val(),
+		address : $("#editAddress").val(),
+		title : $("#editTitle").val(),
+		phone : $("#editPhone").val(),
+		memo : $("#editMemo").val(),
+		state : $("#editState").val(),
+		branch : $("#editBranch").val(),
+		bank : $("#editBank").val(),
+		bsb : $("#editBsb").val(),
+		accountNumber : $("#editAccountNumber").val(),
+		tfn : $("#editTfn").val(),
+		superannuation : $("#editSuperannuation").val(),
+		superMember : $("#editSuperMember").val()
+	}
+	
+	
+	// send query to controller
+	$.ajax({
+		url : '${pageContext.request.contextPath}/teacher/update',
+		type : 'PUT',
+		dataType : 'json',
+		data : JSON.stringify(teacher),
+		contentType : 'application/json',
+		success : function(value) {
+			$('#editTeacherModal').modal('hide');
+			// flush all registered data
+			document.getElementById("teacherEdit").reset();
+			
+			// Display success alert
+			$('#success-alert .modal-body').text(
+					'ID : ' + value.id + ' is updated successfully.');
+			$('#success-alert').modal('show');
+			
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+	
+	
+}
+
+
+//de-activate teacher
+function inactivateTeacher(id) {
 	if(confirm("Are you sure you want to de-activate this teacher?")){
 		// send query to controller
 		$.ajax({
@@ -140,94 +206,6 @@ function inactivateStudent(id) {
 		return;
 	}
 }
-
-
-
-
-
-
-
-
-//Search Student with Keyword	
-function retreiveStudentInfo(std) {
-	// send query to controller
-	$.ajax({
-		url : '${pageContext.request.contextPath}/teacher/get/' + std,
-		type : 'GET',
-		success : function(teacher) {
-			$('#editStudentModal').modal('show');
-			// Update display info
-			$("#teacherEditId").val(teacher.id);
-			$("#teacherEditFirstName").val(teacher.firstName);
-			$("#teacherEditLastName").val(teacher.lastName);
-			$("#teacherEditEmail").val(teacher.email);
-			$("#teacherEditAddress").val(teacher.address);
-			$("#teacherEditContact1").val(teacher.contactNo1);
-			$("#teacherEditContact2").val(teacher.contactNo2);
-			$("#teacherEditMemo").val(teacher.memo);
-			$("#teacherEditState").val(teacher.state);
-			$("#teacherEditBranch").val(teacher.branch);
-			//$("#formGrade").val(teacher.grade);
-			$("#teacherEditGrade").val(teacher.grade);
-			// Set date value
-			var date = new Date(teacher.enrolmentDate); // Replace with your date value
-			$("#teacherEditEnrolment").datepicker('setDate', date);
-		},
-		error : function(xhr, status, error) {
-			console.log('Error : ' + error);
-		}
-	});
-}
-
-
-function updateStudentInfo(){
-	
-	// get from formData
-	var std = {
-		id : $('#teacherEditId').val(),
-		firstName : $("#teacherEditFirstName").val(),
-		lastName : $("#teacherEditLastName").val(),
-		email : $("#teacherEditEmail").val(),
-		address : $("#teacherEditAddress").val(),
-		contactNo1 : $("#teacherEditContact1").val(),
-		contactNo2 : $("#teacherEditContact2").val(),
-		memo : $("#teacherEditMemo").val(),
-		state : $("#teacherEditState").val(),
-		branch : $("#teacherEditBranch").val(),
-		//grade : $("#teacherEditGrade").val(),
-		grade : $("#elearningGrade").val(),
-		enrolmentDate : $("#teacherEditEnrolment").val(),
-		elearnings : []
-	}
-	
-	
-	// send query to controller
-	$.ajax({
-		url : '${pageContext.request.contextPath}/teacher/updateOnlyStudent',
-		type : 'PUT',
-		dataType : 'json',
-		data : JSON.stringify(std),
-		contentType : 'application/json',
-		success : function(value) {
-			// Display success alert
-			$('#success-alert .modal-body').text(
-					'ID : ' + value.id + ' is updated successfully.');
-			$('#success-alert').modal('show');
-			
-		},
-		error : function(xhr, status, error) {
-			console.log('Error : ' + error);
-		}
-	});
-	
-	$('#editStudentModal').modal('hide');
-	// flush all registered data
-	document.getElementById("teacherEdit").reset();
-	
-	
-	
-}
-
 
 
 
@@ -524,11 +502,11 @@ function updateStudentInfo(){
 <!-- /.modal -->
 
 <!-- Edit Form Dialogue -->
-<div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
+<div class="modal fade" id="editTeacherModal" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="modalEditLabel">Student Edit</h4>
+				<h4 class="modal-title" id="modalEditLabel">Teacher Edit</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
 			<div class="modal-body">
@@ -537,7 +515,7 @@ function updateStudentInfo(){
 						<div class="form-row">
 							<div class="col-md-4">
 								<label for="selectOption">State</label> <select
-									class="form-control" id="teacherEditState" name="teacherEditState">
+									class="form-control" id="editState" name="editState">
 									<option value="vic">Victoria</option>
 									<option value="nsw">New South Wales</option>
 									<option value="qld">Queensland</option>
@@ -548,9 +526,9 @@ function updateStudentInfo(){
 									<option value="act">ACT</option>
 								</select>
 							</div>
-							<div class="col-md-5">
+							<div class="col-md-6">
 								<label for="selectOption">Branch</label> <select
-									class="form-control" id="teacherEditBranch" name="teacherEditBranch">
+									class="form-control" id="editBranch" name="editBranch">
 									<option value="braybrook">Braybrook</option>
 									<option value="epping">Epping</option>
 									<option value="balwyn">Balwyn</option>
@@ -575,89 +553,103 @@ function updateStudentInfo(){
 									<option value="packenham">Packenham</option>
 								</select>
 							</div>
-							<div class="col-md-3">
-								<label for="datepicker">Enrolment</label> 
-								<input type="text" class="form-control datepicker" id="teacherEditEnrolment" name="teacherEditEnrolment" placeholder="dd/mm/yyyy">
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
 							<div class="col-md-2">
-								<label for="name">ID:</label> <input type="text"
-									class="form-control" id="teacherEditId" name="teacherEditId">
-							</div>
-							
-							<div class="col-md-4">
-								<label for="name">First Name:</label> <input type="text"
-									class="form-control" id="teacherEditFirstName" name="teacherEditFirstName">
-							</div>
-							<div class="col-md-4">
-								<label for="name">Last Name:</label> <input type="text"
-									class="form-control" id="teacherEditLastName" name="teacherEditLastName">
-							</div>
-							<div class="col-md-2">
-								<label for="selectOption">Grade</label> <select
-									class="form-control" id="teacherEditGrade" name="teacherEditGrade">
-									<option value="p2">P2</option>
-									<option value="p3">P3</option>
-									<option value="p4">P4</option>
-									<option value="p5">P5</option>
-									<option value="p6">P6</option>
-									<option value="s7">S7</option>
-									<option value="s8">S8</option>
-									<option value="s9">S9</option>
-									<option value="s10">S10</option>
-									<option value="s10e">S10E</option>
-									<option value="tt6">TT6</option>
-									<option value="tt8">TT8</option>
-									<option value="tt8e">TT8E</option>
-									<option value="srw4">SRW4</option>
-									<option value="srw5">SRW5</option>
-									<option value="srw6">SRW6</option>
-									<option value="srw8">SRW8</option>
-									<option value="jmss">JMSS</option>
-									<option value="vce">VCE</option>
+								<label for="selectOption">Title</label>
+								<select class="form-control" id="editTitle" name="editTitle">
+									<option value="mr">Mr</option>
+									<option value="mrs">Mrs</option>
+									<option value="ms">Ms</option>
+									<option value="miss">Miss</option>
+									<option value="other">Other</option>
 								</select>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
+							<div class="col-md-2">
+							<label for="name">Id:</label> <input type="text"
+								class="form-control" id="editId" name="editId" readonly>
+							</div>
 							<div class="col-md-5">
-								<label for="name">Email</label> <input type="text"
-									class="form-control" id="teacherEditEmail" name="teacherEditEmail">
+								<label for="name">First Name:</label> <input type="text"
+									class="form-control" id="editFirstName" name="editFirstName">
 							</div>
-							<div class="col-md-7">
-								<label for="name">Address</label> <input type="text"
-									class="form-control" id="teacherEditAddress" name="teacherEditAddress">
+							<div class="col-md-5">
+								<label for="name">Last Name:</label> <input type="text"
+									class="form-control" id="editLastName" name="editLastName">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-6">
-								<label for="name">Contact No 1</label> <input type="text"
-									class="form-control" id="teacherEditContact1" name="teacherEditContact1">
+							<div class="col-md-5">
+								<label for="name">Email</label>
+								<input type="text" class="form-control" id="editEmail" name="editEmail">
 							</div>
 							<div class="col-md-6">
-								<label for="name">Contact No 2</label> <input type="text"
-									class="form-control" id="teacherEditContact2" name="teacherEditContact2">
+								<label for="name">Phone</label>
+								<input type="text" class="form-control" id="editPhone" name="editPhone">
 							</div>
 						</div>
 					</div>
-
 					<div class="form-group">
 						<div class="form-row">
-							<label for="message">Memo</label>
-							<textarea class="form-control" id="teacherEditMemo" name="teacherEditMemo"></textarea>
+							<div class="col-md-12">
+								<label for="name">Address</label> 
+								<input type="text" class="form-control" id="editAddress" name="editAddress">
+							</div>
 						</div>
 					</div>
+					<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-4">
+								<label for="name">Bank</label> 
+								<input type="text" class="form-control" id="editBank" name="editBank">
+							</div>
+							<div class="col-md-3">
+								<label for="name">Bsb</label> 
+								<input type="text" class="form-control" id="editBsb" name="editBsb">
+							</div>
+							<div class="col-md-5">
+								<label for="name">Account #</label> 
+								<input type="text" class="form-control" id="editAccountNumber" name="editAccountNumber">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-5">
+								<label for="name">TFN</label> 
+								<input type="text" class="form-control" id="editTfn" name="editTfn">
+							</div>
+							<div class="col-md-4">
+								<label for="name">Superannuation</label> 
+								<input type="text" class="form-control" id="editSuperannuation" name="editSuperannuation">
+							</div>
+							<div class="col-md-3">
+								<label for="name"> Membership #</label> 
+								<input type="text" class="form-control" id="editSuperMember" name="editSuperMember">
+							</div>
+						</div>
+					</div>
+		
+					<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-12">
+								<label for="message">Memo</label>
+								<textarea class="form-control" id="editMemo" name="editMemo"></textarea>
+							</div>
+						</div>
+					</div>
+				
+				
+				
 				</form>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary" onclick="updateStudentInfo()">Save</button>
+				<button type="submit" class="btn btn-primary" onclick="updateTeacherInfo()">Save</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->
