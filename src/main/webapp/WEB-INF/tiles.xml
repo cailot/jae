@@ -6,10 +6,7 @@
 	<definition name="base.definition"
 		template="/WEB-INF/layouts/classic.jsp">
 		<put-attribute name="title" value="" />
-		<put-attribute name="header"
-			value="/WEB-INF/layouts/tiles/header.jsp" />
-		<put-attribute name="menu"
-			value="/WEB-INF/layouts/tiles/menu.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/layouts/tiles/menu.jsp" />
 		<put-attribute name="body" value="" />
 	</definition>
 

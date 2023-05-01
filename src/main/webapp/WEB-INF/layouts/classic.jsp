@@ -26,9 +26,9 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <!-- Glyphicons -->
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">	
-	
-	
-	
+<!-- fontawesome -->	
+<!-- <script src="https://kit.fontawesome.com/11fc5f2316.js" crossorigin="anonymous"></script>	
+ -->	
 	
 	
 	
@@ -36,9 +36,6 @@
 </head>
 <body>
 	<div class="container-fluid d-flex h-100 flex-column">
-		<div class="row">
-			<tiles:insertAttribute name="header" />
-		</div>
 		<div class="row">
 			<tiles:insertAttribute name="menu" />
 		</div>
