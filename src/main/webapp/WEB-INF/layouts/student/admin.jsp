@@ -164,6 +164,8 @@
 			$("#formContact1").val(value['contactNo1']).css("color", "black");
 			$("#formContact2").val(value['contactNo2']).css("color", "black");
 			$("#formMemo").val(value['memo']).css("color", "black");
+			$('#formActive').prop('checked', true);
+			$("#formActive").prop("disabled", true);
 		}else{ // inactive student
 			$("#formFirstName").val(value['firstName']).css("color", "red");
 			$("#formLastName").val(value['lastName']).css("color", "red");
@@ -172,6 +174,8 @@
 			$("#formContact1").val(value['contactNo1']).css("color", "red");
 			$("#formContact2").val(value['contactNo2']).css("color", "red");
 			$("#formMemo").val(value['memo']).css("color", "red");
+			$('#formActive').prop('checked', false);
+			$("#formActive").prop("disabled", false);
 		}
 		$("#formState").val(value['state']);
 		$("#formBranch").val(value['branch']);
@@ -207,6 +211,12 @@
 
 	// Update existing student
 	function updateStudentInfo() {
+		// if activate process, then call activateStudent()
+		if($('#formActive').prop('checked')){
+			activateStudent();
+			return;
+		}
+		
 		//warn if Id is empty
 		if ($("#formId").val() == '') {
 			$('#warning-alert .modal-body').text(
@@ -297,7 +307,36 @@
 		}
 	}
 
-	
+	// activate student
+	function activateStudent() {
+		var id = $("#formId").val();
+		//warn if Id is empty
+		if (id == '') {
+			$('#warning-alert .modal-body').text(
+					'Please search student record before inactivate');
+			$('#warning-alert').modal('show');
+			return;
+		}
+		if(confirm("Are you sure you want to activate this student?")){
+			// send query to controller
+			$.ajax({
+				url : '${pageContext.request.contextPath}/student/activate/' + id,
+				type : 'PUT',
+				success : function(data) {
+					// clear existing form
+					$('#success-alert .modal-body').text(
+							'ID : ' + id + ' is now activated');
+					$('#success-alert').modal('show');
+					clearStudentForm();
+				},
+				error : function(xhr, status, error) {
+					console.log('Error : ' + error);
+				}
+			}); 
+		}else{
+			return;
+		}
+	}
 	
 	// Clear all form
 	function clearStudentForm() {
@@ -486,11 +525,18 @@
 			</div>
 			<div class="form-group">
 				<div class="form-row">
-					<div class="col-md-12">
+					<div class="col-md-9">
 						<input type="text"
 							class="form-control form-control-sm" id="formEmail" name="formEmail" placeholder="Email">
 					</div>
-
+					<div class="input-group col-md-3">
+					  <div class="input-group-prepend">
+					    <div class="input-group-text">
+					      <input type="checkbox" id="formActive" name="formActive" disabled>
+					    </div>
+					  </div>
+					  <input type="text" class="form-control form-control-sm" placeholder="Activate" readonly>
+					</div>
 				</div>
 			</div>
 			<div class="form-group">

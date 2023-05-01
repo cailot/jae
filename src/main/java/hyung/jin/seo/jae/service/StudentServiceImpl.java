@@ -1,9 +1,6 @@
 package hyung.jin.seo.jae.service;
 
-import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.StudentRepository;
@@ -195,7 +193,17 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public void dischargeStudent(Long id) {
+	@Transactional
+	public void activateStudent(Long id) {
+		try {
+			studentRepository.setEndDateToNull(id);
+		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
+			System.out.println("Nothing to discharge");
+		}
+	}
+	
+	@Override
+	public void deactivateStudent(Long id) {
 		try {
 			// studentRepository.deleteById(id);
 			Optional<Student> end = studentRepository.findById(id);

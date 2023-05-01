@@ -70,7 +70,7 @@ public class StudentRestController {
     
     @PutMapping("/student/discharge/{id}")
 	void dischargeStudent(@PathVariable Long id) {
-    	studentService.dischargeStudent(id);
+    	studentService.deactivateStudent(id);
     }
     
     @DeleteMapping("/student/{id}")

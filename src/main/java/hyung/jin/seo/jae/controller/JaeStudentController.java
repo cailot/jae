@@ -130,10 +130,17 @@ public class JaeStudentController {
 	@PutMapping("/inactivate/{id}")
 	@ResponseBody
 	public void inactivateStudent(@PathVariable Long id) {
-		studentService.dischargeStudent(id);
+		studentService.deactivateStudent(id);
 	}
 	
-	
+
+	// de-activate student by Id
+	@PutMapping("/activate/{id}")
+	@ResponseBody
+	public void activateStudent(@PathVariable Long id) {
+		studentService.activateStudent(id);
+	}
+
 	// search student list with state, branch, grade, start date or active
 	@GetMapping("/list")
 	public String listStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {

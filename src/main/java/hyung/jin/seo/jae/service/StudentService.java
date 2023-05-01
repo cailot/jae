@@ -29,7 +29,9 @@ public interface StudentService {
     
 	Student updateStudent(Student newStudent, Long id);
 
-	void dischargeStudent(Long id);
+	void deactivateStudent(Long id);
+	
+	void activateStudent(Long id);
 	
 	void deleteStudent(Long id);
 }
