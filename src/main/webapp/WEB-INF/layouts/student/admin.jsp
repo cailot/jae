@@ -179,15 +179,15 @@
 		}
 		$("#formState").val(value['state']);
 		$("#formBranch").val(value['branch']);
-		//$("#formGrade").val(value['grade']);
 		$("#elearningGrade").val(value['grade']);
 		// display same selected grade to Course Register section
 		$("#registerGrade").val(value['grade']);
+		$("#formEndDate").val(value['endDate']);
 		
 		// Set date value
 		var date = new Date(value['enrolmentDate']); // Replace with your date value
 		$("#formEnrolment").datepicker('setDate', date);
-
+		
 		// dispose modal
 		$('#studentListResult').modal('hide');
 		// clear search keyword
@@ -212,11 +212,11 @@
 	// Update existing student
 	function updateStudentInfo() {
 		// if activate process, then call activateStudent()
-		if($('#formActive').prop('checked')){
+		if($('#formEndDate').val()!='' && $('#formActive').prop('checked')){
 			activateStudent();
 			return;
-		}
-		
+		}		
+
 		//warn if Id is empty
 		if ($("#formId").val() == '') {
 			$('#warning-alert .modal-body').text(
@@ -651,7 +651,7 @@
 			    }[column.field]
 			  }
 			</script>			
-			
+			<input type="hidden" id="formEndDate" name="formEndDate" />
 		</form>
 	</div>
 </div>
