@@ -74,3 +74,8 @@
 .deactived-user{
 	color: red !important;
 }
+
+.alert-dialog-display{
+	display: flex !important; 
+	align-items: center !important;
+}

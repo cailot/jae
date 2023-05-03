@@ -19,49 +19,40 @@
 </script>
 
 
-
-
-<!-- Success Modal -->
-<div class="modal fade" id="success-alert" tabindex="-1"
-	aria-labelledby="successModalLabel" aria-hidden="true">
+<!-- Success Alert -->
+<div id="success-alert" class="modal fade">
 	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="successModalLabel">Success!</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body"></div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- No Keyword Modal -->
-<div class="modal fade" id="warning-alert" tabindex="-1"
-	aria-labelledby="successModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="successModalLabel">Warning</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body"></div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+		<div class="alert alert-block alert-success alert-dialog-display">
+			<i class="fa fa-check-circle fa-2x"></i>&nbsp;&nbsp;<div class="modal-body"></div>
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 		</div>
 	</div>
 </div>
 
+<!-- Warning Alert -->
+<div id="warning-alert" class="modal fade">
+	<div class="modal-dialog">
+		<div class="alert alert-block alert-warning alert-dialog-display">
+			<i class="fa fa-exclamation-circle fa-2x"></i>&nbsp;&nbsp;<div class="modal-body"></div>
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		</div>
+	</div>
+</div>
 
-
+<!-- Delete Alert -->
+<div id="confirm-alert" class="modal fade" >
+    <div class="modal-dialog">
+    	<div class="alert alert-block alert-danger">
+    		<div class="alert-dialog-display">
+    			<i class="fa fa-minus-circle fa-2x"></i>&nbsp;&nbsp;<div class="modal-body"></div>
+    		</div>
+			<div style="text-align: right;">
+				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
+				<button type="button" class="btn btn-sm btn-danger btn-ok" data-dismiss="modal">Delete</button>
+			</div>
+		</div>
+    </div>
+</div>
 
 <!-- Students List Modal -->
 <div class="modal fade" id="studentListResult" tabindex="-1"
@@ -123,13 +114,13 @@
 								<label for="selectOption">State</label> <select
 									class="form-control" id="addState" name="addState">
 									<option value="vic">Victoria</option>
-									<option value="nsw">New South Wales</option>
+									<!-- <option value="nsw">New South Wales</option>
 									<option value="qld">Queensland</option>
 									<option value="sa">South Australia</option>
 									<option value="tas">Tasmania</option>
 									<option value="wa">Western Australia</option>
 									<option value="nt">Northern Territory</option>
-									<option value="act">ACT</option>
+									<option value="act">ACT</option> -->
 								</select>
 							</div>
 							<div class="col-md-5">

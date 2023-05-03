@@ -59,9 +59,8 @@
 			contentType : 'application/json',
 			success : function(student) {
 				// Display the success alert
-				$('#success-alert .modal-body').text(
-						'Your action has been completed successfully.');
-				$('#success-alert').modal('show');
+				$('#success-alert .modal-body').html('New student is registered successfully.');
+				$('#success-alert').modal('toggle');
 				// Update display info
 				$("#formId").val(student.id);
 				$("#formFirstName").val(student.firstName);
@@ -95,9 +94,8 @@
 	function searchStudent() {
 		//warn if keyword is empty
 		if ($("#formKeyword").val() == '') {
-			$('#warning-alert .modal-body').text(
-					'Please fill in keyword before search');
-			$('#warning-alert').modal('show');
+			$('#warning-alert .modal-body').text('Please fill in keyword before search');
+			$('#warning-alert').modal('toggle');
 			return;
 		}
 
@@ -112,9 +110,8 @@
 			success : function(data) {
 				//console.log('search - ' + data);
 				if (data == '') {
-					$('#warning-alert .modal-body').text(
-							'No record found with ' + $("#formKeyword").val());
-					$('#warning-alert').modal('show');
+					$('#warning-alert .modal-body').html('No record found with <b>' + $("#formKeyword").val() + '</b>');
+					$('#warning-alert').modal('toggle');
 					clearStudentForm();
 					return;
 				}
@@ -219,9 +216,8 @@
 
 		//warn if Id is empty
 		if ($("#formId").val() == '') {
-			$('#warning-alert .modal-body').text(
-					'Please search student record before update');
-			$('#warning-alert').modal('show');
+			$('#warning-alert .modal-body').text('Please search student record before update');
+			$('#warning-alert').modal('toggle');
 			return;
 		}
 
@@ -264,9 +260,8 @@
 			contentType : 'application/json',
 			success : function(value) {
 				// Display success alert
-				$('#success-alert .modal-body').text(
-						'ID : ' + value.id + ' is updated successfully.');
-				$('#success-alert').modal('show');
+				$('#success-alert .modal-body').html('ID : <b>' + value.id + '</b> is updated successfully.');
+				$('#success-alert').modal('toggle');
 				// Display returned result
 				displayStudentInfo(value);
 			},
@@ -281,21 +276,23 @@
 		var id = $("#formId").val();
 		//warn if Id is empty
 		if (id == '') {
-			$('#warning-alert .modal-body').text(
-					'Please search student record before inactivate');
-			$('#warning-alert').modal('show');
+			$('#warning-alert .modal-body').text('Please search student record before suspend');
+			$('#warning-alert').modal('toggle');
 			return;
 		}
-		if(confirm("Are you sure you want to de-activate this student?")){
+		
+		$('#confirm-alert .modal-body').html('Are you sure suspending ID : <b>' + id + '</b> ?');
+		$('#confirm-alert').modal('toggle');
+		
+		/* if(confirm("Are you sure you want to de-activate this student?")){
 			// send query to controller
 			$.ajax({
 				url : '${pageContext.request.contextPath}/student/inactivate/' + id,
 				type : 'PUT',
 				success : function(data) {
 					// clear existing form
-					$('#success-alert .modal-body').text(
-							'ID : ' + id + ' is now inactivated');
-					$('#success-alert').modal('show');
+					$('#success-alert .modal-body').html('ID : <b>' + id + '</b> is now suspended');
+					$('#success-alert').modal('toggle');
 					clearStudentForm();
 				},
 				error : function(xhr, status, error) {
@@ -304,7 +301,7 @@
 			}); 
 		}else{
 			return;
-		}
+		} */
 	}
 
 	// activate student
@@ -312,9 +309,8 @@
 		var id = $("#formId").val();
 		//warn if Id is empty
 		if (id == '') {
-			$('#warning-alert .modal-body').text(
-					'Please search student record before inactivate');
-			$('#warning-alert').modal('show');
+			$('#warning-alert .modal-body').text('Please search student record before activate');
+			$('#warning-alert').modal('toggle');
 			return;
 		}
 		if(confirm("Are you sure you want to activate this student?")){
@@ -324,9 +320,8 @@
 				type : 'PUT',
 				success : function(data) {
 					// clear existing form
-					$('#success-alert .modal-body').text(
-							'ID : ' + id + ' is now activated');
-					$('#success-alert').modal('show');
+					$('#success-alert .modal-body').html('ID : <b>' + id + '</b> is now activated');
+					$('#success-alert').modal('toggle');
 					clearStudentForm();
 				},
 				error : function(xhr, status, error) {
@@ -463,13 +458,13 @@
 						<label for="formState" class="label-form">State</label> <select class="form-control form-control-sm"
 							id="formState" name="formState">
 							<option value="vic">Victoria</option>
-							<option value="nsw">New South Wales</option>
+							<!-- <option value="nsw">New South Wales</option>
 							<option value="qld">Queensland</option>
 							<option value="sa">South Australia</option>
 							<option value="tas">Tasmania</option>
 							<option value="wa">Western Australia</option>
 							<option value="nt">Northern Territory</option>
-							<option value="act">ACT</option>
+							<option value="act">ACT</option> -->
 						</select>
 					</div>
 					<div class="col-md-4">
