@@ -1,4 +1,4 @@
-package hyung.jin.seo.jae.model;
+package hyung.jin.seo.jae.dto;
 
 import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
@@ -7,7 +7,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-
+import hyung.jin.seo.jae.model.Course;
+import hyung.jin.seo.jae.model.Cycle;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,12 +49,17 @@ public class CourseDTO implements Serializable{
     
     private String grade;
 
-    private String state;
-    
-    private String branch;
-    
     private String day;
 
+    public Set<CycleDTO> getCycles() {
+		return cycles;
+	}
+
+	public void setCycles(Set<CycleDTO> cycles) {
+		this.cycles = cycles;
+	}
+
+	private Set<CycleDTO> cycles = new LinkedHashSet<>();
     
 	public String getId() {
 		return id;
@@ -105,26 +111,6 @@ public class CourseDTO implements Serializable{
 	}
 
 
-	public String getState() {
-		return state;
-	}
-
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-
-	public String getBranch() {
-		return branch;
-	}
-
-
-	public void setBranch(String branch) {
-		this.branch = branch;
-	}
-
-
 	public String getDay() {
 		return day;
 	}
@@ -138,7 +124,7 @@ public class CourseDTO implements Serializable{
 	@Override
 	public String toString() {
 		return "CourseDTO [id=" + id + ", name=" + name + ", description=" + description + ", registerDate="
-				+ registerDate + ", grade=" + grade + ", state=" + state + ", branch=" + branch + ", day=" + day + "]";
+				+ registerDate + ", grade=" + grade + ", day=" + day + "]";
 	}
 
 
@@ -151,9 +137,8 @@ public class CourseDTO implements Serializable{
     	this.description = (course.getDescription()!=null) ? course.getDescription() : "";
     	this.registerDate = (course.getRegisterDate()!=null) ? course.getRegisterDate().toString() : "";
     	this.grade = (course.getGrade()!=null) ? course.getGrade() : "";
-    	this.state = (course.getState()!=null) ? course.getState() : "";
-    	this.branch = (course.getBranch()!=null) ? course.getBranch() : "";
     	this.day = (course.getDay()!=null) ? course.getDay() : "";
+		
     }
     
     public Course convertToCourse() {
@@ -163,9 +148,8 @@ public class CourseDTO implements Serializable{
     	if(StringUtils.isNotBlank(description)) course.setDescription(this.description);
     	if(StringUtils.isNotBlank(registerDate)) course.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(grade)) course.setGrade(this.grade);
-    	if(StringUtils.isNotBlank(state)) course.setState(this.state);
-    	if(StringUtils.isNotBlank(branch)) course.setBranch(this.branch);
     	if(StringUtils.isNotBlank(day)) course.setDay(this.day);
+    	
     	return course;
     }
 }

@@ -1,0 +1,32 @@
+{
+	"folders": {},
+	"connections": {
+		"mariaDB-187e7521377-6ae69ec8c1239dd": {
+			"provider": "mysql",
+			"driver": "mariaDB",
+			"name": "jae",
+			"save-password": true,
+			"configuration": {
+				"host": "cailot.hopto.org",
+				"port": "3306",
+				"database": "jae",
+				"url": "jdbc:mariadb://cailot.hopto.org:3306/jae",
+				"configurationType": "MANUAL",
+				"home": "/usr/local/Cellar/mysql/8.0.32",
+				"type": "dev",
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"auto-close-transactions": false
+		}
+	}
+}

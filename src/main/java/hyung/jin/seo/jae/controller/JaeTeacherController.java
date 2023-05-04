@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hyung.jin.seo.jae.dto.TeacherDTO;
 import hyung.jin.seo.jae.model.Teacher;
-import hyung.jin.seo.jae.model.TeacherDTO;
 import hyung.jin.seo.jae.service.TeacherService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 import hyung.jin.seo.jae.utils.JaeUtils;

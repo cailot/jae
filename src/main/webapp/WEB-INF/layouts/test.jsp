@@ -1,6 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@page import="hyung.jin.seo.jae.model.StudentDTO"%>
+<%@page import="hyung.jin.seo.jae.dto.StudentDTO"%>
 <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css">
 <script src="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.js"></script>
 <script>
@@ -39,6 +39,10 @@
 	</div>
 </div>
 
+
+
+
+
 <!-- Delete Alert -->
 <div id="confirm-alert" class="modal fade" >
     <div class="modal-dialog">
@@ -48,15 +52,22 @@
     		</div>
 			<div style="text-align: right;">
 				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Cancel</button>
-				<button type="button" class="btn btn-sm btn-danger btn-ok" data-dismiss="modal">Delete</button>
+				<button type="button" class="btn btn-sm btn-danger" id="deactivateAction">Delete</button>
 			</div>
 		</div>
     </div>
 </div>
 
+
+
+
+
+
+
+
+
 <!-- Students List Modal -->
-<div class="modal fade" id="studentListResult" tabindex="-1"
-	role="dialog" aria-labelledby="studentListLabel">
+<!-- <div class="modal fade" id="studentListResult" tabindex="-1" role="dialog" aria-labelledby="studentListLabel">
 	<div class="modal-dialog modal-xl" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -92,6 +103,99 @@
 		</div>
 	</div>
 </div>
+
+ -->
+
+
+
+
+<div class="modal fade" id="studentListResult">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-body table-wrap">
+				<table class="table table-striped" id="studentListResultTable" data-header-style="headerStyle">
+					<thead class="table-primary">
+						<tr>
+							<th data-field="id">ID</th>
+							<th data-field="firstname">First Name</th>
+							<th data-field="lastname">Last Name</th>
+							<th data-field="grade">Grade</th>
+							<th data-field="startdate">Start Date</th>
+							<th data-field="enddate">End Date</th>
+							<th data-field="email">Email</th>
+							<th data-field="contact1">Contact No 1</th>
+							<th data-field="contact2">Contact No 2</th>
+							<th data-field="address">Address</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			
+			
+			<style>
+			.search-list {
+			  font-size : 1.5rem;
+			}
+			</style>			
+			<script>
+			  function headerStyle(column) {
+			    return {
+			      id: {
+			        classes : 'search-list'
+			      },
+			      firstname: {
+			    	classes : 'search-list'
+			      },
+			      lastname: {
+			    	classes : 'search-list'
+			      },
+			      grade: {
+			    	classes : 'search-list'
+			      },
+			      startdate: {
+				   	classes : 'search-list'
+				  },
+			      enddate: {
+			    	classes : 'search-list'
+			      },
+			      email: {
+			    	classes : 'search-list'
+			      },
+			      contact1: {
+			    	classes : 'search-list'
+			      },
+			      contact2: {
+			    	classes : 'search-list'
+			      },
+			      address: {
+			      	classes : 'search-list'
+			      }
+			    }[column.field]
+			  }
+			</script>			
+			
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

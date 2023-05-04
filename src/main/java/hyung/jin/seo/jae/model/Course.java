@@ -1,35 +1,22 @@
 package hyung.jin.seo.jae.model;
 
-import java.io.Serializable;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Table;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+
+import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.LinkedHashSet;
 
 //@Getter
 //@Setter
@@ -38,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name="Course")
-public class Course implements Serializable{
+public class Course{
     
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
@@ -49,12 +36,6 @@ public class Course implements Serializable{
     
     @Column(length = 10, nullable = false)
     private String grade;
-
-    @Column(length = 30, nullable = true)
-    private String state;
-    
-    @Column(length = 50, nullable = true)
-    private String branch;
     
     @Column(length = 400, nullable = false)
     private String description;
@@ -64,6 +45,21 @@ public class Course implements Serializable{
 
     @CreationTimestamp
     private LocalDate registerDate;
+    
+    @OneToMany(mappedBy = "course")
+    private Set<CourseCycle> courseCycles = new LinkedHashSet<>();
+
+    public void addCourseCycle(CourseCycle cc) {
+        courseCycles.add(cc);
+    }    
+    
+	public Set<CourseCycle> getCourseCycles() {
+		return courseCycles;
+	}
+
+	public void setCourseCycles(Set<CourseCycle> cycles) {
+		this.courseCycles = cycles;
+	}
 
 	public Long getId() {
 		return id;
@@ -87,22 +83,6 @@ public class Course implements Serializable{
 
 	public void setGrade(String grade) {
 		this.grade = grade;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getBranch() {
-		return branch;
-	}
-
-	public void setBranch(String branch) {
-		this.branch = branch;
 	}
 
 	public String getDescription() {
@@ -131,8 +111,8 @@ public class Course implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Course [id=" + id + ", name=" + name + ", grade=" + grade + ", state=" + state + ", branch=" + branch
-				+ ", description=" + description + ", day=" + day + ", registerDate=" + registerDate + "]";
+		return "Course [id=" + id + ", name=" + name + ", grade=" + grade + ", description=" + description + ", day="
+				+ day + ", registerDate=" + registerDate + ", courseCycles=" + courseCycles + "]";
 	}
 
  }

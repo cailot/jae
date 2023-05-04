@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hyung.jin.seo.jae.dto.CourseEtcDTO;
 import hyung.jin.seo.jae.model.CourseEtc;
-import hyung.jin.seo.jae.model.CourseEtcDTO;
 import hyung.jin.seo.jae.service.CourseEtcService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 

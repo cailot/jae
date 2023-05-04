@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hyung.jin.seo.jae.dto.ElearningDTO;
+import hyung.jin.seo.jae.dto.StudentDTO;
 import hyung.jin.seo.jae.model.Elearning;
-import hyung.jin.seo.jae.model.ElearningDTO;
 import hyung.jin.seo.jae.model.Student;
-import hyung.jin.seo.jae.model.StudentDTO;
 import hyung.jin.seo.jae.service.ElearningService;
 import hyung.jin.seo.jae.service.StudentService;
 import hyung.jin.seo.jae.utils.JaeConstants;

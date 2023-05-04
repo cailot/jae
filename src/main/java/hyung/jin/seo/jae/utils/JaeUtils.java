@@ -15,7 +15,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import hyung.jin.seo.jae.model.StudentDTO;
+import hyung.jin.seo.jae.dto.StudentDTO;
 
 public class JaeUtils {
 

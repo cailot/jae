@@ -31,6 +31,9 @@
 		        row.remove();
 		      	}
 		    });
+			
+			
+
 
 	});
 
@@ -281,10 +284,13 @@
 			return;
 		}
 		
-		$('#confirm-alert .modal-body').html('Are you sure suspending ID : <b>' + id + '</b> ?');
+		/* $('#confirm-alert .modal-body').html('Are you sure suspending ID : <b>' + id + '</b> ?');
 		$('#confirm-alert').modal('toggle');
+		 */
 		
-		/* if(confirm("Are you sure you want to de-activate this student?")){
+		
+		 
+		if(confirm("Are you sure you want to de-activate this student?")){
 			// send query to controller
 			$.ajax({
 				url : '${pageContext.request.contextPath}/student/inactivate/' + id,
@@ -301,8 +307,19 @@
 			}); 
 		}else{
 			return;
-		} */
+		}  
+		
 	}
+	
+	
+	
+
+	
+	
+	
+	
+	
+	
 
 	// activate student
 	function activateStudent() {
@@ -414,12 +431,39 @@
 			}
 		});
 	}
-	
-	
-	
-	
-	
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <!-- Administration Body -->
