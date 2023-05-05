@@ -40,7 +40,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-
+@Getter
+@Setter
+@ToString
 public class StudentDTO implements Serializable{
     
     private String id;
@@ -72,38 +74,9 @@ public class StudentDTO implements Serializable{
     private String endDate;
     
     private Set<ElearningDTO> elearnings = new LinkedHashSet<>();
-    
-    public Set<ElearningDTO> getElearnings() {
-		return elearnings;
-	}
+ 
 
-	public void setElearnings(Set<ElearningDTO> elearnings) {
-		this.elearnings = elearnings;
-	}
-
-	public StudentDTO() {}
-
-    public StudentDTO(Student std) {
-    	this.id = (std.getId()!=null) ? std.getId().toString() : "";
-        this.firstName = (std.getFirstName()!=null) ? std.getFirstName() : "";
-        this.lastName = (std.getLastName()!=null) ? std.getLastName() : "";
-        this.grade = (std.getGrade()!=null) ? std.getGrade() : "";
-        this.contactNo1 = (std.getContactNo1()!=null) ? std.getContactNo1() : "";
-        this.contactNo2 = (std.getContactNo2()!=null) ? std.getContactNo2() : "";
-        this.email = (std.getEmail()!=null) ? std.getEmail() : "";
-        this.address = (std.getAddress()!=null) ? std.getAddress() : "";
-        this.state = (std.getState()!=null) ? std.getState() : "";
-        this.branch = (std.getBranch()!=null) ? std.getBranch() : "";
-        this.memo = (std.getMemo()!=null) ? std.getMemo() : "";
-        this.registerDate = (std.getRegisterDate()!=null) ? std.getRegisterDate().toString() : "";
-        this.enrolmentDate = (std.getEnrolmentDate()!=null) ? std.getEnrolmentDate().toString() : "";
-        this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
-        if((std.getElearnings()!=null) && (std.getElearnings().size()>0)){
-        	for(Elearning crs : std.getElearnings()) {
-        		elearnings.add(new ElearningDTO(crs));
-        	}
-        }
-    }
+	
     
     public Student convertToStudent() {
     	Student std = new Student();
@@ -130,6 +103,7 @@ public class StudentDTO implements Serializable{
     	return std;
     }
 
+	/**
 	public String getId() {
 		return id;
 	}
@@ -241,6 +215,14 @@ public class StudentDTO implements Serializable{
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
+   
+    public Set<ElearningDTO> getElearnings() {
+		return elearnings;
+	}
+
+	public void setElearnings(Set<ElearningDTO> elearnings) {
+		this.elearnings = elearnings;
+	}
 
 	@Override
 	public String toString() {
@@ -250,7 +232,30 @@ public class StudentDTO implements Serializable{
 				+ registerDate + ", enrolmentDate=" + enrolmentDate + ", endDate=" + endDate + ", elearnings=" + elearnings
 				+ "]";
 	}
+*/
 
-	
+	public StudentDTO() {}
+
+    public StudentDTO(Student std) {
+    	this.id = (std.getId()!=null) ? std.getId().toString() : "";
+        this.firstName = (std.getFirstName()!=null) ? std.getFirstName() : "";
+        this.lastName = (std.getLastName()!=null) ? std.getLastName() : "";
+        this.grade = (std.getGrade()!=null) ? std.getGrade() : "";
+        this.contactNo1 = (std.getContactNo1()!=null) ? std.getContactNo1() : "";
+        this.contactNo2 = (std.getContactNo2()!=null) ? std.getContactNo2() : "";
+        this.email = (std.getEmail()!=null) ? std.getEmail() : "";
+        this.address = (std.getAddress()!=null) ? std.getAddress() : "";
+        this.state = (std.getState()!=null) ? std.getState() : "";
+        this.branch = (std.getBranch()!=null) ? std.getBranch() : "";
+        this.memo = (std.getMemo()!=null) ? std.getMemo() : "";
+        this.registerDate = (std.getRegisterDate()!=null) ? std.getRegisterDate().toString() : "";
+        this.enrolmentDate = (std.getEnrolmentDate()!=null) ? std.getEnrolmentDate().toString() : "";
+        this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
+        if((std.getElearnings()!=null) && (std.getElearnings().size()>0)){
+        	for(Elearning crs : std.getElearnings()) {
+        		elearnings.add(new ElearningDTO(crs));
+        	}
+        }
+    }
         
 }

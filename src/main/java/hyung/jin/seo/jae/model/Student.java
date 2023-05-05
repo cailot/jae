@@ -36,8 +36,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-//@Getter
-//@Setter
+@Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,6 +45,7 @@ import java.util.Set;
 @Table(name="Student")
 public class Student implements Serializable{
     
+	/**
     public Long getId() {
 		return id;
 	}
@@ -156,7 +157,7 @@ public class Student implements Serializable{
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
-
+*/
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
@@ -209,6 +210,7 @@ public class Student implements Serializable{
     )
     private Set<Elearning> elearnings = new LinkedHashSet<>();
 
+	/* 
 	public Set<Elearning> getElearnings() {
 		return elearnings;
 	}
@@ -216,5 +218,5 @@ public class Student implements Serializable{
 	public void setElearnings(Set<Elearning> elearnings) {
 		this.elearnings = elearnings;
 	}
-    
+    */
 }
