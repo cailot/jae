@@ -1,3 +1,4 @@
+/*
 CREATE TABLE `Course` (
   `id` bigint(20) NOT NULL,
   `day` varchar(10) COLLATE latin1_general_ci NOT NULL,
@@ -23,7 +24,7 @@ ALTER TABLE `Course`
 ALTER TABLE `Course`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 COMMIT;
-
+*/
 
 
 

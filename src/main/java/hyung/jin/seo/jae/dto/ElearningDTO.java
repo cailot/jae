@@ -35,7 +35,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-
+@Getter
+@Setter
+@ToString
 public class ElearningDTO implements Serializable{
     
 	private String id;
@@ -46,19 +48,22 @@ public class ElearningDTO implements Serializable{
     
     private String year;
     
-    public String getYear() {
-		return year;
-	}
-
-	public void setYear(String year) {
-		this.year = year;
-	}
+ 
 
 	private String registerDate;
     
     private String endDate;
     
     private Set<StudentDTO> students = new LinkedHashSet<>();
+
+	/*
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
 
 	public String getEndDate() {
 		return endDate;
@@ -109,13 +114,16 @@ public class ElearningDTO implements Serializable{
 		this.students = students;
 	}
 
-	public ElearningDTO() {}
-
 	@Override
 	public String toString() {
 		return "CourseDTO [id=" + id + ", grade=" + grade + ", name=" + name + ", year=" + year + ", registerDate="
 				+ registerDate + ", endDate=" + endDate + ", students=" + students + "]";
 	}
+*/
+
+	public ElearningDTO() {}
+
+	
 
 	public ElearningDTO(Elearning crs) {
     	this.id = (crs.getId()!=null) ? crs.getId().toString() : "";

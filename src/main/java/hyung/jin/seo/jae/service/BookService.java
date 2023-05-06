@@ -2,17 +2,17 @@ package hyung.jin.seo.jae.service;
 
 import java.util.List;
 
-import hyung.jin.seo.jae.model.CourseBook;
+import hyung.jin.seo.jae.model.Book;
 
-public interface CourseBookService {
+public interface BookService {
 	// list all Course Books
-	List<CourseBook> allBooks();
+	List<Book> allBooks();
 	
 	// list available books based on year
-	List<CourseBook> availbeBooks(String year);
+	List<Book> availbeBooks(String year);
 
 	// list available books based on grade & year
-	List<CourseBook> availableGradeBooks(String grade, String year);
+	List<Book> availableGradeBooks(String grade, String year);
 	
 	// return total count
 	long checkCount();

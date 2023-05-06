@@ -21,22 +21,42 @@
 				$(cell2).addClass('small');
 				var cell3 = row.insertCell(3);
 				cell3.innerHTML = '<a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a>';
-				
+				//cell3.innerHTML = '<span class="elearningRemoveConfirm" title="Delete eLearning"><i class="fa fa-trash"></i></span>';
 			});
 			
 			$('#gradeAssociateElearningTable').on('click', 'a', function() {
 		    	var row = $(this).closest('tr');
 		    	var name = row.find('td:eq(1)').text();
-		      	if (confirm('Are you sure you want to remove ' + name + '?')) {
-		        row.remove();
-		      	}
+				$.confirmModal('Are you sure you want to remove ' + name +'?', function(el) {
+        			row.remove();
+      			});
 		    });
+
 			
 			
-
-
+			$('.deactivateConfirmModal').click(function(e) {
+      			e.preventDefault();
+				$.confirmModal('Are you sure to suspend this student?', function(el) {
+        			inactivateStudent();
+      			});
+    		});         
+		
 	});
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
 	// Register Student
 	function addStudent() {
 		// Get from form data
@@ -283,31 +303,21 @@
 			$('#warning-alert').modal('toggle');
 			return;
 		}
-		
-		/* $('#confirm-alert .modal-body').html('Are you sure suspending ID : <b>' + id + '</b> ?');
-		$('#confirm-alert').modal('toggle');
-		 */
-		
-		
-		 
-		if(confirm("Are you sure you want to de-activate this student?")){
-			// send query to controller
-			$.ajax({
-				url : '${pageContext.request.contextPath}/student/inactivate/' + id,
-				type : 'PUT',
-				success : function(data) {
-					// clear existing form
-					$('#success-alert .modal-body').html('ID : <b>' + id + '</b> is now suspended');
-					$('#success-alert').modal('toggle');
-					clearStudentForm();
-				},
-				error : function(xhr, status, error) {
-					console.log('Error : ' + error);
-				}
-			}); 
-		}else{
-			return;
-		}  
+
+		// send query to controller
+		$.ajax({
+			url : '${pageContext.request.contextPath}/student/inactivate/' + id,
+			type : 'PUT',
+			success : function(data) {
+				// clear existing form
+				$('#success-alert .modal-body').html('ID : <b>' + id + '</b> is now suspended');
+				$('#success-alert').modal('toggle');
+				clearStudentForm();
+			},
+			error : function(xhr, status, error) {
+				console.log('Error : ' + error);
+			}
+		}); 
 		
 	}
 	
@@ -390,7 +400,6 @@
 								.text(item.grade.toUpperCase()));
 						row.append($('<td class="small"></td>').text(item.name));
 						row.append($('<td><a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a></td>'));
-						
 						body.append(row);
 					} else {
 						//console.log(item.id);
@@ -489,7 +498,7 @@
 						<button type="button" class="btn btn-block btn-warning btn-sm" onclick="updateStudentInfo()">Save</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-danger btn-sm" onclick="inactivateStudent()">Suspend</button>
+						<button type="button" class="btn btn-block btn-danger btn-sm deactivateConfirmModal">Suspend</button>
 					</div>
 					<div class="col mx-auto">
 						<button type="button" class="btn btn-block btn-info btn-sm" onclick="clearStudentForm()">Clear</button>

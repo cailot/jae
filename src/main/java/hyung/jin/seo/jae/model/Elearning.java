@@ -1,13 +1,7 @@
 package hyung.jin.seo.jae.model;
 
-import java.io.Serializable;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,27 +17,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
-//@Getter
-//@Setter
+@Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name="Elearning")
-public class Elearning implements Serializable{
+public class Elearning {
     
-    
+    /**
 	public Long getId() {
 		return id;
 	}
@@ -93,7 +80,14 @@ public class Elearning implements Serializable{
 		this.year = year;
 	}
 
+	public Set<Student> getStudents() {
+		return students;
+	}
 
+	public void setStudents(Set<Student> students) {
+		this.students = students;
+	}
+*/
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
@@ -113,15 +107,6 @@ public class Elearning implements Serializable{
     
     @CreatedDate
     private LocalDate endDate;
-    
-    
-    public Set<Student> getStudents() {
-		return students;
-	}
-
-	public void setStudents(Set<Student> students) {
-		this.students = students;
-	}
 
 	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH, mappedBy="elearnings")
     private Set<Student> students = new LinkedHashSet<>();

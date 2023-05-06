@@ -131,7 +131,7 @@
 		<li><a href="${pageContext.request.contextPath}/test">Setting</a></li>
 	</ul>
 	<ul class="navbar_icon">
-		<li><i class="fas fa-smile"></i></li>	
+		<li><i class="fa fa-user-circle"></i></li>	
 	</ul>
 </nav>
 </div>

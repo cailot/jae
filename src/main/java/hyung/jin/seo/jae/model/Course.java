@@ -3,12 +3,18 @@ package hyung.jin.seo.jae.model;
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Table;
 import javax.persistence.Id;
-
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,9 +24,9 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.LinkedHashSet;
 
-//@Getter
-//@Setter
-//@ToString
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -49,10 +55,28 @@ public class Course{
     @OneToMany(mappedBy = "course")
     private Set<CourseCycle> courseCycles = new LinkedHashSet<>();
 
+	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH)
+    @JoinTable(name="Course_Subject",
+    	joinColumns = {@JoinColumn(name="courseId")},
+    	inverseJoinColumns = {@JoinColumn(name="subjectId")}
+    )
+    private Set<Subject> subjects = new LinkedHashSet<>();
+
+	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH)
+    @JoinTable(name="Course_CourseEtc",
+    	joinColumns = {@JoinColumn(name="courseId")},
+    	inverseJoinColumns = {@JoinColumn(name="etcId")}
+    )
+    private Set<Subject> etcs = new LinkedHashSet<>();
+
+	@OneToMany(targetEntity = Book.class, cascade=CascadeType.ALL)
+    @JoinColumn(name="customerId", referencedColumnName = "id")
+    private Set<Book> books = new LinkedHashSet<>();
+
     public void addCourseCycle(CourseCycle cc) {
         courseCycles.add(cc);
     }    
-    
+    /*
 	public Set<CourseCycle> getCourseCycles() {
 		return courseCycles;
 	}
@@ -114,5 +138,5 @@ public class Course{
 		return "Course [id=" + id + ", name=" + name + ", grade=" + grade + ", description=" + description + ", day="
 				+ day + ", registerDate=" + registerDate + ", courseCycles=" + courseCycles + "]";
 	}
-
+*/
  }

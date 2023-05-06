@@ -13,28 +13,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import hyung.jin.seo.jae.dto.CourseBookDTO;
-import hyung.jin.seo.jae.model.CourseBook;
-import hyung.jin.seo.jae.service.CourseBookService;
+import hyung.jin.seo.jae.dto.BookDTO;
+import hyung.jin.seo.jae.model.Book;
+import hyung.jin.seo.jae.service.BookService;
 import hyung.jin.seo.jae.utils.JaeUtils;
 
 @Controller
 @RequestMapping("courseBook")
-public class JaeCourseBookController {
+public class JaeBookController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JaeCourseBookController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JaeBookController.class);
 
 	@Autowired
-	private CourseBookService courseBookService;
+	private BookService bookService;
 
 	// search all course books
 	@GetMapping("/list")
 	@ResponseBody
-	List<CourseBookDTO> listBooks() {
-		List<CourseBook> cbs = courseBookService.allBooks();
-		List<CourseBookDTO> dtos = new ArrayList<CourseBookDTO>();
-		for (CourseBook cb : cbs) {
-			CourseBookDTO dto = new CourseBookDTO(cb);
+	List<BookDTO> listBooks() {
+		List<Book> cbs = bookService.allBooks();
+		List<BookDTO> dtos = new ArrayList<BookDTO>();
+		for (Book cb : cbs) {
+			BookDTO dto = new BookDTO(cb);
 			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
 			{
 				String newName = dto.getName().replaceAll("\'", "&#39;");
@@ -48,11 +48,11 @@ public class JaeCourseBookController {
 	// search course books by year
 	@GetMapping("/listYear")
 	@ResponseBody
-	List<CourseBookDTO> listYearBook(@RequestParam("year") String keyword) {
-		List<CourseBook> cbs = courseBookService.availbeBooks(keyword);
-		List<CourseBookDTO> dtos = new ArrayList<CourseBookDTO>();
-		for (CourseBook cb : cbs) {
-			CourseBookDTO dto = new CourseBookDTO(cb);
+	List<BookDTO> listYearBook(@RequestParam("year") String keyword) {
+		List<Book> cbs = bookService.availbeBooks(keyword);
+		List<BookDTO> dtos = new ArrayList<BookDTO>();
+		for (Book cb : cbs) {
+			BookDTO dto = new BookDTO(cb);
 			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
 			{
 				String newName = dto.getName().replaceAll("\'", "&#39;");
@@ -67,12 +67,12 @@ public class JaeCourseBookController {
 	// search course books by grade
 	@GetMapping("/listGrade")
 	@ResponseBody
-	List<CourseBookDTO> listGradeBook(@RequestParam("grade") String grade) {
+	List<BookDTO> listGradeBook(@RequestParam("grade") String grade) {
 		int year = JaeUtils.academicYear();
-		List<CourseBook> cbs = courseBookService.availableGradeBooks(grade, Integer.toString(year));
-		List<CourseBookDTO> dtos = new ArrayList<CourseBookDTO>();
-		for (CourseBook cb : cbs) {
-			CourseBookDTO dto = new CourseBookDTO(cb);
+		List<Book> cbs = bookService.availableGradeBooks(grade, Integer.toString(year));
+		List<BookDTO> dtos = new ArrayList<BookDTO>();
+		for (Book cb : cbs) {
+			BookDTO dto = new BookDTO(cb);
 			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
 			{
 				String newName = dto.getName().replaceAll("\'", "&#39;");
@@ -88,7 +88,7 @@ public class JaeCourseBookController {
 	@GetMapping("/count")
 	@ResponseBody
 	long coutFees() {
-		long count = courseBookService.checkCount();
+		long count = bookService.checkCount();
 		return count;
 	}
 }

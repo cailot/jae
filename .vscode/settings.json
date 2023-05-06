@@ -1,3 +1,18 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "cailot.hopto.org",
+            "port": 3306,
+            "driver": "MariaDB",
+            "name": "Jae",
+            "database": "jae",
+            "username": "javacoffee",
+            "password": "J@va1973M"
+        }
+    ]
 }

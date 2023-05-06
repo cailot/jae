@@ -1,11 +1,7 @@
 package hyung.jin.seo.jae.model;
 
-import java.io.Serializable;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
@@ -25,15 +21,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -43,7 +32,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name="Student")
-public class Student implements Serializable{
+public class Student {
     
 	/**
     public Long getId() {
@@ -205,8 +194,8 @@ public class Student implements Serializable{
     
     @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH)
     @JoinTable(name="Student_Elearning",
-    	joinColumns = {@JoinColumn(name="student_id")},
-    	inverseJoinColumns = {@JoinColumn(name="elearning_id")}
+    	joinColumns = {@JoinColumn(name="studentId")},
+    	inverseJoinColumns = {@JoinColumn(name="elearningId")}
     )
     private Set<Elearning> elearnings = new LinkedHashSet<>();
 
