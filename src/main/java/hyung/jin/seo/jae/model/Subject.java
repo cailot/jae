@@ -9,17 +9,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Table;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -41,13 +36,9 @@ public class Subject {
     private String description;
     
     @Column(length = 10, nullable = false)
-    private String abr;
+    private String abbr;
     
     @CreationTimestamp
     private LocalDate registerDate;
 
-	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH, mappedBy="subjects")
-    private Set<Course> courses = new LinkedHashSet<>();
-
-	
  }

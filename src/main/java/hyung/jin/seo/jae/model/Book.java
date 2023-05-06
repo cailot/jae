@@ -35,9 +35,6 @@ public class Book {
     @Column(length = 10, nullable = false)
     private String grade;
     
-    @Column(length = 50, nullable = true)
-    private String subjects;
-    
     @Column(columnDefinition = "DECIMAL(10,2)")
     private double price;
     

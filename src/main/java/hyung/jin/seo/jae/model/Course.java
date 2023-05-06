@@ -9,20 +9,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Table;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import java.time.LocalDate;
-import java.util.Set;
-import java.util.LinkedHashSet;
 
 @Getter
 @Setter
@@ -52,30 +44,6 @@ public class Course{
     @CreationTimestamp
     private LocalDate registerDate;
     
-    @OneToMany(mappedBy = "course")
-    private Set<CourseCycle> courseCycles = new LinkedHashSet<>();
-
-	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH)
-    @JoinTable(name="Course_Subject",
-    	joinColumns = {@JoinColumn(name="courseId")},
-    	inverseJoinColumns = {@JoinColumn(name="subjectId")}
-    )
-    private Set<Subject> subjects = new LinkedHashSet<>();
-
-	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH)
-    @JoinTable(name="Course_CourseEtc",
-    	joinColumns = {@JoinColumn(name="courseId")},
-    	inverseJoinColumns = {@JoinColumn(name="etcId")}
-    )
-    private Set<Subject> etcs = new LinkedHashSet<>();
-
-	@OneToMany(targetEntity = Book.class, cascade=CascadeType.ALL)
-    @JoinColumn(name="customerId", referencedColumnName = "id")
-    private Set<Book> books = new LinkedHashSet<>();
-
-    public void addCourseCycle(CourseCycle cc) {
-        courseCycles.add(cc);
-    }    
     /*
 	public Set<CourseCycle> getCourseCycles() {
 		return courseCycles;
