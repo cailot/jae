@@ -3,7 +3,10 @@ package hyung.jin.seo.jae.model;
 import java.math.BigDecimal;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,12 +18,14 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.CascadeType;
 
-
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Course_Cycle")
-public class CourseCycle{
+@Table(name="Class")
+public class Class{
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
@@ -37,43 +42,7 @@ public class CourseCycle{
 	@Column(name="fee")
 	private BigDecimal fee;
 
-	public Long getId() {
-		return id;
-	}
+	@Column(length = 400)
+    private String description;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	
-	public BigDecimal getFee() {
-		return fee;
-	}
-
-	public void setFee(BigDecimal fee) {
-		this.fee = fee;
-	}
-
-	public Course getCourse() {
-		return course;
-	}
-
-	public void setCourse(Course course) {
-		this.course = course;
-	}
-
-	public Cycle getCycle() {
-		return cycle;
-	}
-
-	public void setCycle(Cycle cycle) {
-		this.cycle = cycle;
-	}
-
-	@Override
-	public String toString() {
-		return "CourseCycle [id=" + id + ", course=" + course + ", cycle=" + cycle + ", fee=" + fee + "]";
-	}
-
-	
- }
+}

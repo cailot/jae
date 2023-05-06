@@ -11,10 +11,15 @@ import lombok.ToString;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -43,68 +48,23 @@ public class Course{
 
     @CreationTimestamp
     private LocalDate registerDate;
-    
-    /*
-	public Set<CourseCycle> getCourseCycles() {
-		return courseCycles;
-	}
 
-	public void setCourseCycles(Set<CourseCycle> cycles) {
-		this.courseCycles = cycles;
-	}
+	@OneToMany(targetEntity = Subject.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "courseId", referencedColumnName = "id")
+	private Set<Subject> subjects = new LinkedHashSet<>();
 
-	public Long getId() {
-		return id;
-	}
+	@OneToMany(targetEntity = Book.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "courseId", referencedColumnName = "id")
+	private Set<Book> books = new LinkedHashSet<>();
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+	@OneToMany(targetEntity = CourseEtc.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "courseId", referencedColumnName = "id")
+	private Set<CourseEtc> etcs = new LinkedHashSet<>();
 
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+	//@JoinColumn(name = "courseId", referencedColumnName = "id")
+	private Set<Class> classes = new LinkedHashSet<>();
 
-	public String getGrade() {
-		return grade;
-	}
 
-	public void setGrade(String grade) {
-		this.grade = grade;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getDay() {
-		return day;
-	}
-
-	public void setDay(String day) {
-		this.day = day;
-	}
-
-	public LocalDate getRegisterDate() {
-		return registerDate;
-	}
-
-	public void setRegisterDate(LocalDate registerDate) {
-		this.registerDate = registerDate;
-	}
-
-	@Override
-	public String toString() {
-		return "Course [id=" + id + ", name=" + name + ", grade=" + grade + ", description=" + description + ", day="
-				+ day + ", registerDate=" + registerDate + ", courseCycles=" + courseCycles + "]";
-	}
-*/
- }
+}

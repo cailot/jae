@@ -39,7 +39,7 @@ public class BookDTO implements Serializable{
     	this.grade = (cb.getGrade()!=null) ? cb.getGrade() : "";
     	this.name = (cb.getName()!=null) ? cb.getName() : "";
     	this.year = (cb.getYear()!=null) ? cb.getYear(): "";
-    	this.subjects = (cb.getSubjects()!=null) ? cb.getSubjects() : "";
+    	// this.subjects = (cb.getSubjects()!=null) ? cb.getSubjects() : "";
     	this.price = (cb.getPrice()!=0.0) ? Double.toString(cb.getPrice()): "0.0";
     	this.registerDate = (cb.getRegisterDate()!=null) ? cb.getRegisterDate().toString() : "";
     }
@@ -50,7 +50,7 @@ public class BookDTO implements Serializable{
     	if(StringUtils.isNotBlank(grade)) cb.setGrade(this.grade);
     	if(StringUtils.isNotBlank(name)) cb.setName(this.name);
     	if(StringUtils.isNotBlank(year)) cb.setYear(this.year);
-    	if(StringUtils.isNotBlank(subjects)) cb.setSubjects(this.subjects);
+    	// if(StringUtils.isNotBlank(subjects)) cb.setSubjects(this.subjects);
     	if(StringUtils.isNotBlank(price)) cb.setPrice(Double.parseDouble(this.price));
     	if(StringUtils.isNotBlank(registerDate)) cb.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	return cb;

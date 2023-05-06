@@ -29,13 +29,13 @@ public class SqlScriptRunner {
     	// run scripts only for 'create-drop' or 'create'
     	if(StringUtils.startsWithIgnoreCase(ddl, "create")){
 	        Connection connection = dataSource.getConnection();
-	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/elearning.sql")); // eLearning 
-	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/course.sql")); // Course
-			ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/subject.sql")); // Subject
-	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/course_fee.sql")); // Course Fee
-	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/book.sql")); // Course Book
-	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/course_etc.sql")); // Course Etc
-	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/braybrook_student.sql")); // Student
+	        // ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/elearning.sql")); // eLearning 
+	        // ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/course.sql")); // Course
+			// ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/subject.sql")); // Subject
+	        // ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/course_fee.sql")); // Course Fee
+	        // ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/book.sql")); // Course Book
+	        // ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/course_etc.sql")); // Course Etc
+	        // ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/braybrook_student.sql")); // Student
     	}
     }
 }

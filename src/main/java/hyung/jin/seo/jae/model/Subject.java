@@ -32,7 +32,7 @@ public class Subject {
     @Column(length = 200, nullable = false)
     private String name;
     
-    @Column(length = 400, nullable = false)
+    @Column(length = 400)
     private String description;
     
     @Column(length = 10, nullable = false)
