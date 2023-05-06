@@ -1,4 +1,4 @@
-package hyung.jin.seo.jae.service;
+package hyung.jin.seo.jae.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import hyung.jin.seo.jae.model.Elearning;
 import hyung.jin.seo.jae.repository.ElearningRepository;
+import hyung.jin.seo.jae.service.ElearningService;
 import hyung.jin.seo.jae.specification.ElearningSpecification;
 
 @Service

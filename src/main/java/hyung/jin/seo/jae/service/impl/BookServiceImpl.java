@@ -1,4 +1,4 @@
-package hyung.jin.seo.jae.service;
+package hyung.jin.seo.jae.service.impl;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import hyung.jin.seo.jae.model.Book;
 import hyung.jin.seo.jae.repository.BookRepository;
+import hyung.jin.seo.jae.service.BookService;
 
 @Service
 public class BookServiceImpl implements BookService {

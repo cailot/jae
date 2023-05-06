@@ -1,4 +1,4 @@
-package hyung.jin.seo.jae.service;
+package hyung.jin.seo.jae.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import hyung.jin.seo.jae.model.Teacher;
 import hyung.jin.seo.jae.repository.TeacherRepository;
+import hyung.jin.seo.jae.service.TeacherService;
 import hyung.jin.seo.jae.specification.StudentSpecification;
 import hyung.jin.seo.jae.specification.TeacherSpecification;
 import hyung.jin.seo.jae.utils.JaeConstants;

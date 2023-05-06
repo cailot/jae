@@ -1,4 +1,4 @@
-package hyung.jin.seo.jae.service;
+package hyung.jin.seo.jae.service.impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import hyung.jin.seo.jae.model.CourseEtc;
 import hyung.jin.seo.jae.repository.CourseEtcRepository;
+import hyung.jin.seo.jae.service.CourseEtcService;
 import hyung.jin.seo.jae.specification.CourseEtcSpecification;
 import hyung.jin.seo.jae.utils.JaeConstants;
 

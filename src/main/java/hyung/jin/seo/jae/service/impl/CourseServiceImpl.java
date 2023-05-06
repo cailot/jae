@@ -1,4 +1,4 @@
-package hyung.jin.seo.jae.service;
+package hyung.jin.seo.jae.service.impl;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import hyung.jin.seo.jae.model.Course;
 import hyung.jin.seo.jae.model.CourseFee;
 import hyung.jin.seo.jae.repository.CourseFeeRepository;
 import hyung.jin.seo.jae.repository.CourseRepository;
+import hyung.jin.seo.jae.service.CourseService;
 
 @Service
 public class CourseServiceImpl implements CourseService {

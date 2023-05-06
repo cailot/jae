@@ -25,7 +25,7 @@ import javax.persistence.CascadeType;
 @AllArgsConstructor
 @Entity
 @Table(name="Class")
-public class Class{
+public class Class{ // bridge table between Course & Cycle
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment

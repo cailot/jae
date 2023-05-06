@@ -1,4 +1,4 @@
-package hyung.jin.seo.jae.service;
+package hyung.jin.seo.jae.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.StudentRepository;
+import hyung.jin.seo.jae.service.StudentService;
 import hyung.jin.seo.jae.specification.StudentSpecification;
 import hyung.jin.seo.jae.utils.JaeConstants;
 import hyung.jin.seo.jae.utils.JaeUtils;
