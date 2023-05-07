@@ -69,8 +69,6 @@ public class JaeStudentController {
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
-			// replace escape character single quote for JSON
-//			dto = JaeUtils.safeJsonStudentInfo(dto);
 			dtos.add(dto);
 		}
 		return dtos;
@@ -103,14 +101,12 @@ public class JaeStudentController {
 			}
 			long[] courseId = cidList.stream().mapToLong(Long::longValue).toArray();
 			// 2. get Course in Student
-			Set courses = std.getElearnings();
+			Set<Elearning> courses = std.getElearnings();
 			// 3. clear existing course
 			courses.clear();
 			for(long cid : courseId) {
 				// 4. get course info
 				Elearning crs = elearningService.getElearning(cid);
-				// 6. add Student to Course
-				//crs.getStudents().add(std);
 				// 5. add Course to Student
 				courses.add(crs);
 			}

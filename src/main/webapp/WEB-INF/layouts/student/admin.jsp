@@ -25,23 +25,6 @@
 				//cell3.innerHTML = '<span class="elearningRemoveConfirm" title="Delete eLearning"><i class="fa fa-trash"></i></span>';
 			});
 			
-			$('#gradeAssociateElearningTable').on('click', 'a', function() {
-		    	var row = $(this).closest('tr');
-		    	var name = row.find('td:eq(1)').text();
-				$.confirmModal('Are you sure you want to remove ' + name +'?', function(el) {
-        			row.remove();
-      			});
-		    });
-
-			
-			
-			$('.deactivateConfirmModal').click(function(e) {
-      			e.preventDefault();
-				$.confirmModal('Are you sure to suspend this student?', function(el) {
-        			inactivateStudent();
-      			});
-    		}); 
-			
 		///////////////////////////////////////////////////////////////////////////////	
 		// 				Register Form
 		///////////////////////////////////////////////////////////////////////////////	
@@ -207,6 +190,63 @@
 		availableElearnings();
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 			Deactivate student
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function inactivateStudent() {
+		var id = $("#formId").val();
+		//warn if Id is empty
+		if (id == '') {
+			$('#warning-alert .modal-body').text('Please search student record before suspend');
+			$('#warning-alert').modal('toggle');
+			return;
+		}
+
+		// send query to controller
+		$.ajax({
+			url : '${pageContext.request.contextPath}/student/inactivate/' + id,
+			type : 'PUT',
+			success : function(data) {
+				$('#deactivateModal').modal('hide');
+				$('#success-alert .modal-body').html('ID : <b>' + id + '</b> is now suspended');
+				$('#success-alert').modal('toggle');
+				clearStudentForm();
+			},
+			error : function(xhr, status, error) {
+				console.log('Error : ' + error);
+			}
+		}); 
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 			Re-activate student
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function reactivateStudent() {
+		var id = $("#formId").val();
+		//warn if Id is empty
+		if (id == '') {
+			$('#warning-alert .modal-body').text('Please search student record before activate');
+			$('#warning-alert').modal('toggle');
+			return;
+		}
+			// send query to controller
+		$.ajax({
+			url : '${pageContext.request.contextPath}/student/activate/' + id,
+			type : 'PUT',
+			success : function(data) {
+				//$('#ReactivateModal').modal('hide');
+				$('#success-alert .modal-body').html('ID : <b>' + id + '</b> is now activated');
+				$('#success-alert').modal('toggle');
+				clearStudentForm();
+			},
+			error : function(xhr, status, error) {
+				console.log('Error : ' + error);
+			}
+		}); 
+	}
+	
+
+
 	// clean old elearning on Register form
 	function clearElearningOnRegister(){
 		// erase previous selected elearning course
@@ -267,13 +307,7 @@
 		});
 
 	}
-	
-	// Display selected student in student search
-	function display(value) {
-		
-		console.log(value.id);
-	}
-	
+
 	// Display selected student in student search
 	function displayStudentInfo(value) {
 		
@@ -337,7 +371,7 @@
 	function updateStudentInfo() {
 		// if activate process, then call activateStudent()
 		if($('#formEndDate').val()!='' && $('#formActive').prop('checked')){
-			activateStudent();
+			reactivateStudent();
 			return;
 		}		
 
@@ -396,33 +430,7 @@
 			}
 		});
 	}
-	
-	// de-activate student
-	function inactivateStudent() {
-		var id = $("#formId").val();
-		//warn if Id is empty
-		if (id == '') {
-			$('#warning-alert .modal-body').text('Please search student record before suspend');
-			$('#warning-alert').modal('toggle');
-			return;
-		}
 
-		// send query to controller
-		$.ajax({
-			url : '${pageContext.request.contextPath}/student/inactivate/' + id,
-			type : 'PUT',
-			success : function(data) {
-				// clear existing form
-				$('#success-alert .modal-body').html('ID : <b>' + id + '</b> is now suspended');
-				$('#success-alert').modal('toggle');
-				clearStudentForm();
-			},
-			error : function(xhr, status, error) {
-				console.log('Error : ' + error);
-			}
-		}); 
-		
-	}
 	
 	
 	
@@ -434,34 +442,6 @@
 	
 	
 
-	// activate student
-	function activateStudent() {
-		var id = $("#formId").val();
-		//warn if Id is empty
-		if (id == '') {
-			$('#warning-alert .modal-body').text('Please search student record before activate');
-			$('#warning-alert').modal('toggle');
-			return;
-		}
-		if(confirm("Are you sure you want to activate this student?")){
-			// send query to controller
-			$.ajax({
-				url : '${pageContext.request.contextPath}/student/activate/' + id,
-				type : 'PUT',
-				success : function(data) {
-					// clear existing form
-					$('#success-alert .modal-body').html('ID : <b>' + id + '</b> is now activated');
-					$('#success-alert').modal('toggle');
-					clearStudentForm();
-				},
-				error : function(xhr, status, error) {
-					console.log('Error : ' + error);
-				}
-			}); 
-		}else{
-			return;
-		}
-	}
 	
 	// Clear all form
 	function clearStudentForm() {
@@ -547,11 +527,47 @@
 
 
 
+<!-- Deactivate Dialogue -->
+<div class="modal fade" id="deactivateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">Student Suspend</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				Do you want to suspend this student ?	
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-danger" onclick="inactivateStudent()">Deactivate</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+	</div>
+	<!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
-
-
-
-
+<!-- Reactivate Dialogue -->
+<!-- <div class="modal fade" id="reactivateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">Student Re-activate</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				Do you want to re-activate this student ?	
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-success" onclick="reactivateStudent()">Re-activate</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+	</div>
+</div>
+</div> -->
+<!-- /.modal -->
 
 
 
@@ -776,7 +792,7 @@
 						<button type="button" class="btn btn-block btn-warning btn-sm" onclick="updateStudentInfo()">Save</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-danger btn-sm deactivateConfirmModal">Suspend</button>
+						<button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal" data-target="#deactivateModal">Suspend</button>
 					</div>
 					<div class="col mx-auto">
 						<button type="button" class="btn btn-block btn-info btn-sm" onclick="clearStudentForm()">Clear</button>
@@ -921,12 +937,7 @@
 							<option value="vce">VCE</option>
 						</select>
 					</div>
-					<!-- <div class="col-md-3">
-						<label for="" class="label-form">Course</label>
-						<button type="button" class="btn btn-block btn-primary btn-sm"
-							onclick="listElearnings(document.getElementById('elearningGrade').value)">Search</button>
-					</div> -->
-					<div class="col-md-6">
+					<div class="col-md-9">
 						<label for="" class="label-form">Select to add subject</label> <select
 							class="form-control form-control-sm" id="elearingDropdown" name="elearingDropdown">
 							<option value="p2">Click to add a subject</option>

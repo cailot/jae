@@ -79,3 +79,10 @@
 	display: flex !important; 
 	align-items: center !important;
 }
+
+td a i.fa-trash {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
