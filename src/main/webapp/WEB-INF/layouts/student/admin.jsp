@@ -9,12 +9,13 @@
 						"gradeAssociateElearningTable")
 						.getElementsByTagName('tbody')[0];
 				var row = table.insertRow(0);
+				row.style.height="35px"; // set the height of the row
 				var cell0 = row.insertCell(0);
 				cell0.innerHTML = $(this).find('option:selected').val();
 				$(cell0).addClass('hidden-column');
-				var val = selectedOptionText.split("...");
+				var val = selectedOptionText.split("] ");
 				var cell1 = row.insertCell(1);
-				cell1.innerHTML = val[0];
+				cell1.innerHTML = val[0].substring(1);
 				$(cell1).addClass('small');
 				var cell2 = row.insertCell(2);
 				cell2.innerHTML = val[1];
@@ -39,8 +40,75 @@
 				$.confirmModal('Are you sure to suspend this student?', function(el) {
         			inactivateStudent();
       			});
-    		});         
-		
+    		}); 
+			
+		///////////////////////////////////////////////////////////////////////////////	
+		// 				Register Form
+		///////////////////////////////////////////////////////////////////////////////	
+		// When register modal is shown, make an AJAX request to get list of elearnings
+		$('#registerModal').on('shown.bs.modal', function() {
+			// erase previous selected elearning course
+			//$('#add-elearning-body').empty();
+			
+			//const dropdown = document.getElementById("addElearingDropdown");
+			// remove all options before fetching new list
+			// while (dropdown.options.length > 0) {
+			// 	dropdown.remove(0);
+			// }
+
+			$.ajax({
+			url: '${pageContext.request.contextPath}/elearning/available',
+			type: 'GET',
+			dataType: 'json',
+			success: function(data) {
+				// add elearning list to dropdown menu
+				$.each(data, function(i, item) {
+					const dropdown = document.getElementById("addElearingDropdown");
+					const option = document.createElement("option");
+					option.value = item.id;
+					option.textContent = "[" + item.grade.toUpperCase() + "] "
+							+ item.name;
+					dropdown.appendChild(option);
+				});
+			},
+			error: function(xhr, textStatus, errorThrown) {
+				// Handle errors
+				console.log(xhr.status);
+				console.log(errorThrown);
+			}
+			});
+		});
+
+		// When users select elearning in register modal, table shows selected elearning.
+		$('#addElearingDropdown').on('change',function() {
+			var selectedOptionText = $(this).find('option:selected').text();
+			// add new row into table
+			var table = document.getElementById("addElearningTable").getElementsByTagName('tbody')[0];
+			var row = table.insertRow(0);
+			row.style.height="35px"; // set the height of the row
+			var cell0 = row.insertCell(0);
+			cell0.innerHTML = $(this).find('option:selected').val();
+			$(cell0).addClass('hidden-column');
+			var val = selectedOptionText.split("] ");
+			var cell1 = row.insertCell(1);
+			cell1.innerHTML = val[0].substring(1); // remove '[' 
+			//$(cell1).addClass('small');
+			var cell2 = row.insertCell(2);
+			cell2.innerHTML = val[1];
+			//$(cell2).addClass('small');
+			var cell3 = row.insertCell(3);
+			cell3.innerHTML = '<a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a>';
+			//cell3.innerHTML = '<span class="elearningRemoveConfirm" title="Delete eLearning"><i class="fa fa-trash"></i></span>';
+		});
+
+		// remove selected elearning in register dialog
+		$('#addElearningTable').on('click', 'a', function() {
+			var row = $(this).closest('tr');
+			var name = row.find('td:eq(1)').text();
+			if(confirm('Are you sure you want to remove ' + name +'?')){
+				row.remove();
+			}
+		});
 	});
 
 
@@ -56,8 +124,10 @@
 
 
 
-	
-	// Register Student
+		
+	///////////////////////////////////////////////////////////////////////////
+	// 		Add Student
+	///////////////////////////////////////////////////////////////////////////
 	function addStudent() {
 		// Get from form data
 		var std = {
@@ -71,8 +141,19 @@
 			state : $("#addState").val(),
 			branch : $("#addBranch").val(),
 			grade : $("#addGrade").val(),
-			enrolmentDate : $("#addEnrolment").val()
+			enrolmentDate : $("#addEnrolment").val(),
+			elearnings : []
 		}
+		// associate course info
+		var cId = [];
+		$("#addElearningTable tbody tr").each(function() {
+		  cId.push($(this).find("td").eq(0).text());
+		  var crs = {
+				  id : $(this).find("td").eq(0).text()
+		  };
+		  std.elearnings.push(crs);
+		});
+		
 		// Send AJAX to server
 		$.ajax({
 			url : '${pageContext.request.contextPath}/student/register',
@@ -95,24 +176,47 @@
 				$("#formMemo").val(student.memo);
 				$("#formState").val(student.state);
 				$("#formBranch").val(student.branch);
-				//$("#formGrade").val(student.grade);
 				$("#elearningGrade").val(student.grade);
 				// Set date value
 				var date = new Date(student.enrolmentDate); // Replace with your date value
 				$("#formEnrolment").datepicker('setDate', date);
-
+					// eLearning Info
+				const crss = student.elearnings;
+				if(crss != null){
+					var body = $('#list-grade-associate-body');
+					body.empty();
+					for(let i=0; i<crss.length; i++){
+						var row = $('<tr></tr>');
+						row.append($('<td class="hidden-column"></td>').text(crss[i].id));
+						row.append($('<td class="small"></td>')
+								.text(crss[i].grade.toUpperCase()));
+						row.append($('<td class="small"></td>').text(crss[i].name));
+						row.append($('<td><a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a></td>'));
+						body.append(row);
+					}
+				}
 			},
 			error : function(xhr, status, error) {
 				console.log('Error : ' + error);
 			}
 		});
 		$('#registerModal').modal('hide');
-		// ready to associate
-		listElearnings(std.grade);
 		// flush all registered data
 		document.getElementById("studentRegister").reset();
+		clearElearningOnRegister();
+		availableElearnings();
 	}
 
+	// clean old elearning on Register form
+	function clearElearningOnRegister(){
+		// erase previous selected elearning course
+		$('#add-elearning-body').empty();
+		const dropdown = document.getElementById("addElearingDropdown");
+		// remove all options before fetching new list
+		while (dropdown.options.length > 0) {
+			dropdown.remove(0);
+		}
+	}
 	// Search Student with Keyword	
 	function searchStudent() {
 		//warn if keyword is empty
@@ -218,7 +322,7 @@
 		if(crss != null){
 			var body = $('#list-grade-associate-body');
 			for(let i=0; i<crss.length; i++){
-				var row = $('<tr></tr>');
+				var row = $('<tr style="height: 35px;"></tr>');
 				row.append($('<td class="hidden-column"></td>').text(crss[i].id));
 				row.append($('<td class="small"></td>')
 						.text(crss[i].grade.toUpperCase()));
@@ -256,7 +360,6 @@
 			memo : $("#formMemo").val(),
 			state : $("#formState").val(),
 			branch : $("#formBranch").val(),
-			//grade : $("#formGrade").val(),
 			grade : $("#elearningGrade").val(),
 			enrolmentDate : $("#formEnrolment").val(),
 			elearnings : []
@@ -374,45 +477,44 @@
 	
 	// Course Info
 	// Get list of courses by grade
-	function listElearnings(grade) {
-		var body = $('#list-grade-associate-body');
-		//var grade = $("#elearningGrade").val();
-		//console.log(grade);
-		const dropdown = document.getElementById("elearingDropdown");
-		body.empty();
-		// remove all options before fetching new list
-		while (dropdown.options.length > 0) {
-			dropdown.remove(0);
-		}
-		const title = document.createElement("option");
-		title.textContent = "Click to add a subject";
-		dropdown.appendChild(title);
-		$.ajax({
-			url : "${pageContext.request.contextPath}/elearning/list",
-			type : 'GET',
-			data : grade,
-			success : function(data) {
-				$.each(data, function(i, item) {
-					if (item.grade == grade) {
-						var row = $('<tr></tr>');
-						row.append($('<td class="hidden-column"></td>').text(item.id));
-						row.append($('<td class="small"></td>')
-								.text(item.grade.toUpperCase()));
-						row.append($('<td class="small"></td>').text(item.name));
-						row.append($('<td><a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a></td>'));
-						body.append(row);
-					} else {
-						//console.log(item.id);
-						const option = document.createElement("option");
-						option.value = item.id;
-						option.textContent = item.grade.toUpperCase() + "..."
-								+ item.name;
-						dropdown.appendChild(option);
-					}
-				});
-			}
-		});
-	}
+	// function listElearnings(grade) {
+	// 	var body = $('#list-grade-associate-body');
+	// 	//var grade = $("#elearningGrade").val();
+	// 	//console.log(grade);
+	// 	const dropdown = document.getElementById("elearingDropdown");
+	// 	body.empty();
+	// 	// remove all options before fetching new list
+	// 	while (dropdown.options.length > 0) {
+	// 		dropdown.remove(0);
+	// 	}
+	// 	const title = document.createElement("option");
+	// 	title.textContent = "Click to add a subject";
+	// 	dropdown.appendChild(title);
+	// 	$.ajax({
+	// 		url : "${pageContext.request.contextPath}/elearning/list",
+	// 		type : 'GET',
+	// 		data : grade,
+	// 		success : function(data) {
+	// 			$.each(data, function(i, item) {
+	// 				if (item.grade == grade) {
+	// 					var row = $('<tr></tr>');
+	// 					row.append($('<td class="hidden-column"></td>').text(item.id));
+	// 					row.append($('<td class="small"></td>')
+	// 							.text(item.grade.toUpperCase()));
+	// 					row.append($('<td class="small"></td>').text(item.name));
+	// 					row.append($('<td><a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a></td>'));
+	// 					body.append(row);
+	// 				} else {
+	// 					//console.log(item.id);
+	// 					const option = document.createElement("option");
+	// 					option.value = item.id;
+	// 					option.textContent = "[" + item.grade.toUpperCase() + "] " + item.name;
+	// 					dropdown.appendChild(option);
+	// 				}
+	// 			});
+	// 		}
+	// 	});
+	// }
 	
 	// Get list of available courses
 	function availableElearnings() {
@@ -434,7 +536,7 @@
 						//console.log(item.id);
 					const option = document.createElement("option");
 					option.value = item.id;
-					option.textContent = item.grade.toUpperCase() + "..." + item.name;
+					option.textContent = "[" + item.grade.toUpperCase() + "] " + item.name;
 					dropdown.appendChild(option);
 				});
 			}
@@ -452,6 +554,182 @@
 
 
 
+
+<!-- Register Form Dialogue -->
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">Student Enrolment</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form id="studentRegister">
+					<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-4">
+								<label for="selectOption">State</label> <select
+									class="form-control" id="addState" name="addState">
+									<option value="vic">Victoria</option>
+									<!-- <option value="nsw">New South Wales</option>
+									<option value="qld">Queensland</option>
+									<option value="sa">South Australia</option>
+									<option value="tas">Tasmania</option>
+									<option value="wa">Western Australia</option>
+									<option value="nt">Northern Territory</option>
+									<option value="act">ACT</option> -->
+								</select>
+							</div>
+							<div class="col-md-5">
+								<label for="selectOption">Branch</label> <select
+									class="form-control" id="addBranch" name="addBranch">
+									<option value="braybrook">Braybrook</option>
+									<option value="epping">Epping</option>
+									<option value="balwyn">Balwyn</option>
+									<option value="bayswater">Bayswater</option>
+									<option value="boxhill">Box Hill</option>
+									<option value="carolinesprings">Caroline Springs</option>
+									<option value="chadstone">Chadstone</option>
+									<option value="craigieburn">Craigieburn</option>
+									<option value="cranbourne">Cranbourne</option>
+									<option value="glenwaverley">Glen Waverley</option>
+									<option value="mitcha">Mitcham</option>
+									<option value="narrewarren">Narre Warren</option>
+									<option value="ormond">Ormond</option>
+									<option value="pointcook">Point Cook</option>
+									<option value="preston">Preston</option>
+									<option value="springvale">Springvale</option>
+									<option value="stalbans">St Albans</option>
+									<option value="werribee">Werribee</option>
+									<option value="mernda">Mernda</option>
+									<option value="melton">Melton</option>
+									<option value="glenroy">Glenroy</option>
+									<option value="packenham">Packenham</option>
+								</select>
+							</div>
+							<div class="col-md-3">
+								<label for="datepicker">Enrolment</label> 
+								<input type="text" class="form-control datepicker" id="addEnrolment" name="addEnrolment" placeholder="dd/mm/yyyy">
+							</div>
+							<script>
+								var today = new Date();
+								var day = today.getDate();
+								var month = today.getMonth() + 1; // Note: January is 0
+								var year = today.getFullYear();
+								var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
+								document.getElementById('addEnrolment').value = formattedDate;
+							</script>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-5">
+								<label for="name">First Name:</label> <input type="text"
+									class="form-control" id="addFirstName" name="addFirstName">
+							</div>
+							<div class="col-md-5">
+								<label for="name">Last Name:</label> <input type="text"
+									class="form-control" id="addLastName" name="addLastName">
+							</div>
+							<div class="col-md-2">
+								<label for="selectOption">Grade</label> <select
+									class="form-control" id="addGrade" name="addGrade">
+									<option value="p2">P2</option>
+									<option value="p3">P3</option>
+									<option value="p4">P4</option>
+									<option value="p5">P5</option>
+									<option value="p6">P6</option>
+									<option value="s7">S7</option>
+									<option value="s8">S8</option>
+									<option value="s9">S9</option>
+									<option value="s10">S10</option>
+									<option value="s10e">S10E</option>
+									<option value="tt6">TT6</option>
+									<option value="tt8">TT8</option>
+									<option value="tt8e">TT8E</option>
+									<option value="srw4">SRW4</option>
+									<option value="srw5">SRW5</option>
+									<option value="srw6">SRW6</option>
+									<option value="srw8">SRW8</option>
+									<option value="jmss">JMSS</option>
+									<option value="vce">VCE</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-5">
+								<label for="name">Email</label> <input type="text"
+									class="form-control" id="addEmail" name="addEmail">
+							</div>
+							<div class="col-md-7">
+								<label for="name">Address</label> <input type="text"
+									class="form-control" id="addAddress" name="addAddress">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-6">
+								<label for="name">Contact No 1</label> <input type="text"
+									class="form-control" id="addContact1" name="addContact1">
+							</div>
+							<div class="col-md-6">
+								<label for="name">Contact No 2</label> <input type="text"
+									class="form-control" id="addContact2" name="addContact2">
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-12">
+								<label for="message">Memo</label>
+								<textarea class="form-control" id="addMemo" name="addMemo"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-12">
+								<!-- <label>Select to add subject</label>  -->
+								<select class="form-control" id="addElearingDropdown" name="addElearingDropdown">
+									<option value="p2">Click to add a subject</option>
+								</select>
+							</div>	
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-12">
+								<table id="addElearningTable" style="width: 100%;" class="table-bordered table-sm">
+									<thead class="table-primary">
+										<tr class="small" style="height: 35px;">
+											<th class="hidden-column"></th>
+											<th>Grade</th>
+											<th>eLearning Subject</th>
+											<th>Delete</th>
+										</tr>
+									</thead>
+									<tbody id="add-elearning-body">
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary" onclick="addStudent()">Register</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clearElearningOnRegister()">Close</button>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
 
 
@@ -643,15 +921,14 @@
 							<option value="vce">VCE</option>
 						</select>
 					</div>
-					<div class="col-md-3">
+					<!-- <div class="col-md-3">
 						<label for="" class="label-form">Course</label>
 						<button type="button" class="btn btn-block btn-primary btn-sm"
 							onclick="listElearnings(document.getElementById('elearningGrade').value)">Search</button>
-					</div>
+					</div> -->
 					<div class="col-md-6">
 						<label for="" class="label-form">Select to add subject</label> <select
-							class="form-control form-control-sm" id="elearingDropdown"
-							name="elearingDropdown">
+							class="form-control form-control-sm" id="elearingDropdown" name="elearingDropdown">
 							<option value="p2">Click to add a subject</option>
 						</select>
 					</div>
@@ -661,44 +938,21 @@
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-12">
-						<div class="table-wrap">
-							<table id="gradeAssociateElearningTable" data-toggle="table" data-header-style="headerStyle">
-								<thead class="table-primary">
-									<tr>
-										<th class="hidden-column"></th>
-										<th data-field="grade">Grade</th>
-										<th data-field="name">eLearning Subject</th>
-										<th data-field="delete">Delete</th>
-									</tr>
-								</thead>
-								<tbody id="list-grade-associate-body">
-								</tbody>
-							</table>
-						</div>
+						<table id="gradeAssociateElearningTable" style="width: 100%;" class="table-bordered table-sm">
+							<thead class="table-primary">
+								<tr class="small" style="height: 35px;">
+									<th class="hidden-column"></th>
+									<th>Grade</th>
+									<th>eLearning Subject</th>
+									<th>Delete</th>
+								</tr>
+							</thead>
+							<tbody id="list-grade-associate-body">
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
-			<style>
-			.course-title {
-			  font-weight : fw-bold;
-			  font-size : 0.75rem;
-			}
-			</style>			
-			<script>
-			  function headerStyle(column) {
-			    return {
-			      grade: {
-			        classes : 'course-title'
-			      },
-			      name: {
-			    	classes : 'course-title'
-			      },
-			      delete: {
-			      	classes : 'course-title'
-			      }
-			    }[column.field]
-			  }
-			</script>			
 			<input type="hidden" id="formEndDate" name="formEndDate" />
 		</form>
 	</div>

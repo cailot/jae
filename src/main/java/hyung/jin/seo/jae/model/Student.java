@@ -11,7 +11,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -34,119 +33,6 @@ import java.util.Set;
 @Table(name="Student")
 public class Student {
     
-	/**
-    public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getGrade() {
-		return grade;
-	}
-
-	public void setGrade(String grade) {
-		this.grade = grade;
-	}
-
-	public String getContactNo1() {
-		return contactNo1;
-	}
-
-	public void setContactNo1(String contactNo1) {
-		this.contactNo1 = contactNo1;
-	}
-
-	public String getContactNo2() {
-		return contactNo2;
-	}
-
-	public void setContactNo2(String contactNo2) {
-		this.contactNo2 = contactNo2;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	public String getBranch() {
-		return branch;
-	}
-
-	public void setBranch(String branch) {
-		this.branch = branch;
-	}
-
-	public String getMemo() {
-		return memo;
-	}
-
-	public void setMemo(String memo) {
-		this.memo = memo;
-	}
-
-	public LocalDate getRegisterDate() {
-		return registerDate;
-	}
-
-	public void setRegisterDate(LocalDate registerDate) {
-		this.registerDate = registerDate;
-	}
-
-	public LocalDate getEnrolmentDate() {
-		return enrolmentDate;
-	}
-
-	public void setEnrolmentDate(LocalDate enrolmentDate) {
-		this.enrolmentDate = enrolmentDate;
-	}
-
-	public LocalDate getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
-*/
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
@@ -192,20 +78,11 @@ public class Student {
     private LocalDate endDate;
 
     
-    @ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.DETACH)
+    @ManyToMany(cascade=CascadeType.DETACH)
     @JoinTable(name="Student_Elearning",
     	joinColumns = {@JoinColumn(name="studentId")},
     	inverseJoinColumns = {@JoinColumn(name="elearningId")}
     )
     private Set<Elearning> elearnings = new LinkedHashSet<>();
 
-	/* 
-	public Set<Elearning> getElearnings() {
-		return elearnings;
-	}
-
-	public void setElearnings(Set<Elearning> elearnings) {
-		this.elearnings = elearnings;
-	}
-    */
 }

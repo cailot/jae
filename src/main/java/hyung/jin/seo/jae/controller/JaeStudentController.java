@@ -46,7 +46,16 @@ public class JaeStudentController {
 	@PostMapping("/register")
 	@ResponseBody
 	public StudentDTO registerStudent(@RequestBody StudentDTO formData) {
-		Student std = formData.convertToStudent();
+		// 1. create Student without elearning
+		Student std = formData.convertToOnlyStudent();
+		// 2. get elearning
+		Set<ElearningDTO> elearnings = formData.getElearnings();
+		for(ElearningDTO elearningDto : elearnings){
+			Elearning elearn = elearningService.getElearning(Long.parseLong(elearningDto.getId()));
+			// 3. associate elearning to Student
+			std.getElearnings().add(elearn);
+		}
+		// 4. save Student
 		std = studentService.addStudent(std);
 		StudentDTO dto = new StudentDTO(std);
 		return dto;
@@ -101,7 +110,7 @@ public class JaeStudentController {
 				// 4. get course info
 				Elearning crs = elearningService.getElearning(cid);
 				// 6. add Student to Course
-				crs.getStudents().add(std);
+				//crs.getStudents().add(std);
 				// 5. add Course to Student
 				courses.add(crs);
 			}

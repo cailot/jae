@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -49,21 +51,32 @@ public class Course{
     @CreationTimestamp
     private LocalDate registerDate;
 
-	@OneToMany(targetEntity = Subject.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "courseId", referencedColumnName = "id")
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+		name = "Course_Subject",
+		joinColumns = { @JoinColumn(name = "courseId")},
+		inverseJoinColumns = { @JoinColumn(name = "subjectId")}
+	)
 	private Set<Subject> subjects = new LinkedHashSet<>();
 
-	@OneToMany(targetEntity = Book.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "courseId", referencedColumnName = "id")
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+		name = "Course_Book",
+		joinColumns = { @JoinColumn(name = "courseId")},
+		inverseJoinColumns = { @JoinColumn(name = "bookId")}
+	)
 	private Set<Book> books = new LinkedHashSet<>();
 
-	@OneToMany(targetEntity = CourseEtc.class, cascade = CascadeType.ALL)
-	@JoinColumn(name = "courseId", referencedColumnName = "id")
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+		name = "Course_CourseEtc",
+		joinColumns = { @JoinColumn(name = "courseId")},
+		inverseJoinColumns = { @JoinColumn(name = "etcId")}
+	)
 	private Set<CourseEtc> etcs = new LinkedHashSet<>();
 
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-	//@JoinColumn(name = "courseId", referencedColumnName = "id")
 	private Set<Class> classes = new LinkedHashSet<>();
 
 
