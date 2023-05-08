@@ -34,16 +34,9 @@ public class BookDTO implements Serializable{
     	this.grade = (cb.getGrade()!=null) ? cb.getGrade() : "";
     	this.name = (cb.getName()!=null) ? cb.getName() : "";
     	this.price = (cb.getPrice()!=0.0) ? Double.toString(cb.getPrice()): "0.0";
-    	//this.registerDate = (cb.getRegisterDate()!=null) ? cb.getRegisterDate().toString() : "";
     }
     
-    // public Book convertToBook() {
-    // 	Book cb = new Book();
-    // 	if(StringUtils.isNotBlank(id)) cb.setId(Long.parseLong(this.id));
-    // 	if(StringUtils.isNotBlank(grade)) cb.setGrade(this.grade);
-    // 	if(StringUtils.isNotBlank(name)) cb.setName(this.name);
-    // 	if(StringUtils.isNotBlank(price)) cb.setPrice(Double.parseDouble(this.price));
-    // 	if(StringUtils.isNotBlank(registerDate)) cb.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    // 	return cb;
-    // }
-}
+    public void addSubject(String subject){
+        subjects.add(subject);
+    }
+  }

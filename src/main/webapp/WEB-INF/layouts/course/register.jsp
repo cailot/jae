@@ -67,8 +67,6 @@ function listBooks(grade) {
 		success : function(data) {
 			$.each(data, function(index, value) {
 				//var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")''>");
-				//row.append($('<td>').text(value.id));
-				//row.append($('<td>').text(value.grade.toUpperCase()));
 				var row = $('<tr>');
 				row.append($('<td>').text(value.name));
 				row.append($('<td>').text(value.subjects));
@@ -101,7 +99,7 @@ function listEtcs(grade) {
 				return;
 			} */
 			$.each(data, function(index, value) {
-				//var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")''>");
+				//var row = $("<tr onclick='popup(" + value.id + ")''>");
 				//row.append($('<td>').text(value.id));
 				//row.append($('<td>').text(value.grade.toUpperCase()));
 				var row = $('<tr>');
@@ -110,16 +108,14 @@ function listEtcs(grade) {
 				
 				$('#courseEtcTable > tbody').append(row);
 			});
-			//$('#studentListResult').modal('show');
-
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
 		}
 	});
 }
-
 </script>
+
 <h5>Course Registration</h5>
 <div class="modal-body">
 	<form id="">

@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hyung.jin.seo.jae.model.Course;
-import hyung.jin.seo.jae.model.CourseFee;
-import hyung.jin.seo.jae.repository.CourseFeeRepository;
 import hyung.jin.seo.jae.repository.CourseRepository;
 import hyung.jin.seo.jae.service.CourseService;
 

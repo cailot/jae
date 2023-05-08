@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import hyung.jin.seo.jae.model.CourseEtc;
-import hyung.jin.seo.jae.model.CourseFee;
 import hyung.jin.seo.jae.model.Elearning;
 import hyung.jin.seo.jae.model.Student;
 
