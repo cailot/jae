@@ -46,30 +46,30 @@ public class JaeBookController {
 	}
 
 	// search course books by year
-	@GetMapping("/listYear")
-	@ResponseBody
-	List<BookDTO> listYearBook(@RequestParam("year") String keyword) {
-		List<Book> cbs = bookService.availbeBooks(keyword);
-		List<BookDTO> dtos = new ArrayList<BookDTO>();
-		for (Book cb : cbs) {
-			BookDTO dto = new BookDTO(cb);
-			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
-			{
-				String newName = dto.getName().replaceAll("\'", "&#39;");
-				dto.setName(newName);
-			}
-			dtos.add(dto);
-		}
-		return dtos;
-	}
+	// @GetMapping("/listYear")
+	// @ResponseBody
+	// List<BookDTO> listYearBook(@RequestParam("year") String keyword) {
+	// 	List<Book> cbs = bookService.availbeBooks(keyword);
+	// 	List<BookDTO> dtos = new ArrayList<BookDTO>();
+	// 	for (Book cb : cbs) {
+	// 		BookDTO dto = new BookDTO(cb);
+	// 		if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
+	// 		{
+	// 			String newName = dto.getName().replaceAll("\'", "&#39;");
+	// 			dto.setName(newName);
+	// 		}
+	// 		dtos.add(dto);
+	// 	}
+	// 	return dtos;
+	// }
 	
 	
 	// search course books by grade
 	@GetMapping("/listGrade")
 	@ResponseBody
 	List<BookDTO> listGradeBook(@RequestParam("grade") String grade) {
-		int year = JaeUtils.academicYear();
-		List<Book> cbs = bookService.availableGradeBooks(grade, Integer.toString(year));
+		// int year = JaeUtils.academicYear();
+		List<Book> cbs = bookService.booksByGrade(grade);
 		List<BookDTO> dtos = new ArrayList<BookDTO>();
 		for (Book cb : cbs) {
 			BookDTO dto = new BookDTO(cb);

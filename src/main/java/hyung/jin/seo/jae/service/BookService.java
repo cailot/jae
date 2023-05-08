@@ -9,11 +9,14 @@ public interface BookService {
 	List<Book> allBooks();
 	
 	// list available books based on year
-	List<Book> availbeBooks(String year);
+	// List<Book> availbeBooks(String year);
 
 	// list available books based on grade & year
-	List<Book> availableGradeBooks(String grade, String year);
+	// List<Book> availableGradeBooks(String grade, String year);
 	
+	// list available books based on grade
+	List<Book> booksByGrade(String grade);
+
 	// return total count
 	long checkCount();
 }

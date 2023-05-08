@@ -38,8 +38,8 @@ public class Book {
     @Column(columnDefinition = "DECIMAL(10,2)")
     private double price;
     
-    @Column(length = 10, nullable = false)
-    private String year;
+    // @Column(length = 10, nullable = false)
+    // private String year;
     
     @CreationTimestamp
     private LocalDate registerDate;

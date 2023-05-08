@@ -1,6 +1,7 @@
 package hyung.jin.seo.jae.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +16,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.Column;
 import javax.persistence.CascadeType;
 
@@ -44,5 +48,9 @@ public class Class{ // bridge table between Course & Cycle
 
 	@Column(length = 400)
     private String description;
+
+	@CreationTimestamp
+    private LocalDate registerDate;
+
 
 }

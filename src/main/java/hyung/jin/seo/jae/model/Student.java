@@ -37,25 +37,25 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
-    @Column(length = 200, nullable = false)
+    @Column(length = 100, nullable = false)
     private String firstName;
     
-    @Column(length = 200, nullable = false)
+    @Column(length = 100, nullable = false)
     private String lastName;
     
     @Column(length = 10, nullable = false)
     private String grade;
     
-    @Column(length = 200, nullable = true)
+    @Column(length = 50, nullable = true)
     private String contactNo1;
     
-    @Column(length = 200, nullable = true)
+    @Column(length = 50, nullable = true)
     private String contactNo2;
     
-    @Column(length = 300, nullable = true)
+    @Column(length = 100, nullable = true)
     private String email;
     
-    @Column(length = 500, nullable = true)
+    @Column(length = 200, nullable = true)
     private String address;
     
     @Column(length = 30, nullable = true)

@@ -3,18 +3,18 @@ $(document).ready(
 	function() {
 		$('#registerGrade').on('change',function() {
 			var grade = $(this).val()
-			listFees(grade);
+			//listFees(grade);
 			listBooks(grade);
-			listEtcs(grade);
+			//listEtcs(grade);
 		});
 		
-		$('#gradeAssociateElearningTable').on('click', 'a', function() {
-	    	var row = $(this).closest('tr');
-	    	var name = row.find('td:eq(1)').text();
-	      	if (confirm('Are you sure you want to remove ' + name + '?')) {
-	        row.remove();
-      	}
-    });
+		// $('#gradeAssociateElearningTable').on('click', 'a', function() {
+	    // 	var row = $(this).closest('tr');
+	    // 	var name = row.find('td:eq(1)').text();
+	    //   	if (confirm('Are you sure you want to remove ' + name + '?')) {
+	    //     row.remove();
+      	// }
+    	// });
 });
 	
 //Search Fees based on Grade	
@@ -56,7 +56,7 @@ function listFees(grade) {
 
 //Search Book based on Grade	
 function listBooks(grade) {
-	// clear 'courseEtcTable' table body
+	// clear 'courseBookTable' table body
 	$('#courseBookTable tbody').empty();
 	$.ajax({
 		url : 'courseBook/listGrade',
@@ -65,13 +65,6 @@ function listBooks(grade) {
 			grade : grade,
 		},
 		success : function(data) {
-			/* console.log('search - ' + data + ' , ' + grade);
-			if (data == '') {
-				$('#warning-alert .modal-body').text(
-						'No fee found with ' + $("#formKeyword").val());
-				$('#warning-alert').modal('show');
-				return;
-			} */
 			$.each(data, function(index, value) {
 				//var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")''>");
 				//row.append($('<td>').text(value.id));
@@ -82,8 +75,6 @@ function listBooks(grade) {
 				row.append($('<td>').text(value.price));
 				$('#courseBookTable > tbody').append(row);
 			});
-			//$('#studentListResult').modal('show');
-
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);

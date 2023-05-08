@@ -115,6 +115,7 @@
 		width: 100%;
 		
 	}
+
 }
 </style>
 <div class="container-fluid jae-header">
@@ -124,7 +125,19 @@
 		James An Colleges
 	</div>
 	<ul class="navbar_menu">
-		<li><a href="${pageContext.request.contextPath}/test">Student</a></li>
+		
+
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/test" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Student
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/test">Student Admin</a>
+			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/list">Student List</a>
+			</div>
+		  </li>
+
+
 		<li><a href="${pageContext.request.contextPath}/test">Course</a></li>
 		<li><a href="${pageContext.request.contextPath}/teacher">Teacher</a></li>
 		<li><a href="${pageContext.request.contextPath}/list">List</a></li>

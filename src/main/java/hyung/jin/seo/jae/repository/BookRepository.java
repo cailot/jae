@@ -10,9 +10,11 @@ public interface BookRepository extends JpaRepository<Book, Long>{
 	
 	List<Book> findAll();
 	
-	List<Book> findByYear(String year);
+	//List<Book> findByYear(String year);
 
-	List<Book> findByGradeAndYear(String grade, String year);
+	//List<Book> findByGradeAndYear(String grade, String year);
+	
+	List<Book> findByGrade(String grade);
 	
 	long count();
 }

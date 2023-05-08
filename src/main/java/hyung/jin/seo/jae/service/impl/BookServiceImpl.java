@@ -21,15 +21,21 @@ public class BookServiceImpl implements BookService {
 		return books;
 	}
 
-	@Override
-	public List<Book> availbeBooks(String year) {
-		List<Book> books = courseBookRepository.findByYear(year);
-		return books;	
-	}
+	// @Override
+	// public List<Book> availbeBooks(String year) {
+	// 	List<Book> books = courseBookRepository.findByYear(year);
+	// 	return books;	
+	// }
+
+	// @Override
+	// public List<Book> availableGradeBooks(String grade, String year) {
+	// 	List<Book> books = courseBookRepository.findByGradeAndYear(grade, year);
+	// 	return books;	
+	// }
 
 	@Override
-	public List<Book> availableGradeBooks(String grade, String year) {
-		List<Book> books = courseBookRepository.findByGradeAndYear(grade, year);
+	public List<Book> booksByGrade(String grade) {
+		List<Book> books = courseBookRepository.findByGrade(grade);
 		return books;	
 	}
 
