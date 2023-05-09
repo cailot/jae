@@ -43,8 +43,8 @@ public class Class{ // bridge table between Course & Cycle
 	@JoinColumn(name = "cycleId")
 	private Cycle cycle;
 	
-	@Column(name="fee")
-	private BigDecimal fee;
+    @Column(columnDefinition = "DECIMAL(10,2)")
+	private double fee;
 
 	@Column(length = 400)
     private String description;

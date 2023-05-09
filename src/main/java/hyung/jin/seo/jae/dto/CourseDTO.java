@@ -37,6 +37,11 @@ import java.util.List;
 import java.util.Set;
 
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class CourseDTO implements Serializable{
     
 	private String id;
@@ -50,86 +55,7 @@ public class CourseDTO implements Serializable{
     private String grade;
 
     private String day;
-
-    public Set<CycleDTO> getCycles() {
-		return cycles;
-	}
-
-	public void setCycles(Set<CycleDTO> cycles) {
-		this.cycles = cycles;
-	}
-
-	private Set<CycleDTO> cycles = new LinkedHashSet<>();
-    
-	public String getId() {
-		return id;
-	}
-
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-	public String getDescription() {
-		return description;
-	}
-
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-
-	public String getRegisterDate() {
-		return registerDate;
-	}
-
-
-	public void setRegisterDate(String registerDate) {
-		this.registerDate = registerDate;
-	}
-
-
-	public String getGrade() {
-		return grade;
-	}
-
-
-	public void setGrade(String grade) {
-		this.grade = grade;
-	}
-
-
-	public String getDay() {
-		return day;
-	}
-
-
-	public void setDay(String day) {
-		this.day = day;
-	}
-
-
-	@Override
-	public String toString() {
-		return "CourseDTO [id=" + id + ", name=" + name + ", description=" + description + ", registerDate="
-				+ registerDate + ", grade=" + grade + ", day=" + day + "]";
-	}
-
-
-	public CourseDTO() {}
-
+	
 
 	public CourseDTO(Course course) {
     	this.id = (course.getId()!=null) ? course.getId().toString() : "";
@@ -149,7 +75,6 @@ public class CourseDTO implements Serializable{
     	if(StringUtils.isNotBlank(registerDate)) course.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(grade)) course.setGrade(this.grade);
     	if(StringUtils.isNotBlank(day)) course.setDay(this.day);
-    	
     	return course;
     }
 }

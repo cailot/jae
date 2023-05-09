@@ -13,30 +13,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hyung.jin.seo.jae.dto.ClassDTO;
 import hyung.jin.seo.jae.dto.CourseEtcDTO;
+import hyung.jin.seo.jae.service.ClassService;
 import hyung.jin.seo.jae.service.CourseEtcService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 
 @Controller
-@RequestMapping("courseEtc")
-public class JaeCourseEtcController {
+@RequestMapping("class")
+public class JaeClassController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JaeCourseEtcController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JaeClassController.class);
 
 	@Autowired
-	private CourseEtcService courseEtcService;
+	private ClassService classService;
 
-	// search etc with grade
-	// if grade == 'tt8' then get them all; otherwise get all except VSSE
-	@GetMapping("/list")
+	// search classes by grade & year
+	@GetMapping("/search")
 	@ResponseBody
-	List<CourseEtcDTO> gradeEtc(@RequestParam("grade") String keyword) {
-		List<CourseEtcDTO> dtos = new ArrayList<>();
-		if(StringUtils.equalsIgnoreCase(keyword, JaeConstants.TT8)){
-			dtos = courseEtcService.forTT8();
-		}else { // exclude VSSE, which is general purpose
-			dtos = courseEtcService.exceptTT8();
-		}
+	List<ClassDTO> searchClasses(@RequestParam("grade") String grade, @RequestParam("year") String year) {
+		List<ClassDTO> dtos = classService.findClassesForGradeNCycle(grade, year);
 		return dtos;
 	}
 
@@ -44,7 +40,7 @@ public class JaeCourseEtcController {
 	@GetMapping("/count")
 	@ResponseBody
 	long coutEtc() {
-		long count = courseEtcService.checkCount();
+		long count = classService.checkCount();
 		return count;
 	}
 }

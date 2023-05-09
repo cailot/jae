@@ -3,48 +3,37 @@ $(document).ready(
 	function() {
 		$('#registerGrade').on('change',function() {
 			var grade = $(this).val()
-			//listFees(grade);
+			listFees(grade);
 			listBooks(grade);
-			//listEtcs(grade);
+			listEtcs(grade);
 		});
-		
-		// $('#gradeAssociateElearningTable').on('click', 'a', function() {
-	    // 	var row = $(this).closest('tr');
-	    // 	var name = row.find('td:eq(1)').text();
-	    //   	if (confirm('Are you sure you want to remove ' + name + '?')) {
-	    //     row.remove();
-      	// }
-    	// });
-});
+		// when page loads, search course fees for grade 'p2' as first entry
+		listBooks('p2');
+		listEtcs('p2');
+	}
+);
 	
 //Search Fees based on Grade	
 function listFees(grade) {
 	// clear 'courseFeeTable' table body
 	$('#courseFeeTable tbody').empty();
 	$.ajax({
-		url : '${pageContext.request.contextPath}/courseFee/listGrade',
+		url : '${pageContext.request.contextPath}/class/search',
 		type : 'GET',
 		data : {
 			grade : grade,
+			year : 2022
 		},
 		success : function(data) {
-			/* console.log('search - ' + data + ' , ' + grade);
-			if (data == '') {
-				$('#warning-alert .modal-body').text(
-						'No fee found with ' + $("#formKeyword").val());
-				$('#warning-alert').modal('show');
-				return;
-			} */
 			$.each(data, function(index, value) {
 				//var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")''>");
+				console.log(value);
 				var row = $('<tr>');
 				row.append($('<td>').text(value.name));
 				row.append($('<td>').text(value.subjects));
 				row.append($('<td>').text(value.price));				
 				$('#courseFeeTable > tbody').append(row);
 			});
-			//$('#studentListResult').modal('show');
- 
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
@@ -52,7 +41,9 @@ function listFees(grade) {
 	});
 }
 
-//Search Book based on Grade	
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Search Book based on Grade	
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 function listBooks(grade) {
 	// clear 'courseBookTable' table body
 	$('#courseBookTable tbody').empty();
@@ -77,8 +68,9 @@ function listBooks(grade) {
 		}
 	});
 }
-
-//Search Etc based on Grade	
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Search Etc based on Grade	
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 function listEtcs(grade) {
 	// clear 'courseEtcTable' table body
 	$('#courseEtcTable tbody').empty();
@@ -89,21 +81,11 @@ function listEtcs(grade) {
 			grade : grade,
 		},
 		success : function(data) {
-			/* console.log('search - ' + data + ' , ' + grade);
-			if (data == '') {
-				$('#warning-alert .modal-body').text(
-						'No fee found with ' + $("#formKeyword").val());
-				$('#warning-alert').modal('show');
-				return;
-			} */
 			$.each(data, function(index, value) {
-				//var row = $("<tr onclick='popup(" + value.id + ")''>");
-				//row.append($('<td>').text(value.id));
-				//row.append($('<td>').text(value.grade.toUpperCase()));
-				var row = $('<tr>');
+				const cleaned = cleanUpJson(value);
+				var row = $("<tr onclick='displayInfo(" + cleaned + ")''>");
 				row.append($('<td>').text(value.name));
 				row.append($('<td>').text(value.price));				
-				
 				$('#courseEtcTable > tbody').append(row);
 			});
 		},
