@@ -69,13 +69,18 @@ public class JaeStudentController {
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
+			try {
+				// convert date format to dd/MM/yyyy
+				dto.setRegisterDate(JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate()));
+				dto.setEndDate(JaeUtils.convertToddMMyyyyFormat(dto.getEndDate()));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 			dtos.add(dto);
 		}
 		return dtos;
 	}
 	
-	
-
 	// search student by ID
 	@GetMapping("/get/{id}")
 	@ResponseBody

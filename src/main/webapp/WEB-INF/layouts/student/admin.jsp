@@ -84,6 +84,16 @@
 			//cell3.innerHTML = '<span class="elearningRemoveConfirm" title="Delete eLearning"><i class="fa fa-trash"></i></span>';
 		});
 
+
+		// remove selected elearning in register dialog
+		$('#gradeAssociateElearningTable').on('click', 'a', function() {
+			var row = $(this).closest('tr');
+			var name = row.find('td:eq(1)').text();
+			if(confirm('Are you sure you want to remove ' + name +'?')){
+				row.remove();
+			}
+		});
+
 		// remove selected elearning in register dialog
 		$('#addElearningTable').on('click', 'a', function() {
 			var row = $(this).closest('tr');
@@ -92,6 +102,9 @@
 				row.remove();
 			}
 		});
+
+
+
 	});
 
 
@@ -257,7 +270,9 @@
 			dropdown.remove(0);
 		}
 	}
-	// Search Student with Keyword	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//			Search Student with Keyword	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function searchStudent() {
 		//warn if keyword is empty
 		if ($("#formKeyword").val() == '') {
@@ -265,7 +280,6 @@
 			$('#warning-alert').modal('toggle');
 			return;
 		}
-
 		// send query to controller
 		$('#studentListResultTable tbody').empty();
 		$.ajax({
@@ -288,25 +302,27 @@
 					row.append($('<td>').text(value.id));
 					row.append($('<td>').text(value.firstName));
 					row.append($('<td>').text(value.lastName));
-					row.append($('<td>').text(value.grade));
+					row.append($('<td>').text(value.grade.toUpperCase()));
 					row.append($('<td>').text(value.registerDate));
 					row.append($('<td>').text(value.endDate));
 					row.append($('<td>').text(value.email));
 					row.append($('<td>').text(value.contactNo1));
 					row.append($('<td>').text(value.contactNo2));
 					row.append($('<td>').text(value.address));
-
 					$('#studentListResultTable > tbody').append(row);
 				});
 				$('#studentListResult').modal('show');
-
 			},
 			error : function(xhr, status, error) {
 				console.log('Error : ' + error);
 			}
 		});
-
 	}
+
+
+
+
+
 
 	// Display selected student in student search
 	function displayStudentInfo(value) {
@@ -454,48 +470,6 @@
 		
 	}
 	
-	
-	// Course Info
-	// Get list of courses by grade
-	// function listElearnings(grade) {
-	// 	var body = $('#list-grade-associate-body');
-	// 	//var grade = $("#elearningGrade").val();
-	// 	//console.log(grade);
-	// 	const dropdown = document.getElementById("elearingDropdown");
-	// 	body.empty();
-	// 	// remove all options before fetching new list
-	// 	while (dropdown.options.length > 0) {
-	// 		dropdown.remove(0);
-	// 	}
-	// 	const title = document.createElement("option");
-	// 	title.textContent = "Click to add a subject";
-	// 	dropdown.appendChild(title);
-	// 	$.ajax({
-	// 		url : "${pageContext.request.contextPath}/elearning/list",
-	// 		type : 'GET',
-	// 		data : grade,
-	// 		success : function(data) {
-	// 			$.each(data, function(i, item) {
-	// 				if (item.grade == grade) {
-	// 					var row = $('<tr></tr>');
-	// 					row.append($('<td class="hidden-column"></td>').text(item.id));
-	// 					row.append($('<td class="small"></td>')
-	// 							.text(item.grade.toUpperCase()));
-	// 					row.append($('<td class="small"></td>').text(item.name));
-	// 					row.append($('<td><a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a></td>'));
-	// 					body.append(row);
-	// 				} else {
-	// 					//console.log(item.id);
-	// 					const option = document.createElement("option");
-	// 					option.value = item.id;
-	// 					option.textContent = "[" + item.grade.toUpperCase() + "] " + item.name;
-	// 					dropdown.appendChild(option);
-	// 				}
-	// 			});
-	// 		}
-	// 	});
-	// }
-	
 	// Get list of available courses
 	function availableElearnings() {
 		var body = $('#list-grade-associate-body');
@@ -525,30 +499,71 @@
 </script>
 
 
-
-
 <!-- Deactivate Dialogue -->
 <div class="modal fade" id="deactivateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel">Student Suspend</h4>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header btn-danger">
+               <h4 class="modal-title text-white" id="myModalLabel"><i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;Student Suspend</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			</div>
-			<div class="modal-body">
-				Do you want to suspend this student ?	
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-danger" onclick="inactivateStudent()">Deactivate</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+            </div>
+            <div class="modal-body">
+                <p><i class="fa fa-question-circle"></i> Do you want to suspend this student?</p>	
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger" onclick="inactivateStudent()"><i class="fa fa-times"></i> Deactivate</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-check"></i> Close</button>
+            </div>
+    	</div>
 	</div>
-	<!-- /.modal-content -->
 </div>
-<!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
 
+
+<!-- Search Result Dialog -->
+<div class="modal fade" id="studentListResult">
+	<div class="modal-dialog modal-xl modal-dialog-centered">
+	  <div class="modal-content">
+		<div class="modal-header bg-primary text-white">
+		  <h5 class="modal-title">&nbsp;<i class="fas fa-list"></i>&nbsp;&nbsp; Student List</h5>
+		  <button type="button" class="close" data-dismiss="modal">
+			<span>&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body table-wrap">
+		  <table class="table table-striped table-bordered" id="studentListResultTable" data-header-style="headerStyle" style="font-size: smaller;">
+			<thead class="thead-light">
+			  <tr>
+				<th data-field="id">ID</th>
+				<th data-field="firstname">First Name</th>
+				<th data-field="lastname">Last Name</th>
+				<th data-field="grade">Grade</th>
+				<th data-field="startdate">Start Date</th>
+				<th data-field="enddate">End Date</th>
+				<th data-field="email">Email</th>
+				<th data-field="contact1">Contact No 1</th>
+				<th data-field="contact2">Contact No 2</th>
+				<th data-field="address">Address</th>
+			  </tr>
+			</thead>
+			<tbody>
+			</tbody>
+		  </table>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+  
+  <style>
+	.table-wrap {
+	  overflow-x: auto;
+	}
+	#studentListResultTable th, #studentListResultTable td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  </style>
+  
+  
 
 <!-- Register Form Dialogue -->
 <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -566,14 +581,7 @@
 								<label for="selectOption">State</label> <select
 									class="form-control" id="addState" name="addState">
 									<option value="vic">Victoria</option>
-									<!-- <option value="nsw">New South Wales</option>
-									<option value="qld">Queensland</option>
-									<option value="sa">South Australia</option>
-									<option value="tas">Tasmania</option>
-									<option value="wa">Western Australia</option>
-									<option value="nt">Northern Territory</option>
-									<option value="act">ACT</option> -->
-								</select>
+									</select>
 							</div>
 							<div class="col-md-5">
 								<label for="selectOption">Branch</label> <select
@@ -688,7 +696,6 @@
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-12">
-								<!-- <label>Select to add subject</label>  -->
 								<select class="form-control" id="addElearingDropdown" name="addElearingDropdown">
 									<option value="p2">Click to add a subject</option>
 								</select>
@@ -720,13 +727,8 @@
 				<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="clearElearningOnRegister()">Close</button>
 			</div>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
-
-
 
 
 

@@ -40,7 +40,7 @@ public class BookDTO implements Serializable{
     	this.name = (cb.getName()!=null) ? cb.getName() : "";
     	this.price = (cb.getPrice()!=0.0) ? Double.toString(cb.getPrice()): "0.0";
     }
-    
+
     public void addSubject(String subject){
         subjects.add(subject);
     }
