@@ -2,6 +2,7 @@ package hyung.jin.seo.jae.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,14 +17,14 @@ import hyung.jin.seo.jae.service.BookService;
 public class BookServiceImpl implements BookService {
 	
 	@Autowired
-	private BookRepository courseBookRepository;
+	private BookRepository bookRepository;
 	
 	@Autowired
 	private SubjectRepository subjectRepository;
 
 	@Override
 	public List<BookDTO> allBooks() {
-		List<Book> books = courseBookRepository.findAll();
+		List<Book> books = bookRepository.findAll();
 		List<BookDTO> dtos = new ArrayList<>();
 		for(Book book: books){
 			BookDTO dto = new BookDTO(book);
@@ -32,22 +33,21 @@ public class BookServiceImpl implements BookService {
 		return dtos;
 	}
 
-	// @Override
-	// public List<Book> availbeBooks(String year) {
-	// 	List<Book> books = courseBookRepository.findByYear(year);
-	// 	return books;	
-	// }
-
-	// @Override
-	// public List<Book> availableGradeBooks(String grade, String year) {
-	// 	List<Book> books = courseBookRepository.findByGradeAndYear(grade, year);
-	// 	return books;	
-	// }
+	@Override
+	public BookDTO getBook(Long id){
+		Optional<Book> book = bookRepository.findById(id);
+		if(book.isPresent()){
+			BookDTO dto = new BookDTO(book.get());
+			return dto;
+		}else{ // return empty DTO to avoid Runtime error
+			return new BookDTO();
+		}
+	}
 
 	@Override
 	public List<BookDTO> booksByGrade(String grade) {
 		// 1. get books
-		List<Book> books = courseBookRepository.findByGrade(grade);
+		List<Book> books = bookRepository.findByGrade(grade);
 		// 2. get subjects
 		List<String> subjects = subjectRepository.findSubjectNamesForGrade(grade);
 		// 3. assign subjects to books
@@ -65,7 +65,7 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public long checkCount() {
-		long count = courseBookRepository.count();
+		long count = bookRepository.count();
 		return count;
 	}
 	

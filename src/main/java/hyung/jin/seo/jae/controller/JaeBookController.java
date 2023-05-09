@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,10 +16,10 @@ import hyung.jin.seo.jae.dto.BookDTO;
 import hyung.jin.seo.jae.service.BookService;
 
 @Controller
-@RequestMapping("courseBook")
+@RequestMapping("book")
 public class JaeBookController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JaeBookController.class);
+	//private static final Logger LOG = LoggerFactory.getLogger(JaeBookController.class);
 
 	@Autowired
 	private BookService bookService;
@@ -40,6 +41,13 @@ public class JaeBookController {
 		return dtos;
 	}
 
+	// get book by Id
+	@GetMapping("/get/{id}")
+	@ResponseBody
+	BookDTO getBook(@PathVariable("id") Long id) {
+		BookDTO dto = bookService.getBook(id);	
+		return dto;
+	}
 
 	// count records number in database
 	@GetMapping("/count")

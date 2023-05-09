@@ -22,7 +22,7 @@ function listFees(grade) {
 	// clear 'courseFeeTable' table body
 	$('#courseFeeTable tbody').empty();
 	$.ajax({
-		url : 'courseFee/listGrade',
+		url : '${pageContext.request.contextPath}/courseFee/listGrade',
 		type : 'GET',
 		data : {
 			grade : grade,
@@ -37,8 +37,6 @@ function listFees(grade) {
 			} */
 			$.each(data, function(index, value) {
 				//var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")''>");
-				//row.append($('<td>').text(value.id));
-				//row.append($('<td>').text(value.grade.toUpperCase()));
 				var row = $('<tr>');
 				row.append($('<td>').text(value.name));
 				row.append($('<td>').text(value.subjects));
@@ -59,15 +57,15 @@ function listBooks(grade) {
 	// clear 'courseBookTable' table body
 	$('#courseBookTable tbody').empty();
 	$.ajax({
-		url : 'courseBook/listGrade',
+		url : '${pageContext.request.contextPath}/book/listGrade',
 		type : 'GET',
 		data : {
 			grade : grade,
 		},
 		success : function(data) {
 			$.each(data, function(index, value) {
-				//var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")''>");
-				var row = $('<tr>');
+				const cleaned = cleanUpJson(value);
+				var row = $("<tr onclick='displayInfo(" + cleaned + ")''>");
 				row.append($('<td>').text(value.name));
 				row.append($('<td>').text(value.subjects));
 				row.append($('<td>').text(value.price));
@@ -85,7 +83,7 @@ function listEtcs(grade) {
 	// clear 'courseEtcTable' table body
 	$('#courseEtcTable tbody').empty();
 	$.ajax({
-		url : 'courseEtc/list',
+		url : '${pageContext.request.contextPath}/courseEtc/list',
 		type : 'GET',
 		data : {
 			grade : grade,
@@ -114,6 +112,24 @@ function listEtcs(grade) {
 		}
 	});
 }
+
+// clean up any single quote escape charater in Json
+function cleanUpJson(obj){
+	const jsonString = JSON.stringify(obj, (key, value) => {
+  		// If the value is a string, remove escape characters from it
+  		if (typeof value === 'string') {
+    		return value.replace(/\\/g, '');
+  		}
+  			return value;
+	});
+	return jsonString;
+}
+
+function displayInfo(id){
+	console.log(id);
+}
+
+
 </script>
 
 <h5>Course Registration</h5>

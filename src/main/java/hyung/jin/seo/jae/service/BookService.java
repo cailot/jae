@@ -11,6 +11,9 @@ public interface BookService {
 	// list available books based on grade
 	List<BookDTO> booksByGrade(String grade);
 
+	// get Book by Id
+	BookDTO getBook(Long id);
+
 	// return total count
 	long checkCount();
 }
