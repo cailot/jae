@@ -35,13 +35,10 @@ public class Elearning {
     @Column(length = 200, nullable = false)
     private String name;
     
-    @Column(length = 10, nullable = true)
-    private String year;
-    
     @CreationTimestamp
     private LocalDate registerDate;
     
-    @CreatedDate
-    private LocalDate endDate;
+    // @CreatedDate
+    // private LocalDate endDate;
     
 }

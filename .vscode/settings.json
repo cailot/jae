@@ -14,5 +14,6 @@
             "username": "javacoffee",
             "password": "J@va1973M"
         }
-    ]
+    ],
+    "liveServer.settings.port": 5501
 }

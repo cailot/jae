@@ -35,31 +35,14 @@ public class JaeElearningController {
 	@PostMapping("/register")
 	@ResponseBody
 	public ElearningDTO registerStudent(@RequestBody ElearningDTO formData) {
-		Elearning crs = formData.convertToCourse();
+		Elearning crs = formData.convertToElearning();
 		crs = elearningService.addElearning(crs);
 		ElearningDTO dto = new ElearningDTO(crs);
 		return dto;
 	}
 
-	// search course with grade
-	@GetMapping("/gradeCourse")
-	@ResponseBody
-	List<ElearningDTO> listCourses(@RequestParam("grade") String keyword) {
-		List<Elearning> crss = elearningService.gradeElearnings(keyword);
-		List<ElearningDTO> dtos = new ArrayList<ElearningDTO>();
-		for (Elearning crs : crss) {
-			ElearningDTO dto = new ElearningDTO(crs);
-			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
-			{
-				String newName = dto.getName().replaceAll("\'", "&#39;");
-				dto.setName(newName);
-			}
-			dtos.add(dto);
-		}
-		return dtos;
-	}
 
-	// search course with grade
+	// search elearning with grade
 	@GetMapping("/grade")
 	@ResponseBody
 	List<ElearningDTO> gradeCourses(@RequestParam("grade") String keyword) {
@@ -67,30 +50,6 @@ public class JaeElearningController {
 		List<ElearningDTO> dtos = new ArrayList<ElearningDTO>();
 		for (Elearning crs : crss) {
 			ElearningDTO dto = new ElearningDTO(crs);
-			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
-			{
-				String newName = dto.getName().replaceAll("\'", "&#39;");
-				dto.setName(newName);
-			}
-			dtos.add(dto);
-		}
-		return dtos;
-	}
-
-	
-	// search course with grade
-	@GetMapping("/no_grade")
-	@ResponseBody
-	List<ElearningDTO> noGradeCourses(@RequestParam("grade") String keyword) {
-		List<Elearning> crss = elearningService.notGradeElearnings(keyword);
-		List<ElearningDTO> dtos = new ArrayList<ElearningDTO>();
-		for (Elearning crs : crss) {
-			ElearningDTO dto = new ElearningDTO(crs);
-			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
-			{
-				String newName = dto.getName().replaceAll("\'", "&#39;");
-				dto.setName(newName);
-			}
 			dtos.add(dto);
 		}
 		return dtos;
@@ -101,17 +60,10 @@ public class JaeElearningController {
 	@PutMapping("/update")
 	@ResponseBody
 	public ElearningDTO updateStudent(@RequestBody ElearningDTO formData) {
-		Elearning crs = formData.convertToCourse();
+		Elearning crs = formData.convertToElearning();
 		crs = elearningService.updateElearning(crs, crs.getId());
 		ElearningDTO dto = new ElearningDTO(crs);
 		return dto;
-	}
-
-	// de-activate course by Id
-	@PutMapping("/inactivate/{id}")
-	@ResponseBody
-	public void inactivateCourse(@PathVariable Long id) {
-		elearningService.dischargeElearning(id);
 	}
 	
 	
@@ -119,33 +71,10 @@ public class JaeElearningController {
 	@GetMapping("/list")
 	@ResponseBody
 	List<ElearningDTO> allCourses() {
-		List<Elearning> crss = elearningService.availableElearnings();
+		List<Elearning> crss = elearningService.allElearnings();
 		List<ElearningDTO> dtos = new ArrayList<ElearningDTO>();
 		for(Elearning crs : crss) {
-			ElearningDTO dto = new ElearningDTO(crs);
-			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
-			{
-				String newName = dto.getName().replaceAll("\'", "&#39;");
-				dto.setName(newName);
-			}
-			dtos.add(dto);
-		}
-        return dtos;
-	}
-	
-	// list available courses
-	@GetMapping("/available")
-	@ResponseBody
-	List<ElearningDTO> availableCourses() {
-		List<Elearning> crss = elearningService.availableElearnings();
-		List<ElearningDTO> dtos = new ArrayList<ElearningDTO>();
-		for(Elearning crs : crss) {
-			ElearningDTO dto = new ElearningDTO(crs);
-			if (StringUtils.isNotBlank(dto.getName())) // replace escape character single quote
-			{
-				String newName = dto.getName().replaceAll("\'", "&#39;");
-				dto.setName(newName);
-			}
+			ElearningDTO dto = new ElearningDTO(crs);	
 			dtos.add(dto);
 		}
         return dtos;

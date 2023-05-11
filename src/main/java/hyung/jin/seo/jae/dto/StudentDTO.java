@@ -96,7 +96,7 @@ public class StudentDTO implements Serializable{
     	if((elearnings!=null) && (elearnings.size() > 0)) {
     		
     		for(ElearningDTO dto : elearnings) {
-    			std.getElearnings().add(dto.convertToCourse());
+    			std.getElearnings().add(dto.convertToElearning());
     		}
     	}
     	return std;

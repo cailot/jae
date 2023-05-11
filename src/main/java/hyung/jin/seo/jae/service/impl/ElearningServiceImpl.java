@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import hyung.jin.seo.jae.model.Elearning;
 import hyung.jin.seo.jae.repository.ElearningRepository;
 import hyung.jin.seo.jae.service.ElearningService;
-import hyung.jin.seo.jae.specification.ElearningSpecification;
 
 @Service
 public class ElearningServiceImpl implements ElearningService {
@@ -22,7 +21,7 @@ public class ElearningServiceImpl implements ElearningService {
 
 	@Override
 	public long checkCount() {
-		long count = elearningRepository.countByEndDateIsNull();
+		long count = elearningRepository.count();
 		return count;
 	}
 
@@ -33,15 +32,10 @@ public class ElearningServiceImpl implements ElearningService {
 	}
 	
 	@Override
-	public List<Elearning> availableElearnings() {
-		List<Elearning> courses = elearningRepository.findAllByEndDateIsNull();
-		return courses;
-	}
-
-	@Override
 	public Elearning getElearning(Long id) {
-		Elearning crs = elearningRepository.findByIdAndEndDateIsNull(id);
-		return crs;
+		Optional<Elearning> crs = elearningRepository.findById(id);
+		if(!crs.isPresent()) return null;
+		return crs.get();
 	}
 
 	@Override
@@ -74,20 +68,6 @@ public class ElearningServiceImpl implements ElearningService {
 
 	
 	@Override
-	public void dischargeElearning(Long id) {
-		try {
-			Optional<Elearning> end = elearningRepository.findById(id);
-			if(!end.isPresent()) return;
-			Elearning elearn = end.get();
-			elearn.setEndDate(LocalDate.now());
-			elearningRepository.save(elearn);	
-		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
-			System.out.println("Nothing to discharge");
-		}
-	}
-
-	
-	@Override
 	public void deleteElearning(Long id) {
 		try{
 		    elearningRepository.deleteById(id);
@@ -98,21 +78,7 @@ public class ElearningServiceImpl implements ElearningService {
 
 	@Override
 	public List<Elearning> gradeElearnings(String grade) {
-		List<Elearning> courses = null;
-		Specification<Elearning> spec = Specification.where(null);
-		spec = spec.and(ElearningSpecification.gradeEquals(grade));
-		spec = spec.and(ElearningSpecification.hasNullVaule("endDate")); // among current Elearning
-		courses = elearningRepository.findAll(spec);
-		return courses;
-	}
-
-	@Override
-	public List<Elearning> notGradeElearnings(String grade) {
-		List<Elearning> courses = null;
-		Specification<Elearning> spec = Specification.where(null);
-		spec = spec.and(ElearningSpecification.gradeNotEquals(grade));
-		spec = spec.and(ElearningSpecification.hasNullVaule("endDate")); // among current Elearning
-		courses = elearningRepository.findAll(spec);
+		List<Elearning> courses = elearningRepository.findAllByGrade(grade);
 		return courses;
 	}
 

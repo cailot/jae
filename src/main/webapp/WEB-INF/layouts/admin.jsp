@@ -80,14 +80,14 @@
     <div class="col-lg-4">
       <div class="card-body">
       	<h5>Student Information</h5>
-				<jsp:include page="student/admin.jsp"></jsp:include>
+				<jsp:include page="student/studentInfo.jsp"></jsp:include>
 			</div>
       </div>
 	<div class="col-lg-8 bg-warning">
       	<div class="row">
 			<div class="col-lg-8 bg-warning">
 			<div class="card-body">
-				<jsp:include page="course/register.jsp"></jsp:include>
+				<jsp:include page="course/courseInfo.jsp"></jsp:include>
 			 </div>
 			</div>
 			<div class="col-lg-4 bg-success">

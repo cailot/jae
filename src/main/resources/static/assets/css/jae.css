@@ -60,11 +60,15 @@
 }
 
 .label-form {
-	font-size: 10; 
+	font-size: 13px; 
 	margin-bottom: 0.1rem;
 	color : #0000FF;
 }
 
+.admin-form-row {
+	margin-bottom: 0.5rem;
+}
+  
 
 
 .hidden-column{
@@ -86,3 +90,5 @@ td a i.fa-trash {
 	align-items: center;
 	height: 100%;
 }
+
+.

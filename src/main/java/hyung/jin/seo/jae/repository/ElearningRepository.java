@@ -1,18 +1,18 @@
 package hyung.jin.seo.jae.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import hyung.jin.seo.jae.model.Elearning;
 
-public interface ElearningRepository extends JpaRepository<Elearning, Long>, JpaSpecificationExecutor<Elearning>{  
+public interface ElearningRepository extends JpaRepository<Elearning, Long>{  
 	
-	List<Elearning> findAllByEndDateIsNull();
+	List<Elearning> findAll();
 	
-	List<Elearning> findAllByEndDateIsNotNull();
+	List<Elearning> findAllByGrade(String grade);
 	
-	Elearning findByIdAndEndDateIsNull(Long id);
+	Optional<Elearning> findById(Long id);
 	
-	long countByEndDateIsNull();
+	long count();
 }
