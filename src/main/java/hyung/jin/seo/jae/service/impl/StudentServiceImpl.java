@@ -61,21 +61,9 @@ public class StudentServiceImpl implements StudentService {
 			spec = spec.and(StudentSpecification.gradeEquals(grade));
 		}
 		if(StringUtils.isNotBlank(year)&&(!StringUtils.equals(year, JaeConstants.ALL))) {
-			LocalDate lastDate = JaeUtils.lastAcademicDate(year);
-			spec = spec.and(StudentSpecification.startDateLessThanOrEqualTo(lastDate) );
+			// LocalDate lastDate = JaeUtils.lastAcademicDate(year);
+			// spec = spec.and(StudentSpecification.startDateLessThanOrEqualTo(lastDate) );
 		}
-//		if(StringUtils.isNotBlank(start) && JaeUtils.isValidDateFormat(start)) {
-//			
-//			Date date = null;
-//			try {
-//				date = JaeUtils.dateFormat.parse(start);
-//				LocalDate startDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//				spec = spec.and(StudentSpecification.startDateAfter(startDate));
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
 
 		switch ((active==null) ? JaeConstants.ALL : active) {
 

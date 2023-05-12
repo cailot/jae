@@ -1,9 +1,7 @@
 package hyung.jin.seo.jae.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hyung.jin.seo.jae.dto.ClassDTO;
-import hyung.jin.seo.jae.dto.CourseEtcDTO;
 import hyung.jin.seo.jae.service.ClassService;
-import hyung.jin.seo.jae.service.CourseEtcService;
-import hyung.jin.seo.jae.utils.JaeConstants;
 
 @Controller
 @RequestMapping("class")

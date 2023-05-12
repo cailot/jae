@@ -1,8 +1,9 @@
 package hyung.jin.seo.jae.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,8 +31,12 @@ public class ClassDTO implements Serializable{
 
 	private String year; // Cycle.year
 
-	//ClassDTO(c.id, c.fee, c.description, c.course.id, c.cycle.id, c.course.grade, c.course.day, c.cycle.year) 
-	//long, double, java.lang.String, long, long, java.lang.String, java.lang.String, int
+	private List<String> subjects = new ArrayList<>();
+
+	public void addSubject(String subject){
+		subjects.add(subject);
+	}
+
 	public ClassDTO(long id, double fee, String description, long courseId, long cycleId, String grade, String day, int year) {
 		this.id = Long.toString(id);
 		this.fee = Double.toString(fee);

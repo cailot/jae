@@ -83,14 +83,7 @@ public interface JaeConstants {
 	
 	String TEACHER_LIST = "TeacherList";
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	String VSSE = "VSSE";
+
+	String ACADEMIC_CYCLES = "academicCycles";
 }

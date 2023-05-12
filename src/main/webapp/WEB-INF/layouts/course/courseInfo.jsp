@@ -10,28 +10,11 @@ $(document).ready(
 		});
 		// when page loads, search course fees for grade 'p2' as first entry
 		listElearns('p2');
-		//listBooks('p2');
-		//listEtcs('p2');
+		listFees('p2');
+		listBooks('p2');
+		listEtcs('p2');
 	}
 );
-
-
-
-
-// 	var cell0 = row.insertCell(0);
-			// 	cell0.innerHTML = $(this).find('option:selected').val();
-			// 	$(cell0).addClass('hidden-column');
-			// 	var val = selectedOptionText.split("] ");
-			// 	var cell1 = row.insertCell(1);
-			// 	cell1.innerHTML = val[0].substring(1);
-			// 	$(cell1).addClass('small');
-			// 	var cell2 = row.insertCell(2);
-			// 	cell2.innerHTML = val[1];
-			// 	$(cell2).addClass('small');
-			// 	var cell3 = row.insertCell(3);
-			// 	cell3.innerHTML = '<a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a>';
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Search e-Learning based on Grade	
@@ -48,7 +31,7 @@ function listElearns(grade) {
 		success : function(data) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				console.log(cleaned);
+				// console.log(cleaned);
 				var row = $("<tr onclick='displayInfo(" + cleaned + ")''>");
 				row.append($('<td>').addClass('hidden-column').text(value.id));
 				row.append($('<td>').text(value.grade.toUpperCase()));
@@ -62,8 +45,9 @@ function listElearns(grade) {
 		}
 	});
 }
-
-//Search Fees based on Grade	
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Search Fees based on Grade	
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 function listFees(grade) {
 	// clear 'courseFeeTable' table body
 	$('#courseFeeTable tbody').empty();
@@ -76,12 +60,14 @@ function listFees(grade) {
 		},
 		success : function(data) {
 			$.each(data, function(index, value) {
-				//var row = $("<tr onclick='displayStudentInfo(" + JSON.stringify(value) + ")''>");
-				console.log(value);
+				const cleaned = cleanUpJson(value);
+				console.log(cleaned);
+				var row = $("<tr onclick='displayInfo(" + cleaned + ")''>");
 				var row = $('<tr>');
-				row.append($('<td>').text(value.name));
+				row.append($('<td>').addClass('hidden-column').text(value.id));
+				row.append($('<td>').text(value.description));
 				row.append($('<td>').text(value.subjects));
-				row.append($('<td>').text(value.price));				
+				row.append($('<td>').text(value.fee));				
 				$('#courseFeeTable > tbody').append(row);
 			});
 		},
@@ -144,18 +130,6 @@ function listEtcs(grade) {
 		}
 	});
 }
-
-// // clean up any single quote escape charater in Json
-// function cleanUpJson(obj){
-// 	const jsonString = JSON.stringify(obj, (key, value) => {
-//   		// If the value is a string, remove escape characters from it
-//   		if (typeof value === 'string') {
-//     		return value.replace(/\\/g, '');
-//   		}
-//   			return value;
-// 	});
-// 	return jsonString;
-// }
 
 function displayInfo(id){
 	console.log(id);
@@ -236,6 +210,7 @@ function displayInfo(id){
                               <table class="table" id="courseFeeTable" name="courseFeeTable">
                                   <thead>
                                       <tr>
+										  <th class="hidden-column"></th>
                                           <th>Description</th>
                                           <th>Subjects</th>
                                           <th>Price</th>

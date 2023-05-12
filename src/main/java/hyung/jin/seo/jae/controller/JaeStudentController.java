@@ -162,7 +162,7 @@ public class JaeStudentController {
 			try {
 				// convert date format to dd/MM/yyyy
 				String startDate = JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate());
-				int startWeek = JaeUtils.academicWeeks(startDate);
+				int startWeek = 10;//JaeUtils.academicWeeks(startDate);
 				dto.setRegisterDate(startDate+"|"+startWeek);
 				dto.setEnrolmentDate(JaeUtils.convertToddMMyyyyFormat(dto.getEnrolmentDate()));
 				dto.setEndDate(JaeUtils.convertToddMMyyyyFormat(dto.getEndDate()));
