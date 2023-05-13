@@ -166,11 +166,6 @@ public class StudentServiceImpl implements StudentService {
 		if (StringUtils.isNotBlank(newMemo)) {
 			existing.setMemo(newMemo);
 		}
-		if (newStudent.getEnrolmentDate() != null) {
-			LocalDate newEnrolDate = newStudent.getEnrolmentDate();
-			existing.setEnrolmentDate(newEnrolDate);
-		}
-		
 		// update course
 		if((newStudent.getElearnings()!=null) && (newStudent.getElearnings().size() > 0)) {
 			existing.setElearnings(newStudent.getElearnings());

@@ -9,7 +9,7 @@ public interface ClassService {
 	List<ClassDTO> allClasses();
 
 	// list all class for grade & year
-	List<ClassDTO> findClassesForGradeNCycle(String grade, String year);
+	List<ClassDTO> findClassesForGradeNCycle(String grade, int year);
 	
 	// return total count
 	long checkCount();

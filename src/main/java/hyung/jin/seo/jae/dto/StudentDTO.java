@@ -2,12 +2,6 @@ package hyung.jin.seo.jae.dto;
 
 import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import hyung.jin.seo.jae.model.Elearning;
 import hyung.jin.seo.jae.model.Student;
 import lombok.AllArgsConstructor;
@@ -16,28 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -71,7 +46,7 @@ public class StudentDTO implements Serializable{
     
     private String registerDate;
     
-    private String enrolmentDate;
+    // private String enrolmentDate;
     
     private String endDate;
     
@@ -91,7 +66,7 @@ public class StudentDTO implements Serializable{
     	if(StringUtils.isNotBlank(branch)) std.setBranch(this.branch);
     	if(StringUtils.isNotBlank(memo)) std.setMemo(this.memo);
     	if(StringUtils.isNotBlank(registerDate)) std.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	// if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(endDate)) std.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if((elearnings!=null) && (elearnings.size() > 0)) {
     		
@@ -116,7 +91,7 @@ public class StudentDTO implements Serializable{
     	if(StringUtils.isNotBlank(branch)) std.setBranch(this.branch);
     	if(StringUtils.isNotBlank(memo)) std.setMemo(this.memo);
     	if(StringUtils.isNotBlank(registerDate)) std.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	// if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(endDate)) std.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	// if((elearnings!=null) && (elearnings.size() > 0)) {
     		
@@ -141,7 +116,7 @@ public class StudentDTO implements Serializable{
         this.branch = (std.getBranch()!=null) ? std.getBranch() : "";
         this.memo = (std.getMemo()!=null) ? std.getMemo() : "";
         this.registerDate = (std.getRegisterDate()!=null) ? std.getRegisterDate().toString() : "";
-        this.enrolmentDate = (std.getEnrolmentDate()!=null) ? std.getEnrolmentDate().toString() : "";
+        // this.enrolmentDate = (std.getEnrolmentDate()!=null) ? std.getEnrolmentDate().toString() : "";
         this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
         if((std.getElearnings()!=null) && (std.getElearnings().size()>0)){
         	for(Elearning crs : std.getElearnings()) {

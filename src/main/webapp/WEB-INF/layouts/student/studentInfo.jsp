@@ -16,7 +16,7 @@
 			state : $("#addState").val(),
 			branch : $("#addBranch").val(),
 			grade : $("#addGrade").val(),
-			enrolmentDate : $("#addEnrolment").val(),
+			registerDate : $("#addRegisterDate").val(),
 		}
 		
 		// Send AJAX to server
@@ -42,8 +42,8 @@
 				$("#formState").val(student.state);
 				$("#formBranch").val(student.branch);
 				// Set date value
-				var date = new Date(student.enrolmentDate); // Replace with your date value
-				$("#formEnrolment").datepicker('setDate', date);
+				var date = new Date(student.registerDate); // Replace with your date value
+				$("#formRegisterDate").datepicker('setDate', date);
 			},
 			error : function(xhr, status, error) {
 				console.log('Error : ' + error);
@@ -193,8 +193,8 @@
 		$("#formEndDate").val(value['endDate']);
 		
 		// Set date value
-		var date = new Date(value['enrolmentDate']); // Replace with your date value
-		$("#formEnrolment").datepicker('setDate', date);
+		var date = new Date(value['registerDate']); // Replace with your date value
+		$("#formRegisterDate").datepicker('setDate', date);
 		
 		// dispose modal
 		$('#studentListResult').modal('hide');
@@ -231,7 +231,7 @@
 			state : $("#formState").val(),
 			branch : $("#formBranch").val(),
 			grade : $("#elearningGrade").val(),
-			enrolmentDate : $("#formEnrolment").val(),
+			registerDate : $("#formRegisterDate").val(),
 		}
 			
 		// send query to controller
@@ -335,7 +335,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel">Student Enrolment</h4>
+				<h4 class="modal-title" id="myModalLabel">Student Registration</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
 			<div class="modal-body">
@@ -377,7 +377,7 @@
 							</div>
 							<div class="col-md-3">
 								<label for="datepicker">Registration Date</label> 
-								<input type="text" class="form-control datepicker" id="addEnrolment" name="addEnrolment" placeholder="dd/mm/yyyy">
+								<input type="text" class="form-control datepicker" id="addRegisterDate" name="addRegisterDate" placeholder="dd/mm/yyyy">
 							</div>
 							<script>
 								var today = new Date();
@@ -385,7 +385,7 @@
 								var month = today.getMonth() + 1; // Note: January is 0
 								var year = today.getFullYear();
 								var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
-								document.getElementById('addEnrolment').value = formattedDate;
+								document.getElementById('addRegisterDate').value = formattedDate;
 							</script>
 						</div>
 					</div>
@@ -454,43 +454,10 @@
 						<div class="form-row">
 							<div class="col-md-12">
 								<label for="message">Memo</label>
-								<textarea class="form-control" id="addMemo" name="addMemo"></textarea>
+								<textarea class="form-control" style="height: 150px;" id="addMemo" name="addMemo"></textarea>
 							</div>
 						</div>
 					</div>
-					
-					
-					<!-- <div class="form-group">
-						<div class="form-row">
-							<div class="col-md-12">
-								<select class="form-control" id="addElearingDropdown" name="addElearingDropdown">
-									<option value="p2">Click to add a subject</option>
-								</select>
-							</div>	
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-12">
-								<table id="addElearningTable" style="width: 100%;" class="table-bordered table-sm">
-									<thead class="table-primary">
-										<tr class="small" style="height: 35px;">
-											<th class="hidden-column"></th>
-											<th>Grade</th>
-											<th>eLearning Subject</th>
-											<th>Delete</th>
-										</tr>
-									</thead>
-									<tbody id="add-elearning-body">
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div> -->
-
-
-
-
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -595,7 +562,7 @@
 						</select>
 					</div>
 					<div class="col-md-4">
-						<label for="datepicker" class="label-form">Registration Date</label> <input type="text" class="form-control datepicker" id="formEnrolment" name="formEnrolment" placeholder=" Select a date" required>
+						<label for="datepicker" class="label-form">Registration Date</label> <input type="text" class="form-control datepicker" id="formRegisterDate" name="formRegisterDate" placeholder=" Select a date" required>
 					</div>
 
 				</div>

@@ -307,10 +307,9 @@ function updateStudentInfo(){
 					<div class="col-md-2">
 						<select class="form-control" id="listYear" name="listYear">
 							<option value="All">All</option>
-							<c:set var="academicYear" scope="session" value='<%= JaeUtils.academicYear() %>' />
-							<option value="${academicYear}">${academicYear}</option>
-							<option value="${academicYear-1}">${academicYear-1}</option>
-							<option value="${academicYear-2}">${academicYear-2}</option>
+							<option value="2022">2022</option>
+							<option value="2021">2021</option>
+							<option value="2020">2020</option>
 						</select>
 					</div>
 					<div class="col-md-2">

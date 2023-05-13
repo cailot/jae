@@ -71,8 +71,8 @@ public class Student {
     private LocalDate registerDate;
     
     //@UpdateTimestamp
-    @DateTimeFormat
-    private LocalDate enrolmentDate;
+    // @DateTimeFormat
+    // private LocalDate enrolmentDate;
     
     @CreatedDate
     private LocalDate endDate;

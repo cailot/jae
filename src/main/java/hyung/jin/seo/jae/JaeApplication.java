@@ -46,14 +46,14 @@ public class JaeApplication extends SpringBootServletInitializer implements Comm
 		// System.out.println("After ****** " + year);
 		//  year = JaeUtils.checkIfTodayBelongTo("12/05/2022", "2022-06-11", "2023-06-12");
 		// System.out.println("After ****** " + year);
-		int year = cycleService.academicYear();
-		System.out.println("********************** " + year);
-		year = cycleService.academicYear("19/08/2024");
-		System.out.println("********************** " + year);
-		int week = cycleService.academicWeeks();
-		System.out.println("********************** " + week);
-		week = cycleService.academicWeeks("19/07/2023");
-		System.out.println("********************** " + week);
+		// int year = cycleService.academicYear();
+		// System.out.println("********************** " + year);
+		// year = cycleService.academicYear("19/08/2024");
+		// System.out.println("********************** " + year);
+		// int week = cycleService.academicWeeks();
+		// System.out.println("********************** " + week);
+		// week = cycleService.academicWeeks("19/07/2023");
+		// System.out.println("********************** " + week);
 		
 		
 		

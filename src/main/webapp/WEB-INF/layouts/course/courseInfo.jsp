@@ -4,13 +4,13 @@ $(document).ready(
 		$('#registerGrade').on('change',function() {
 			var grade = $(this).val()
 			listElearns(grade);
-			listFees(grade);
+			listClasses(grade);
 			listBooks(grade);
 			listEtcs(grade);
 		});
 		// when page loads, search course fees for grade 'p2' as first entry
 		listElearns('p2');
-		listFees('p2');
+		listClasses('p2');
 		listBooks('p2');
 		listEtcs('p2');
 	}
@@ -48,7 +48,7 @@ function listElearns(grade) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Search Fees based on Grade	
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function listFees(grade) {
+function listClasses(grade) {
 	// clear 'courseFeeTable' table body
 	$('#courseFeeTable tbody').empty();
 	$.ajax({
@@ -56,7 +56,6 @@ function listFees(grade) {
 		type : 'GET',
 		data : {
 			grade : grade,
-			year : 2022
 		},
 		success : function(data) {
 			$.each(data, function(index, value) {
@@ -182,7 +181,7 @@ function displayInfo(id){
 					<nav>
                           <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                             	<a class="nav-item nav-link active" id="nav-elearn-tab" data-toggle="tab" href="#nav-elearn" role="tab" aria-controls="nav-elearn" aria-selected="true">e-Learning</a>
-                            	<a class="nav-item nav-link" id="nav-fee-tab" data-toggle="tab" href="#nav-fee" role="tab" aria-controls="nav-fee" aria-selected="true">Fees</a>
+                            	<a class="nav-item nav-link" id="nav-fee-tab" data-toggle="tab" href="#nav-fee" role="tab" aria-controls="nav-fee" aria-selected="true">Class</a>
                               	<a class="nav-item nav-link" id="nav-book-tab" data-toggle="tab" href="#nav-book" role="tab" aria-controls="nav-book" aria-selected="false">Books</a>
                               	<a class="nav-item nav-link" id="nav-etc-tab" data-toggle="tab" href="#nav-etc" role="tab" aria-controls="nav-etc" aria-selected="false">Etc</a>
                           </div>

@@ -8,9 +8,6 @@ public interface JaeConstants {
 	
 	String STOPPED = "Stopped";
 	
-	int ACADEMIC_START_COMMING_WEEKS = 29;
-	
-	String ACADEMIC_NEXT_YEAR_COURSE_SUFFIX = " (From New Academic Year)";
 	
 	///////////////////////////////////////////////////////////////////////
 	//
@@ -86,4 +83,9 @@ public interface JaeConstants {
 	String VSSE = "VSSE";
 
 	String ACADEMIC_CYCLES = "academicCycles";
+
+	int ACADEMIC_START_COMMING_WEEKS = 29;
+	
+	String ACADEMIC_NEXT_YEAR_COURSE_SUFFIX = " (From New Academic Year)";
+	
 }

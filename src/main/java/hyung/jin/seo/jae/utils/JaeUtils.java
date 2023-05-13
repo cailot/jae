@@ -12,24 +12,24 @@ import hyung.jin.seo.jae.dto.StudentDTO;
 
 public class JaeUtils {
 
-	public static Map<String, String> ACADEMIC_START_DAY;
+	// public static Map<String, String> ACADEMIC_START_DAY;
 	
-	static {
-		 ACADEMIC_START_DAY = new HashMap<String, String>();
-		 ACADEMIC_START_DAY.put("2019", "17/06");
-		 ACADEMIC_START_DAY.put("2020", "15/06");
-		 ACADEMIC_START_DAY.put("2021", "14/06");
-		 ACADEMIC_START_DAY.put("2022", "13/06");
-		 ACADEMIC_START_DAY.put("2023", "12/06");
-		 ACADEMIC_START_DAY.put("2024", "10/06");
-		 ACADEMIC_START_DAY.put("2025", "09/06");
-		 ACADEMIC_START_DAY.put("2026", "08/06");
-		 ACADEMIC_START_DAY.put("2027", "07/06");
-		 ACADEMIC_START_DAY.put("2028", "05/06");
-		 ACADEMIC_START_DAY.put("2029", "04/06");
-		 ACADEMIC_START_DAY.put("2030", "03/06");
-		 ACADEMIC_START_DAY.put("2031", "02/06");
-	}
+	// static {
+	// 	 ACADEMIC_START_DAY = new HashMap<String, String>();
+	// 	 ACADEMIC_START_DAY.put("2019", "17/06");
+	// 	 ACADEMIC_START_DAY.put("2020", "15/06");
+	// 	 ACADEMIC_START_DAY.put("2021", "14/06");
+	// 	 ACADEMIC_START_DAY.put("2022", "13/06");
+	// 	 ACADEMIC_START_DAY.put("2023", "12/06");
+	// 	 ACADEMIC_START_DAY.put("2024", "10/06");
+	// 	 ACADEMIC_START_DAY.put("2025", "09/06");
+	// 	 ACADEMIC_START_DAY.put("2026", "08/06");
+	// 	 ACADEMIC_START_DAY.put("2027", "07/06");
+	// 	 ACADEMIC_START_DAY.put("2028", "05/06");
+	// 	 ACADEMIC_START_DAY.put("2029", "04/06");
+	// 	 ACADEMIC_START_DAY.put("2030", "03/06");
+	// 	 ACADEMIC_START_DAY.put("2031", "02/06");
+	// }
 	
 	public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 	public static SimpleDateFormat displayFormat = new SimpleDateFormat("yyyy-MM-dd");

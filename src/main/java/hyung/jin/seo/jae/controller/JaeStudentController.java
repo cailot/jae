@@ -48,13 +48,13 @@ public class JaeStudentController {
 	public StudentDTO registerStudent(@RequestBody StudentDTO formData) {
 		// 1. create Student without elearning
 		Student std = formData.convertToOnlyStudent();
-		// 2. get elearning
-		Set<ElearningDTO> elearnings = formData.getElearnings();
-		for(ElearningDTO elearningDto : elearnings){
-			Elearning elearn = elearningService.getElearning(Long.parseLong(elearningDto.getId()));
-			// 3. associate elearning to Student
-			std.getElearnings().add(elearn);
-		}
+		// // 2. get elearning
+		// Set<ElearningDTO> elearnings = formData.getElearnings();
+		// for(ElearningDTO elearningDto : elearnings){
+		// 	Elearning elearn = elearningService.getElearning(Long.parseLong(elearningDto.getId()));
+		// 	// 3. associate elearning to Student
+		// 	std.getElearnings().add(elearn);
+		// }
 		// 4. save Student
 		std = studentService.addStudent(std);
 		StudentDTO dto = new StudentDTO(std);
@@ -97,25 +97,25 @@ public class JaeStudentController {
 	public StudentDTO updateStudent(@RequestBody StudentDTO formData) {
 		Student std = formData.convertToStudent();
 		
-		if((std.getElearnings() != null) && (std.getElearnings().size() > 0)) {
-			// 1. check if any related courses come
-			Set<ElearningDTO> crss = formData.getElearnings();
-			Set<Long> cidList = new HashSet<Long>(); // extract Course Id
-			for(ElearningDTO crsDto : crss) {
-				cidList.add(Long.parseLong(crsDto.getId()));
-			}
-			long[] courseId = cidList.stream().mapToLong(Long::longValue).toArray();
-			// 2. get Course in Student
-			Set<Elearning> courses = std.getElearnings();
-			// 3. clear existing course
-			courses.clear();
-			for(long cid : courseId) {
-				// 4. get course info
-				Elearning crs = elearningService.getElearning(cid);
-				// 5. add Course to Student
-				courses.add(crs);
-			}
-		}
+		// if((std.getElearnings() != null) && (std.getElearnings().size() > 0)) {
+		// 	// 1. check if any related courses come
+		// 	Set<ElearningDTO> crss = formData.getElearnings();
+		// 	Set<Long> cidList = new HashSet<Long>(); // extract Course Id
+		// 	for(ElearningDTO crsDto : crss) {
+		// 		cidList.add(Long.parseLong(crsDto.getId()));
+		// 	}
+		// 	long[] courseId = cidList.stream().mapToLong(Long::longValue).toArray();
+		// 	// 2. get Course in Student
+		// 	Set<Elearning> courses = std.getElearnings();
+		// 	// 3. clear existing course
+		// 	courses.clear();
+		// 	for(long cid : courseId) {
+		// 		// 4. get course info
+		// 		Elearning crs = elearningService.getElearning(cid);
+		// 		// 5. add Course to Student
+		// 		courses.add(crs);
+		// 	}
+		// }
 		// 7. update Student
 		std = studentService.updateStudent(std, std.getId());
 		// 8. convert Student to StudentDTO
@@ -164,10 +164,9 @@ public class JaeStudentController {
 				String startDate = JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate());
 				int startWeek = 10;//JaeUtils.academicWeeks(startDate);
 				dto.setRegisterDate(startDate+"|"+startWeek);
-				dto.setEnrolmentDate(JaeUtils.convertToddMMyyyyFormat(dto.getEnrolmentDate()));
+				// dto.setEnrolmentDate(JaeUtils.convertToddMMyyyyFormat(dto.getEnrolmentDate()));
 				dto.setEndDate(JaeUtils.convertToddMMyyyyFormat(dto.getEndDate()));
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			dtos.add(dto);
