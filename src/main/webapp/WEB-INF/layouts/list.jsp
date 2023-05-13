@@ -320,10 +320,12 @@ function updateStudentInfo(){
 						</select>
 					</div>
 					<div class="col mx-auto">
-						<button type="submit" class="btn btn-primary btn-block" onclick="return validate()">Search</button>
+						<button type="submit" class="btn btn-primary btn-block" onclick="return validate()"> <i class="fa fa-search"></i>&nbsp;Search</button>
+
+
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerStudentModal">New</button>
+						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerStudentModal"><i class="fa fa-plus"></i>&nbsp;New</button>
 					</div>
 				</div>
 			</div>

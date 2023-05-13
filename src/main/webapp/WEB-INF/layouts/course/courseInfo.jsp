@@ -32,11 +32,11 @@ function listElearns(grade) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
 				// console.log(cleaned);
-				var row = $("<tr onclick='displayInfo(" + cleaned + ")''>");
+				var row = $("<tr>");
 				row.append($('<td>').addClass('hidden-column').text(value.id));
 				row.append($('<td>').text(value.grade.toUpperCase()));
 				row.append($('<td>').text(value.name));
-				row.append($('<td>').html('<a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a>'));
+				row.append($("<td onclick='addToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a>'));
 				$('#elearnTable > tbody').append(row);
 			});
 		},
@@ -60,7 +60,7 @@ function listClasses(grade) {
 		success : function(data) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				console.log(cleaned);
+				//console.log(cleaned);
 				var row = $("<tr onclick='displayInfo(" + cleaned + ")''>");
 				var row = $('<tr>');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
@@ -134,6 +134,18 @@ function displayInfo(id){
 	console.log(id);
 }
 
+function addToBasket(value){
+	console.log(value);
+	var row = $("<tr>");
+	row.append($('<td>').addClass('hidden-column').text(value.id));
+	row.append($('<td>').text(value.grade.toUpperCase()));
+	row.append($('<td>').text(value.name));
+							
+				
+	$('#basketTable > tbody').append(row);
+
+	
+}
 
 </script>
 
@@ -180,7 +192,8 @@ function displayInfo(id){
 				<div class="col-md-12">
 					<nav>
                           <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                            	<a class="nav-item nav-link active" id="nav-elearn-tab" data-toggle="tab" href="#nav-elearn" role="tab" aria-controls="nav-elearn" aria-selected="true">e-Learning</a>
+								<a class="nav-item nav-link active" id="nav-basket-tab" data-toggle="tab" href="#nav-basket" role="tab" aria-controls="nav-basket" aria-selected="true">My Lecture</a>
+								<a class="nav-item nav-link" id="nav-elearn-tab" data-toggle="tab" href="#nav-elearn" role="tab" aria-controls="nav-elearn" aria-selected="true">e-Learning</a>
                             	<a class="nav-item nav-link" id="nav-fee-tab" data-toggle="tab" href="#nav-fee" role="tab" aria-controls="nav-fee" aria-selected="true">Class</a>
                               	<a class="nav-item nav-link" id="nav-book-tab" data-toggle="tab" href="#nav-book" role="tab" aria-controls="nav-book" aria-selected="false">Books</a>
                               	<a class="nav-item nav-link" id="nav-etc-tab" data-toggle="tab" href="#nav-etc" role="tab" aria-controls="nav-etc" aria-selected="false">Etc</a>
@@ -188,9 +201,9 @@ function displayInfo(id){
                       </nav>
 					  
                       <div class="tab-content" id="nav-tabContent">
- 
-						<div class="tab-pane fade show active" id="nav-elearn" role="tabpanel" aria-labelledby="nav-elearn-tab">
-							<table class="table" id="elearnTable" name="elearnTable">
+						<!-- Lecture List -->
+						<div class="tab-pane fade show active" id="nav-basket" role="tabpanel" aria-labelledby="nav-basket-tab">
+							<table class="table" id="basketTable" name="basketTable">
 								<thead>
 									<tr>
 										<th class="hidden-column"></th>
@@ -204,7 +217,23 @@ function displayInfo(id){
 								</tbody>
 							</table>
 						</div>
-	
+						<!-- e-Learning -->
+						<div class="tab-pane fade" id="nav-elearn" role="tabpanel" aria-labelledby="nav-elearn-tab">
+							<table class="table" id="elearnTable" name="elearnTable">
+								<thead>
+									<tr>
+										<th class="hidden-column"></th>
+										<th>Grade</th>
+										<th>Subjects</th>
+										<th>Add</th>
+									</tr>
+								</thead>
+								<tbody>
+									
+								</tbody>
+							</table>
+						</div>
+						<!-- Class -->
 						<div class="tab-pane fade" id="nav-fee" role="tabpanel" aria-labelledby="nav-fee-tab">
                               <table class="table" id="courseFeeTable" name="courseFeeTable">
                                   <thead>
@@ -220,6 +249,7 @@ function displayInfo(id){
                                   </tbody>
                               </table>
                           </div>
+						  <!-- Book -->
                           <div class="tab-pane fade" id="nav-book" role="tabpanel" aria-labelledby="nav-book-tab">
                               <table class="table" cellspacing="0" id="courseBookTable" name="courseBookTable">
                                   <thead>
@@ -233,6 +263,7 @@ function displayInfo(id){
                                   </tbody>
                               </table>
                           </div>
+						  <!-- Etc -->
                           <div class="tab-pane fade" id="nav-etc" role="tabpanel" aria-labelledby="nav-etc-tab">
                               <table class="table" cellspacing="0" id="courseEtcTable" name="courseEtcTable">
 								<thead>
@@ -246,35 +277,7 @@ function displayInfo(id){
                               </table>
                           </div>
                       </div>
-                   				
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
+              
 				</div>
 			</div>
 		</div>

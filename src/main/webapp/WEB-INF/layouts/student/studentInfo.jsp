@@ -513,7 +513,7 @@
 						<button type="button" class="btn btn-block btn-warning" onclick="updateStudentInfo()">Save</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deactivateModal">Suspen</button>
+						<button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deactivateModal">Suspend</button>
 					</div>
 					<div class="col mx-auto">
 						<button type="button" class="btn btn-block btn-info" onclick="clearStudentForm()">Clear</button>
