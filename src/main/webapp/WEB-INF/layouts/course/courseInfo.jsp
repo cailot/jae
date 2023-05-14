@@ -1,6 +1,27 @@
 <script>
+
+var academicYear;
+var academicWeek;
+
 $(document).ready(
 	function() {
+		// make an AJAX call on page load
+		// to get the academic year and week
+		$.ajax({
+		  url : '${pageContext.request.contextPath}/class/academy',
+	      method: "GET",
+	      success: function(response) {
+	        // save the response into the variable
+	        academicYear = response[0];
+	        academicWeek = response[1];
+			// console.log(response);
+	      },
+	      error: function(jqXHR, textStatus, errorThrown) {
+	        // handle error
+	      }
+	    });
+
+
 		$('#registerGrade').on('change',function() {
 			var grade = $(this).val()
 			listElearns(grade);
@@ -8,11 +29,21 @@ $(document).ready(
 			listBooks(grade);
 			listEtcs(grade);
 		});
+		
 		// when page loads, search course fees for grade 'p2' as first entry
 		listElearns('p2');
 		listClasses('p2');
 		listBooks('p2');
 		listEtcs('p2');
+
+		// remove records from basket when click on delete icon
+		$('#basketTable').on('click', 'a', function(e) {
+			e.preventDefault();
+			$(this).closest('tr').remove();
+		});
+
+
+
 	}
 );
 
@@ -36,7 +67,7 @@ function listElearns(grade) {
 				row.append($('<td>').addClass('hidden-column').text(value.id));
 				row.append($('<td>').text(value.grade.toUpperCase()));
 				row.append($('<td>').text(value.name));
-				row.append($("<td onclick='addToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a>'));
+				row.append($("<td onclick='addElearningToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add eLearning"><i class="fa fa-plus-circle"></i></a>'));
 				$('#elearnTable > tbody').append(row);
 			});
 		},
@@ -61,12 +92,13 @@ function listClasses(grade) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
 				//console.log(cleaned);
-				var row = $("<tr onclick='displayInfo(" + cleaned + ")''>");
+				// var row = $("<tr onclick='displayInfo(" + cleaned + ")''>");
 				var row = $('<tr>');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
 				row.append($('<td>').text(value.description));
 				row.append($('<td>').text(value.subjects));
-				row.append($('<td>').text(value.fee));				
+				row.append($('<td>').text(value.fee));
+				row.append($("<td onclick='addClassToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Class"><i class="fa fa-plus-circle"></i></a>'));
 				$('#courseFeeTable > tbody').append(row);
 			});
 		},
@@ -91,10 +123,12 @@ function listBooks(grade) {
 		success : function(data) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				var row = $("<tr onclick='displayInfo(" + cleaned + ")''>");
+				var row = $('<tr>');
+				row.append($('<td>').addClass('hidden-column').text(value.id));
 				row.append($('<td>').text(value.name));
 				row.append($('<td>').text(value.subjects));
 				row.append($('<td>').text(value.price));
+				row.append($("<td onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
 				$('#courseBookTable > tbody').append(row);
 			});
 		},
@@ -118,9 +152,11 @@ function listEtcs(grade) {
 		success : function(data) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				var row = $("<tr onclick='displayInfo(" + cleaned + ")''>");
+				var row = $('<tr>');
+				row.append($('<td>').addClass('hidden-column').text(value.id));
 				row.append($('<td>').text(value.name));
-				row.append($('<td>').text(value.price));				
+				row.append($('<td>').text(value.price));
+				row.append($("<td onclick='addEtcToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Etc"><i class="fa fa-plus-circle"></i></a>'));
 				$('#courseEtcTable > tbody').append(row);
 			});
 		},
@@ -134,17 +170,65 @@ function displayInfo(id){
 	console.log(id);
 }
 
-function addToBasket(value){
+
+// add elearning to basket
+function addElearningToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
 	row.append($('<td>').addClass('hidden-column').text(value.id));
-	row.append($('<td>').text(value.grade.toUpperCase()));
-	row.append($('<td>').text(value.name));
-							
-				
+	row.append($('<td>').text('[' + value.grade.toUpperCase() + '] ' + value.name));
+		row.append($('<td>').text('eLearning'));
+	row.append($('<td>').text(academicYear));
+	row.append($('<td>').text(academicWeek));
+	row.append($('<td>').text(0));
+	row.append($('<td>').text(0));
+	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a>'));
 	$('#basketTable > tbody').append(row);
+}
 
-	
+// add class to basket
+function addClassToBasket(value){
+	console.log(value);
+	var row = $("<tr>");
+	row.append($('<td>').addClass('hidden-column').text(value.id));
+	row.append($('<td>').text('[' + value.grade.toUpperCase() + '] ' + value.description));
+	row.append($('<td>').text('Class'));
+	row.append($('<td>').text(academicYear));
+	row.append($('<td>').text(academicWeek));
+	row.append($('<td>').text(0));
+	row.append($('<td>').text(value.fee));
+	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+	$('#basketTable > tbody').append(row);
+}
+
+// add book to basket
+function addBookToBasket(value){
+	console.log(value);
+	var row = $("<tr>");
+	row.append($('<td>').addClass('hidden-column').text(value.id));
+	row.append($('<td>').text('[' + value.grade.toUpperCase() + '] ' + value.name));
+	row.append($('<td>').text('Book'));
+	row.append($('<td>').text(academicYear));
+	row.append($('<td>').text(academicWeek));
+	row.append($('<td>').text(0));
+	row.append($('<td>').text(value.price));
+	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Book"><i class="fa fa-trash"></i></a>'));
+	$('#basketTable > tbody').append(row);
+}
+
+// add etc to basket
+function addEtcToBasket(value){
+	console.log(value);
+	var row = $("<tr>");
+	row.append($('<td>').addClass('hidden-column').text(value.id));
+	row.append($('<td>').text(value.name));
+	row.append($('<td>').text('Etc'));
+	row.append($('<td>').text(academicYear));
+	row.append($('<td>').text(academicWeek));
+	row.append($('<td>').text(0));
+	row.append($('<td>').text(value.price));
+	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Etc"><i class="fa fa-trash"></i></a>'));
+	$('#basketTable > tbody').append(row);
 }
 
 </script>
@@ -207,9 +291,13 @@ function addToBasket(value){
 								<thead>
 									<tr>
 										<th class="hidden-column"></th>
-										<th>Grade</th>
-										<th>Subjects</th>
-										<th>Delete</th>
+										<th>Description</th>
+										<th>Item</th>
+										<th>Year</th>
+										<th>Start</th>
+										<th>End</th>
+										<th>Fee</th>
+										<th>Action</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -242,6 +330,7 @@ function addToBasket(value){
                                           <th>Description</th>
                                           <th>Subjects</th>
                                           <th>Price</th>
+										  <th>Add</th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -254,9 +343,11 @@ function addToBasket(value){
                               <table class="table" cellspacing="0" id="courseBookTable" name="courseBookTable">
                                   <thead>
                                       <tr>
-                                          <th>Description</th>
+										  <th class="hidden-column"></th>
+										  <th>Description</th>
                                           <th>Subjects</th>
                                           <th>Price</th>
+										  <th>Add</th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -268,8 +359,10 @@ function addToBasket(value){
                               <table class="table" cellspacing="0" id="courseEtcTable" name="courseEtcTable">
 								<thead>
                                       <tr>
-                                          <th>Description</th>
+										  <th class="hidden-column"></th>
+										  <th>Description</th>
                                           <th>Price</th>
+										  <th>Add</th>
                                       </tr>
                                   </thead>
                                   <tbody>

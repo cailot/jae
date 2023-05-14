@@ -44,6 +44,15 @@ public class JaeClassController {
 		return dtos;
 	}
 
+	// check current academic year and week
+	@GetMapping("/academy")
+	@ResponseBody
+	String[] getAcademicInfo() {
+		int year = cycleService.academicYear();
+		int week = cycleService.academicWeeks();
+		return new String[] {String.valueOf(year), String.valueOf(week)};
+	}
+
 	// count records number in database
 	@GetMapping("/count")
 	@ResponseBody

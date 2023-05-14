@@ -112,7 +112,7 @@
 						<div class="form-group">
 							<div class="form-row">
 								<div class="col-md-6">
-									<p>Receivable Amt: 740.00 OUtstanding: 0.00</p>
+									<p>Receivable Amt: 740.00 Outstanding: 0.00</p>
 								</div>
 								<div class="col md-auto">
 									<button type="button" class="btn btn-block btn-primary btn-sm"
