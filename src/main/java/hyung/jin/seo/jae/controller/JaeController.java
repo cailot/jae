@@ -13,10 +13,16 @@ public class JaeController {
 	public String adminJob(HttpSession session) {
 		return "adminPage";
 	}
+
+	@GetMapping("/studentList")
+	public String studentList(HttpSession session) {
+		return "studentListPage";
+	}
+
 	
-	@GetMapping("/list")
-	public String list(HttpSession session) {
-		return "listPage";
+	@GetMapping("/classList")
+	public String classList(HttpSession session) {
+		return "classListPage";
 	}
 
 	@GetMapping("/teacher")

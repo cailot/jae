@@ -78,13 +78,23 @@
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/admin">Student Admin</a>
-			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/list">Student List</a>
+			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/studentList">Student List</a>
 				  <a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
 			</div>
-		  </li>
+		</li>
+
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/test" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Class
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/classList">Class List</a>
+				<a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
+			</div>
+		</li>
 
 
-		<li><a href="${pageContext.request.contextPath}/test">Course</a></li>
+		<!-- <li><a href="${pageContext.request.contextPath}/test">Course</a></li> -->
 		<li><a href="${pageContext.request.contextPath}/teacher">Teacher</a></li>
 		<li><a href="${pageContext.request.contextPath}/list">List</a></li>
 		<li><a href="${pageContext.request.contextPath}/test">Setting</a></li>

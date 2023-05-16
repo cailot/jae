@@ -21,7 +21,7 @@
   
 <script>
 $(document).ready(function () {
-    $('#studentListTable').DataTable({
+    $('#classListTable').DataTable({
     	language: {
     		search: 'Filter:'
     	},
@@ -56,8 +56,8 @@ $(document).ready(function () {
     
 });
 
-// Register Student
-function addStudent() {
+// Register Class
+function addClass() {
 	// Get from form data
 	var std = {
 		firstName : $("#addFirstName").val(),
@@ -241,7 +241,7 @@ function updateStudentInfo(){
 <!-- List Body -->
 <div class="row">
 	<div class="modal-body">
-		<form id="studentList" method="get" action="${pageContext.request.contextPath}/student/list">
+		<form id="classList" method="get" action="${pageContext.request.contextPath}/student/list">
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-2">
@@ -335,7 +335,7 @@ function updateStudentInfo(){
 				<div class="form-row">
 					<div class="col-md-12">
 						<div class="table-wrap">
-							<table id="studentListTable" class="table table-striped table-bordered"><thead class="table-primary">
+							<table id="classListTable" class="table table-striped table-bordered"><thead class="table-primary">
 									<tr>
 										<th>ID</th>
 										<th>First Name</th>
@@ -350,11 +350,11 @@ function updateStudentInfo(){
 										<th>Action</th>
 									</tr>
 								</thead>
-								<tbody id="list-student-body">
+								<tbody id="list-class-body">
 								<c:choose>
-									<c:when test="${StudentList != null}">
+									<c:when test="${classList != null}">
 									
-										<c:forEach items="${StudentList}" var="student">
+										<c:forEach items="${classList}" var="student">
 											<tr>
 											
 											
@@ -529,8 +529,8 @@ function updateStudentInfo(){
 				</form>
 			</div>
 			<div class="modal-footer">
+				<button type="submit" class="btn btn-primary" onclick="addClass()">Create</button>
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary" onclick="addStudent()">Register</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->

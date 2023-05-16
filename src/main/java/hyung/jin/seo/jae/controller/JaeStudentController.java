@@ -172,6 +172,6 @@ public class JaeStudentController {
 			dtos.add(dto);
 		}
 		model.addAttribute(JaeConstants.STUDENT_LIST, dtos);
-		return "listPage";
+		return "studentListPage";
 	}
 }
