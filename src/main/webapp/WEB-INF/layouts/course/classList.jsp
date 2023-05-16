@@ -241,7 +241,7 @@ function updateStudentInfo(){
 <!-- List Body -->
 <div class="row">
 	<div class="modal-body">
-		<form id="classList" method="get" action="${pageContext.request.contextPath}/student/list">
+		<form id="classList" method="get" action="${pageContext.request.contextPath}/class/list">
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-2">
@@ -314,13 +314,14 @@ function updateStudentInfo(){
 					</div>
 					<div class="col-md-2">
 						<select class="form-control" id="listActive" name="listActive">
-							<option value="All">All Students</option>
-							<option value="Current">Current Students</option>
-							<option value="Stopped">Stopped Students</option>
+							<option value="All">All Classes</option>
+							<option value="Current">Active Classes</option>
+							<option value="Stopped">Inactive Classes</option>
+							</option>
 						</select>
 					</div>
 					<div class="col mx-auto">
-						<button type="submit" class="btn btn-primary btn-block" onclick="return validate()"> <i class="fa fa-search"></i>&nbsp;Search</button>
+						<button type="submit" class="btn btn-primary btn-block"> <i class="fa fa-search"></i>&nbsp;Search</button>
 
 
 					</div>
@@ -337,41 +338,31 @@ function updateStudentInfo(){
 						<div class="table-wrap">
 							<table id="classListTable" class="table table-striped table-bordered"><thead class="table-primary">
 									<tr>
-										<th>ID</th>
-										<th>First Name</th>
-										<th>Last Name</th>
-										<th>Grade</th>
+										<th>Class Name</th>
+										<th>Description</th>
 										<th>Start Date</th>
-										<th>Week</th>
-										<th>End Date</th>
-										<th>Email</th>
-										<th>Contact 1</th>
-										<th>Contact 2</th>
+										<th>Day</th>
+										<th>Activated</th>
 										<th>Action</th>
 									</tr>
 								</thead>
 								<tbody id="list-class-body">
 								<c:choose>
-									<c:when test="${classList != null}">
+									<c:when test="${ClassList != null}">
 									
-										<c:forEach items="${classList}" var="student">
+										<c:forEach items="${ClassList}" var="clazz">
 											<tr>
-											
-											
-												<td class="small ellipsis" id="studentId" name="studentId"><span><c:out value="${student.id}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${student.firstName}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${student.lastName}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${fn:toUpperCase(student.grade)}" /></span></td>
-												
+												<td class="small ellipsis"><span><c:out value="${clazz.name}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${clazz.description}" /></span></td>
+												<!-- <td class="small ellipsis"><span><c:out value="${fn:toUpperCase(student.grade)}" /></span></td>
 												<c:set var="regDate" value="${student.registerDate}" />
 												<c:set var="starts" value="${fn:split(regDate, '|')}" />
 							
 												<td class="small ellipsis"><span><c:out value="${starts[0]}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${starts[1]}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${student.endDate}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${student.email}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${student.contactNo1}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${student.contactNo2}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${starts[1]}" /></span></td> -->
+												<td class="small ellipsis"><span><c:out value="${clazz.startDate}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${clazz.day}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${clazz.active}" /></span></td>
 												<td>
 													<i class="fa fa-edit text-primary" data-toggle="tooltip" title="Edit" onclick="retreiveStudentInfo('${student.id}')"></i>&nbsp;
 													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;

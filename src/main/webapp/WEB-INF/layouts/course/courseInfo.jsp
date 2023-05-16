@@ -91,11 +91,10 @@ function listClasses(grade) {
 		success : function(data) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				//console.log(cleaned);
-				// var row = $("<tr onclick='displayInfo(" + cleaned + ")''>");
+				// console.log(cleaned);
 				var row = $('<tr>');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
-				row.append($('<td>').text(value.description));
+				row.append($('<td>').text(value.name));
 				row.append($('<td>').text(value.subjects));
 				row.append($('<td>').text(value.fee));
 				row.append($("<td onclick='addClassToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Class"><i class="fa fa-plus-circle"></i></a>'));
@@ -191,7 +190,7 @@ function addClassToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
 	row.append($('<td>').addClass('hidden-column').text(value.id));
-	row.append($('<td>').text('[' + value.grade.toUpperCase() + '] ' + value.description));
+	row.append($('<td>').text(value.name));
 	row.append($('<td>').text('Class'));
 	row.append($('<td>').text(academicYear));
 	row.append($('<td>').text(academicWeek));
@@ -327,7 +326,7 @@ function addEtcToBasket(value){
                                   <thead>
                                       <tr>
 										  <th class="hidden-column"></th>
-                                          <th>Description</th>
+                                          <th>Name</th>
                                           <th>Subjects</th>
                                           <th>Price</th>
 										  <th>Add</th>

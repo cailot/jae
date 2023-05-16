@@ -17,7 +17,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnTransformer;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Column;
 import javax.persistence.CascadeType;
@@ -46,11 +48,40 @@ public class Class{ // bridge table between Course & Cycle
     @Column(columnDefinition = "DECIMAL(10,2)")
 	private double fee;
 
-	@Column(length = 400)
-    private String description;
+	// @Column(length = 400)
+    // private String description;
 
 	@CreationTimestamp
     private LocalDate registerDate;
+
+
+
+
+	@Column(length = 30)
+    private String state;
+
+	@Column(length = 50)
+    private String branch;
+
+	// @Column(length = 10)
+    // private String grade;
+
+	@Column(length = 100)
+    private String name;
+
+	@CreatedDate
+    private LocalDate startDate;
+
+	@Column(length = 10)
+    private String day;
+
+	@Column
+	private boolean active;
+
+
+
+
+
 
 
 }

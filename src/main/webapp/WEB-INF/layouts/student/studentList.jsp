@@ -242,7 +242,7 @@ function updateStudentInfo(){
 <!-- List Body -->
 <div class="row">
 	<div class="modal-body">
-		<form id="studentList" method="get" action="${pageContext.request.contextPath}/student/list">
+		<form id="studentList" method="get" action="${pageContext.request.contextPath}/course/list">
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-2">
@@ -321,12 +321,12 @@ function updateStudentInfo(){
 						</select>
 					</div>
 					<div class="col mx-auto">
-						<button type="submit" class="btn btn-primary btn-block" onclick="return validate()"> <i class="fa fa-search"></i>&nbsp;Search</button>
+						<button type="submit" class="btn btn-primary btn-block"> <i class="fa fa-search"></i>&nbsp;Search</button>
 
 
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerStudentModal"><i class="fa fa-plus"></i>&nbsp;New</button>
+						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerStudentModal"><i class="fa fa-plus"></i>&nbsp;Registration</button>
 					</div>
 				</div>
 			</div>

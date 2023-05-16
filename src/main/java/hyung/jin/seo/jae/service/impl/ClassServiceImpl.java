@@ -1,5 +1,6 @@
 package hyung.jin.seo.jae.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,13 @@ public class ClassServiceImpl implements ClassService {
 
 	@Override
 	public List<ClassDTO> allClasses() {
-		List<Class> crs = null;//classRepository.findAll();
-		return null;
+		List<Class> crs = classRepository.findAll();
+		List<ClassDTO> dtos = new ArrayList<>();
+		for(Class claz : crs){
+			ClassDTO dto = new ClassDTO(claz);
+			dtos.add(dto);
+		}
+		return dtos;
 	}
 
 	@Override
