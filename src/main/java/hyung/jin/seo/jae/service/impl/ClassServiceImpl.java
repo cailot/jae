@@ -53,5 +53,12 @@ public class ClassServiceImpl implements ClassService {
 		// 4. return DTOs
 		return dtos;	
 	}
+
+	@Override
+	public ClassDTO addClass(Class clazz) {
+		Class cla = classRepository.save(clazz);
+		ClassDTO dto = new ClassDTO(cla);
+		return dto;
+	}
 	
 }

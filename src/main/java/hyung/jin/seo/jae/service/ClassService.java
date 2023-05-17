@@ -3,6 +3,7 @@ package hyung.jin.seo.jae.service;
 import java.util.List;
 
 import hyung.jin.seo.jae.dto.ClassDTO;
+import hyung.jin.seo.jae.model.Class;
 
 public interface ClassService {
 	// list all class
@@ -13,4 +14,7 @@ public interface ClassService {
 	
 	// return total count
 	long checkCount();
+
+	// add class
+	ClassDTO addClass(Class clazz);
 }

@@ -53,33 +53,57 @@ $(document).ready(function () {
 		todayHighlight : true
 	});
 
-    
+    // When the Grade dropdown changes, send an Ajax request to get the corresponding Type
+	$('#addGrade').change(function() {
+	var grade = $(this).val();
+		courseByGrade(grade);
+	});
+
 });
+
+function courseByGrade(grade){
+	$.ajax({
+		url: '${pageContext.request.contextPath}/class/coursesByGrade',
+		method: 'GET',
+		data: { grade: grade },
+		success: function(data) {
+			$('#addCourse').empty(); // clear the previous options
+			$.each(data, function(index, value) {
+				const cleaned = cleanUpJson(value);
+				console.log(cleaned);
+				$('#addCourse').append($("<option value='" + value.id + "'>").text(value.description).val(value.id)); // add new option
+				});
+			},
+			error: function(xhr, status, error) {
+			console.error(xhr.responseText);
+			}
+		});
+}
+
+
+
+
 
 // Register Class
 function addClass() {
 	// Get from form data
-	var std = {
-		firstName : $("#addFirstName").val(),
-		lastName : $("#addLastName").val(),
-		email : $("#addEmail").val(),
-		address : $("#addAddress").val(),
-		contactNo1 : $("#addContact1").val(),
-		contactNo2 : $("#addContact2").val(),
-		memo : $("#addMemo").val(),
+	var clazz = {
 		state : $("#addState").val(),
 		branch : $("#addBranch").val(),
+		startDate : $("#addStartDate").val(),
+		name : $("#addName").val(),
 		grade : $("#addGrade").val(),
-		enrolmentDate : $("#addEnrolment").val()
+		courseId : $("#addCourse").val(),
+		day : $("#addDay").val()
 	}
-	console.log(std);
+	console.log(clazz);
 	
 	// Send AJAX to server
 	$.ajax({
-		url : '${pageContext.request.contextPath}/student/register',
+		url : '${pageContext.request.contextPath}/class/register',
 		type : 'POST',
 		dataType : 'json',
-		data : JSON.stringify(std),
+		data : JSON.stringify(clazz),
 		contentType : 'application/json',
 		success : function(student) {
 			// Display the success alert
@@ -87,30 +111,29 @@ function addClass() {
 					'Your action has been completed successfully.');
 			$('#success-alert').modal('show');
 			// Update display info
-			$("#formId").val(student.id);
-			$("#formFirstName").val(student.firstName);
-			$("#formLastName").val(student.lastName);
-			$("#formEmail").val(student.email);
-			$("#formAddress").val(student.address);
-			$("#formContact1").val(student.contactNo1);
-			$("#formContact2").val(student.contactNo2);
-			$("#formMemo").val(student.memo);
-			$("#formState").val(student.state);
-			$("#formBranch").val(student.branch);
-			//$("#formGrade").val(student.grade);
-			$("#elearningGrade").val(student.grade);
-			// Set date value
-			var date = new Date(student.enrolmentDate); // Replace with your date value
-			$("#formEnrolment").datepicker('setDate', date);
-
+			// $("#formId").val(student.id);
+			// $("#formFirstName").val(student.firstName);
+			// $("#formLastName").val(student.lastName);
+			// $("#formEmail").val(student.email);
+			// $("#formAddress").val(student.address);
+			// $("#formContact1").val(student.contactNo1);
+			// $("#formContact2").val(student.contactNo2);
+			// $("#formMemo").val(student.memo);
+			// $("#formState").val(student.state);
+			// $("#formBranch").val(student.branch);
+			// //$("#formGrade").val(student.grade);
+			// $("#elearningGrade").val(student.grade);
+			// // Set date value
+			// var date = new Date(student.enrolmentDate); // Replace with your date value
+			// $("#formEnrolment").datepicker('setDate', date);
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
 		}
 	});
-	$('#registerStudentModal').modal('hide');
+	$('#registerClassModal').modal('hide');
 	// flush all registered data
-	document.getElementById("studentRegister").reset();
+	document.getElementById("classRegister").reset();
 }
 
 
@@ -322,11 +345,9 @@ function updateStudentInfo(){
 					</div>
 					<div class="col mx-auto">
 						<button type="submit" class="btn btn-primary btn-block"> <i class="fa fa-search"></i>&nbsp;Search</button>
-
-
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerStudentModal"><i class="fa fa-plus"></i>&nbsp;New</button>
+						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerClassModal" onclick="courseByGrade('p2')"><i class="fa fa-plus"></i>&nbsp;New</button>
 					</div>
 				</div>
 			</div>
@@ -342,6 +363,7 @@ function updateStudentInfo(){
 										<th>Description</th>
 										<th>Start Date</th>
 										<th>Day</th>
+										<th>Year</th>
 										<th>Activated</th>
 										<th>Action</th>
 									</tr>
@@ -349,20 +371,26 @@ function updateStudentInfo(){
 								<tbody id="list-class-body">
 								<c:choose>
 									<c:when test="${ClassList != null}">
-									
 										<c:forEach items="${ClassList}" var="clazz">
 											<tr>
 												<td class="small ellipsis"><span><c:out value="${clazz.name}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.description}" /></span></td>
-												<!-- <td class="small ellipsis"><span><c:out value="${fn:toUpperCase(student.grade)}" /></span></td>
-												<c:set var="regDate" value="${student.registerDate}" />
-												<c:set var="starts" value="${fn:split(regDate, '|')}" />
-							
-												<td class="small ellipsis"><span><c:out value="${starts[0]}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${starts[1]}" /></span></td> -->
 												<td class="small ellipsis"><span><c:out value="${clazz.startDate}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.day}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${clazz.active}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${clazz.year}" /></span></td>
+												<c:set var="active" value="${clazz.active}" />
+												<c:choose>
+													<c:when test="${active == true}">
+														<td>
+															<i class="fa fa-check-circle text-primary"></i>
+														</td>
+													</c:when>
+													<c:otherwise>
+														<td>
+															<i class="fa fa-check-circle text-secondary"></i>
+														</td>
+													</c:otherwise>
+												</c:choose>		
 												<td>
 													<i class="fa fa-edit text-primary" data-toggle="tooltip" title="Edit" onclick="retreiveStudentInfo('${student.id}')"></i>&nbsp;
 													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;
@@ -385,28 +413,28 @@ function updateStudentInfo(){
 </div>
 
 <!-- Add Form Dialogue -->
-<div class="modal fade" id="registerStudentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="registerClassModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel">Student Enrolment</h4>
+				<h4 class="modal-title" id="myModalLabel">Create Class</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
 			<div class="modal-body">
-				<form id="studentRegister">
+				<form id="classRegister">
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-4">
 								<label for="selectOption">State</label> <select
 									class="form-control" id="addState" name="addState">
 									<option value="vic">Victoria</option>
-									<option value="nsw">New South Wales</option>
+									<!-- <option value="nsw">New South Wales</option>
 									<option value="qld">Queensland</option>
 									<option value="sa">South Australia</option>
 									<option value="tas">Tasmania</option>
 									<option value="wa">Western Australia</option>
 									<option value="nt">Northern Territory</option>
-									<option value="act">ACT</option>
+									<option value="act">ACT</option> -->
 								</select>
 							</div>
 							<div class="col-md-5">
@@ -437,8 +465,8 @@ function updateStudentInfo(){
 								</select>
 							</div>
 							<div class="col-md-3">
-								<label for="datepicker">Enrolment</label> 
-								<input type="text" class="form-control datepicker" id="addEnrolment" name="addEnrolment" placeholder="dd/mm/yyyy">
+								<label for="datepicker">Start Date</label> 
+								<input type="text" class="form-control datepicker" id="addStartDate" name="addStartDate" placeholder="dd/mm/yyyy">
 							</div>
 							<script>
 								var today = new Date();
@@ -446,23 +474,19 @@ function updateStudentInfo(){
 								var month = today.getMonth() + 1; // Note: January is 0
 								var year = today.getFullYear();
 								var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
-								document.getElementById('addEnrolment').value = formattedDate;
+								document.getElementById('addStartDate').value = formattedDate;
 							</script>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-5">
-								<label for="name">First Name:</label> <input type="text"
-									class="form-control" id="addFirstName" name="addFirstName">
-							</div>
-							<div class="col-md-5">
-								<label for="name">Last Name:</label> <input type="text"
-									class="form-control" id="addLastName" name="addLastName">
+							<div class="col-md-10">
+								<label for="name">Name:</label> <input type="text"
+									class="form-control" id="addName" name="addName">
 							</div>
 							<div class="col-md-2">
-								<label for="selectOption">Grade</label> <select
-									class="form-control" id="addGrade" name="addGrade">
+								<label for="selectOption">Grade</label>
+								<select class="form-control" id="addGrade" name="addGrade">
 									<option value="p2">P2</option>
 									<option value="p3">P3</option>
 									<option value="p4">P4</option>
@@ -488,29 +512,27 @@ function updateStudentInfo(){
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-5">
-								<label for="name">Email</label> <input type="text"
-									class="form-control" id="addEmail" name="addEmail">
-							</div>
 							<div class="col-md-7">
-								<label for="name">Address</label> <input type="text"
-									class="form-control" id="addAddress" name="addAddress">
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-6">
-								<label for="name">Contact No 1</label> <input type="text"
-									class="form-control" id="addContact1" name="addContact1">
-							</div>
-							<div class="col-md-6">
-								<label for="name">Contact No 2</label> <input type="text"
-									class="form-control" id="addContact2" name="addContact2">
-							</div>
-						</div>
-					</div>
+								<label for="name">Course</label> 
+								<select class="form-control" id="addCourse" name="addCourse">
 
+								</select>
+							</div>
+							<div class="col-md-5">
+								<label for="name">Day</label>
+								<select class="form-control" id="addDay" name="addDay">
+									<option value="All">All</option>
+									<option value="Monday">Monday</option>
+									<option value="Tuesday">Tuesday</option>
+									<option value="Wednesday">Wednesday</option>
+									<option value="Thursday">Thursday</option>
+									<option value="Friday">Friday</option>
+									<option value="Saturday">Saturday</option>
+									<option value="Sunday">Sunday</option>
+								</select>
+							</div>
+						</div>
+					</div>
 					<div class="form-group">
 						<div class="form-row">
 							<label for="message">Memo</label>

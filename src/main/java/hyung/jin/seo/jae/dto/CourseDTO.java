@@ -63,7 +63,7 @@ public class CourseDTO implements Serializable{
     	this.description = (course.getDescription()!=null) ? course.getDescription() : "";
     	this.registerDate = (course.getRegisterDate()!=null) ? course.getRegisterDate().toString() : "";
     	this.grade = (course.getGrade()!=null) ? course.getGrade() : "";
-    	this.day = (course.getDay()!=null) ? course.getDay() : "";
+    	// this.day = (course.getDay()!=null) ? course.getDay() : "";
 		
     }
     
@@ -74,7 +74,7 @@ public class CourseDTO implements Serializable{
     	if(StringUtils.isNotBlank(description)) course.setDescription(this.description);
     	if(StringUtils.isNotBlank(registerDate)) course.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(grade)) course.setGrade(this.grade);
-    	if(StringUtils.isNotBlank(day)) course.setDay(this.day);
+    	// if(StringUtils.isNotBlank(day)) course.setDay(this.day);
     	return course;
     }
 }

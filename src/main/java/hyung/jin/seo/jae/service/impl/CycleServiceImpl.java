@@ -8,6 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -204,6 +205,34 @@ public class CycleServiceImpl implements CycleService {
 			}		
 		}
 		return (weeks+1); // calculation must start from 1 not 0
+	}
+
+	@Override
+	public Cycle findById(String cycleId) {
+		Optional<Cycle> cycle = cycleRepository.findById(Long.parseLong(cycleId));
+		if(cycle.isPresent()) {
+			return cycle.get();
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	public Long findIdByDate(String date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        // Parse the string to LocalDate
+        LocalDate localDate = LocalDate.parse(date, formatter);
+		Long id = cycleRepository.findIdByDate(localDate);
+		return id;
+	}
+
+	@Override
+	public Cycle findCycleByDate(String date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		// Parse the string to LocalDate
+		LocalDate localDate = LocalDate.parse(date, formatter);
+		Cycle cycle = cycleRepository.findCycleByDate(localDate);
+		return cycle;
 	}
 
 

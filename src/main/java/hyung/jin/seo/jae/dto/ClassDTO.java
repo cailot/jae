@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hyung.jin.seo.jae.model.Class;
 
@@ -21,12 +23,16 @@ import lombok.ToString;
 public class ClassDTO implements Serializable{
     
 	private String id;
+
+	private String state;
+
+	private String branch;
     
     private String fee;
 
 	private String name;
    
-   private String description; // Course.description
+   	private String description; // Course.description
 
 	private String day;
 
@@ -34,7 +40,7 @@ public class ClassDTO implements Serializable{
 
 	private boolean active;
 
-    @JsonIgnore
+    //@JsonIgnore
 	private String courseId;
 
 	@JsonIgnore
@@ -78,4 +84,17 @@ public class ClassDTO implements Serializable{
 		this.description = clazz.getCourse().getDescription();
 		this.year = Integer.toString(clazz.getCycle().getYear());
 	}
+
+
+	public Class convertToOnlyClass() {
+    	Class clazz = new Class();
+		if(StringUtils.isNotBlank(state)) clazz.setState(this.state);
+    	if(StringUtils.isNotBlank(branch)) clazz.setBranch(this.branch);
+		if(StringUtils.isNotBlank(startDate)) clazz.setStartDate(LocalDate.parse(startDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
+		clazz.setFee(55.55);
+		if(StringUtils.isNotBlank(name)) clazz.setName(this.name);		
+    	if(StringUtils.isNotBlank(day)) clazz.setDay(this.day);
+    	return clazz;
+    }
+
 }

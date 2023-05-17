@@ -6,5 +6,6 @@ INSERT INTO jae.Subject(abbr,description,name,registerDate) VALUES ('SCI','Scien
 INSERT INTO jae.Subject(abbr,description,name,registerDate) VALUES ('ALL','VCE Subject','All',sysdate());
 INSERT INTO jae.Subject(abbr,description,name,registerDate) VALUES ('ONE','1 Subject','One Subject',sysdate());
 INSERT INTO jae.Subject(abbr,description,name,registerDate) VALUES ('TWO','2 Subject','Two Subjects',sysdate());
+INSERT INTO jae.Subject(abbr,description,name,registerDate) VALUES ('THREE','3 Subject','Two Subjects',sysdate());
 
 commit;

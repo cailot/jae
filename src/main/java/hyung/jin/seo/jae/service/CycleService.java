@@ -3,6 +3,7 @@ package hyung.jin.seo.jae.service;
 import java.util.List;
 
 import hyung.jin.seo.jae.dto.CycleDTO;
+import hyung.jin.seo.jae.model.Cycle;
 
 public interface CycleService {
 	
@@ -23,4 +24,13 @@ public interface CycleService {
 
 	// get academic week by date
 	int academicWeeks(String date);
+
+	// get Cycle by Id
+    Cycle findById(String cycleId);
+
+	// get Id by date
+	Long findIdByDate(String date);
+
+	// get Cycle by date
+	Cycle findCycleByDate(String date);
 }

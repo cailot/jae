@@ -45,8 +45,8 @@ public class Course{
     @Column(length = 400, nullable = false)
     private String description;
     
-    @Column(length = 10, nullable = false)
-    private String day;
+    // @Column(length = 10, nullable = false)
+    // private String day;
 
     @CreationTimestamp
     private LocalDate registerDate;
