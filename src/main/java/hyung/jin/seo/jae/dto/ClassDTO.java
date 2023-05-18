@@ -94,6 +94,7 @@ public class ClassDTO implements Serializable{
 		clazz.setFee(55.55);
 		if(StringUtils.isNotBlank(name)) clazz.setName(this.name);		
     	if(StringUtils.isNotBlank(day)) clazz.setDay(this.day);
+		clazz.setActive(this.active);
     	return clazz;
     }
 

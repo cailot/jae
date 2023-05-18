@@ -94,7 +94,8 @@ function addClass() {
 		name : $("#addName").val(),
 		grade : $("#addGrade").val(),
 		courseId : $("#addCourse").val(),
-		day : $("#addDay").val()
+		day : $("#addDay").val(),
+		active : $("#addActive").val()
 	}
 	console.log(clazz);
 	
@@ -253,6 +254,14 @@ function updateStudentInfo(){
 
 
 
+function updateActiveValue(checkbox) {
+  var addActiveInput = document.getElementById("addActive");
+  if (checkbox.checked) {
+    addActiveInput.value = "true";
+  } else {
+    addActiveInput.value = "false";
+  }
+}
 
 
 
@@ -535,8 +544,19 @@ function updateStudentInfo(){
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<label for="message">Memo</label>
-							<textarea class="form-control" id="addMemo" name="addMemo"></textarea>
+							<!-- <div class="col-md-4">
+								<label for="addActive">Activate</label> 
+								<input type="checkbox" id="addActive" name="addActive" value="true">
+							</div> -->
+							<div class="input-group col-md-4">
+								<div class="input-group-prepend">
+								  <div class="input-group-text">
+									<input type="checkbox" id="addActiveCheckbox" name="addActiveCheckbox" onchange="updateActiveValue(this)">
+								  </div>
+								</div>
+								<input type="hidden" id="addActive" name="addActive" value="false">
+								<input type="text" id="addActiveLabel" class="form-control" placeholder="Activate">
+							  </div>
 						</div>
 					</div>
 				</form>
