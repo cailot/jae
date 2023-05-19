@@ -27,6 +27,7 @@
 			data : JSON.stringify(std),
 			contentType : 'application/json',
 			success : function(student) {
+				//debugger;
 				// Display the success alert
 				$('#success-alert .modal-body').html('New student is registered successfully.');
 				$('#success-alert').modal('toggle');
@@ -98,10 +99,9 @@
 			url : '${pageContext.request.contextPath}/student/activate/' + id,
 			type : 'PUT',
 			success : function(data) {
-				//$('#ReactivateModal').modal('hide');
 				$('#success-alert .modal-body').html('ID : <b>' + id + '</b> is now activated');
 				$('#success-alert').modal('toggle');
-				clearStudentForm();
+				displayStudentInfo(data);
 			},
 			error : function(xhr, status, error) {
 				console.log('Error : ' + error);
@@ -143,8 +143,8 @@
 					row.append($('<td>').text(value.firstName));
 					row.append($('<td>').text(value.lastName));
 					row.append($('<td>').text(value.grade.toUpperCase()));
-					row.append($('<td>').text(value.registerDate));
-					row.append($('<td>').text(value.endDate));
+					row.append($('<td>').text(formatDate(value.registerDate)));
+					row.append($('<td>').text(formatDate(value.endDate)));
 					row.append($('<td>').text(value.email));
 					row.append($('<td>').text(value.contactNo1));
 					row.append($('<td>').text(value.contactNo2));
@@ -164,7 +164,7 @@
 		
 		clearStudentForm();
 		$("#formId").val(value['id']);
-		
+		//debugger;
 		if(value['endDate']===''){ // active student
 			$("#formFirstName").val(value['firstName']).css("color", "black");
 			$("#formLastName").val(value['lastName']).css("color", "black");
@@ -193,6 +193,8 @@
 		$("#formEndDate").val(value['endDate']);
 		
 		// Set date value
+		// const tempDate = formatDate(value['registerDate']);
+		// var date = new Date(tempDate); // Replace with your date value
 		var date = new Date(value['registerDate']); // Replace with your date value
 		$("#formRegisterDate").datepicker('setDate', date);
 		
@@ -245,9 +247,6 @@
 				// Display success alert
 				$('#success-alert .modal-body').html('ID : <b>' + value.id + '</b> is updated successfully.');
 				$('#success-alert').modal('toggle');
-				// Display returned result
-				const cleaned = cleanUpJson(value);
-				displayStudentInfo(cleaned);
 			},
 			error : function(xhr, status, error) {
 				console.log('Error : ' + error);
@@ -255,9 +254,29 @@
 		});
 	}
 
-		// Clear all form
+	// Clear all form
 	function clearStudentForm() {
 		document.getElementById("studentInfo").reset();
+	}
+
+	// date format for datepicker. it changes date format from dd/mm/yyyy to yyyy-mm-dd
+	// function formatDate(dateString) {
+	// 	const parts = dateString.split('/');
+	// 	const day = parts[0].padStart(2, '0');
+	// 	const month = parts[1].padStart(2, '0');
+	// 	const year = parts[2];
+	// 	return year + '-' + month + '-' + day;
+	// }
+
+	// date format for datepicker. it changes date format from yyyy-mm-dd to dd/mm/yyyy
+	function formatDate(dateString) {
+	if (dateString.includes('-')) {
+		const parts = dateString.split('-');
+		const formattedDate = parts.reverse().join('/');
+		return formattedDate;
+	} else {
+		return dateString; // Return the original string if it doesn't contain '-'
+	}
 	}
 
 

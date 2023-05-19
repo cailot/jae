@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +40,8 @@ public class JaeStudentController {
 	@Autowired
 	private StudentService studentService;
 	
-	@Autowired
-	private ElearningService elearningService;
+	// @Autowired
+	// private ElearningService elearningService;
 	
 
 	// register new student
@@ -69,13 +71,13 @@ public class JaeStudentController {
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
-			try {
-				// convert date format to dd/MM/yyyy
-				dto.setRegisterDate(JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate()));
-				dto.setEndDate(JaeUtils.convertToddMMyyyyFormat(dto.getEndDate()));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+			// try {
+			// 	// convert date format to dd/MM/yyyy
+			// 	dto.setRegisterDate(JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate()));
+			// 	dto.setEndDate(JaeUtils.convertToddMMyyyyFormat(dto.getEndDate()));
+			// } catch (ParseException e) {
+			// 	e.printStackTrace();
+			// }
 			dtos.add(dto);
 		}
 		return dtos;
@@ -147,31 +149,41 @@ public class JaeStudentController {
 	// de-activate student by Id
 	@PutMapping("/activate/{id}")
 	@ResponseBody
-	public void activateStudent(@PathVariable Long id) {
-		studentService.activateStudent(id);
+	public StudentDTO activateStudent(@PathVariable Long id) {
+		Student std = studentService.activateStudent(id);
+		StudentDTO dto = new StudentDTO(std);
+		return dto;
 	}
 
 	// search student list with state, branch, grade, start date or active
 	@GetMapping("/list")
-	public String listStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
-        System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
+	public String listStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model, HttpSession session) {
+        System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active);
+
 		List<Student> students = studentService.listStudents(state, branch, grade, year, active);
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
-			try {
+			// try {
 				// convert date format to dd/MM/yyyy
-				String startDate = JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate());
+				// String startDate = JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate());
 				int startWeek = 10;//JaeUtils.academicWeeks(startDate);
-				dto.setRegisterDate(startDate+"|"+startWeek);
+				dto.setRegisterDate(dto.getRegisterDate()+"|"+startWeek);
 				// dto.setEnrolmentDate(JaeUtils.convertToddMMyyyyFormat(dto.getEnrolmentDate()));
-				dto.setEndDate(JaeUtils.convertToddMMyyyyFormat(dto.getEndDate()));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
+				// dto.setEndDate(JaeUtils.convertToddMMyyyyFormat(dto.getEndDate()));
+			// } catch (ParseException e) {
+			// 	e.printStackTrace();
+			// }
 			dtos.add(dto);
 		}
 		model.addAttribute(JaeConstants.STUDENT_LIST, dtos);
+		
+		session.setAttribute("state", state);
+		session.setAttribute("branch", branch);
+		session.setAttribute("grade", grade);
+		session.setAttribute("year", year);
+		session.setAttribute("active", active);
+		
 		return "studentListPage";
 	}
 }

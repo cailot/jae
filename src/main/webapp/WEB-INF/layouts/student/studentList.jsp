@@ -111,7 +111,29 @@ function addStudent() {
 	$('#registerStudentModal').modal('hide');
 	// flush all registered data
 	document.getElementById("studentRegister").reset();
+
+	
 }
+
+
+
+// re-list student
+function relistStudent() {
+	debugger;
+		// send query to controller
+		$.ajax({
+			url : '${pageContext.request.contextPath}/student/list',
+			type : 'GET',
+			success : function(data) {
+			},
+			error : function(xhr, status, error) {
+				console.log('Error : ' + error);
+			}
+		}); 
+}
+
+
+
 
 
 // de-activate student
@@ -220,29 +242,28 @@ function updateStudentInfo(){
 	$('#editStudentModal').modal('hide');
 	// flush all registered data
 	document.getElementById("studentEdit").reset();
-	
-	
-	
+
+	location.reload();
+		
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 </script>
 
+
+
+
+
+
+
+<c:out value="${state}" /><br>
+<c:out value="${branch}" /><br>
+<c:out value="${grade}" /><br>
+<c:out value="${year}" /><br>
+<c:out value="${active}" /><br>
 <!-- List Body -->
 <div class="row">
 	<div class="modal-body">
-		<form id="studentList" method="get" action="${pageContext.request.contextPath}/course/list">
+		<form id="studentList" method="get" action="${pageContext.request.contextPath}/student/list">
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-2">

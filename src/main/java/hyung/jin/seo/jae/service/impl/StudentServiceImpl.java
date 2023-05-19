@@ -167,23 +167,42 @@ public class StudentServiceImpl implements StudentService {
 			existing.setMemo(newMemo);
 		}
 		// update course
-		if((newStudent.getElearnings()!=null) && (newStudent.getElearnings().size() > 0)) {
-			existing.setElearnings(newStudent.getElearnings());
-		}
+		// if((newStudent.getElearnings()!=null) && (newStudent.getElearnings().size() > 0)) {
+		// 	existing.setElearnings(newStudent.getElearnings());
+		// }
 
 		// update the existing record
 		Student updated = studentRepository.save(existing);
 		return updated;
 	}
 
+	// @Override
+	// @Transactional
+	// public void activateStudent(Long id) {
+	// 	try {
+	// 		studentRepository.setEndDateToNull(id);
+	// 	} catch (org.springframework.dao.EmptyResultDataAccessException e) {
+	// 		System.out.println("Nothing to discharge");
+	// 	}
+	// }
+
 	@Override
 	@Transactional
-	public void activateStudent(Long id) {
+	public Student activateStudent(Long id) {
+		Student student = null;
 		try {
-			studentRepository.setEndDateToNull(id);
+			// studentRepository.deleteById(id);
+			Optional<Student> end = studentRepository.findById(id);
+			if(end.isPresent()){
+				Student std = end.get();
+				std.setEndDate(null);
+				student = studentRepository.save(std);
+			}
+			return student;
 		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
-			System.out.println("Nothing to discharge");
+			System.out.println("Nothing to activate");
 		}
+		return student;
 	}
 	
 	@Override

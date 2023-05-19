@@ -50,7 +50,7 @@ public class StudentDTO implements Serializable{
     
     private String endDate;
     
-    private Set<ElearningDTO> elearnings = new LinkedHashSet<>();
+    // private Set<ElearningDTO> elearnings = new LinkedHashSet<>();
 	 
     public Student convertToStudent() {
     	Student std = new Student();
@@ -68,12 +68,12 @@ public class StudentDTO implements Serializable{
     	if(StringUtils.isNotBlank(registerDate)) std.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	// if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(endDate)) std.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	if((elearnings!=null) && (elearnings.size() > 0)) {
+    	// if((elearnings!=null) && (elearnings.size() > 0)) {
     		
-    		for(ElearningDTO dto : elearnings) {
-    			std.getElearnings().add(dto.convertToElearning());
-    		}
-    	}
+    	// 	for(ElearningDTO dto : elearnings) {
+    	// 		std.getElearnings().add(dto.convertToElearning());
+    	// 	}
+    	// }
     	return std;
     }
 
@@ -118,11 +118,11 @@ public class StudentDTO implements Serializable{
         this.registerDate = (std.getRegisterDate()!=null) ? std.getRegisterDate().toString() : "";
         // this.enrolmentDate = (std.getEnrolmentDate()!=null) ? std.getEnrolmentDate().toString() : "";
         this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
-        if((std.getElearnings()!=null) && (std.getElearnings().size()>0)){
-        	for(Elearning crs : std.getElearnings()) {
-        		elearnings.add(new ElearningDTO(crs));
-        	}
-        }
+        // if((std.getElearnings()!=null) && (std.getElearnings().size()>0)){
+        // 	for(Elearning crs : std.getElearnings()) {
+        // 		elearnings.add(new ElearningDTO(crs));
+        // 	}
+        // }
     }
         
 }

@@ -78,11 +78,11 @@ public class Student {
     private LocalDate endDate;
 
     
-    @ManyToMany(cascade=CascadeType.DETACH)
-    @JoinTable(name="Student_Elearning",
-    	joinColumns = {@JoinColumn(name="studentId")},
-    	inverseJoinColumns = {@JoinColumn(name="elearningId")}
-    )
-    private Set<Elearning> elearnings = new LinkedHashSet<>();
+    // @ManyToMany(cascade=CascadeType.DETACH)
+    // @JoinTable(name="Student_Elearning",
+    // 	joinColumns = {@JoinColumn(name="studentId")},
+    // 	inverseJoinColumns = {@JoinColumn(name="elearningId")}
+    // )
+    // private Set<Elearning> elearnings = new LinkedHashSet<>();
 
 }

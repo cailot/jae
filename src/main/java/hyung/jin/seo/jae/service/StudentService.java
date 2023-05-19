@@ -31,7 +31,7 @@ public interface StudentService {
 
 	void deactivateStudent(Long id);
 	
-	void activateStudent(Long id);
+	Student activateStudent(Long id);
 	
 	void deleteStudent(Long id);
 }
