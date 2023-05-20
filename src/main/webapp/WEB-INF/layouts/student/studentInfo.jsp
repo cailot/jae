@@ -36,6 +36,7 @@
 				$("#formFirstName").val(student.firstName);
 				$("#formLastName").val(student.lastName);
 				$("#formEmail").val(student.email);
+				$("#formGrade").val(student.grade);
 				$("#formAddress").val(student.address);
 				$("#formContact1").val(student.contactNo1);
 				$("#formContact2").val(student.contactNo2);
@@ -159,6 +160,58 @@
 		});
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//		Update existing student
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////	
+	function updateStudentInfo() {
+		// if activate process, then call activateStudent()
+		if($('#formEndDate').val()!='' && $('#formActive').prop('checked')){
+			reactivateStudent();
+			return;
+		}		
+		//warn if Id is empty
+		if ($("#formId").val() == '') {
+			$('#warning-alert .modal-body').text('Please search student record before update');
+			$('#warning-alert').modal('toggle');
+			return;
+		}
+		// get from formData
+		var std = {
+			id : $('#formId').val(),
+			firstName : $("#formFirstName").val(),
+			lastName : $("#formLastName").val(),
+			email : $("#formEmail").val(),
+			address : $("#formAddress").val(),
+			contactNo1 : $("#formContact1").val(),
+			contactNo2 : $("#formContact2").val(),
+			memo : $("#formMemo").val(),
+			state : $("#formState").val(),
+			branch : $("#formBranch").val(),
+			grade : $("#formGrade").val(),
+			registerDate : $("#formRegisterDate").val(),
+		}
+			
+		// send query to controller
+		$.ajax({
+			url : '${pageContext.request.contextPath}/student/update',
+			type : 'PUT',
+			dataType : 'json',
+			data : JSON.stringify(std),
+			contentType : 'application/json',
+			success : function(value) {
+				// Display success alert
+				$('#success-alert .modal-body').html('ID : <b>' + value.id + '</b> is updated successfully.');
+				$('#success-alert').modal('toggle');
+			},
+			error : function(xhr, status, error) {
+				console.log('Error : ' + error);
+			}
+		});
+	}
+
+
+
+
 	// Display selected student in student search
 	function displayStudentInfo(value) {
 		
@@ -169,6 +222,7 @@
 			$("#formFirstName").val(value['firstName']).css("color", "black");
 			$("#formLastName").val(value['lastName']).css("color", "black");
 			$("#formEmail").val(value['email']).css("color", "black");
+			$("#formGrade").val(value['grade']).css("color", "black");
 			$("#formAddress").val(value['address']).css("color", "black");
 			$("#formContact1").val(value['contactNo1']).css("color", "black");
 			$("#formContact2").val(value['contactNo2']).css("color", "black");
@@ -179,6 +233,7 @@
 			$("#formFirstName").val(value['firstName']).css("color", "red");
 			$("#formLastName").val(value['lastName']).css("color", "red");
 			$("#formEmail").val(value['email']).css("color", "red");
+			$("#formGrade").val(value['grade']).css("color", "red");
 			$("#formAddress").val(value['address']).css("color", "red");
 			$("#formContact1").val(value['contactNo1']).css("color", "red");
 			$("#formContact2").val(value['contactNo2']).css("color", "red");
@@ -203,55 +258,6 @@
 		// clear search keyword
 		$("#formKeyword").val('');
 	
-	}
-
-	// Update existing student
-	function updateStudentInfo() {
-		// if activate process, then call activateStudent()
-		if($('#formEndDate').val()!='' && $('#formActive').prop('checked')){
-			reactivateStudent();
-			return;
-		}		
-
-		//warn if Id is empty
-		if ($("#formId").val() == '') {
-			$('#warning-alert .modal-body').text('Please search student record before update');
-			$('#warning-alert').modal('toggle');
-			return;
-		}
-
-		// get from formData
-		var std = {
-			id : $('#formId').val(),
-			firstName : $("#formFirstName").val(),
-			lastName : $("#formLastName").val(),
-			email : $("#formEmail").val(),
-			address : $("#formAddress").val(),
-			contactNo1 : $("#formContact1").val(),
-			contactNo2 : $("#formContact2").val(),
-			memo : $("#formMemo").val(),
-			state : $("#formState").val(),
-			branch : $("#formBranch").val(),
-			grade : $("#elearningGrade").val(),
-			registerDate : $("#formRegisterDate").val(),
-		}
-			
-		// send query to controller
-		$.ajax({
-			url : '${pageContext.request.contextPath}/student/update',
-			type : 'PUT',
-			dataType : 'json',
-			data : JSON.stringify(std),
-			contentType : 'application/json',
-			success : function(value) {
-				// Display success alert
-				$('#success-alert .modal-body').html('ID : <b>' + value.id + '</b> is updated successfully.');
-				$('#success-alert').modal('toggle');
-			},
-			error : function(xhr, status, error) {
-				console.log('Error : ' + error);
-			}
-		});
 	}
 
 	// Clear all form
@@ -292,7 +298,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">
-                <p><i class="fa fa-question-circle"></i> Do you want to suspend this student?</p>	
+                <p> Do you want to suspend this student?</p>	
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-danger" onclick="inactivateStudent()"><i class="fa fa-times"></i> Deactivate</button>
@@ -353,23 +359,20 @@
 <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel">Student Registration</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			</div>
 			<div class="modal-body">
+				<section class="fieldset rounded border-primary">
+					<header class="text-primary font-weight-bold">Student Registration</header>
+			
 				<form id="studentRegister">
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-4">
-								<label for="selectOption">State</label> <select
-									class="form-control" id="addState" name="addState">
+								<label for="addState" class="label-form">State</label> <select class="form-control" id="addState" name="addState">
 									<option value="vic">Victoria</option>
 									</select>
 							</div>
 							<div class="col-md-5">
-								<label for="selectOption">Branch</label> <select
-									class="form-control" id="addBranch" name="addBranch">
+								<label for="addBranch" class="label-form">Branch</label> <select class="form-control" id="addBranch" name="addBranch">
 									<option value="braybrook">Braybrook</option>
 									<option value="epping">Epping</option>
 									<option value="balwyn">Balwyn</option>
@@ -395,7 +398,7 @@
 								</select>
 							</div>
 							<div class="col-md-3">
-								<label for="datepicker">Registration Date</label> 
+								<label for="addRegisterDate" class="label-form">Registration</label> 
 								<input type="text" class="form-control datepicker" id="addRegisterDate" name="addRegisterDate" placeholder="dd/mm/yyyy">
 							</div>
 							<script>
@@ -411,16 +414,13 @@
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-5">
-								<label for="name">First Name:</label> <input type="text"
-									class="form-control" id="addFirstName" name="addFirstName">
+								<label for="addFirstName" class="label-form">First Name:</label> <input type="text" class="form-control" id="addFirstName" name="addFirstName">
 							</div>
-							<div class="col-md-5">
-								<label for="name">Last Name:</label> <input type="text"
-									class="form-control" id="addLastName" name="addLastName">
+							<div class="col-md-4">
+								<label for="addLastName" class="label-form">Last Name:</label> <input type="text" class="form-control" id="addLastName" name="addLastName">
 							</div>
-							<div class="col-md-2">
-								<label for="selectOption">Grade</label> <select
-									class="form-control" id="addGrade" name="addGrade">
+							<div class="col-md-3">
+								<label for="addGrade" class="label-form">Grade</label> <select class="form-control" id="addGrade" name="addGrade">
 									<option value="p2">P2</option>
 									<option value="p3">P3</option>
 									<option value="p4">P4</option>
@@ -447,67 +447,41 @@
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-5">
-								<label for="name">Email</label> <input type="text"
-									class="form-control" id="addEmail" name="addEmail">
+								<label for="addEmail" class="label-form">Email</label> <input type="text" class="form-control" id="addEmail" name="addEmail">
 							</div>
 							<div class="col-md-7">
-								<label for="name">Address</label> <input type="text"
-									class="form-control" id="addAddress" name="addAddress">
+								<label for="addAddress" class="label-form">Address</label> <input type="text" class="form-control" id="addAddress" name="addAddress">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-6">
-								<label for="name">Contact No 1</label> <input type="text"
-									class="form-control" id="addContact1" name="addContact1">
+								<label for="addContact1" class="label-form">Contact No 1</label> <input type="text" class="form-control" id="addContact1" name="addContact1">
 							</div>
 							<div class="col-md-6">
-								<label for="name">Contact No 2</label> <input type="text"
-									class="form-control" id="addContact2" name="addContact2">
+								<label for="addContact2" class="label-form">Contact No 2</label> <input type="text" class="form-control" id="addContact2" name="addContact2">
 							</div>
 						</div>
 					</div>
-
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-12">
-								<label for="message">Memo</label>
+								<label for="addMemo" class="label-form">Memo</label>
 								<textarea class="form-control" style="height: 150px;" id="addMemo" name="addMemo"></textarea>
 							</div>
 						</div>
 					</div>
 				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-primary" onclick="addStudent()">Register</button>
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<div class="d-flex justify-content-end">
+    				<button type="submit" class="btn btn-primary" onclick="addStudent()">Register</button>&nbsp;&nbsp;
+    				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>	
+				</section>
 			</div>
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</style>
 
 <!-- Administration Body -->
 <div class="row">
@@ -583,11 +557,8 @@
 					<div class="col-md-4">
 						<label for="datepicker" class="label-form">Registration Date</label> <input type="text" class="form-control datepicker" id="formRegisterDate" name="formRegisterDate" placeholder=" Select a date" required>
 					</div>
-
 				</div>
 			</div>
-
-
 			<div class="form-group">
 				<div class="form-row admin-form-row">
 					<div class="col-md-3">
@@ -622,39 +593,12 @@
 			</div>
 			<div class="form-group">
 				<div class="form-row admin-form-row">
-					<div class="col-md-12">
+					<div class="col-md-9">
 						<input type="text"
 							class="form-control" id="formAddress" name="formAddress" placeholder="Address">
 					</div>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="form-row admin-form-row">
-					<div class="col-md-6">
-						<input type="text"
-							class="form-control" id="formContact1" name="formContact1" placeholder="Contact No 1">
-					</div>
-					<div class="col-md-6">
-						<input type="text"
-							class="form-control" id="formContact2" name="formContact2" placeholder="Contact No 2">
-					</div>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="form-row admin-form-row">
-					<div class="col-md-12">
-						<textarea class="form-control" id="formMemo" name="formMemo" style="height: 150px;" placeholder="Memo"></textarea>
-					</div>
-				</div>
-			</div>
-			<!-- eLearning List -->
-			<!-- <div class="form-group">
-				<div class="form-row admin-form-row">
 					<div class="col-md-3">
-						<label for="elearningGrade" class="label-form">Grade</label> 
-						<select class="form-control" id="elearningGrade" name="elearningGrade">
+						<select class="form-control" id="formGrade" name="formGrade">
 							<option value="p2">P2</option>
 							<option value="p3">P3</option>
 							<option value="p4">P4</option>
@@ -676,36 +620,28 @@
 							<option value="vce">VCE</option>
 						</select>
 					</div>
-					<div class="col-md-9">
-						<label for="" class="label-form">Select to add subject</label> <select
-							class="form-control" id="elearingDropdown" name="elearingDropdown">
-							<option value="p2">Click to add a subject</option>
-						</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="form-row admin-form-row">
+					<div class="col-md-6">
+						<input type="text"
+							class="form-control" id="formContact1" name="formContact1" placeholder="Contact No 1">
+					</div>
+					<div class="col-md-6">
+						<input type="text"
+							class="form-control" id="formContact2" name="formContact2" placeholder="Contact No 2">
 					</div>
 				</div>
 			</div>
-			
 			<div class="form-group">
 				<div class="form-row admin-form-row">
 					<div class="col-md-12">
-						<table id="gradeAssociateElearningTable" style="width: 100%;" class="table-bordered table-sm">
-							<thead class="table-primary">
-								<tr class="small" style="height: 35px;">
-									<th class="hidden-column"></th>
-									<th>Grade</th>
-									<th>eLearning Subject</th>
-									<th>Delete</th>
-								</tr>
-							</thead>
-							<tbody id="list-grade-associate-body">
-							</tbody>
-						</table>
+						<textarea class="form-control" id="formMemo" name="formMemo" style="height: 150px;" placeholder="Memo"></textarea>
 					</div>
 				</div>
-			</div> -->
-
-
-
+			</div>
 			<input type="hidden" id="formEndDate" name="formEndDate" />
 		</form>
 	</div>

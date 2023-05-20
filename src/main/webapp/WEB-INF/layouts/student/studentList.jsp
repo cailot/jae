@@ -56,7 +56,9 @@ $(document).ready(function () {
     
 });
 
-// Register Student
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Register Student
+////////////////////////////////////////////////////////////////////////////////////////////////////
 function addStudent() {
 	// Get from form data
 	var std = {
@@ -72,71 +74,83 @@ function addStudent() {
 		grade : $("#addGrade").val(),
 		enrolmentDate : $("#addEnrolment").val()
 	}
-	console.log(std);
-	
 	// Send AJAX to server
 	$.ajax({
-		url : '${pageContext.request.contextPath}/student/register',
-		type : 'POST',
+        url : '${pageContext.request.contextPath}/student/register',
+        type : 'POST',
+        dataType : 'json',
+        data : JSON.stringify(std),
+        contentType : 'application/json',
+        success : function() {
+			// Display the success alert
+            $('#success-alert .modal-body').text(
+                    'New Student is registered successfully.');
+            $('#success-alert').modal('show');
+			$('#success-alert').on('hidden.bs.modal', function(e) {
+				location.reload();
+			});
+        },
+        error : function(xhr, status, error) {
+            console.log('Error : ' + error);
+        }
+    });
+	$('#registerStudentModal').modal('hide');
+	// flush all registered data
+	document.getElementById("studentRegister").reset();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Update Student
+////////////////////////////////////////////////////////////////////////////////////////////////////
+function updateStudentInfo(){
+	
+	// get from formData
+	var std = {
+		id : $('#studentEditId').val(),
+		firstName : $("#studentEditFirstName").val(),
+		lastName : $("#studentEditLastName").val(),
+		email : $("#studentEditEmail").val(),
+		address : $("#studentEditAddress").val(),
+		contactNo1 : $("#studentEditContact1").val(),
+		contactNo2 : $("#studentEditContact2").val(),
+		memo : $("#studentEditMemo").val(),
+		state : $("#studentEditState").val(),
+		branch : $("#studentEditBranch").val(),
+		grade : $("#studentEditGrade").val(),
+		registerDate : $("#studentEditRegister").val()
+	}
+		
+	// send query to controller
+	$.ajax({
+		url : '${pageContext.request.contextPath}/student/update',
+		type : 'PUT',
 		dataType : 'json',
 		data : JSON.stringify(std),
 		contentType : 'application/json',
-		success : function(student) {
-			// Display the success alert
-			$('#success-alert .modal-body').text(
-					'Your action has been completed successfully.');
+		success : function(value) {
+			// Display success alert
+			$('#success-alert .modal-body').text('ID : ' + value.id + ' is updated successfully.');
 			$('#success-alert').modal('show');
-			// Update display info
-			$("#formId").val(student.id);
-			$("#formFirstName").val(student.firstName);
-			$("#formLastName").val(student.lastName);
-			$("#formEmail").val(student.email);
-			$("#formAddress").val(student.address);
-			$("#formContact1").val(student.contactNo1);
-			$("#formContact2").val(student.contactNo2);
-			$("#formMemo").val(student.memo);
-			$("#formState").val(student.state);
-			$("#formBranch").val(student.branch);
-			//$("#formGrade").val(student.grade);
-			$("#elearningGrade").val(student.grade);
-			// Set date value
-			var date = new Date(student.enrolmentDate); // Replace with your date value
-			$("#formEnrolment").datepicker('setDate', date);
-
+			// fetch data again
+			$('#success-alert').on('hidden.bs.modal', function(e) {
+				location.reload();
+			});
+			
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
 		}
 	});
-	$('#registerStudentModal').modal('hide');
-	// flush all registered data
-	document.getElementById("studentRegister").reset();
-
 	
+	$('#editStudentModal').modal('hide');
+	// flush all registered data
+	document.getElementById("studentEdit").reset();
 }
 
 
-
-// re-list student
-function relistStudent() {
-	debugger;
-		// send query to controller
-		$.ajax({
-			url : '${pageContext.request.contextPath}/student/list',
-			type : 'GET',
-			success : function(data) {
-			},
-			error : function(xhr, status, error) {
-				console.log('Error : ' + error);
-			}
-		}); 
-}
-
-
-
-
-
-// de-activate student
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//		De-activate Student
+////////////////////////////////////////////////////////////////////////////////////////////////////
 function inactivateStudent(id) {
 	if(confirm("Are you sure you want to de-activate this student?")){
 		// send query to controller
@@ -148,7 +162,9 @@ function inactivateStudent(id) {
 				$('#success-alert .modal-body').text(
 						'ID : ' + id + ' is now inactivated');
 				$('#success-alert').modal('show');
-				//clearStudentForm();
+				$('#success-alert').on('hidden.bs.modal', function(e) {
+					location.reload();
+				});
 			},
 			error : function(xhr, status, error) {
 				console.log('Error : ' + error);
@@ -160,13 +176,9 @@ function inactivateStudent(id) {
 }
 
 
-
-
-
-
-
-
-//Search Student with Keyword	
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Search Student with Keyword	
+////////////////////////////////////////////////////////////////////////////////////////////////////
 function retreiveStudentInfo(std) {
 	// send query to controller
 	$.ajax({
@@ -186,7 +198,6 @@ function retreiveStudentInfo(std) {
 			$("#studentEditMemo").val(student.memo);
 			$("#studentEditState").val(student.state);
 			$("#studentEditBranch").val(student.branch);
-			//$("#formGrade").val(student.grade);
 			$("#studentEditGrade").val(student.grade);
 			// Set date value
 			var date = new Date(student.registerDate); // Replace with your date value
@@ -199,67 +210,12 @@ function retreiveStudentInfo(std) {
 }
 
 
-function updateStudentInfo(){
-	
-	// get from formData
-	var std = {
-		id : $('#studentEditId').val(),
-		firstName : $("#studentEditFirstName").val(),
-		lastName : $("#studentEditLastName").val(),
-		email : $("#studentEditEmail").val(),
-		address : $("#studentEditAddress").val(),
-		contactNo1 : $("#studentEditContact1").val(),
-		contactNo2 : $("#studentEditContact2").val(),
-		memo : $("#studentEditMemo").val(),
-		state : $("#studentEditState").val(),
-		branch : $("#studentEditBranch").val(),
-		//grade : $("#studentEditGrade").val(),
-		grade : $("#elearningGrade").val(),
-		registerDate : $("#studentEditRegister").val(),
-		elearnings : []
-	}
-	
-	
-	// send query to controller
-	$.ajax({
-		url : '${pageContext.request.contextPath}/student/updateOnlyStudent',
-		type : 'PUT',
-		dataType : 'json',
-		data : JSON.stringify(std),
-		contentType : 'application/json',
-		success : function(value) {
-			// Display success alert
-			$('#success-alert .modal-body').text(
-					'ID : ' + value.id + ' is updated successfully.');
-			$('#success-alert').modal('show');
-			
-		},
-		error : function(xhr, status, error) {
-			console.log('Error : ' + error);
-		}
-	});
-	
-	$('#editStudentModal').modal('hide');
-	// flush all registered data
-	document.getElementById("studentEdit").reset();
-
-	location.reload();
-		
-}
-
 </script>
 
 
 
 
 
-
-
-<c:out value="${state}" /><br>
-<c:out value="${branch}" /><br>
-<c:out value="${grade}" /><br>
-<c:out value="${year}" /><br>
-<c:out value="${active}" /><br>
 <!-- List Body -->
 <div class="row">
 	<div class="modal-body">
@@ -326,7 +282,7 @@ function updateStudentInfo(){
 							<option value="vce">VCE</option>
 						</select>
 					</div>
-					<div class="col-md-2">
+					<div class="col-md-1">
 						<select class="form-control" id="listYear" name="listYear">
 							<option value="All">All</option>
 							<option value="2022">2022</option>
@@ -343,16 +299,12 @@ function updateStudentInfo(){
 					</div>
 					<div class="col mx-auto">
 						<button type="submit" class="btn btn-primary btn-block"> <i class="fa fa-search"></i>&nbsp;Search</button>
-
-
 					</div>
 					<div class="col mx-auto">
 						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerStudentModal"><i class="fa fa-plus"></i>&nbsp;Registration</button>
 					</div>
 				</div>
 			</div>
-
-
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-12">
@@ -378,16 +330,12 @@ function updateStudentInfo(){
 									
 										<c:forEach items="${StudentList}" var="student">
 											<tr>
-											
-											
 												<td class="small ellipsis" id="studentId" name="studentId"><span><c:out value="${student.id}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${student.firstName}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${student.lastName}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${fn:toUpperCase(student.grade)}" /></span></td>
-												
 												<c:set var="regDate" value="${student.registerDate}" />
 												<c:set var="starts" value="${fn:split(regDate, '|')}" />
-							
 												<td class="small ellipsis"><span><c:out value="${starts[0]}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${starts[1]}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${student.endDate}" /></span></td>
@@ -397,7 +345,7 @@ function updateStudentInfo(){
 												<td>
 													<i class="fa fa-edit text-primary" data-toggle="tooltip" title="Edit" onclick="retreiveStudentInfo('${student.id}')"></i>&nbsp;
 													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;
-				 									<i class="fa fa-trash text-danger" data-toggle="tooltip" title="Delete" onclick="inactivateStudent('${student.id}')"></i>
+				 									<i class="fa fa-trash text-danger" data-toggle="tooltip" title="Suspend" onclick="inactivateStudent('${student.id}')"></i>
 												</td>
 											</tr>
 										</c:forEach>
@@ -410,39 +358,28 @@ function updateStudentInfo(){
 					</div>
 				</div>
 			</div>
-
 		</form>
 	</div>
 </div>
 
-<!-- Add Form Dialogue -->
+<!-- Register Form Dialogue -->
 <div class="modal fade" id="registerStudentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel">Student Enrolment</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			</div>
 			<div class="modal-body">
+				<section class="fieldset rounded border-primary">
+					<header class="text-primary font-weight-bold">Student Registration</header>
+			
 				<form id="studentRegister">
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-4">
-								<label for="selectOption">State</label> <select
-									class="form-control" id="addState" name="addState">
+								<label for="addState" class="label-form">State</label> <select class="form-control" id="addState" name="addState">
 									<option value="vic">Victoria</option>
-									<!-- <option value="nsw">New South Wales</option>
-									<option value="qld">Queensland</option>
-									<option value="sa">South Australia</option>
-									<option value="tas">Tasmania</option>
-									<option value="wa">Western Australia</option>
-									<option value="nt">Northern Territory</option>
-									<option value="act">ACT</option> -->
-								</select>
+									</select>
 							</div>
 							<div class="col-md-5">
-								<label for="selectOption">Branch</label> <select
-									class="form-control" id="addBranch" name="addBranch">
+								<label for="addBranch" class="label-form">Branch</label> <select class="form-control" id="addBranch" name="addBranch">
 									<option value="braybrook">Braybrook</option>
 									<option value="epping">Epping</option>
 									<option value="balwyn">Balwyn</option>
@@ -468,8 +405,8 @@ function updateStudentInfo(){
 								</select>
 							</div>
 							<div class="col-md-3">
-								<label for="datepicker">Enrolment</label> 
-								<input type="text" class="form-control datepicker" id="addEnrolment" name="addEnrolment" placeholder="dd/mm/yyyy">
+								<label for="addRegisterDate" class="label-form">Registration</label> 
+								<input type="text" class="form-control datepicker" id="addRegisterDate" name="addRegisterDate" placeholder="dd/mm/yyyy">
 							</div>
 							<script>
 								var today = new Date();
@@ -477,23 +414,20 @@ function updateStudentInfo(){
 								var month = today.getMonth() + 1; // Note: January is 0
 								var year = today.getFullYear();
 								var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
-								document.getElementById('addEnrolment').value = formattedDate;
+								document.getElementById('addRegisterDate').value = formattedDate;
 							</script>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-5">
-								<label for="name">First Name:</label> <input type="text"
-									class="form-control" id="addFirstName" name="addFirstName">
+								<label for="addFirstName" class="label-form">First Name:</label> <input type="text" class="form-control" id="addFirstName" name="addFirstName">
 							</div>
-							<div class="col-md-5">
-								<label for="name">Last Name:</label> <input type="text"
-									class="form-control" id="addLastName" name="addLastName">
+							<div class="col-md-4">
+								<label for="addLastName" class="label-form">Last Name:</label> <input type="text" class="form-control" id="addLastName" name="addLastName">
 							</div>
-							<div class="col-md-2">
-								<label for="selectOption">Grade</label> <select
-									class="form-control" id="addGrade" name="addGrade">
+							<div class="col-md-3">
+								<label for="addGrade" class="label-form">Grade</label> <select class="form-control" id="addGrade" name="addGrade">
 									<option value="p2">P2</option>
 									<option value="p3">P3</option>
 									<option value="p4">P4</option>
@@ -520,46 +454,43 @@ function updateStudentInfo(){
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-5">
-								<label for="name">Email</label> <input type="text"
-									class="form-control" id="addEmail" name="addEmail">
+								<label for="addEmail" class="label-form">Email</label> <input type="text" class="form-control" id="addEmail" name="addEmail">
 							</div>
 							<div class="col-md-7">
-								<label for="name">Address</label> <input type="text"
-									class="form-control" id="addAddress" name="addAddress">
+								<label for="addAddress" class="label-form">Address</label> <input type="text" class="form-control" id="addAddress" name="addAddress">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-6">
-								<label for="name">Contact No 1</label> <input type="text"
-									class="form-control" id="addContact1" name="addContact1">
+								<label for="addContact1" class="label-form">Contact No 1</label> <input type="text" class="form-control" id="addContact1" name="addContact1">
 							</div>
 							<div class="col-md-6">
-								<label for="name">Contact No 2</label> <input type="text"
-									class="form-control" id="addContact2" name="addContact2">
+								<label for="addContact2" class="label-form">Contact No 2</label> <input type="text" class="form-control" id="addContact2" name="addContact2">
 							</div>
 						</div>
 					</div>
-
 					<div class="form-group">
 						<div class="form-row">
-							<label for="message">Memo</label>
-							<textarea class="form-control" id="addMemo" name="addMemo"></textarea>
+							<div class="col-md-12">
+								<label for="addMemo" class="label-form">Memo</label>
+								<textarea class="form-control" style="height: 150px;" id="addMemo" name="addMemo"></textarea>
+							</div>
 						</div>
 					</div>
 				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-primary" onclick="addStudent()">Register</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<div class="d-flex justify-content-end">
+    				<button type="submit" class="btn btn-primary" onclick="addStudent()">Register</button>&nbsp;&nbsp;
+    				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>	
+				</section>
 			</div>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
+
+
 
 <!-- Edit Form Dialogue -->
 <div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
@@ -731,8 +662,8 @@ function updateStudentInfo(){
 					</div>
 				</div>
 				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
 					<button type="submit" class="btn btn-info" onclick="return passwordChange();">Change Password</button> 
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
 					<input type="hidden" name="usernamepassword" id="usernamepassword" />
 				</div>
 			</form>
