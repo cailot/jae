@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -35,29 +36,15 @@ import hyung.jin.seo.jae.utils.JaeUtils;
 @RequestMapping("student")
 public class JaeStudentController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(JaeStudentController.class);
-
 	@Autowired
 	private StudentService studentService;
 	
-	// @Autowired
-	// private ElearningService elearningService;
-	
-
 	// register new student
 	@PostMapping("/register")
 	@ResponseBody
 	public StudentDTO registerStudent(@RequestBody StudentDTO formData) {
 		// 1. create Student without elearning
 		Student std = formData.convertToOnlyStudent();
-		// // 2. get elearning
-		// Set<ElearningDTO> elearnings = formData.getElearnings();
-		// for(ElearningDTO elearningDto : elearnings){
-		// 	Elearning elearn = elearningService.getElearning(Long.parseLong(elearningDto.getId()));
-		// 	// 3. associate elearning to Student
-		// 	std.getElearnings().add(elearn);
-		// }
-		// 4. save Student
 		std = studentService.addStudent(std);
 		StudentDTO dto = new StudentDTO(std);
 		return dto;
@@ -71,13 +58,6 @@ public class JaeStudentController {
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
-			// try {
-			// 	// convert date format to dd/MM/yyyy
-			// 	dto.setRegisterDate(JaeUtils.convertToddMMyyyyFormat(dto.getRegisterDate()));
-			// 	dto.setEndDate(JaeUtils.convertToddMMyyyyFormat(dto.getEndDate()));
-			// } catch (ParseException e) {
-			// 	e.printStackTrace();
-			// }
 			dtos.add(dto);
 		}
 		return dtos;
@@ -98,26 +78,6 @@ public class JaeStudentController {
 	@ResponseBody
 	public StudentDTO updateStudent(@RequestBody StudentDTO formData) {
 		Student std = formData.convertToStudent();
-		
-		// if((std.getElearnings() != null) && (std.getElearnings().size() > 0)) {
-		// 	// 1. check if any related courses come
-		// 	Set<ElearningDTO> crss = formData.getElearnings();
-		// 	Set<Long> cidList = new HashSet<Long>(); // extract Course Id
-		// 	for(ElearningDTO crsDto : crss) {
-		// 		cidList.add(Long.parseLong(crsDto.getId()));
-		// 	}
-		// 	long[] courseId = cidList.stream().mapToLong(Long::longValue).toArray();
-		// 	// 2. get Course in Student
-		// 	Set<Elearning> courses = std.getElearnings();
-		// 	// 3. clear existing course
-		// 	courses.clear();
-		// 	for(long cid : courseId) {
-		// 		// 4. get course info
-		// 		Elearning crs = elearningService.getElearning(cid);
-		// 		// 5. add Course to Student
-		// 		courses.add(crs);
-		// 	}
-		// }
 		// 7. update Student
 		std = studentService.updateStudent(std, std.getId());
 		// 8. convert Student to StudentDTO
@@ -126,17 +86,17 @@ public class JaeStudentController {
 	}
 	
 	
-	// update existing student
-	@PutMapping("/updateOnlyStudent")
-	@ResponseBody
-	public StudentDTO updateOnlyStudent(@RequestBody StudentDTO formData) {
-		Student std = formData.convertToStudent();
-		// update Student
-		std = studentService.updateStudent(std, std.getId());
-		// convert Student to StudentDTO
-		StudentDTO dto = new StudentDTO(std);
-		return dto;
-	}
+	// // update existing student
+	// @PutMapping("/updateOnlyStudent")
+	// @ResponseBody
+	// public StudentDTO updateOnlyStudent(@RequestBody StudentDTO formData) {
+	// 	Student std = formData.convertToStudent();
+	// 	// update Student
+	// 	std = studentService.updateStudent(std, std.getId());
+	// 	// convert Student to StudentDTO
+	// 	StudentDTO dto = new StudentDTO(std);
+	// 	return dto;
+	// }
 	
 	// de-activate student by Id
 	@PutMapping("/inactivate/{id}")
@@ -157,8 +117,10 @@ public class JaeStudentController {
 
 	// search student list with state, branch, grade, start date or active
 	@GetMapping("/list")
-	public String listStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model, HttpSession session) {
-        System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active);
+	public String listStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model, HttpServletRequest request, HttpSession session) {
+        String queryString = request.getQueryString();
+		System.out.println(queryString);
+		//System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active);
 
 		List<Student> students = studentService.listStudents(state, branch, grade, year, active);
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
@@ -178,12 +140,32 @@ public class JaeStudentController {
 		}
 		model.addAttribute(JaeConstants.STUDENT_LIST, dtos);
 		
-		session.setAttribute("state", state);
-		session.setAttribute("branch", branch);
-		session.setAttribute("grade", grade);
-		session.setAttribute("year", year);
-		session.setAttribute("active", active);
-		
+		session.setAttribute("query", queryString);
 		return "studentListPage";
 	}
+
+
+
+
+	// register new student
+	@PostMapping("/list/register")
+	@ResponseBody
+	public StudentDTO registerStudentList(@RequestBody StudentDTO formData) {
+		Student std = formData.convertToOnlyStudent();
+		std = studentService.addStudent(std);
+		return new StudentDTO(std);
+	}
+
+	// update existing student in student list page
+	@PutMapping("/list/update")
+	@ResponseBody
+	public StudentDTO updateStudentList(@RequestBody StudentDTO formData) {
+		Student std = formData.convertToStudent();		
+		// 7. update Student
+		std = studentService.updateStudent(std, std.getId());
+		// 8. convert Student to StudentDTO
+		StudentDTO dto = new StudentDTO(std);
+		return dto;
+	}
+	
 }
