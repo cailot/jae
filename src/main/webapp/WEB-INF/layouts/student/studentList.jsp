@@ -177,7 +177,7 @@ function inactivateStudent(id) {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Search Student with Keyword	
+//		Retrieve Student by User's click	
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 function retreiveStudentInfo(std) {
 	// send query to controller
@@ -212,7 +212,16 @@ function retreiveStudentInfo(std) {
 
 </script>
 
-
+<style>
+	#studentListTable th, td {
+		padding: 15px;
+	}
+	#studentList .form-row {
+  		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+	
+</style>
 
 
 
@@ -223,6 +232,7 @@ function retreiveStudentInfo(std) {
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-2">
+						<label for="listState" class="label-form">State</label> 
 						<select class="form-control" id="listState" name="listState">
 							<option value="All">All State</option>
 							<option value="vic">Victoria</option>
@@ -236,6 +246,7 @@ function retreiveStudentInfo(std) {
 						</select>
 					</div>
 					<div class="col-md-2">
+						<label for="listBranch" class="label-form">Branch</label> 
 						<select class="form-control" id="listBranch" name="listBranch">
 							<option value="All">All Branch</option>
 							<option value="braybrook">Braybrook</option>
@@ -263,6 +274,7 @@ function retreiveStudentInfo(std) {
 						</select>
 					</div>
 					<div class="col-md-1">
+						<label for="listGrade" class="label-form">Grade</label> 
 						<select class="form-control" id="listGrade" name="listGrade">
 							<option value="All">All</option>
 							<option value="p2">P2</option>
@@ -283,6 +295,7 @@ function retreiveStudentInfo(std) {
 						</select>
 					</div>
 					<div class="col-md-1">
+						<label for="listYear" class="label-form">Year</label> 
 						<select class="form-control" id="listYear" name="listYear">
 							<option value="All">All</option>
 							<option value="2022">2022</option>
@@ -291,6 +304,7 @@ function retreiveStudentInfo(std) {
 						</select>
 					</div>
 					<div class="col-md-2">
+						<label for="listActive" class="label-form">Activated</label> 
 						<select class="form-control" id="listActive" name="listActive">
 							<option value="All">All Students</option>
 							<option value="Current">Current Students</option>
@@ -298,9 +312,11 @@ function retreiveStudentInfo(std) {
 						</select>
 					</div>
 					<div class="col mx-auto">
+						<label class="label-form-white">Search</label> 
 						<button type="submit" class="btn btn-primary btn-block"> <i class="fa fa-search"></i>&nbsp;Search</button>
 					</div>
 					<div class="col mx-auto">
+						<label class="label-form-white">Registration</label> 
 						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerStudentModal"><i class="fa fa-plus"></i>&nbsp;Registration</button>
 					</div>
 				</div>
@@ -316,12 +332,12 @@ function retreiveStudentInfo(std) {
 										<th>Last Name</th>
 										<th>Grade</th>
 										<th>Start Date</th>
-										<th>Week</th>
+										<!-- <th>Week</th> -->
 										<th>End Date</th>
 										<th>Email</th>
 										<th>Contact 1</th>
 										<th>Contact 2</th>
-										<th>Action</th>
+										<th data-orderable="false">Action</th>
 									</tr>
 								</thead>
 								<tbody id="list-student-body">
@@ -337,7 +353,7 @@ function retreiveStudentInfo(std) {
 												<c:set var="regDate" value="${student.registerDate}" />
 												<c:set var="starts" value="${fn:split(regDate, '|')}" />
 												<td class="small ellipsis"><span><c:out value="${starts[0]}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${starts[1]}" /></span></td>
+												<!-- <td class="small ellipsis"><span><c:out value="${starts[1]}" /></span></td> -->
 												<td class="small ellipsis"><span><c:out value="${student.endDate}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${student.email}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${student.contactNo1}" /></span></td>
@@ -496,30 +512,20 @@ function retreiveStudentInfo(std) {
 <div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="modalEditLabel">Student Edit</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			</div>
 			<div class="modal-body">
+				<section class="fieldset rounded border-primary">
+					<header class="text-primary font-weight-bold">Student Edit</header>
+			
 				<form id="studentEdit">
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-4">
-								<label for="selectOption">State</label> <select
-									class="form-control" id="studentEditState" name="studentEditState">
+								<label for="studentEditState" class="label-form">State</label> <select class="form-control" id="studentEditState" name="studentEditState">
 									<option value="vic">Victoria</option>
-									<!-- <option value="nsw">New South Wales</option>
-									<option value="qld">Queensland</option>
-									<option value="sa">South Australia</option>
-									<option value="tas">Tasmania</option>
-									<option value="wa">Western Australia</option>
-									<option value="nt">Northern Territory</option>
-									<option value="act">ACT</option> -->
 								</select>
 							</div>
 							<div class="col-md-5">
-								<label for="selectOption">Branch</label> <select
-									class="form-control" id="studentEditBranch" name="studentEditBranch">
+								<label for="studentEditBranch" class="label-form">Branch</label> <select class="form-control" id="studentEditBranch" name="studentEditBranch">
 									<option value="braybrook">Braybrook</option>
 									<option value="epping">Epping</option>
 									<option value="balwyn">Balwyn</option>
@@ -545,29 +551,38 @@ function retreiveStudentInfo(std) {
 								</select>
 							</div>
 							<div class="col-md-3">
-								<label for="datepicker">Enrolment</label> 
+								<label for="studentEditRegister" class="label-form">Enrolment</label> 
 								<input type="text" class="form-control datepicker" id="studentEditRegister" name="studentEditRegister" placeholder="dd/mm/yyyy">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-2">
-								<label for="name">ID:</label> <input type="text"
-									class="form-control" id="studentEditId" name="studentEditId" readonly>
-							</div>
-							
 							<div class="col-md-4">
-								<label for="name">First Name:</label> <input type="text"
-									class="form-control" id="studentEditFirstName" name="studentEditFirstName">
+								<label for="studentEditId" class="label-form">ID:</label> <input type="text" class="form-control" id="studentEditId" name="studentEditId" readonly>
 							</div>
 							<div class="col-md-4">
-								<label for="name">Last Name:</label> <input type="text"
-									class="form-control" id="studentEditLastName" name="studentEditLastName">
+								<label for="studentEditFirstName" class="label-form">First Name:</label> <input type="text" class="form-control" id="studentEditFirstName" name="studentEditFirstName">
 							</div>
+							<div class="col-md-4">
+								<label for="studentEditLastName" class="label-form">Last Name:</label> <input type="text" class="form-control" id="studentEditLastName" name="studentEditLastName">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-row">
+							<div class="col-md-5">
+								<label for="studentEditEmail" class="label-form">Email</label> <input type="text" class="form-control" id="studentEditEmail" name="studentEditEmail">
+							</div>
+							<div class="col-md-7">
+								<label for="studentEditAddress" class="label-form">Address</label> <input type="text" class="form-control" id="studentEditAddress" name="studentEditAddress">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-row">
 							<div class="col-md-2">
-								<label for="selectOption">Grade</label> <select
-									class="form-control" id="studentEditGrade" name="studentEditGrade">
+								<label for="studentEditGrade" class="label-form">Grade</label> <select class="form-control" id="studentEditGrade" name="studentEditGrade">
 									<option value="p2">P2</option>
 									<option value="p3">P3</option>
 									<option value="p4">P4</option>
@@ -589,51 +604,30 @@ function retreiveStudentInfo(std) {
 									<option value="vce">VCE</option>
 								</select>
 							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
 							<div class="col-md-5">
-								<label for="name">Email</label> <input type="text"
-									class="form-control" id="studentEditEmail" name="studentEditEmail">
+								<label for="studentEditContact1" class="label-form">Contact No 1</label> <input type="text" class="form-control" id="studentEditContact1" name="studentEditContact1">
 							</div>
-							<div class="col-md-7">
-								<label for="name">Address</label> <input type="text"
-									class="form-control" id="studentEditAddress" name="studentEditAddress">
+							<div class="col-md-5">
+								<label for="studentEditContact2" class="label-form">Contact No 2</label> <input type="text" class="form-control" id="studentEditContact2" name="studentEditContact2">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-6">
-								<label for="name">Contact No 1</label> <input type="text"
-									class="form-control" id="studentEditContact1" name="studentEditContact1">
-							</div>
-							<div class="col-md-6">
-								<label for="name">Contact No 2</label> <input type="text"
-									class="form-control" id="studentEditContact2" name="studentEditContact2">
-							</div>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<div class="form-row">
-							<label for="message">Memo</label>
+							<label for="studentEditMemo" class="label-form">Memo</label>
 							<textarea class="form-control" id="studentEditMemo" name="studentEditMemo"></textarea>
 						</div>
 					</div>
 				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-primary" onclick="updateStudentInfo()">Save</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<div class="d-flex justify-content-end">
+					<button type="submit" class="btn btn-primary" onclick="updateStudentInfo()">Save</button>&nbsp;&nbsp;
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+				</section>
 			</div>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
 
 
 
@@ -671,45 +665,22 @@ function retreiveStudentInfo(std) {
 	</div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- Success Message Modal -->
-<div class="modal fade" id="success-alert" tabindex="-1"
-	aria-labelledby="successModalLabel" aria-hidden="true">
+<!-- Success Alert -->
+<div id="success-alert" class="modal fade">
 	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="successModalLabel">Success!</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body"></div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+		<div class="alert alert-block alert-success alert-dialog-display">
+			<i class="fa fa-check-circle fa-2x"></i>&nbsp;&nbsp;<div class="modal-body"></div>
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		</div>
+	</div>
+</div>
+
+<!-- Warning Alert -->
+<div id="warning-alert" class="modal fade">
+	<div class="modal-dialog">
+		<div class="alert alert-block alert-warning alert-dialog-display">
+			<i class="fa fa-exclamation-circle fa-2x"></i>&nbsp;&nbsp;<div class="modal-body"></div>
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 		</div>
 	</div>
 </div>

@@ -19,7 +19,6 @@
 	});
 </script>
 
-
 <!-- Success Alert -->
 <div id="success-alert" class="modal fade">
 	<div class="modal-dialog">
@@ -39,10 +38,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-
 
 <!-- Delete Alert -->
 <div id="confirm-alert" class="modal fade" >

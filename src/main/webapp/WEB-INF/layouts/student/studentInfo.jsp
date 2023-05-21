@@ -43,6 +43,8 @@
 				$("#formMemo").val(student.memo);
 				$("#formState").val(student.state);
 				$("#formBranch").val(student.branch);
+				$('#formActive').prop('checked', true);
+				$("#formActive").prop("disabled", true);
 				// Set date value
 				var date = new Date(student.registerDate); // Replace with your date value
 				$("#formRegisterDate").datepicker('setDate', date);
@@ -301,7 +303,7 @@
                 <p> Do you want to suspend this student?</p>	
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-danger" onclick="inactivateStudent()"><i class="fa fa-times"></i> Deactivate</button>
+                <button type="submit" class="btn btn-danger" onclick="inactivateStudent()"><i class="fa fa-times"></i>Suspend</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-check"></i> Close</button>
             </div>
     	</div>
@@ -587,7 +589,7 @@
 					      <input type="checkbox" id="formActive" name="formActive" disabled>
 					    </div>
 					  </div>
-					  <input type="text" id="formActiveLabel" class="form-control" placeholder="Activate" readonly>
+					  <input type="text" id="formActiveLabel" class="form-control" placeholder="Activated" readonly>
 					</div>
 				</div>
 			</div>

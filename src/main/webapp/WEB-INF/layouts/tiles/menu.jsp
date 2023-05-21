@@ -4,7 +4,8 @@
 <style>
 .jae-header{
 	padding : 0;
-	background-color: #263343;
+	/*background-color: #263343;*/
+	background-color: #2d398e;
 }
 .navbar {
 	display: flex;
@@ -16,10 +17,10 @@
 	text-decoraton: none;
 	color: white;
 }
-.navbar_logo{
+/* .navbar_logo{
 	font-size: 24px;
 	color: white;
-}
+} */
 .navbar_menu{
 	display: flex;
 	list-style: none;
@@ -32,14 +33,14 @@
 	background-color: '#e9ecef';
 	border-radius: 4px;
 }
-
+/* 
 .navbar_icon{
 	color: white;
 	font-size: 24px;
 	list-style: none;
 	display: flex;
 	padding-left: 0;
-}
+} */
 .navbar_icon li {
 	padding: 8px 12px;
 }
@@ -123,12 +124,6 @@
 			</div>
 		</li>
 
-
-
-		<!-- <li><a href="${pageContext.request.contextPath}/test">Course</a></li>
-		<li><a href="${pageContext.request.contextPath}/teacher">Teacher</a></li>
-		<li><a href="${pageContext.request.contextPath}/list">List</a></li>
-		<li><a href="${pageContext.request.contextPath}/test">Setting</a></li> -->
 	</ul>
 	<ul class="navbar_icon">
 		<li><i class="fa fa-user-circle"></i></li>	
