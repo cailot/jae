@@ -29,7 +29,7 @@
 	padding: 8px 12px;
 }
 .navbar_menu li:hover{
-	background-color: yellow;
+	background-color: '#e9ecef';
 	border-radius: 4px;
 }
 
@@ -73,7 +73,7 @@
 		
 
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/test" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Student
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -84,7 +84,7 @@
 		</li>
 
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/test" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Class
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -93,11 +93,42 @@
 			</div>
 		</li>
 
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Teacher
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/classList">Class List</a>
+				<a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
+			</div>
+		</li>
 
-		<!-- <li><a href="${pageContext.request.contextPath}/test">Course</a></li> -->
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  User
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/classList">Class List</a>
+				<a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
+			</div>
+		</li>
+
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Setting
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/classList">Class List</a>
+				<a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
+			</div>
+		</li>
+
+
+
+		<!-- <li><a href="${pageContext.request.contextPath}/test">Course</a></li>
 		<li><a href="${pageContext.request.contextPath}/teacher">Teacher</a></li>
 		<li><a href="${pageContext.request.contextPath}/list">List</a></li>
-		<li><a href="${pageContext.request.contextPath}/test">Setting</a></li>
+		<li><a href="${pageContext.request.contextPath}/test">Setting</a></li> -->
 	</ul>
 	<ul class="navbar_icon">
 		<li><i class="fa fa-user-circle"></i></li>	
