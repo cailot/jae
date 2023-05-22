@@ -1,8 +1,173 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@page import="hyung.jin.seo.jae.dto.StudentDTO"%>
-<%@page import="hyung.jin.seo.jae.utils.JaeUtils"%>
+
+
+<html>
+<head>
+<title>Student List</title>
+<link href="/css/jae.css" rel="stylesheet" type="text/css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	
+	
+
+<script type="text/javascript" src="/js/jae.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>		
+	
+<!-- Link to Bootstrap Datepicker CSS -->
+<link rel="stylesheet"	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<!-- Link to Bootstrap Datepicker JavaScript -->
+<script	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<!-- Glyphicons -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">		
+	
+
+
+</head>
+<body>
+	<div class="container-fluid d-flex h-100 flex-column">
+		<div class="row">
+			
+
+
+<style>
+.jae-header{
+	padding : 0;
+	/*background-color: #263343;*/
+	background-color: #2d398e;
+}
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px 12px;
+}
+.navbar a {
+	text-decoraton: none;
+	color: white;
+}
+/* .navbar_logo{
+	font-size: 24px;
+	color: white;
+} */
+.navbar_menu{
+	display: flex;
+	list-style: none;
+	padding-left: 0;
+}
+.navbar_menu li {
+	padding: 8px 12px;
+}
+.navbar_menu li:hover{
+	background-color: '#e9ecef';
+	border-radius: 4px;
+}
+/* 
+.navbar_icon{
+	color: white;
+	font-size: 24px;
+	list-style: none;
+	display: flex;
+	padding-left: 0;
+} */
+.navbar_icon li {
+	padding: 8px 12px;
+}
+
+@media screen and (max-width: 768px){
+	.navbar{
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 8px 12px;
+	}
+	.navbar_menu{
+		flex-direction: column;
+		align-items: center;
+		width: 100%;
+	}
+	.navbar_icon{
+		justify-content: center;
+		width: 100%;
+		
+	}
+
+}
+</style>
+<div class="container-fluid jae-header">
+<nav class="navbar">
+	<div class="navbar_logo">
+		<img src="/image/logo.png" style="filter: brightness(0) invert(1);width:45px;" >
+		James An Colleges
+	</div>
+	<ul class="navbar_menu">
+		
+
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Student
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				<a class="dropdown-item" style="color: #212529;" href="/admin">Student Admin</a>
+			  	<a class="dropdown-item" style="color: #212529;" href="/studentList">Student List</a>
+				  <a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
+			</div>
+		</li>
+
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Class
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			  	<a class="dropdown-item" style="color: #212529;" href="/classList">Class List</a>
+				<a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
+			</div>
+		</li>
+
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Teacher
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			  	<a class="dropdown-item" style="color: #212529;" href="/classList">Class List</a>
+				<a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
+			</div>
+		</li>
+
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  User
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			  	<a class="dropdown-item" style="color: #212529;" href="/classList">Class List</a>
+				<a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
+			</div>
+		</li>
+
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			  Setting
+			</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			  	<a class="dropdown-item" style="color: #212529;" href="/classList">Class List</a>
+				<a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
+			</div>
+		</li>
+
+	</ul>
+	<ul class="navbar_icon">
+		<li><i class="fa fa-user-circle"></i></li>	
+	</ul>
+</nav>
+</div>
+ 
+		</div>
+		<div class="row justify-content-center align-items-center">
+			
+
+
+
+
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"></link>
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"></link>
@@ -16,6 +181,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
  
   
 <script>
@@ -37,6 +203,7 @@ $(document).ready(function () {
 		//pageLength: 20
     });
     
+
 	$('table .password').on('click', function(){
 		var username = $(this).parent().find('#username').val();
 		$('#passwordModal #usernamepassword').val(username);
@@ -74,7 +241,7 @@ function addStudent() {
 	}
 	// Send AJAX to server
 	$.ajax({
-        url : '${pageContext.request.contextPath}/student/register',
+        url : '/student/register',
         type : 'POST',
         dataType : 'json',
         data : JSON.stringify(std),
@@ -120,7 +287,7 @@ function updateStudentInfo(){
 		
 	// send query to controller
 	$.ajax({
-		url : '${pageContext.request.contextPath}/student/update',
+		url : '/student/update',
 		type : 'PUT',
 		dataType : 'json',
 		data : JSON.stringify(std),
@@ -145,6 +312,7 @@ function updateStudentInfo(){
 	document.getElementById("studentEdit").reset();
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //		De-activate Student
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -152,7 +320,7 @@ function inactivateStudent(id) {
 	if(confirm("Are you sure you want to suspend this student?")){
 		// send query to controller
 		$.ajax({
-			url : '${pageContext.request.contextPath}/student/inactivate/' + id,
+			url : '/student/inactivate/' + id,
 			type : 'PUT',
 			success : function(data) {
 				// clear existing form
@@ -179,7 +347,7 @@ function inactivateStudent(id) {
 function retreiveStudentInfo(std) {
 	// send query to controller
 	$.ajax({
-		url : '${pageContext.request.contextPath}/student/get/' + std,
+		url : '/student/get/' + std,
 		type : 'GET',
 		success : function(student) {
 			$('#editStudentModal').modal('show');
@@ -210,7 +378,7 @@ function retreiveStudentInfo(std) {
 </script>
 
 <style>
-	#studentListTable th, tr {
+	#studentListTable th, td {
 		padding: 15px;
 	}
 	#studentList .form-row {
@@ -218,26 +386,27 @@ function retreiveStudentInfo(std) {
 		margin-bottom: 20px;
 	}
 	div.dataTables_filter {
-		padding-top: 35px;
-		padding-bottom: 35px;
+		padding-top: 5px;
+		padding-bottom: 10px;
 	}
-	div.dt-buttons {
-		padding-top: 35px;
+	dt-buttons {
+		padding-top: 20px;
 		padding-bottom: 10px;
 	}
 	div.dataTables_length{
-		padding-top: 40px;
+		padding-top: 5px;
 		padding-bottom: 10px;
 	}
-	tr { height: 50px } 
 
+	
 </style>
+
 
 
 <!-- List Body -->
 <div class="row">
 	<div class="modal-body">
-		<form id="studentList" method="get" action="${pageContext.request.contextPath}/student/list">
+		<form id="studentList" method="get" action="/student/list">
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-2">
@@ -334,8 +503,7 @@ function retreiveStudentInfo(std) {
 				<div class="form-row">
 					<div class="col-md-12">
 						<div class="table-wrap">
-							<table id="studentListTable" class="table table-striped table-bordered" style="width: 100%;">
-								<thead class="table-primary">
+							<table id="studentListTable" class="table table-striped table-bordered"><thead class="table-primary">
 									<tr>
 										<th>ID</th>
 										<th>First Name</th>
@@ -351,31 +519,9 @@ function retreiveStudentInfo(std) {
 									</tr>
 								</thead>
 								<tbody id="list-student-body">
-								<c:choose>
-									<c:when test="${StudentList != null}">
-										<c:forEach items="${StudentList}" var="student">
-											<tr>
-												<td class="ellipsis" id="studentId" name="studentId"><span><c:out value="${student.id}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.firstName}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.lastName}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${fn:toUpperCase(student.grade)}" /></span></td>
-												<c:set var="regDate" value="${student.registerDate}" />
-												<c:set var="starts" value="${fn:split(regDate, '|')}" />
-												<td class="ellipsis"><span><c:out value="${starts[0]}" /></span></td>
-												<!-- <td class="small ellipsis"><span><c:out value="${starts[1]}" /></span></td> -->
-												<td class="ellipsis"><span><c:out value="${student.endDate}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.email}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.contactNo1}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.contactNo2}" /></span></td>
-												<td>
-													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retreiveStudentInfo('${student.id}')"></i>&nbsp;
-													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning fa-lg" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;
-				 									<i class="fa fa-trash text-danger fa-lg" data-toggle="tooltip" title="Suspend" onclick="inactivateStudent('${student.id}')"></i>
-												</td>
-											</tr>
-										</c:forEach>
-									</c:when>
-								</c:choose>
+								
+									
+								
 								</tbody>
 							</table>
 						</div>
@@ -514,6 +660,8 @@ function retreiveStudentInfo(std) {
 	</div>
 </div>
 
+
+
 <!-- Edit Form Dialogue -->
 <div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -521,6 +669,7 @@ function retreiveStudentInfo(std) {
 			<div class="modal-body">
 				<section class="fieldset rounded border-primary">
 					<header class="text-primary font-weight-bold">Student Edit</header>
+			
 				<form id="studentEdit">
 					<div class="form-group">
 						<div class="form-row">
@@ -634,11 +783,20 @@ function retreiveStudentInfo(std) {
 	</div>
 </div>
 
+
+
+
+
+
+
+
+
+
 <!--  Password Modal HTML -->
 <div id="passwordStudentModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form method="POST" action="${pageContext.request.contextPath}/changePassword">
+			<form method="POST" action="/changePassword">
 				<div class="modal-header">
 					<h4 class="modal-title">Change Password</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -700,3 +858,16 @@ function retreiveStudentInfo(std) {
     	</div>
 	</div>
 </div>
+
+		</div>
+		<footer class="mt-auto">
+			<div class="row dhhs-color" style="padding: 15px 20px;">
+				2018 -
+				2023
+				&copy;&nbsp; All rights reserved.&nbsp;&nbsp;
+				<div class="copyright-font-color">James An College</div>
+			</div>
+		</footer>
+	</div>
+</body>
+</html>

@@ -78,14 +78,14 @@
 				<jsp:include page="student/studentInfo.jsp"></jsp:include>
 			</div>
       </div>
-	<div class="col-lg-8 bg-warning">
+	<div class="col-lg-8">
       	<div class="row">
-			<div class="col-lg-8 bg-warning">
+			<div class="col-lg-8 bg-secondary">
 			<div class="card-body">
 				<jsp:include page="course/courseInfo.jsp"></jsp:include>
 			 </div>
 			</div>
-			<div class="col-lg-4 bg-success">
+			<div class="col-lg-4 bg-secondary">
 			 <div class="card-body">
 			 <h5 class="card-title">Attendance</h5>
 				<div class="modal-body">
@@ -101,7 +101,7 @@
 			</div>
       	</div>
       	<div class="row">
-      		<div class="col-lg-12 bg-primary">
+      		<div class="col-lg-12 bg-secondary">
       		<div class="card-body">
       				<form>
 						<div class="form-group">

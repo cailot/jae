@@ -1,5 +1,4 @@
 <script>
-	
 	///////////////////////////////////////////////////////////////////////////
 	// 		Add Student
 	///////////////////////////////////////////////////////////////////////////
@@ -18,7 +17,6 @@
 			grade : $("#addGrade").val(),
 			registerDate : $("#addRegisterDate").val(),
 		}
-		
 		// Send AJAX to server
 		$.ajax({
 			url : '${pageContext.request.contextPath}/student/register',
@@ -111,7 +109,6 @@
 			}
 		}); 
 	}
-
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//			Search Student with Keyword	
@@ -211,9 +208,6 @@
 		});
 	}
 
-
-
-
 	// Display selected student in student search
 	function displayStudentInfo(value) {
 		
@@ -267,24 +261,15 @@
 		document.getElementById("studentInfo").reset();
 	}
 
-	// date format for datepicker. it changes date format from dd/mm/yyyy to yyyy-mm-dd
-	// function formatDate(dateString) {
-	// 	const parts = dateString.split('/');
-	// 	const day = parts[0].padStart(2, '0');
-	// 	const month = parts[1].padStart(2, '0');
-	// 	const year = parts[2];
-	// 	return year + '-' + month + '-' + day;
-	// }
-
 	// date format for datepicker. it changes date format from yyyy-mm-dd to dd/mm/yyyy
 	function formatDate(dateString) {
-	if (dateString.includes('-')) {
-		const parts = dateString.split('-');
-		const formattedDate = parts.reverse().join('/');
-		return formattedDate;
-	} else {
-		return dateString; // Return the original string if it doesn't contain '-'
-	}
+		if (dateString.includes('-')) {
+			const parts = dateString.split('-');
+			const formattedDate = parts.reverse().join('/');
+			return formattedDate;
+		} else {
+			return dateString; // Return the original string if it doesn't contain '-'
+		}
 	}
 
 
@@ -303,7 +288,7 @@
                 <p> Do you want to suspend this student?</p>	
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-danger" onclick="inactivateStudent()"><i class="fa fa-times"></i>Suspend</button>
+                <button type="submit" class="btn btn-danger" onclick="inactivateStudent()"><i class="fa fa-times"></i> Suspend</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-check"></i> Close</button>
             </div>
     	</div>
@@ -353,6 +338,9 @@
 	  overflow-x: auto;
 	}
 	#studentListResultTable th, #studentListResultTable td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+	.form-group{
+		margin-bottom: 30px;
+	}
   </style>
   
   
@@ -364,7 +352,6 @@
 			<div class="modal-body">
 				<section class="fieldset rounded border-primary">
 					<header class="text-primary font-weight-bold">Student Registration</header>
-			
 				<form id="studentRegister">
 					<div class="form-group">
 						<div class="form-row">
@@ -470,7 +457,7 @@
 						<div class="form-row">
 							<div class="col-md-12">
 								<label for="addMemo" class="label-form">Memo</label>
-								<textarea class="form-control" style="height: 150px;" id="addMemo" name="addMemo"></textarea>
+								<textarea class="form-control" style="height: 200px;" id="addMemo" name="addMemo"></textarea>
 							</div>
 						</div>
 					</div>
@@ -518,15 +505,9 @@
 			<div class="form-group">
 				<div class="form-row admin-form-row">
 					<div class="col-md-4">
-						<label for="formState" class="label-form">State</label> <select class="form-control" id="formState" name="formState">
+						<label for="formState" class="label-form">State</label> 
+						<select class="form-control" id="formState" name="formState">
 							<option value="vic">Victoria</option>
-							<!-- <option value="nsw">New South Wales</option>
-							<option value="qld">Queensland</option>
-							<option value="sa">South Australia</option>
-							<option value="tas">Tasmania</option>
-							<option value="wa">Western Australia</option>
-							<option value="nt">Northern Territory</option>
-							<option value="act">ACT</option> -->
 						</select>
 					</div>
 					<div class="col-md-4">
@@ -572,16 +553,14 @@
 							class="form-control" id="formFirstName" name="formFirstName" placeholder="First Name">
 					</div>
 					<div class="col-md-4">
-						<input type="text"
-							class="form-control" id="formLastName" name="formLastName" placeholder="Last Name">
+						<input type="text" class="form-control" id="formLastName" name="formLastName" placeholder="Last Name">
 					</div>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="form-row admin-form-row">
 					<div class="col-md-8">
-						<input type="text"
-							class="form-control" id="formEmail" name="formEmail" placeholder="Email">
+						<input type="text" class="form-control" id="formEmail" name="formEmail" placeholder="Email">
 					</div>
 					<div class="input-group col-md-4">
 					  <div class="input-group-prepend">
@@ -628,19 +607,17 @@
 			<div class="form-group">
 				<div class="form-row admin-form-row">
 					<div class="col-md-6">
-						<input type="text"
-							class="form-control" id="formContact1" name="formContact1" placeholder="Contact No 1">
+						<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Contact No 1">
 					</div>
 					<div class="col-md-6">
-						<input type="text"
-							class="form-control" id="formContact2" name="formContact2" placeholder="Contact No 2">
+						<input type="text" class="form-control" id="formContact2" name="formContact2" placeholder="Contact No 2">
 					</div>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="form-row admin-form-row">
 					<div class="col-md-12">
-						<textarea class="form-control" id="formMemo" name="formMemo" style="height: 150px;" placeholder="Memo"></textarea>
+						<textarea class="form-control" id="formMemo" name="formMemo" style="height: 200px;" placeholder="Memo"></textarea>
 					</div>
 				</div>
 			</div>
