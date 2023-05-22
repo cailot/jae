@@ -370,7 +370,7 @@ function retreiveStudentInfo(std) {
 												<td>
 													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retreiveStudentInfo('${student.id}')"></i>&nbsp;
 													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning fa-lg" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;
-				 									<i class="fa fa-trash text-danger fa-lg" data-toggle="tooltip" title="Suspend" onclick="inactivateStudent('${student.id}')"></i>
+				 									<i class="fas fa-stop-circle text-danger fa-lg" data-toggle="tooltip" title="Suspend" onclick="inactivateStudent('${student.id}')"></i>
 												</td>
 											</tr>
 										</c:forEach>
@@ -653,7 +653,7 @@ function retreiveStudentInfo(std) {
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-info" onclick="return passwordChange();">Change Password</button> 
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="button" class="btn btn-secondary" data-dismiss="modal" value="Cancel">
 					<input type="hidden" name="usernamepassword" id="usernamepassword" />
 				</div>
 			</form>
