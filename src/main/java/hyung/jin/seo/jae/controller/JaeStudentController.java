@@ -2,7 +2,10 @@ package hyung.jin.seo.jae.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hyung.jin.seo.jae.dto.StudentDTO;
+import hyung.jin.seo.jae.model.Elearning;
 import hyung.jin.seo.jae.model.Student;
+import hyung.jin.seo.jae.service.ElearningService;
 import hyung.jin.seo.jae.service.StudentService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 
@@ -25,6 +30,9 @@ public class JaeStudentController {
 
 	@Autowired
 	private StudentService studentService;
+
+	@Autowired
+	private ElearningService elearningService;
 	
 	// register new student
 	@PostMapping("/register")
@@ -106,5 +114,30 @@ public class JaeStudentController {
 		return "studentListPage";
 	}
 
-	
+	// associate elearnings with student
+	@PostMapping("/associateElearning/{id}")
+	@ResponseBody
+	public ResponseEntity<String> associateElearning(@PathVariable Long id, @RequestBody Long[] elearningIds) {
+		// 1. get student
+		Student std = studentService.getStudent(id);
+		// 2. check whether elearnings are empty
+		if(elearningIds.length==0) {
+			// 3-1. simply return success
+			return ResponseEntity.ok("Nothing associated");
+		}else{
+			// 3-2. empty elearning list
+			Set<Elearning> elearningSet = std.getElearnings();
+			elearningSet.clear();
+			// 4. associate elearnings
+			for(Long elearningId : elearningIds) {
+				Elearning elearning = elearningService.getElearning(elearningId);
+				// 5. associate elearning with student
+				elearningSet.add(elearning);
+			}
+			// 6. update student
+			studentService.updateStudent(std, id);
+			// 7. return success
+			return ResponseEntity.ok("Success");
+		}
+	}
 }

@@ -21,6 +21,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -77,12 +78,12 @@ public class Student {
     @CreatedDate
     private LocalDate endDate;
 
-    
-    // @ManyToMany(cascade=CascadeType.DETACH)
-    // @JoinTable(name="Student_Elearning",
-    // 	joinColumns = {@JoinColumn(name="studentId")},
-    // 	inverseJoinColumns = {@JoinColumn(name="elearningId")}
-    // )
-    // private Set<Elearning> elearnings = new LinkedHashSet<>();
+    // Unidirectional ManyToMany
+    @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(name="Student_Elearning",
+    	joinColumns = @JoinColumn(name="studentId"),
+    	inverseJoinColumns = @JoinColumn(name="elearningId")
+    )
+    private Set<Elearning> elearnings = new HashSet<>();
 
 }

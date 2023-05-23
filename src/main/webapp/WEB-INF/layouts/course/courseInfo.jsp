@@ -23,18 +23,19 @@ $(document).ready(
 
 
 		$('#registerGrade').on('change',function() {
-			var grade = $(this).val()
+			//debugger;
+			var grade = $(this).val();
 			listElearns(grade);
 			listClasses(grade);
 			listBooks(grade);
 			listEtcs(grade);
 		});
 		
-		// when page loads, search course fees for grade 'p2' as first entry
-		listElearns('p2');
-		listClasses('p2');
-		listBooks('p2');
-		listEtcs('p2');
+		// when page loads, search course fees for grade 'p2' as first entry --> No need as there is no student selected yet
+		// listElearns('p2');
+		// listClasses('p2');
+		// listBooks('p2');
+		// listEtcs('p2');
 
 		// remove records from basket when click on delete icon
 		$('#basketTable').on('click', 'a', function(e) {
@@ -165,8 +166,53 @@ function listEtcs(grade) {
 	});
 }
 
-function displayInfo(id){
-	console.log(id);
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Associate eLearnings with Student	
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function associateOnline(){
+	// get id from 'formId'
+	const studentId = $('#formId').val();
+	// if id is null, show alert and return
+	if (studentId == null || studentId == '') {
+		alert('Please select a student');
+		return;
+	}
+
+	var elearnings = [];
+	$('#basketTable tbody tr').each(function() {
+  		var hiddenColumnValue = $(this).find('.hidden-column').text();
+		elearnings.push(hiddenColumnValue);
+	});
+	
+	
+	// Create an object to hold the data
+	// var requestData = {
+	// 	elearningIds: elearnings
+	// };
+	var requestData = elearnings.map(function(id) {
+    	return parseInt(id);
+		});
+	
+
+	var requestString = JSON.stringify(requestData);
+	//debugger;
+	// Make the AJAX request
+	$.ajax({
+		url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
+		method: 'POST',
+		data: requestString,
+		contentType: 'application/json',
+		success: function(response) {
+			// Handle the response
+			console.log(response);
+		},
+		error: function(xhr, status, error) {
+			// Handle the error
+			console.error(error);
+		}
+	});
+			
+
 }
 
 
@@ -239,6 +285,7 @@ function addEtcToBasket(value){
 			<div class="form-row">
 				<div class="col-md-3">
 					<select class="form-control form-control-sm" id="registerGrade" name="registerGrade">
+						<option>Grade</option>
 						<option value="p2">P2</option>
 						<option value="p3">P3</option>
 						<option value="p4">P4</option>
@@ -261,12 +308,10 @@ function addEtcToBasket(value){
 					</select>
 				</div>
 				<div class="col-md-7">
-					<p class="text-truncate">Class change is possible after changing Please click
-						Apply button</p>
+					<p class="text-truncate">Class change is possible after changing Please click Apply button</p>
 				</div>
 				<div class="col-md-2">
-					<button type="button" class="btn btn-block btn-primary btn-sm"
-						data-toggle="modal" data-target="#registerModal">Apply</button>
+					<button type="button" class="btn btn-block btn-primary btn-sm" data-toggle="modal" onclick="associateOnline()">Apply</button>
 				</div>
 			</div>
 		</div>
