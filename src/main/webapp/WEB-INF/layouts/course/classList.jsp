@@ -56,12 +56,57 @@ $(document).ready(function () {
     // When the Grade dropdown changes, send an Ajax request to get the corresponding Type
 	$('#addGrade').change(function() {
 	var grade = $(this).val();
-		courseByGrade(grade);
+		addCourseByGrade(grade);
 	});
 
 });
 
-function courseByGrade(grade){
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Register Class
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function addClass() {
+	// Get from form data
+	var clazz = {
+		state : $("#addState").val(),
+		branch : $("#addBranch").val(),
+		startDate : $("#addStartDate").val(),
+		name : $("#addName").val(),
+		grade : $("#addGrade").val(),
+		courseId : $("#addCourse").val(),
+		day : $("#addDay").val(),
+		active : $("#addActive").val(),
+		fee : $("#addFee").val()
+	}
+	console.log(clazz);
+	
+	// Send AJAX to server
+	$.ajax({
+		url : '${pageContext.request.contextPath}/class/register',
+		type : 'POST',
+		dataType : 'json',
+		data : JSON.stringify(clazz),
+		contentType : 'application/json',
+		success : function(student) {
+			// Display the success alert
+            $('#success-alert .modal-body').text(
+                    'New Class is registered successfully.');
+            $('#success-alert').modal('show');
+			$('#success-alert').on('hidden.bs.modal', function(e) {
+				location.reload();
+			});
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+	$('#registerClassModal').modal('hide');
+	// flush all registered data
+	document.getElementById("classRegister").reset();
+}
+
+
+// populate courses by grade
+function addCourseByGrade(grade){
 	$.ajax({
 		url: '${pageContext.request.contextPath}/class/coursesByGrade',
 		method: 'GET',
@@ -77,65 +122,30 @@ function courseByGrade(grade){
 			error: function(xhr, status, error) {
 			console.error(xhr.responseText);
 			}
-		});
-}
-
-
-
-
-
-// Register Class
-function addClass() {
-	// Get from form data
-	var clazz = {
-		state : $("#addState").val(),
-		branch : $("#addBranch").val(),
-		startDate : $("#addStartDate").val(),
-		name : $("#addName").val(),
-		grade : $("#addGrade").val(),
-		courseId : $("#addCourse").val(),
-		day : $("#addDay").val(),
-		active : $("#addActive").val()
-	}
-	console.log(clazz);
-	
-	// Send AJAX to server
-	$.ajax({
-		url : '${pageContext.request.contextPath}/class/register',
-		type : 'POST',
-		dataType : 'json',
-		data : JSON.stringify(clazz),
-		contentType : 'application/json',
-		success : function(student) {
-			// Display the success alert
-			$('#success-alert .modal-body').text(
-					'Your action has been completed successfully.');
-			$('#success-alert').modal('show');
-			// Update display info
-			// $("#formId").val(student.id);
-			// $("#formFirstName").val(student.firstName);
-			// $("#formLastName").val(student.lastName);
-			// $("#formEmail").val(student.email);
-			// $("#formAddress").val(student.address);
-			// $("#formContact1").val(student.contactNo1);
-			// $("#formContact2").val(student.contactNo2);
-			// $("#formMemo").val(student.memo);
-			// $("#formState").val(student.state);
-			// $("#formBranch").val(student.branch);
-			// //$("#formGrade").val(student.grade);
-			// $("#elearningGrade").val(student.grade);
-			// // Set date value
-			// var date = new Date(student.enrolmentDate); // Replace with your date value
-			// $("#formEnrolment").datepicker('setDate', date);
-		},
-		error : function(xhr, status, error) {
-			console.log('Error : ' + error);
-		}
 	});
-	$('#registerClassModal').modal('hide');
-	// flush all registered data
-	document.getElementById("classRegister").reset();
 }
+
+
+// populate courses by grade
+function editCourseByGrade(grade){
+	$.ajax({
+		url: '${pageContext.request.contextPath}/class/coursesByGrade',
+		method: 'GET',
+		data: { grade: grade },
+		success: function(data) {
+			$('#editCourse').empty(); // clear the previous options
+			$.each(data, function(index, value) {
+				const cleaned = cleanUpJson(value);
+				console.log(cleaned);
+				$('#editCourse').append($("<option value='" + value.id + "'>").text(value.description).val(value.id)); // add new option
+				});
+			},
+			error: function(xhr, status, error) {
+			console.error(xhr.responseText);
+			}
+	});
+}
+
 
 
 // de-activate student
@@ -167,31 +177,41 @@ function inactivateStudent(id) {
 
 
 
-
-//Search Student with Keyword	
-function retreiveStudentInfo(std) {
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Retrieve Class
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function retreiveClassInfo(clazzId) {
 	// send query to controller
 	$.ajax({
-		url : '${pageContext.request.contextPath}/student/get/' + std,
+		url : '${pageContext.request.contextPath}/class/get/' + clazzId,
 		type : 'GET',
-		success : function(student) {
-			$('#editStudentModal').modal('show');
+		success : function(clazz) {
+			console.log(clazz);
+			// firstly populate courses by grade
+			editCourseByGrade(clazz.grade);
+			$('#editClassModal').modal('show');
 			// Update display info
-			$("#studentEditId").val(student.id);
-			$("#studentEditFirstName").val(student.firstName);
-			$("#studentEditLastName").val(student.lastName);
-			$("#studentEditEmail").val(student.email);
-			$("#studentEditAddress").val(student.address);
-			$("#studentEditContact1").val(student.contactNo1);
-			$("#studentEditContact2").val(student.contactNo2);
-			$("#studentEditMemo").val(student.memo);
-			$("#studentEditState").val(student.state);
-			$("#studentEditBranch").val(student.branch);
-			//$("#formGrade").val(student.grade);
-			$("#studentEditGrade").val(student.grade);
+			$("#editState").val(clazz.state);
+			$("#editBranch").val(clazz.branch);
 			// Set date value
-			var date = new Date(student.enrolmentDate); // Replace with your date value
-			$("#studentEditEnrolment").datepicker('setDate', date);
+			var date = new Date(clazz.startDate); // Replace with your date value
+			$("#editStartDate").datepicker('setDate', date);
+			$("#editGrade").val(clazz.grade);
+			$("#editDay").val(clazz.day);
+			$("#editName").val(clazz.name);
+			$("#editFee").val(clazz.fee);
+			
+			$("#editActive").val(clazz.active);
+			// if clazz.active = true, tick the checkbox 'editActiveCheckbox'
+			if(clazz.active == true){
+				$("#editActiveCheckbox").prop('checked', true);
+			}else{
+				$("#editActiveCheckbox").prop('checked', false);
+			}
+
+			$("#editCourse").val(clazz.description);
+			
+			
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
@@ -253,8 +273,8 @@ function updateStudentInfo(){
 
 
 
-
-function updateActiveValue(checkbox) {
+// update hidden value according to add activive checkbox
+function updateAddActiveValue(checkbox) {
   var addActiveInput = document.getElementById("addActive");
   if (checkbox.checked) {
     addActiveInput.value = "true";
@@ -263,6 +283,15 @@ function updateActiveValue(checkbox) {
   }
 }
 
+// update hidden value according to edit activive checkbox
+function updateEditActiveValue(checkbox) {
+  var addActiveInput = document.getElementById("editActive");
+  if (checkbox.checked) {
+    addActiveInput.value = "true";
+  } else {
+    addActiveInput.value = "false";
+  }
+}
 
 
 
@@ -356,7 +385,7 @@ function updateActiveValue(checkbox) {
 						<button type="submit" class="btn btn-primary btn-block"> <i class="fa fa-search"></i>&nbsp;Search</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerClassModal" onclick="courseByGrade('p2')"><i class="fa fa-plus"></i>&nbsp;New</button>
+						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerClassModal" onclick="addCourseByGrade('p2')"><i class="fa fa-plus"></i>&nbsp;New</button>
 					</div>
 				</div>
 			</div>
@@ -391,7 +420,7 @@ function updateActiveValue(checkbox) {
 												<c:choose>
 													<c:when test="${active == true}">
 														<td>
-															<i class="fa fa-check-circle text-primary"></i>
+															<i class="fa fa-check-circle text-success"></i>
 														</td>
 													</c:when>
 													<c:otherwise>
@@ -401,9 +430,8 @@ function updateActiveValue(checkbox) {
 													</c:otherwise>
 												</c:choose>		
 												<td>
-													<i class="fa fa-edit text-primary" data-toggle="tooltip" title="Edit" onclick="retreiveStudentInfo('${student.id}')"></i>&nbsp;
-													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;
-				 									<i class="fa fa-trash text-danger" data-toggle="tooltip" title="Delete" onclick="inactivateStudent('${student.id}')"></i>
+													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retreiveClassInfo('${clazz.id}')"></i>&nbsp;
+				 									<i class="fa fa-trash text-danger fa-lg" data-toggle="tooltip" title="Delete" onclick="inactivateClass('${clazz.id}')"></i>
 												</td>
 											</tr>
 										</c:forEach>
@@ -425,30 +453,20 @@ function updateActiveValue(checkbox) {
 <div class="modal fade" id="registerClassModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="myModalLabel">Create Class</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			</div>
 			<div class="modal-body">
+				<section class="fieldset rounded border-primary">
+					<header class="text-primary font-weight-bold">Class Registration</header>
+			
 				<form id="classRegister">
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-4">
-								<label for="selectOption">State</label> <select
-									class="form-control" id="addState" name="addState">
+								<label for="addState" class="label-form">State</label> <select class="form-control" id="addState" name="addState">
 									<option value="vic">Victoria</option>
-									<!-- <option value="nsw">New South Wales</option>
-									<option value="qld">Queensland</option>
-									<option value="sa">South Australia</option>
-									<option value="tas">Tasmania</option>
-									<option value="wa">Western Australia</option>
-									<option value="nt">Northern Territory</option>
-									<option value="act">ACT</option> -->
 								</select>
 							</div>
 							<div class="col-md-5">
-								<label for="selectOption">Branch</label> <select
-									class="form-control" id="addBranch" name="addBranch">
+								<label for="addBranch" class="label-form">Branch</label> <select class="form-control" id="addBranch" name="addBranch">
 									<option value="braybrook">Braybrook</option>
 									<option value="epping">Epping</option>
 									<option value="balwyn">Balwyn</option>
@@ -474,7 +492,7 @@ function updateActiveValue(checkbox) {
 								</select>
 							</div>
 							<div class="col-md-3">
-								<label for="datepicker">Start Date</label> 
+								<label for="addStartDate" class="label-form">Start Date</label> 
 								<input type="text" class="form-control datepicker" id="addStartDate" name="addStartDate" placeholder="dd/mm/yyyy">
 							</div>
 							<script>
@@ -489,12 +507,8 @@ function updateActiveValue(checkbox) {
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-10">
-								<label for="name">Name:</label> <input type="text"
-									class="form-control" id="addName" name="addName">
-							</div>
-							<div class="col-md-2">
-								<label for="selectOption">Grade</label>
+							<div class="col-md-3">
+								<label for="addGrade" class="label-form">Grade</label>
 								<select class="form-control" id="addGrade" name="addGrade">
 									<option value="p2">P2</option>
 									<option value="p3">P3</option>
@@ -517,18 +531,13 @@ function updateActiveValue(checkbox) {
 									<option value="vce">VCE</option>
 								</select>
 							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-7">
-								<label for="name">Course</label> 
+							<div class="col-md-5">
+								<label for="addCourse" class="label-form">Course</label> 
 								<select class="form-control" id="addCourse" name="addCourse">
-
 								</select>
 							</div>
-							<div class="col-md-5">
-								<label for="name">Day</label>
+							<div class="col-md-4">
+								<label for="addDay" class="label-form">Day</label>
 								<select class="form-control" id="addDay" name="addDay">
 									<option value="All">All</option>
 									<option value="Monday">Monday</option>
@@ -544,62 +553,59 @@ function updateActiveValue(checkbox) {
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<!-- <div class="col-md-4">
-								<label for="addActive">Activate</label> 
-								<input type="checkbox" id="addActive" name="addActive" value="true">
-							</div> -->
-							<div class="input-group col-md-4">
+							<div class="col-md-6">
+								<input type="text" class="form-control" id="addName" name="addName" placeholder="Name" title="Please enter Class name">
+							</div>
+							<div class="col-md-3">
+								 <input type="text" class="form-control" id="addFee" name="addFee" placeholder="Fee" title="Please enter a valid fee amount (e.g. 100 or 100.50)">
+							</div>
+							<div class="input-group col-md-3">
 								<div class="input-group-prepend">
 								  <div class="input-group-text">
-									<input type="checkbox" id="addActiveCheckbox" name="addActiveCheckbox" onchange="updateActiveValue(this)">
+									<input type="checkbox" id="addActiveCheckbox" name="addActiveCheckbox" onchange="updateAddActiveValue(this)">
 								  </div>
 								</div>
 								<input type="hidden" id="addActive" name="addActive" value="false">
 								<input type="text" id="addActiveLabel" class="form-control" placeholder="Activate">
-							  </div>
+							</div>
 						</div>
 					</div>
 				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-primary" onclick="addClass()">Create</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<div class="d-flex justify-content-end">
+					<button type="submit" class="btn btn-primary" onclick="addClass()">Create</button>&nbsp;&nbsp;
+					<button type="button" class="btn btn-default btn-secondary" data-dismiss="modal">Close</button>	
+				</div>	
+				</section>
 			</div>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
 
 <!-- Edit Form Dialogue -->
-<div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
+<div class="modal fade" id="editClassModal" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="modalEditLabel">Student Edit</h4>
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			</div>
 			<div class="modal-body">
+				<section class="fieldset rounded border-primary">
+					<header class="text-primary font-weight-bold">Class Edit</header>
+			
 				<form id="studentEdit">
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-4">
-								<label for="selectOption">State</label> <select
-									class="form-control" id="studentEditState" name="studentEditState">
+								<label for="editState" class="label-form">State</label> <select class="form-control" id="editState" name="editState">
 									<option value="vic">Victoria</option>
-									<option value="nsw">New South Wales</option>
+									<!-- <option value="nsw">New South Wales</option>
 									<option value="qld">Queensland</option>
 									<option value="sa">South Australia</option>
 									<option value="tas">Tasmania</option>
 									<option value="wa">Western Australia</option>
 									<option value="nt">Northern Territory</option>
-									<option value="act">ACT</option>
+									<option value="act">ACT</option> -->
 								</select>
 							</div>
 							<div class="col-md-5">
-								<label for="selectOption">Branch</label> <select
-									class="form-control" id="studentEditBranch" name="studentEditBranch">
+								<label for="editBranch" class="label-form">Branch</label> <select class="form-control" id="editBranch" name="editBranch">
 									<option value="braybrook">Braybrook</option>
 									<option value="epping">Epping</option>
 									<option value="balwyn">Balwyn</option>
@@ -625,29 +631,15 @@ function updateActiveValue(checkbox) {
 								</select>
 							</div>
 							<div class="col-md-3">
-								<label for="datepicker">Enrolment</label> 
-								<input type="text" class="form-control datepicker" id="studentEditEnrolment" name="studentEditEnrolment" placeholder="dd/mm/yyyy">
+								<label for="editStartDate" class="label-form">Start Date</label> 
+								<input type="text" class="form-control datepicker" id="editStartDate" name="editStartDate" placeholder="dd/mm/yyyy">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-2">
-								<label for="name">ID:</label> <input type="text"
-									class="form-control" id="studentEditId" name="studentEditId" readonly>
-							</div>
-							
-							<div class="col-md-4">
-								<label for="name">First Name:</label> <input type="text"
-									class="form-control" id="studentEditFirstName" name="studentEditFirstName">
-							</div>
-							<div class="col-md-4">
-								<label for="name">Last Name:</label> <input type="text"
-									class="form-control" id="studentEditLastName" name="studentEditLastName">
-							</div>
-							<div class="col-md-2">
-								<label for="selectOption">Grade</label> <select
-									class="form-control" id="studentEditGrade" name="studentEditGrade">
+							<div class="col-md-3">
+								<label for="editGrade" class="label-form">Grade</label> <select class="form-control" id="editGrade" name="editGrade">
 									<option value="p2">P2</option>
 									<option value="p3">P3</option>
 									<option value="p4">P4</option>
@@ -669,51 +661,56 @@ function updateActiveValue(checkbox) {
 									<option value="vce">VCE</option>
 								</select>
 							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
 							<div class="col-md-5">
-								<label for="name">Email</label> <input type="text"
-									class="form-control" id="studentEditEmail" name="studentEditEmail">
+								<label for="editCourse" class="label-form">Course</label> 
+								<select class="form-control" id="editCourse" name="editCourse">
+								</select>
 							</div>
-							<div class="col-md-7">
-								<label for="name">Address</label> <input type="text"
-									class="form-control" id="studentEditAddress" name="studentEditAddress">
+							<div class="col-md-4">
+								<label for="editDay" class="label-form">Day</label>
+								<select class="form-control" id="editDay" name="editDay">
+									<option value="All">All</option>
+									<option value="Monday">Monday</option>
+									<option value="Tuesday">Tuesday</option>
+									<option value="Wednesday">Wednesday</option>
+									<option value="Thursday">Thursday</option>
+									<option value="Friday">Friday</option>
+									<option value="Saturday">Saturday</option>
+									<option value="Sunday">Sunday</option>
+								</select>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-6">
-								<label for="name">Contact No 1</label> <input type="text"
-									class="form-control" id="studentEditContact1" name="studentEditContact1">
+								<input type="text" class="form-control" id="editName" name="editName" placeholder="Name" title="Please enter Class name">
 							</div>
-							<div class="col-md-6">
-								<label for="name">Contact No 2</label> <input type="text"
-									class="form-control" id="studentEditContact2" name="studentEditContact2">
+							<div class="col-md-3">
+								 <input type="text" class="form-control" id="editFee" name="editFee" placeholder="Fee" title="Please enter a valid fee amount (e.g. 100 or 100.50)">
+							</div>
+							<div class="input-group col-md-3">
+								<div class="input-group-prepend">
+								  <div class="input-group-text">
+									<input type="checkbox" id="editActiveCheckbox" name="editActiveCheckbox" onchange="updateEditActiveValue(this)">
+								  </div>
+								</div>
+								<input type="hidden" id="editActive" name="editActive" value="false">
+								<input type="text" id="editActiveLabel" class="form-control" placeholder="Activate">
 							</div>
 						</div>
 					</div>
-
-					<div class="form-group">
-						<div class="form-row">
-							<label for="message">Memo</label>
-							<textarea class="form-control" id="studentEditMemo" name="studentEditMemo"></textarea>
-						</div>
-					</div>
+					<input type="hidden" id="clazzId" name="clazzId">
 				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary" onclick="updateStudentInfo()">Save</button>
+				<div class="d-flex justify-content-end">
+					<button type="submit" class="btn btn-primary" onclick="updateClassInfo()">Save</button>&nbsp;&nbsp;
+					<button type="button" class="btn btn-default btn-secondary" data-dismiss="modal">Close</button>	
+				</div>	
+				</section>
 			</div>
 		</div>
-		<!-- /.modal-content -->
 	</div>
-	<!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
 
 
 
@@ -752,44 +749,12 @@ function updateActiveValue(checkbox) {
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- Success Message Modal -->
-<div class="modal fade" id="success-alert" tabindex="-1"
-	aria-labelledby="successModalLabel" aria-hidden="true">
+<!-- Success Alert -->
+<div id="success-alert" class="modal fade">
 	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="successModalLabel">Success!</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body"></div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			</div>
+		<div class="alert alert-block alert-success alert-dialog-display">
+			<i class="fa fa-check-circle fa-2x"></i>&nbsp;&nbsp;<div class="modal-body"></div>
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 		</div>
 	</div>
 </div>

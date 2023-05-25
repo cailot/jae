@@ -21,6 +21,7 @@ public interface StudentService {
 	// search student list base on keyword where id, firstName or lastName
 	List<Student> searchStudents(String keyword);
 		
+	// bring student by id
 	Student getStudent(Long id);
 	
     Student addStudent(Student std);

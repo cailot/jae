@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.CascadeType;
@@ -85,5 +86,8 @@ public class Student {
     	inverseJoinColumns = @JoinColumn(name="elearningId")
     )
     private Set<Elearning> elearnings = new HashSet<>();
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private Set<Enrolment> enrolments = new HashSet<>();
 
 }

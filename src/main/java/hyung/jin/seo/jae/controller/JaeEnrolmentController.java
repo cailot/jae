@@ -57,42 +57,6 @@ public class JaeEnrolmentController {
 		return dtos;
 	}
 
-	// enrole with student id
-	@PostMapping("/makeEnrolment/{id}")
-	@ResponseBody
-	public ResponseEntity<String> makeEnrolment(@PathVariable Long id, @RequestBody Long[] clazzIds) {
-		// 1. get student
-		Student std = studentService.getStudent(id);
-		// 2. add clazzes
-		for(Long clazzId : clazzIds) {
-			// 2-1. get clazz
-			Clazz clazz = clazzService.getClazz(clazzId);
-			// 2-2. create enrolment
-			Enrolment enrolment = new Enrolment();
-			enrolment.setClazz(clazz);
-			enrolment.setStudent(std);
-			// 2-3. save enrolment
-			enrolmentService.addEnrolment(enrolment);
-		}
-		if(elearningIds.length==0) {
-			// 3-1. simply return success
-			return ResponseEntity.ok("Nothing associated");
-		}else{
-			// 3-2. empty elearning list
-			Set<Elearning> elearningSet = std.getElearnings();
-			elearningSet.clear();
-			// 4. associate elearnings
-			for(Long elearningId : elearningIds) {
-				Elearning elearning = elearningService.getElearning(elearningId);
-				// 5. associate elearning with student
-				elearningSet.add(elearning);
-			}
-			// 6. update student
-			studentService.updateStudent(std, id);
-			// 7. return success
-			return ResponseEntity.ok("Success");
-		}
-	}
 
 	// count records number in database
 	@GetMapping("/count")

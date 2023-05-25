@@ -6,28 +6,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import hyung.jin.seo.jae.dto.ClassDTO;
+import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.dto.CourseDTO;
-import hyung.jin.seo.jae.model.Class;
+import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Course;
 import hyung.jin.seo.jae.model.Cycle;
-import hyung.jin.seo.jae.service.ClassService;
+import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.service.CycleService;
 import hyung.jin.seo.jae.service.CourseService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 
 @Controller
 @RequestMapping("class")
-public class JaeClassController {
+public class JaeClazzController {
 
 	@Autowired
-	private ClassService classService;
+	private ClazzService clazzService;
 
 	@Autowired
 	private CycleService cycleService;
@@ -38,15 +39,15 @@ public class JaeClassController {
 	// search classes by grade & year
 	@GetMapping("/search")
 	@ResponseBody
-	List<ClassDTO> searchClasses(@RequestParam("grade") String grade) {
+	List<ClazzDTO> searchClasses(@RequestParam("grade") String grade) {
 		int year = cycleService.academicYear();
 		int week = cycleService.academicWeeks();
-		List<ClassDTO> dtos = classService.findClassesForGradeNCycle(grade, year);
+		List<ClazzDTO> dtos = clazzService.findClassesForGradeNCycle(grade, year);
 		// if new academic year is going to start, display next year classes
 		if(week > JaeConstants.ACADEMIC_START_COMMING_WEEKS) {
 			// display next year classes
-			List<ClassDTO> nexts = classService.findClassesForGradeNCycle(grade, year+1);
-			for(ClassDTO next : nexts) {
+			List<ClazzDTO> nexts = clazzService.findClassesForGradeNCycle(grade, year+1);
+			for(ClazzDTO next : nexts) {
 				String append = next.getName() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_SUFFIX;
 				next.setName(append);
 				dtos.add(next);
@@ -68,7 +69,7 @@ public class JaeClassController {
 	@GetMapping("/count")
 	@ResponseBody
 	long coutEtc() {
-		long count = classService.checkCount();
+		long count = clazzService.checkCount();
 		return count;
 	}
 
@@ -76,7 +77,7 @@ public class JaeClassController {
 	@GetMapping("/list")
 	public String listClasses(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
         System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
-		List<ClassDTO> dtos = classService.allClasses();
+		List<ClazzDTO> dtos = clazzService.allClasses();
 		model.addAttribute(JaeConstants.CLASS_LIST, dtos);
 		return "classListPage";
 	}
@@ -89,14 +90,22 @@ public class JaeClassController {
 		return dtos;
 	}
 
+	// get class by Id
+	@GetMapping("/get/{id}")
+	@ResponseBody
+	public ClazzDTO getClass(@PathVariable("id") Long id) {
+		Clazz clazz = clazzService.getClazz(id);
+		ClazzDTO dto = new ClazzDTO(clazz);
+		return dto;
+	}
 		
 	// register new student
 	@PostMapping("/register")
 	@ResponseBody
-	public ClassDTO registerClass(@RequestBody ClassDTO formData) {
+	public ClazzDTO registerClass(@RequestBody ClazzDTO formData) {
 		System.out.println(formData);
 		// 1. create bare Class
-		Class clazz = formData.convertToOnlyClass();
+		Clazz clazz = formData.convertToOnlyClass();
 		// 2. get Course
 		Course course = courseService.findById(formData.getCourseId());
 		// 3. get Cycle
@@ -105,7 +114,7 @@ public class JaeClassController {
 		clazz.setCourse(course);
 		clazz.setCycle(cycle);
 		// 5. save Class
-		ClassDTO dto = classService.addClass(clazz);
+		ClazzDTO dto = clazzService.addClass(clazz);
 		// 6. return dto;
 		return dto;
 	}

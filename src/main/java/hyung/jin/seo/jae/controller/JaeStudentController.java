@@ -18,9 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hyung.jin.seo.jae.dto.StudentDTO;
+import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Elearning;
+import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Student;
+import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.service.ElearningService;
+import hyung.jin.seo.jae.service.EnrolmentService;
 import hyung.jin.seo.jae.service.StudentService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 
@@ -33,6 +37,12 @@ public class JaeStudentController {
 
 	@Autowired
 	private ElearningService elearningService;
+
+	@Autowired
+	private ClazzService clazzService;
+
+	@Autowired
+	private EnrolmentService enrolmentService;
 	
 	// register new student
 	@PostMapping("/register")
@@ -139,5 +149,27 @@ public class JaeStudentController {
 			// 7. return success
 			return ResponseEntity.ok("Success");
 		}
+	}
+
+	// associate clazz with student
+	@PostMapping("/associateClazz/{id}")
+	@ResponseBody
+	public ResponseEntity<String> associateClazz(@PathVariable Long id, @RequestBody Long[] claszzIds) {
+		// 1. get student
+		Student std = studentService.getStudent(id);
+		// 2. get clazz
+		for(Long clazzId : claszzIds) {
+			// 3. associate clazz with student
+			Clazz clazz = clazzService.getClazz(clazzId);
+			// 4. Create Enrolment
+			Enrolment enrolment = new Enrolment();
+			// 5. associate enrolment with clazz and student
+			enrolment.setClazz(clazz);
+			enrolment.setStudent(std);
+			// 6. save enrolment
+			enrolmentService.addEnrolment(enrolment);	
+		}
+		// 7. return success
+		return ResponseEntity.ok("Success");
 	}
 }

@@ -102,9 +102,7 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public Student getStudent(Long id) {
-		//Student std = studentRepository.findByIdAndEndDateIsNull(id);// .get();
-		Student std = studentRepository.findById(id).get();
-		
+		Student std = studentRepository.findById(id).get();	
 		return std;
 	}
 

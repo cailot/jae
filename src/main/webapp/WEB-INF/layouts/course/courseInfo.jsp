@@ -3,6 +3,11 @@
 var academicYear;
 var academicWeek;
 
+const ELEARNING = 'elearning';
+const CLASS = 'class';
+const BOOK = 'book';
+const ETC = 'etc';
+
 $(document).ready(
 	function() {
 		// make an AJAX call on page load
@@ -25,6 +30,7 @@ $(document).ready(
 		$('#registerGrade').on('change',function() {
 			//debugger;
 			var grade = $(this).val();
+			console.log(grade);
 			listElearns(grade);
 			listClasses(grade);
 			listBooks(grade);
@@ -174,33 +180,54 @@ function associateOnline(){
 	const studentId = $('#formId').val();
 	// if id is null, show alert and return
 	if (studentId == null || studentId == '') {
-		alert('Please select a student');
-		return;
+		//warn if student id  is empty
+		$('#warning-alert .modal-body').text('Please search student before apply');
+		$('#warning-alert').modal('toggle');
+		return;	
 	}
 
 	var elearnings = [];
-	$('#basketTable tbody tr').each(function() {
-  		var hiddenColumnValue = $(this).find('.hidden-column').text();
-		elearnings.push(hiddenColumnValue);
-	});
-	
-	
-	// Create an object to hold the data
-	// var requestData = {
-	// 	elearningIds: elearnings
-	// };
-	var requestData = elearnings.map(function(id) {
-    	return parseInt(id);
-		});
-	
+	var clazzes = [];
 
-	var requestString = JSON.stringify(requestData);
-	//debugger;
-	// Make the AJAX request
+	$('#basketTable tbody tr').each(function() {
+  		var hiddens = $(this).find('.hidden-column').text();
+		var hiddenValues = hiddens.split('|');
+		hiddenValues[0]===ELEARNING ? elearnings.push(hiddenValues[1]) : clazzes.push(hiddenValues[1]);
+		//elearnings.push(hiddenColumnValue);
+	});
+
+	console.log("Elearnings: " + elearnings);
+	console.log("Classes: " + clazzes);
+
+	var elearningData = elearnings.map(function(id) {
+    	return parseInt(id);
+	});
+
+	var clazzData = clazzes.map(function(id) {
+    	return parseInt(id);
+	});
+
+	// Make the AJAX request for eLearning
 	$.ajax({
 		url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
 		method: 'POST',
-		data: requestString,
+		data: JSON.stringify(elearningData),
+		contentType: 'application/json',
+		success: function(response) {
+			// Handle the response
+			console.log(response);
+		},
+		error: function(xhr, status, error) {
+			// Handle the error
+			console.error(error);
+		}
+	});
+
+	// Make the AJAX request for class
+	$.ajax({
+		url: '${pageContext.request.contextPath}/student/associateClazz/' + studentId,
+		method: 'POST',
+		data: JSON.stringify(clazzData),
 		contentType: 'application/json',
 		success: function(response) {
 			// Handle the response
@@ -220,9 +247,9 @@ function associateOnline(){
 function addElearningToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
-	row.append($('<td>').addClass('hidden-column').text(value.id));
+	row.append($('<td>').addClass('hidden-column').text(ELEARNING + '|' + value.id));
 	row.append($('<td>').text('[' + value.grade.toUpperCase() + '] ' + value.name));
-		row.append($('<td>').text('eLearning'));
+	row.append($('<td>').text('eLearning'));
 	row.append($('<td>').text(academicYear));
 	row.append($('<td>').text(academicWeek));
 	row.append($('<td>').text(0));
@@ -235,7 +262,7 @@ function addElearningToBasket(value){
 function addClassToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
-	row.append($('<td>').addClass('hidden-column').text(value.id));
+	row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
 	row.append($('<td>').text(value.name));
 	row.append($('<td>').text('Class'));
 	row.append($('<td>').text(academicYear));
@@ -250,7 +277,8 @@ function addClassToBasket(value){
 function addBookToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
-	row.append($('<td>').addClass('hidden-column').text(value.id));
+	row.append($('<td>').addClass('hidden-column').text(BOOK));
+	row.append($('<td>').addClass('hidden-column hidden-id').text(value.id));
 	row.append($('<td>').text('[' + value.grade.toUpperCase() + '] ' + value.name));
 	row.append($('<td>').text('Book'));
 	row.append($('<td>').text(academicYear));
@@ -265,7 +293,8 @@ function addBookToBasket(value){
 function addEtcToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
-	row.append($('<td>').addClass('hidden-column').text(value.id));
+	row.append($('<td>').addClass('hidden-column').text(ETC));
+	row.append($('<td>').addClass('hidden-column hidden-id').text(value.id));
 	row.append($('<td>').text(value.name));
 	row.append($('<td>').text('Etc'));
 	row.append($('<td>').text(academicYear));
@@ -311,7 +340,7 @@ function addEtcToBasket(value){
 					<p class="text-truncate">Class change is possible after changing Please click Apply button</p>
 				</div>
 				<div class="col-md-2">
-					<button type="button" class="btn btn-block btn-primary btn-sm" data-toggle="modal" onclick="associateOnline()">Apply</button>
+					<button type="button" class="btn btn-block btn-primary btn-sm" data-toggle="modal" onclick="associateOnline()">Enrolment</button>
 				</div>
 			</div>
 		</div>

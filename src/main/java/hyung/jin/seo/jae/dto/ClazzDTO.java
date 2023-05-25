@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hyung.jin.seo.jae.model.Class;
+import hyung.jin.seo.jae.model.Clazz;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class ClassDTO implements Serializable{
+public class ClazzDTO implements Serializable{
     
 	private String id;
 
@@ -46,7 +46,7 @@ public class ClassDTO implements Serializable{
 	@JsonIgnore
 	private String cycleId;
 
-	@JsonIgnore
+	//@JsonIgnore
 	private String grade; // Course.grade
 
 	private String year; // Cycle.year
@@ -57,12 +57,12 @@ public class ClassDTO implements Serializable{
 		subjects.add(subject);
 	}
 
-	public ClassDTO(long id, double fee, String name, String day, LocalDate startDate, boolean active, long courseId, long cycleId, String grade, String description, int year) {
+	public ClazzDTO(long id, double fee, String name, String day, LocalDate startDate, boolean active, long courseId, long cycleId, String grade, String description, int year) {
 		this.id = Long.toString(id);
 		this.fee = Double.toString(fee);
 		this.name = name;
 		this.day = day;
-		this.startDate = DateTimeFormatter.ofPattern("dd/MM/yyyy").format(startDate);
+		this.startDate = startDate.toString();
 		this.active = active;
 		this.courseId = Long.toString(courseId);
 		this.cycleId = Long.toString(cycleId);
@@ -71,12 +71,14 @@ public class ClassDTO implements Serializable{
 		this.year = Integer.toString(year);
 	}
 
-	public ClassDTO(Class clazz){
+	public ClazzDTO(Clazz clazz){
 		this.id = Long.toString(clazz.getId());
 		this.fee = Double.toString(clazz.getFee());
+		this.state = clazz.getState();
+		this.branch = clazz.getBranch();
 		this.name = clazz.getName();
 		this.day = clazz.getDay();
-		this.startDate = DateTimeFormatter.ofPattern("dd/MM/yyyy").format(clazz.getStartDate());
+		this.startDate = clazz.getStartDate().toString();
 		this.active = clazz.isActive();
 		this.courseId = Long.toString(clazz.getCourse().getId());
 		this.cycleId = Long.toString(clazz.getCycle().getId());
@@ -86,12 +88,12 @@ public class ClassDTO implements Serializable{
 	}
 
 
-	public Class convertToOnlyClass() {
-    	Class clazz = new Class();
+	public Clazz convertToOnlyClass() {
+    	Clazz clazz = new Clazz();
 		if(StringUtils.isNotBlank(state)) clazz.setState(this.state);
     	if(StringUtils.isNotBlank(branch)) clazz.setBranch(this.branch);
 		if(StringUtils.isNotBlank(startDate)) clazz.setStartDate(LocalDate.parse(startDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
-		clazz.setFee(55.55);
+		if(StringUtils.isNotBlank(fee)) clazz.setFee(Double.parseDouble(this.fee));
 		if(StringUtils.isNotBlank(name)) clazz.setName(this.name);		
     	if(StringUtils.isNotBlank(day)) clazz.setDay(this.day);
 		clazz.setActive(this.active);

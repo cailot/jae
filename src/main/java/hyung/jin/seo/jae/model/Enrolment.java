@@ -17,8 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-
 import javax.persistence.Column;
 import javax.persistence.CascadeType;
 
@@ -28,55 +26,30 @@ import javax.persistence.CascadeType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Class")
-public class Class{ // bridge table between Course & Cycle
+@Table(name="Enrolment")
+public class Enrolment{ // bridge table between Student & Class
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "courseId")
-	private Course course;
+	@JoinColumn(name = "studentId")
+	private Student student;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "cycleId")
-	private Cycle cycle;
+	@JoinColumn(name = "clazzId")
+	private Clazz clazz;
 	
-    @Column(columnDefinition = "DECIMAL(10,2)")
-	private double fee;
-
-	// @Column(length = 400)
-    // private String description;
-
+	// @CreatedDate
+	// auto update to current date
 	@CreationTimestamp
-    private LocalDate registerDate;
-
-	@Column(length = 30)
-    private String state;
-
-	@Column(length = 50)
-    private String branch;
-
-	// @Column(length = 10)
-    // private String grade;
-
-	@Column(length = 100)
-    private String name;
-
-	@CreatedDate
-    private LocalDate startDate;
-
-	@Column(length = 10)
-    private String day;
+    private LocalDate enrolmentDate;
 
 	@Column
-	private boolean active;
+	private boolean cancelled;
 
-
-
-
-
-
+	@Column(length = 100)
+    private String cancellationReason;
 
 }

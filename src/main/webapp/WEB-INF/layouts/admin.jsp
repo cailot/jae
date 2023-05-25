@@ -80,7 +80,7 @@
       </div>
 	<div class="col-lg-8">
       	<div class="row">
-			<div class="col-lg-8 bg-secondary">
+			<div class="col-lg-8 bg-warning">
 			<div class="card-body">
 				<jsp:include page="course/courseInfo.jsp"></jsp:include>
 			 </div>

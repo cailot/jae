@@ -556,7 +556,7 @@ function retreiveStudentInfo(std) {
 								</select>
 							</div>
 							<div class="col-md-3">
-								<label for="studentEditRegister" class="label-form">Enrolment</label> 
+								<label for="studentEditRegister" class="label-form">Registration</label> 
 								<input type="text" class="form-control datepicker" id="studentEditRegister" name="studentEditRegister" placeholder="dd/mm/yyyy">
 							</div>
 						</div>

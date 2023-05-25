@@ -240,7 +240,7 @@
 		$("#formState").val(value['state']);
 		$("#formBranch").val(value['branch']);
 		// display same selected grade to Course Register section
-		$("#registerGrade").val(value['grade']);
+		//$("#registerGrade").val(value['grade']);
 		$("#formEndDate").val(value['endDate']);
 		
 		// Set date value
