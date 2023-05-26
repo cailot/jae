@@ -176,7 +176,7 @@ function inactivateStudent(id) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve Student by User's click	
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-function retreiveStudentInfo(std) {
+function retrieveStudentInfo(std) {
 	// send query to controller
 	$.ajax({
 		url : '${pageContext.request.contextPath}/student/get/' + std,
@@ -368,7 +368,7 @@ function retreiveStudentInfo(std) {
 												<td class="ellipsis"><span><c:out value="${student.contactNo1}" /></span></td>
 												<td class="ellipsis"><span><c:out value="${student.contactNo2}" /></span></td>
 												<td>
-													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retreiveStudentInfo('${student.id}')"></i>&nbsp;
+													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retrieveStudentInfo('${student.id}')"></i>&nbsp;
 													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning fa-lg" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;
 				 									<i class="fas fa-stop-circle text-danger fa-lg" data-toggle="tooltip" title="Suspend" onclick="inactivateStudent('${student.id}')"></i>
 												</td>

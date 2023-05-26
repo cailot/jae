@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -118,6 +119,26 @@ public class JaeClazzController {
 		// 6. return dto;
 		return dto;
 	}
+
+
+	// update existing student
+	@PutMapping("/update")
+	@ResponseBody
+	public ClazzDTO updateClazz(@RequestBody ClazzDTO formData) {
+		// 1. create bare Class
+		Clazz clazz = formData.convertToOnlyClass();
+		// 1. get Course
+		Course course = courseService.findById(formData.getCourseId());		
+		// 2. get Cycle
+		Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
+		// 3. assign Course & Cycle
+		clazz.setCourse(course);
+		clazz.setCycle(cycle);
+		// 4. save Class
+		ClazzDTO dto = clazzService.updateClazz(clazz);
+		return dto;
+	}
+	
 
 
 }

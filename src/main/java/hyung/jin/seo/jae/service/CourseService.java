@@ -15,5 +15,6 @@ public interface CourseService {
 	// return total count
 	long checkCount();
 
+	// get Course by id
     Course findById(String courseId);
 }

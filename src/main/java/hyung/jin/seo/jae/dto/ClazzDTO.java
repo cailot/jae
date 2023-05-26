@@ -90,6 +90,7 @@ public class ClazzDTO implements Serializable{
 
 	public Clazz convertToOnlyClass() {
     	Clazz clazz = new Clazz();
+		if(StringUtils.isNotBlank(id)) clazz.setId(Long.parseLong(this.id));
 		if(StringUtils.isNotBlank(state)) clazz.setState(this.state);
     	if(StringUtils.isNotBlank(branch)) clazz.setBranch(this.branch);
 		if(StringUtils.isNotBlank(startDate)) clazz.setStartDate(LocalDate.parse(startDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	

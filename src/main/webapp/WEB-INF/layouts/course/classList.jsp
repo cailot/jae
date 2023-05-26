@@ -111,6 +111,88 @@ function addClass() {
 	document.getElementById("classRegister").reset();
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Retrieve Class
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function retrieveClassInfo(clazzId) {
+	// send query to controller
+	$.ajax({
+		url : '${pageContext.request.contextPath}/class/get/' + clazzId,
+		type : 'GET',
+		success : async function(clazz) {
+			//console.log(clazz);
+			// firstly populate courses by grade then set the selected option
+			await editInitialiseCourseByGrade(clazz.grade, clazz.courseId);
+			$("#editId").val(clazz.id);
+			$("#editState").val(clazz.state);
+			$("#editBranch").val(clazz.branch);
+			// Set date value
+			var date = new Date(clazz.startDate); // Replace with your date value
+			$("#editStartDate").datepicker('setDate', date);
+			$("#editGrade").val(clazz.grade);
+			$("#editDay").val(clazz.day);
+			$("#editName").val(clazz.name);
+			$("#editFee").val(clazz.fee);
+			$("#editActive").val(clazz.active);
+			// if clazz.active = true, tick the checkbox 'editActiveCheckbox'
+			if(clazz.active == true){
+				$("#editActiveCheckbox").prop('checked', true);
+			}else{
+				$("#editActiveCheckbox").prop('checked', false);
+			}
+			$('#editClassModal').modal('show');
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Update Class
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function updateClassInfo(){
+	// get from formData
+	var clazz = {
+		id : $("#editId").val(),
+		state : $("#editState").val(),
+		branch : $("#editBranch").val(),
+		startDate : $("#editStartDate").val(),
+		name : $("#editName").val(),
+		grade : $("#editGrade").val(),
+		courseId : $("#editCourse").val(),
+		day : $("#editDay").val(),
+		active : $("#editActive").val(),
+		fee : $("#editFee").val()
+	}
+	
+	console.log(clazz);
+	// send query to controller
+	$.ajax({
+		url : '${pageContext.request.contextPath}/class/update',
+		type : 'PUT',
+		dataType : 'json',
+		data : JSON.stringify(clazz),
+		contentType : 'application/json',
+		success : function(value) {
+			// Display success alert
+			$('#success-alert .modal-body').text(
+					'ID : ' + value.id + ' is updated successfully.');
+			$('#success-alert').modal('show');
+			$('#success-alert').on('hidden.bs.modal', function(e) {
+				location.reload();
+			});
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+	
+	$('#editClassModal').modal('hide');
+	// flush all registered data
+	document.getElementById("classEdit").reset();
+}
 
 // populate courses by grade
 function addCourseByGrade(grade){
@@ -122,7 +204,7 @@ function addCourseByGrade(grade){
 			$('#addCourse').empty(); // clear the previous options
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				console.log(cleaned);
+				//console.log(cleaned);
 				$('#addCourse').append($("<option value='" + value.id + "'>").text(value.description).val(value.id)); // add new option
 				});
 			},
@@ -143,7 +225,7 @@ function editCourseByGrade(grade){
 			$('#editCourse').empty(); // clear the previous options
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				console.log(cleaned);
+				//console.log(cleaned);
 				$('#editCourse').append($("<option value='" + value.id + "'>").text(value.description).val(value.id)); // add new option
 				});
 			},
@@ -176,41 +258,6 @@ function editInitialiseCourseByGrade(grade, courseId) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Retrieve Class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function retreiveClassInfo(clazzId) {
-	// send query to controller
-	$.ajax({
-		url : '${pageContext.request.contextPath}/class/get/' + clazzId,
-		type : 'GET',
-		success : async function(clazz) {
-			console.log(clazz);
-			// firstly populate courses by grade then set the selected option
-			await editInitialiseCourseByGrade(clazz.grade, clazz.courseId);
-			$("#editState").val(clazz.state);
-			$("#editBranch").val(clazz.branch);
-			// Set date value
-			var date = new Date(clazz.startDate); // Replace with your date value
-			$("#editStartDate").datepicker('setDate', date);
-			$("#editGrade").val(clazz.grade);
-			$("#editDay").val(clazz.day);
-			$("#editName").val(clazz.name);
-			$("#editFee").val(clazz.fee);
-			$("#editActive").val(clazz.active);
-			// if clazz.active = true, tick the checkbox 'editActiveCheckbox'
-			if(clazz.active == true){
-				$("#editActiveCheckbox").prop('checked', true);
-			}else{
-				$("#editActiveCheckbox").prop('checked', false);
-			}
-			$('#editClassModal').modal('show');
-		},
-		error : function(xhr, status, error) {
-			console.log('Error : ' + error);
-		}
-	});
-}
 
 
 
@@ -243,56 +290,6 @@ function inactivateStudent(id) {
 
 
 
-
-
-
-function updateStudentInfo(){
-	
-	// get from formData
-	var std = {
-		id : $('#studentEditId').val(),
-		firstName : $("#studentEditFirstName").val(),
-		lastName : $("#studentEditLastName").val(),
-		email : $("#studentEditEmail").val(),
-		address : $("#studentEditAddress").val(),
-		contactNo1 : $("#studentEditContact1").val(),
-		contactNo2 : $("#studentEditContact2").val(),
-		memo : $("#studentEditMemo").val(),
-		state : $("#studentEditState").val(),
-		branch : $("#studentEditBranch").val(),
-		//grade : $("#studentEditGrade").val(),
-		grade : $("#elearningGrade").val(),
-		enrolmentDate : $("#studentEditEnrolment").val(),
-		elearnings : []
-	}
-	
-	
-	// send query to controller
-	$.ajax({
-		url : '${pageContext.request.contextPath}/student/updateOnlyStudent',
-		type : 'PUT',
-		dataType : 'json',
-		data : JSON.stringify(std),
-		contentType : 'application/json',
-		success : function(value) {
-			// Display success alert
-			$('#success-alert .modal-body').text(
-					'ID : ' + value.id + ' is updated successfully.');
-			$('#success-alert').modal('show');
-			
-		},
-		error : function(xhr, status, error) {
-			console.log('Error : ' + error);
-		}
-	});
-	
-	$('#editStudentModal').modal('hide');
-	// flush all registered data
-	document.getElementById("studentEdit").reset();
-	
-	
-	
-}
 
 
 
@@ -456,7 +453,7 @@ function updateEditActiveValue(checkbox) {
 													</c:otherwise>
 												</c:choose>		
 												<td>
-													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retreiveClassInfo('${clazz.id}')"></i>&nbsp;
+													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retrieveClassInfo('${clazz.id}')"></i>&nbsp;
 				 									<i class="fa fa-trash text-danger fa-lg" data-toggle="tooltip" title="Delete" onclick="inactivateClass('${clazz.id}')"></i>
 												</td>
 											</tr>
@@ -615,7 +612,7 @@ function updateEditActiveValue(checkbox) {
 				<section class="fieldset rounded border-primary">
 					<header class="text-primary font-weight-bold">Class Edit</header>
 			
-				<form id="studentEdit">
+				<form id="classEdit">
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-4">
@@ -726,7 +723,7 @@ function updateEditActiveValue(checkbox) {
 							</div>
 						</div>
 					</div>
-					<input type="hidden" id="clazzId" name="clazzId">
+					<input type="hidden" id="editId" name="editId">
 				</form>
 				<div class="d-flex justify-content-end">
 					<button type="submit" class="btn btn-primary" onclick="updateClassInfo()">Save</button>&nbsp;&nbsp;

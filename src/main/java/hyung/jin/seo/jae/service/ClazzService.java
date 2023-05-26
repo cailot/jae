@@ -21,4 +21,7 @@ public interface ClazzService {
 
 	// add class
 	ClazzDTO addClass(Clazz clazz);
+
+	// update class
+	ClazzDTO updateClazz(Clazz clazz);
 }

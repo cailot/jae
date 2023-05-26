@@ -1,14 +1,21 @@
 package hyung.jin.seo.jae.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
+import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.model.Clazz;
+import hyung.jin.seo.jae.model.Course;
 import hyung.jin.seo.jae.repository.ClazzRepository;
+import hyung.jin.seo.jae.repository.CourseRepository;
 import hyung.jin.seo.jae.repository.SubjectRepository;
 import hyung.jin.seo.jae.service.ClazzService;
 
@@ -16,20 +23,23 @@ import hyung.jin.seo.jae.service.ClazzService;
 public class ClazzServiceImpl implements ClazzService {
 	
 	@Autowired
-	private ClazzRepository classRepository;
+	private ClazzRepository clazzRepository;
 
 	@Autowired
 	private SubjectRepository subjectRepository;
+
+	@Autowired
+	private CourseRepository courseRepository;
 	
 	@Override
 	public long checkCount() {
-		long count = classRepository.count();
+		long count = clazzRepository.count();
 		return count;
 	}
 
 	@Override
 	public List<ClazzDTO> allClasses() {
-		List<Clazz> crs = classRepository.findAll();
+		List<Clazz> crs = clazzRepository.findAll();
 		List<ClazzDTO> dtos = new ArrayList<>();
 		for(Clazz claz : crs){
 			ClazzDTO dto = new ClazzDTO(claz);
@@ -41,7 +51,7 @@ public class ClazzServiceImpl implements ClazzService {
 	@Override
 	public List<ClazzDTO> findClassesForGradeNCycle(String grade, int year) {
 		// 1. get classes
-		List<ClazzDTO> dtos = classRepository.findClassForGradeNCycle(grade, year);
+		List<ClazzDTO> dtos = clazzRepository.findClassForGradeNCycle(grade, year);
 		// 2. get subjects
 		List<String> subjects = subjectRepository.findSubjectNamesForGrade(grade);
 		// 3. assign subjects to classes
@@ -56,15 +66,60 @@ public class ClazzServiceImpl implements ClazzService {
 
 	@Override
 	public ClazzDTO addClass(Clazz clazz) {
-		Clazz cla = classRepository.save(clazz);
+		Clazz cla = clazzRepository.save(clazz);
 		ClazzDTO dto = new ClazzDTO(cla);
 		return dto;
 	}
 
 	@Override
 	public Clazz getClazz(Long id) {
-		Clazz clazz = classRepository.findById(id).get();
+		Clazz clazz = clazzRepository.findById(id).get();
 		return clazz;	
 	}
-	
+
+	// @Override
+	// public ClazzDTO updateClass(Clazz clazz) {
+	// 	Clazz cla = classRepository.save(clazz);
+	// 	ClazzDTO dto = new ClazzDTO(cla);
+	// 	return dto;
+	// }
+
+
+
+	@Override
+	public ClazzDTO updateClazz(Clazz clazz) {
+		// search by getId
+		Clazz existing =  clazzRepository.findById(clazz.getId()).orElseThrow(() -> new EntityNotFoundException("Clazz Not Found"));
+		// Update info
+		// state
+		String newState = clazz.getState();
+		existing.setState(newState);
+		// branch
+		String newBranch = clazz.getBranch();
+		existing.setBranch(newBranch);
+		// start date
+		LocalDate newStartDate = clazz.getStartDate();
+		existing.setStartDate(newStartDate);
+		// name
+		String newName = clazz.getName();
+		existing.setName(newName);
+		// day
+		String newDay = clazz.getDay();
+		existing.setDay(newDay);
+		// active
+		boolean newActive = clazz.isActive();
+		existing.setActive(newActive);
+		// fee
+		Double newFee = clazz.getFee();
+		existing.setFee(newFee);
+		// update Course & Cycle
+		existing.setCourse(clazz.getCourse());
+		existing.setCycle(clazz.getCycle());		
+		// update the existing record
+		Clazz updated = clazzRepository.save(existing);
+		ClazzDTO dto = new ClazzDTO(updated);
+		return dto;
+	}
+
+
 }
