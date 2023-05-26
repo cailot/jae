@@ -59,6 +59,13 @@ $(document).ready(function () {
 		addCourseByGrade(grade);
 	});
 
+	// When the Grade dropdown changes, send an Ajax request to get the corresponding Type
+	$('#editGrade').change(function() {
+	var grade = $(this).val();
+		editCourseByGrade(grade);
+	});
+
+
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,6 +153,68 @@ function editCourseByGrade(grade){
 	});
 }
 
+// initialise courses by grade in edit dialog
+function editInitialiseCourseByGrade(grade, courseId) {
+    $.ajax({
+        url: '${pageContext.request.contextPath}/class/coursesByGrade',
+        method: 'GET',
+        data: { grade: grade },
+        success: function(data) {
+            $('#editCourse').empty(); // clear the previous options
+            $.each(data, function(index, value) {
+                const cleaned = cleanUpJson(value);
+                console.log(cleaned);
+                $('#editCourse').append($("<option value='" + value.id + "'>").text(value.description).val(value.id)); // add new option
+            });
+            // Set the selected option
+            $("#editCourse").val(courseId);
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Retrieve Class
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function retreiveClassInfo(clazzId) {
+	// send query to controller
+	$.ajax({
+		url : '${pageContext.request.contextPath}/class/get/' + clazzId,
+		type : 'GET',
+		success : async function(clazz) {
+			console.log(clazz);
+			// firstly populate courses by grade then set the selected option
+			await editInitialiseCourseByGrade(clazz.grade, clazz.courseId);
+			$("#editState").val(clazz.state);
+			$("#editBranch").val(clazz.branch);
+			// Set date value
+			var date = new Date(clazz.startDate); // Replace with your date value
+			$("#editStartDate").datepicker('setDate', date);
+			$("#editGrade").val(clazz.grade);
+			$("#editDay").val(clazz.day);
+			$("#editName").val(clazz.name);
+			$("#editFee").val(clazz.fee);
+			$("#editActive").val(clazz.active);
+			// if clazz.active = true, tick the checkbox 'editActiveCheckbox'
+			if(clazz.active == true){
+				$("#editActiveCheckbox").prop('checked', true);
+			}else{
+				$("#editActiveCheckbox").prop('checked', false);
+			}
+			$('#editClassModal').modal('show');
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+}
+
+
+
+
 
 
 // de-activate student
@@ -175,49 +244,6 @@ function inactivateStudent(id) {
 
 
 
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Retrieve Class
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function retreiveClassInfo(clazzId) {
-	// send query to controller
-	$.ajax({
-		url : '${pageContext.request.contextPath}/class/get/' + clazzId,
-		type : 'GET',
-		success : function(clazz) {
-			console.log(clazz);
-			// firstly populate courses by grade
-			editCourseByGrade(clazz.grade);
-			$('#editClassModal').modal('show');
-			// Update display info
-			$("#editState").val(clazz.state);
-			$("#editBranch").val(clazz.branch);
-			// Set date value
-			var date = new Date(clazz.startDate); // Replace with your date value
-			$("#editStartDate").datepicker('setDate', date);
-			$("#editGrade").val(clazz.grade);
-			$("#editDay").val(clazz.day);
-			$("#editName").val(clazz.name);
-			$("#editFee").val(clazz.fee);
-			
-			$("#editActive").val(clazz.active);
-			// if clazz.active = true, tick the checkbox 'editActiveCheckbox'
-			if(clazz.active == true){
-				$("#editActiveCheckbox").prop('checked', true);
-			}else{
-				$("#editActiveCheckbox").prop('checked', false);
-			}
-
-			$("#editCourse").val(clazz.description);
-			
-			
-		},
-		error : function(xhr, status, error) {
-			console.log('Error : ' + error);
-		}
-	});
-}
 
 
 function updateStudentInfo(){
