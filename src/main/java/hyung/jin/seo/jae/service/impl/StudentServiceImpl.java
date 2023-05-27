@@ -148,6 +148,8 @@ public class StudentServiceImpl implements StudentService {
 		existing.setState(newState);
 		String newBranch = StringUtils.defaultString(newStudent.getBranch());
 		existing.setBranch(newBranch);
+		LocalDate newRegisterDate = newStudent.getRegisterDate();
+		existing.setRegisterDate(newRegisterDate);
 		String newMemo = StringUtils.defaultString(newStudent.getMemo());
 		existing.setMemo(newMemo);
 		// update the existing record

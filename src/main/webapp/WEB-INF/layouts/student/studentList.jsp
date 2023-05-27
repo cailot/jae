@@ -62,7 +62,10 @@ function addStudent() {
 	var std = {
 		firstName : $("#addFirstName").val(),
 		lastName : $("#addLastName").val(),
-		email : $("#addEmail").val(),
+		email1 : $("#addEmail1").val(),
+		email2 : $("#addEmail2").val(),
+		relation1 : $("#addRelation1").val(),
+		relation2 : $("#addRelation2").val(),
 		address : $("#addAddress").val(),
 		contactNo1 : $("#addContact1").val(),
 		contactNo2 : $("#addContact2").val(),
@@ -104,18 +107,21 @@ function updateStudentInfo(){
 	
 	// get from formData
 	var std = {
-		id : $('#studentEditId').val(),
-		firstName : $("#studentEditFirstName").val(),
-		lastName : $("#studentEditLastName").val(),
-		email : $("#studentEditEmail").val(),
-		address : $("#studentEditAddress").val(),
-		contactNo1 : $("#studentEditContact1").val(),
-		contactNo2 : $("#studentEditContact2").val(),
-		memo : $("#studentEditMemo").val(),
-		state : $("#studentEditState").val(),
-		branch : $("#studentEditBranch").val(),
-		grade : $("#studentEditGrade").val(),
-		registerDate : $("#studentEditRegister").val()
+		id : $('#editId').val(),
+		firstName : $("#editFirstName").val(),
+		lastName : $("#editLastName").val(),
+		email1 : $("#editEmail1").val(),
+		email2 : $("#editEmail2").val(),
+		address : $("#editAddress").val(),
+		contactNo1 : $("#editContact1").val(),
+		contactNo2 : $("#editContact2").val(),
+		relation1 : $("#editRelation1").val(),
+		relation2 : $("#editRelation2").val(),
+		memo : $("#editMemo").val(),
+		state : $("#editState").val(),
+		branch : $("#editBranch").val(),
+		grade : $("#editGrade").val(),
+		registerDate : $("#editRegister").val()
 	}
 		
 	// send query to controller
@@ -185,20 +191,23 @@ function retrieveStudentInfo(std) {
 			$('#editStudentModal').modal('show');
 			// Update display info
 			console.log(student);
-			$("#studentEditId").val(student.id);
-			$("#studentEditFirstName").val(student.firstName);
-			$("#studentEditLastName").val(student.lastName);
-			$("#studentEditEmail").val(student.email);
-			$("#studentEditAddress").val(student.address);
-			$("#studentEditContact1").val(student.contactNo1);
-			$("#studentEditContact2").val(student.contactNo2);
-			$("#studentEditMemo").val(student.memo);
-			$("#studentEditState").val(student.state);
-			$("#studentEditBranch").val(student.branch);
-			$("#studentEditGrade").val(student.grade);
+			$("#editId").val(student.id);
+			$("#editFirstName").val(student.firstName);
+			$("#editLastName").val(student.lastName);
+			$("#editEmail1").val(student.email1);
+			$("#editEmail2").val(student.email2);
+			$("#editRelation1").val(student.relation1);
+			$("#editRelation2").val(student.relation2);
+			$("#editAddress").val(student.address);
+			$("#editContact1").val(student.contactNo1);
+			$("#editContact2").val(student.contactNo2);
+			$("#editMemo").val(student.memo);
+			$("#editState").val(student.state);
+			$("#editBranch").val(student.branch);
+			$("#editGrade").val(student.grade);
 			// Set date value
 			var date = new Date(student.registerDate); // Replace with your date value
-			$("#studentEditRegister").datepicker('setDate', date);
+			$("#editRegister").datepicker('setDate', date);
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
@@ -344,9 +353,10 @@ function retrieveStudentInfo(std) {
 										<th>Start Date</th>
 										<!-- <th>Week</th> -->
 										<th>End Date</th>
-										<th>Email</th>
-										<th>Contact 1</th>
-										<th>Contact 2</th>
+										<th>Main Email</th>
+										<th>Main Contact</th>
+										<th>Sub Email</th>
+										<th>Sub Contact</th>
 										<th data-orderable="false">Action</th>
 									</tr>
 								</thead>
@@ -364,8 +374,9 @@ function retrieveStudentInfo(std) {
 												<td class="ellipsis"><span><c:out value="${starts[0]}" /></span></td>
 												<!-- <td class="small ellipsis"><span><c:out value="${starts[1]}" /></span></td> -->
 												<td class="ellipsis"><span><c:out value="${student.endDate}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.email}" /></span></td>
+												<td class="ellipsis"><span><c:out value="${student.email1}" /></span></td>
 												<td class="ellipsis"><span><c:out value="${student.contactNo1}" /></span></td>
+												<td class="ellipsis"><span><c:out value="${student.email2}" /></span></td>
 												<td class="ellipsis"><span><c:out value="${student.contactNo2}" /></span></td>
 												<td>
 													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retrieveStudentInfo('${student.id}')"></i>&nbsp;
@@ -477,24 +488,62 @@ function retrieveStudentInfo(std) {
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-5">
-								<label for="addEmail" class="label-form">Email</label> <input type="text" class="form-control" id="addEmail" name="addEmail">
-							</div>
 							<div class="col-md-7">
 								<label for="addAddress" class="label-form">Address</label> <input type="text" class="form-control" id="addAddress" name="addAddress">
 							</div>
 						</div>
 					</div>
+					
 					<div class="form-group">
-						<div class="form-row">
+						<div class="form-row admin-form-row">
 							<div class="col-md-6">
-								<label for="addContact1" class="label-form">Contact No 1</label> <input type="text" class="form-control" id="addContact1" name="addContact1">
+								<section class="fieldset rounded border-secondary" style="padding: 10px;">
+									<header class="text-secondary" style="font-size: 1.1em;">Main Contact</header>
+								<div class="row">
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="addContact1" name="addContact1" placeholder="Contact No">
+									</div>
+									<div class="col-md-4">
+										<select class="form-control" id="addRelation1" name="addRelation1">
+											<option value="mother">Mother</option>
+											<option value="father">Father</option>
+											<option value="other">Other</option>
+										</select>
+									</div>	
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<input type="text" class="form-control" id="addEmail1" name="addEmail1" placeholder="Email">
+									</div>
+								</div>
+								</section>
 							</div>
 							<div class="col-md-6">
-								<label for="addContact2" class="label-form">Contact No 2</label> <input type="text" class="form-control" id="addContact2" name="addContact2">
+								<section class="fieldset rounded border-secondary" style="padding: 10px;">
+									<header class="text-secondary" style="font-size: 1.1em;">Sub Contact</header>
+								
+								<div class="row">
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="addContact2" name="addContact2" placeholder="Contact No">
+									</div>
+									<div class="col-md-4">
+										<select class="form-control" id="addRelation2" name="addRelation2">
+											<option value="mother">Mother</option>
+											<option value="father">Father</option>
+											<option value="other">Other</option>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<input type="text" class="form-control" id="addEmail2" name="addEmail2" placeholder="Email">
+									</div>
+								</div>
+								</section>
 							</div>
 						</div>
 					</div>
+					
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-12">
@@ -525,12 +574,12 @@ function retrieveStudentInfo(std) {
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-4">
-								<label for="studentEditState" class="label-form">State</label> <select class="form-control" id="studentEditState" name="studentEditState">
+								<label for="editState" class="label-form">State</label> <select class="form-control" id="editState" name="editState">
 									<option value="vic">Victoria</option>
 								</select>
 							</div>
 							<div class="col-md-5">
-								<label for="studentEditBranch" class="label-form">Branch</label> <select class="form-control" id="studentEditBranch" name="studentEditBranch">
+								<label for="editBranch" class="label-form">Branch</label> <select class="form-control" id="editBranch" name="editBranch">
 									<option value="braybrook">Braybrook</option>
 									<option value="epping">Epping</option>
 									<option value="balwyn">Balwyn</option>
@@ -556,38 +605,35 @@ function retrieveStudentInfo(std) {
 								</select>
 							</div>
 							<div class="col-md-3">
-								<label for="studentEditRegister" class="label-form">Registration</label> 
-								<input type="text" class="form-control datepicker" id="studentEditRegister" name="studentEditRegister" placeholder="dd/mm/yyyy">
+								<label for="editRegister" class="label-form">Registration</label> 
+								<input type="text" class="form-control datepicker" id="editRegister" name="editRegister" placeholder="dd/mm/yyyy">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-4">
-								<label for="studentEditId" class="label-form">ID:</label> <input type="text" class="form-control" id="studentEditId" name="studentEditId" readonly>
+								<label for="editId" class="label-form">ID:</label> <input type="text" class="form-control" id="editId" name="editId" readonly>
 							</div>
 							<div class="col-md-4">
-								<label for="studentEditFirstName" class="label-form">First Name:</label> <input type="text" class="form-control" id="studentEditFirstName" name="studentEditFirstName">
+								<label for="editFirstName" class="label-form">First Name:</label> <input type="text" class="form-control" id="editFirstName" name="editFirstName">
 							</div>
 							<div class="col-md-4">
-								<label for="studentEditLastName" class="label-form">Last Name:</label> <input type="text" class="form-control" id="studentEditLastName" name="studentEditLastName">
+								<label for="editLastName" class="label-form">Last Name:</label> <input type="text" class="form-control" id="editLastName" name="editLastName">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-5">
-								<label for="studentEditEmail" class="label-form">Email</label> <input type="text" class="form-control" id="studentEditEmail" name="studentEditEmail">
-							</div>
 							<div class="col-md-7">
-								<label for="studentEditAddress" class="label-form">Address</label> <input type="text" class="form-control" id="studentEditAddress" name="studentEditAddress">
+								<label for="editAddress" class="label-form">Address</label> <input type="text" class="form-control" id="editAddress" name="editAddress">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-2">
-								<label for="studentEditGrade" class="label-form">Grade</label> <select class="form-control" id="studentEditGrade" name="studentEditGrade">
+								<label for="editGrade" class="label-form">Grade</label> <select class="form-control" id="editGrade" name="editGrade">
 									<option value="p2">P2</option>
 									<option value="p3">P3</option>
 									<option value="p4">P4</option>
@@ -609,18 +655,68 @@ function retrieveStudentInfo(std) {
 									<option value="vce">VCE</option>
 								</select>
 							</div>
-							<div class="col-md-5">
-								<label for="studentEditContact1" class="label-form">Contact No 1</label> <input type="text" class="form-control" id="studentEditContact1" name="studentEditContact1">
-							</div>
-							<div class="col-md-5">
-								<label for="studentEditContact2" class="label-form">Contact No 2</label> <input type="text" class="form-control" id="studentEditContact2" name="studentEditContact2">
-							</div>
 						</div>
 					</div>
+
+
+					<div class="form-group">
+						<div class="form-row admin-form-row">
+							<div class="col-md-6">
+								<section class="fieldset rounded border-secondary" style="padding: 10px;">
+									<header class="text-secondary" style="font-size: 1.1em;">Main Contact</header>
+								<div class="row">
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="editContact1" name="editContact1" placeholder="Contact No">
+									</div>
+									<div class="col-md-4">
+										<select class="form-control" id="editRelation1" name="editRelation1">
+											<option value="mother">Mother</option>
+											<option value="father">Father</option>
+											<option value="other">Other</option>
+										</select>
+									</div>	
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<input type="text" class="form-control" id="editEmail1" name="editEmail1" placeholder="Email">
+									</div>
+								</div>
+								</section>
+							</div>
+							<div class="col-md-6">
+								<section class="fieldset rounded border-secondary" style="padding: 10px;">
+									<header class="text-secondary" style="font-size: 1.1em;">Sub Contact</header>
+								
+								<div class="row">
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="editContact2" name="editContact2" placeholder="Contact No">
+									</div>
+									<div class="col-md-4">
+										<select class="form-control" id="editRelation2" name="editRelation2">
+											<option value="mother">Mother</option>
+											<option value="father">Father</option>
+											<option value="other">Other</option>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<input type="text" class="form-control" id="editEmail2" name="editEmail2" placeholder="Email">
+									</div>
+								</div>
+								</section>
+							</div>
+						</div>
+					</div>	
+
+
+
+
+
 					<div class="form-group">
 						<div class="form-row">
-							<label for="studentEditMemo" class="label-form">Memo</label>
-							<textarea class="form-control" id="studentEditMemo" name="studentEditMemo"></textarea>
+							<label for="editMemo" class="label-form">Memo</label>
+							<textarea class="form-control" id="editMemo" name="editMemo"></textarea>
 						</div>
 					</div>
 				</form>

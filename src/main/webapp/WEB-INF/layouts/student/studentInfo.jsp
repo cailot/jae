@@ -496,7 +496,7 @@
 										<select class="form-control" id="addRelation2" name="addRelation2">
 											<option value="mother">Mother</option>
 											<option value="father">Father</option>
-											<option value="other">Others</option>
+											<option value="other">Other</option>
 										</select>
 									</div>
 								</div>
