@@ -7,19 +7,14 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.model.Clazz;
-import hyung.jin.seo.jae.model.Course;
 import hyung.jin.seo.jae.repository.ClazzRepository;
-import hyung.jin.seo.jae.repository.CourseRepository;
 import hyung.jin.seo.jae.repository.SubjectRepository;
 import hyung.jin.seo.jae.service.ClazzService;
-import hyung.jin.seo.jae.specification.ClazzSpecification;
 import hyung.jin.seo.jae.utils.JaeConstants;
 
 @Service
@@ -31,9 +26,6 @@ public class ClazzServiceImpl implements ClazzService {
 	@Autowired
 	private SubjectRepository subjectRepository;
 
-	@Autowired
-	private CourseRepository courseRepository;
-	
 	@Override
 	public long checkCount() {
 		long count = clazzRepository.count();

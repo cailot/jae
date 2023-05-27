@@ -134,8 +134,14 @@ public class StudentServiceImpl implements StudentService {
 		existing.setContactNo1(newContactNo1);
 		String newContactNo2 = StringUtils.defaultString(newStudent.getContactNo2());
 		existing.setContactNo2(newContactNo2);
-		String newEmail = StringUtils.defaultString(newStudent.getEmail());
-		existing.setEmail(newEmail);
+		String newEmail1 = StringUtils.defaultString(newStudent.getEmail1());
+		existing.setEmail1(newEmail1);
+		String newEmail2 = StringUtils.defaultString(newStudent.getEmail2());
+		existing.setEmail2(newEmail2);
+		String newRelation1 = StringUtils.defaultString(newStudent.getRelation1());
+		existing.setRelation1(newRelation1);
+		String newRelation2 = StringUtils.defaultString(newStudent.getRelation2());
+		existing.setRelation2(newRelation2);
 		String newAddress = StringUtils.defaultString(newStudent.getAddress());
 		existing.setAddress(newAddress);
 		String newState = StringUtils.defaultString(newStudent.getState());

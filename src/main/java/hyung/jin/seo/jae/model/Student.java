@@ -55,7 +55,16 @@ public class Student {
     private String contactNo2;
     
     @Column(length = 100, nullable = true)
-    private String email;
+    private String email1;
+    
+    @Column(length = 100, nullable = true)
+    private String email2;
+
+    @Column(length = 10, nullable = true)
+    private String relation1;
+
+    @Column(length = 10, nullable = true)
+    private String relation2;
     
     @Column(length = 200, nullable = true)
     private String address;

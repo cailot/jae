@@ -83,9 +83,9 @@ public class JaeStudentController {
 	@ResponseBody
 	public StudentDTO updateStudent(@RequestBody StudentDTO formData) {
 		Student std = formData.convertToStudent();
-		// 7. update Student
+		// 1. update Student
 		std = studentService.updateStudent(std, std.getId());
-		// 8. convert Student to StudentDTO
+		// 2. convert Student to StudentDTO
 		StudentDTO dto = new StudentDTO(std);
 		return dto;
 	}
@@ -110,8 +110,6 @@ public class JaeStudentController {
 	// search student list with state, branch, grade, start date or active
 	@GetMapping("/list")
 	public String listStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
-        //System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active);
-
 		List<Student> students = studentService.listStudents(state, branch, grade, year, active);
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {

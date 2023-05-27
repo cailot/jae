@@ -7,8 +7,11 @@
 		var std = {
 			firstName : $("#addFirstName").val(),
 			lastName : $("#addLastName").val(),
-			email : $("#addEmail").val(),
 			address : $("#addAddress").val(),
+			email1 : $("#addEmail1").val(),
+			email2 : $("#addEmail2").val(),
+			relation1 : $("#addRelation1").val(),
+			relation2 : $("#addRelation2").val(),
 			contactNo1 : $("#addContact1").val(),
 			contactNo2 : $("#addContact2").val(),
 			memo : $("#addMemo").val(),
@@ -33,7 +36,10 @@
 				$("#formId").val(student.id);
 				$("#formFirstName").val(student.firstName);
 				$("#formLastName").val(student.lastName);
-				$("#formEmail").val(student.email);
+				$("#formEmail1").val(student.email1);
+				$("#formEmail2").val(student.email2);
+				$("#formRelation1").val(student.relation1);
+				$("#formRelation2").val(student.relation2);
 				$("#formGrade").val(student.grade);
 				$("#formAddress").val(student.address);
 				$("#formContact1").val(student.contactNo1);
@@ -145,8 +151,9 @@
 					row.append($('<td>').text(value.grade.toUpperCase()));
 					row.append($('<td>').text(formatDate(value.registerDate)));
 					row.append($('<td>').text(formatDate(value.endDate)));
-					row.append($('<td>').text(value.email));
+					row.append($('<td>').text(value.email1));
 					row.append($('<td>').text(value.contactNo1));
+					row.append($('<td>').text(value.email2));
 					row.append($('<td>').text(value.contactNo2));
 					row.append($('<td>').text(value.address));
 					$('#studentListResultTable > tbody').append(row);
@@ -179,7 +186,10 @@
 			id : $('#formId').val(),
 			firstName : $("#formFirstName").val(),
 			lastName : $("#formLastName").val(),
-			email : $("#formEmail").val(),
+			email1 : $("#formEmail1").val(),
+			email2 : $("#formEmail2").val(),
+			relation1 : $("#formRelation1").val(),
+			relation2 : $("#formRelation2").val(),
 			address : $("#formAddress").val(),
 			contactNo1 : $("#formContact1").val(),
 			contactNo2 : $("#formContact2").val(),
@@ -208,7 +218,9 @@
 		});
 	}
 
-	// Display selected student in student search
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//		Display selected student in student search
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	function displayStudentInfo(value) {
 		
 		clearStudentForm();
@@ -217,7 +229,10 @@
 		if(value['endDate']===''){ // active student
 			$("#formFirstName").val(value['firstName']).css("color", "black");
 			$("#formLastName").val(value['lastName']).css("color", "black");
-			$("#formEmail").val(value['email']).css("color", "black");
+			$("#formEmail1").val(value['email1']).css("color", "black");
+			$("#formEmail2").val(value['email2']).css("color", "black");
+			$("#formRelation1").val(value['relation1']).css("color", "black");
+			$("#formRelation2").val(value['relation2']).css("color", "black");
 			$("#formGrade").val(value['grade']).css("color", "black");
 			$("#formAddress").val(value['address']).css("color", "black");
 			$("#formContact1").val(value['contactNo1']).css("color", "black");
@@ -228,7 +243,10 @@
 		}else{ // inactive student
 			$("#formFirstName").val(value['firstName']).css("color", "red");
 			$("#formLastName").val(value['lastName']).css("color", "red");
-			$("#formEmail").val(value['email']).css("color", "red");
+			$("#formEmail1").val(value['email1']).css("color", "red");
+			$("#formEmail2").val(value['email2']).css("color", "red");
+			$("#formRelation1").val(value['relation1']).css("color", "red");
+			$("#formRelation2").val(value['relation2']).css("color", "red");
 			$("#formGrade").val(value['grade']).css("color", "red");
 			$("#formAddress").val(value['address']).css("color", "red");
 			$("#formContact1").val(value['contactNo1']).css("color", "red");
@@ -316,9 +334,10 @@
 				<th data-field="grade">Grade</th>
 				<th data-field="startdate">Start Date</th>
 				<th data-field="enddate">End Date</th>
-				<th data-field="email">Email</th>
-				<th data-field="contact1">Contact No 1</th>
-				<th data-field="contact2">Contact No 2</th>
+				<th data-field="email">Main Email</th>
+				<th data-field="contact1">Main Contact</th>
+				<th data-field="email">Sub Email</th>
+				<th data-field="contact2">Sub Contact</th>
 				<th data-field="address">Address</th>
 			  </tr>
 			</thead>
@@ -435,24 +454,64 @@
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-5">
-								<label for="addEmail" class="label-form">Email</label> <input type="text" class="form-control" id="addEmail" name="addEmail">
-							</div>
 							<div class="col-md-7">
 								<label for="addAddress" class="label-form">Address</label> <input type="text" class="form-control" id="addAddress" name="addAddress">
 							</div>
 						</div>
 					</div>
+
 					<div class="form-group">
-						<div class="form-row">
+						<div class="form-row admin-form-row">
 							<div class="col-md-6">
-								<label for="addContact1" class="label-form">Contact No 1</label> <input type="text" class="form-control" id="addContact1" name="addContact1">
+								<section class="fieldset rounded border-secondary" style="padding: 10px;">
+									<header class="text-secondary" style="font-size: 1.1em;">Main Contact</header>
+								<div class="row">
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="addContact1" name="addContact1" placeholder="Contact No">
+									</div>
+									<div class="col-md-4">
+										<select class="form-control" id="addRelation1" name="addRelation1">
+											<option value="mother">Mother</option>
+											<option value="father">Father</option>
+											<option value="other">Other</option>
+										</select>
+									</div>	
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<input type="text" class="form-control" id="addEmail1" name="addEmail1" placeholder="Email">
+									</div>
+								</div>
+								</section>
 							</div>
 							<div class="col-md-6">
-								<label for="addContact2" class="label-form">Contact No 2</label> <input type="text" class="form-control" id="addContact2" name="addContact2">
+								<section class="fieldset rounded border-secondary" style="padding: 10px;">
+									<header class="text-secondary" style="font-size: 1.1em;">Sub Contact</header>
+								
+								<div class="row">
+									<div class="col-md-8">
+										<input type="text" class="form-control" id="addContact2" name="addContact2" placeholder="Contact No">
+									</div>
+									<div class="col-md-4">
+										<select class="form-control" id="addRelation2" name="addRelation2">
+											<option value="mother">Mother</option>
+											<option value="father">Father</option>
+											<option value="other">Others</option>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<input type="text" class="form-control" id="addEmail2" name="addEmail2" placeholder="Email">
+									</div>
+								</div>
+								</section>
 							</div>
 						</div>
-					</div>
+					</div>	
+
+
+
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-12">
@@ -559,9 +618,6 @@
 			</div>
 			<div class="form-group">
 				<div class="form-row admin-form-row">
-					<div class="col-md-8">
-						<input type="text" class="form-control" id="formEmail" name="formEmail" placeholder="Email">
-					</div>
 					<div class="input-group col-md-4">
 					  <div class="input-group-prepend">
 					    <div class="input-group-text">
@@ -603,19 +659,6 @@
 					</div>
 				</div>
 			</div>
-
-			<div class="form-group">
-				<div class="form-row admin-form-row">
-					<div class="col-md-6">
-						<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Contact No 1">
-					</div>
-					<div class="col-md-6">
-						<input type="text" class="form-control" id="formContact2" name="formContact2" placeholder="Contact No 2">
-					</div>
-				</div>
-			</div>
-
-
 			<div class="form-group">
 				<div class="form-row admin-form-row">
 					<div class="col-md-6">
@@ -626,16 +669,16 @@
 								<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Contact No">
 							</div>
 							<div class="col-md-4">
-								<select class="form-control" id="formGrade" name="formGrade">
-									<option value="p2">Mother</option>
-									<option value="p3">Father</option>
-									<option value="p4">Others</option>
+								<select class="form-control" id="formRelation1" name="formRelation1">
+									<option value="mother">Mother</option>
+									<option value="father">Father</option>
+									<option value="other">Other</option>
 								</select>
 							</div>	
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Email">
+								<input type="text" class="form-control" id="formEmail1" name="formEmail1" placeholder="Email">
 							</div>
 						</div>
 						</section>
@@ -646,19 +689,19 @@
 						
 						<div class="row">
 							<div class="col-md-8">
-								<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Contact No">
+								<input type="text" class="form-control" id="formContact2" name="formContact2" placeholder="Contact No">
 							</div>
 							<div class="col-md-4">
-								<select class="form-control" id="formGrade" name="formGrade">
-									<option value="p2">Mother</option>
-									<option value="p3">Father</option>
-									<option value="p4">Others</option>
+								<select class="form-control" id="formRelation2" name="formRelation2">
+									<option value="mother">Mother</option>
+									<option value="father">Father</option>
+									<option value="other">Others</option>
 								</select>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Email">
+								<input type="text" class="form-control" id="formEmail2" name="formEmail2" placeholder="Email">
 							</div>
 						</div>
 						</section>

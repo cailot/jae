@@ -34,8 +34,14 @@ public class StudentDTO implements Serializable{
     
     private String contactNo2;
     
-    private String email;
-    
+    private String email1;
+
+	private String email2;
+
+	private String relation1;
+
+	private String relation2;
+
     private String address;
     
     private String state;
@@ -60,20 +66,16 @@ public class StudentDTO implements Serializable{
     	if(StringUtils.isNotBlank(grade)) std.setGrade(this.grade);
     	if(StringUtils.isNotBlank(contactNo1)) std.setContactNo1(this.contactNo1);
     	if(StringUtils.isNotBlank(contactNo2)) std.setContactNo2(this.contactNo2);
-    	if(StringUtils.isNotBlank(email)) std.setEmail(this.email);
-    	if(StringUtils.isNotBlank(address)) std.setAddress(this.address);
+    	if(StringUtils.isNotBlank(email1)) std.setEmail1(this.email1);
+    	if(StringUtils.isNotBlank(email2)) std.setEmail2(this.email2);
+    	if(StringUtils.isNotBlank(relation1)) std.setRelation1(this.relation1);
+    	if(StringUtils.isNotBlank(relation2)) std.setRelation2(this.relation2);
+		if(StringUtils.isNotBlank(address)) std.setAddress(this.address);
     	if(StringUtils.isNotBlank(state)) std.setState(this.state);
     	if(StringUtils.isNotBlank(branch)) std.setBranch(this.branch);
     	if(StringUtils.isNotBlank(memo)) std.setMemo(this.memo);
     	if(StringUtils.isNotBlank(registerDate)) std.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	// if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(endDate)) std.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	// if((elearnings!=null) && (elearnings.size() > 0)) {
-    		
-    	// 	for(ElearningDTO dto : elearnings) {
-    	// 		std.getElearnings().add(dto.convertToElearning());
-    	// 	}
-    	// }
     	return std;
     }
 
@@ -85,20 +87,16 @@ public class StudentDTO implements Serializable{
     	if(StringUtils.isNotBlank(grade)) std.setGrade(this.grade);
     	if(StringUtils.isNotBlank(contactNo1)) std.setContactNo1(this.contactNo1);
     	if(StringUtils.isNotBlank(contactNo2)) std.setContactNo2(this.contactNo2);
-    	if(StringUtils.isNotBlank(email)) std.setEmail(this.email);
+    	if(StringUtils.isNotBlank(email1)) std.setEmail1(this.email1);
+		if(StringUtils.isNotBlank(email2)) std.setEmail2(this.email2);
+    	if(StringUtils.isNotBlank(relation1)) std.setRelation1(this.relation1);
+		if(StringUtils.isNotBlank(relation2)) std.setRelation2(this.relation2);
     	if(StringUtils.isNotBlank(address)) std.setAddress(this.address);
     	if(StringUtils.isNotBlank(state)) std.setState(this.state);
     	if(StringUtils.isNotBlank(branch)) std.setBranch(this.branch);
     	if(StringUtils.isNotBlank(memo)) std.setMemo(this.memo);
     	if(StringUtils.isNotBlank(registerDate)) std.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	// if(StringUtils.isNotBlank(enrolmentDate)) std.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(endDate)) std.setEndDate(LocalDate.parse(endDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	// if((elearnings!=null) && (elearnings.size() > 0)) {
-    		
-    	// 	for(ElearningDTO dto : elearnings) {
-    	// 		std.getElearnings().add(dto.convertToCourse());
-    	// 	}
-    	// }
     	return std;
     }
 
@@ -110,19 +108,16 @@ public class StudentDTO implements Serializable{
         this.grade = (std.getGrade()!=null) ? std.getGrade() : "";
         this.contactNo1 = (std.getContactNo1()!=null) ? std.getContactNo1() : "";
         this.contactNo2 = (std.getContactNo2()!=null) ? std.getContactNo2() : "";
-        this.email = (std.getEmail()!=null) ? std.getEmail() : "";
+        this.email1 = (std.getEmail1()!=null) ? std.getEmail1() : "";
+		this.email2 = (std.getEmail2()!=null) ? std.getEmail2() : "";
+		this.relation1 = (std.getRelation1()!=null) ? std.getRelation1() : "";
+		this.relation2 = (std.getRelation2()!=null) ? std.getRelation2() : "";
         this.address = (std.getAddress()!=null) ? std.getAddress() : "";
         this.state = (std.getState()!=null) ? std.getState() : "";
         this.branch = (std.getBranch()!=null) ? std.getBranch() : "";
         this.memo = (std.getMemo()!=null) ? std.getMemo() : "";
         this.registerDate = (std.getRegisterDate()!=null) ? std.getRegisterDate().toString() : "";
-        // this.enrolmentDate = (std.getEnrolmentDate()!=null) ? std.getEnrolmentDate().toString() : "";
         this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
-        // if((std.getElearnings()!=null) && (std.getElearnings().size()>0)){
-        // 	for(Elearning crs : std.getElearnings()) {
-        // 		elearnings.add(new ElearningDTO(crs));
-        // 	}
-        // }
     }
         
 }
