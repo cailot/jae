@@ -58,9 +58,6 @@ public class Clazz{ // bridge table between Course & Cycle
 	@Column(length = 50)
     private String branch;
 
-	// @Column(length = 10)
-    // private String grade;
-
 	@Column(length = 100)
     private String name;
 

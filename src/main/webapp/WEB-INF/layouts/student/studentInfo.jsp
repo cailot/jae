@@ -614,6 +614,58 @@
 					</div>
 				</div>
 			</div>
+
+
+			<div class="form-group">
+				<div class="form-row admin-form-row">
+					<div class="col-md-6">
+						<section class="fieldset rounded border-secondary" style="padding: 10px;">
+							<header class="text-secondary" style="font-size: 1.1em;">Main Contact</header>
+						<div class="row">
+							<div class="col-md-8">
+								<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Contact No">
+							</div>
+							<div class="col-md-4">
+								<select class="form-control" id="formGrade" name="formGrade">
+									<option value="p2">Mother</option>
+									<option value="p3">Father</option>
+									<option value="p4">Others</option>
+								</select>
+							</div>	
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Email">
+							</div>
+						</div>
+						</section>
+					</div>
+					<div class="col-md-6">
+						<section class="fieldset rounded border-secondary" style="padding: 10px;">
+							<header class="text-secondary" style="font-size: 1.1em;">Sub Contact</header>
+						
+						<div class="row">
+							<div class="col-md-8">
+								<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Contact No">
+							</div>
+							<div class="col-md-4">
+								<select class="form-control" id="formGrade" name="formGrade">
+									<option value="p2">Mother</option>
+									<option value="p3">Father</option>
+									<option value="p4">Others</option>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Email">
+							</div>
+						</div>
+						</section>
+					</div>
+				</div>
+			</div>
+
 			<div class="form-group">
 				<div class="form-row admin-form-row">
 					<div class="col-md-12">

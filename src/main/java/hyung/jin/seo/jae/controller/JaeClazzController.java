@@ -78,7 +78,7 @@ public class JaeClazzController {
 	@GetMapping("/list")
 	public String listClasses(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
         System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
-		List<ClazzDTO> dtos = clazzService.allClasses();
+		List<ClazzDTO> dtos = clazzService.listClasses(state, branch, grade, year, active);//clazzService.allClasses();
 		model.addAttribute(JaeConstants.CLASS_LIST, dtos);
 		return "classListPage";
 	}

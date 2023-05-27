@@ -9,6 +9,7 @@ import javax.persistence.EntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import hyung.jin.seo.jae.dto.ClazzDTO;
@@ -18,6 +19,8 @@ import hyung.jin.seo.jae.repository.ClazzRepository;
 import hyung.jin.seo.jae.repository.CourseRepository;
 import hyung.jin.seo.jae.repository.SubjectRepository;
 import hyung.jin.seo.jae.service.ClazzService;
+import hyung.jin.seo.jae.specification.ClazzSpecification;
+import hyung.jin.seo.jae.utils.JaeConstants;
 
 @Service
 public class ClazzServiceImpl implements ClazzService {
@@ -119,6 +122,17 @@ public class ClazzServiceImpl implements ClazzService {
 		Clazz updated = clazzRepository.save(existing);
 		ClazzDTO dto = new ClazzDTO(updated);
 		return dto;
+	}
+
+	@Override
+	public List<ClazzDTO> listClasses(String state, String branch, String grade, String year, String active) {
+		List<ClazzDTO> dtos = null;
+		if(StringUtils.isNotBlank(year) && (!StringUtils.equals(year, JaeConstants.ALL))){
+			dtos = clazzRepository.findClassForStateNBranchNGradeNYear(state, branch, grade, Integer.parseInt(year));
+		}else{
+			dtos = clazzRepository.findClassForStateNBranchNGrade(state, branch, grade);
+		}
+		return dtos;
 	}
 
 

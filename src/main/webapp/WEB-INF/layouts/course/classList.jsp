@@ -368,7 +368,7 @@ function updateEditActiveValue(checkbox) {
 							<option value="packenham">Packenham</option>
 						</select>
 					</div>
-					<div class="col-md-1">
+					<div class="col-md-2">
 						<select class="form-control" id="listGrade" name="listGrade">
 							<option value="All">All</option>
 							<option value="p2">P2</option>
@@ -396,14 +396,14 @@ function updateEditActiveValue(checkbox) {
 							<option value="2020">2020</option>
 						</select>
 					</div>
-					<div class="col-md-2">
+					<!-- <div class="col-md-2">
 						<select class="form-control" id="listActive" name="listActive">
 							<option value="All">All Classes</option>
-							<option value="Current">Active Classes</option>
-							<option value="Stopped">Inactive Classes</option>
+							<option value="true">Active Classes</option>
+							<option value="false">Inactive Classes</option>
 							</option>
 						</select>
-					</div>
+					</div> -->
 					<div class="col mx-auto">
 						<button type="submit" class="btn btn-primary btn-block"> <i class="fa fa-search"></i>&nbsp;Search</button>
 					</div>
@@ -454,7 +454,7 @@ function updateEditActiveValue(checkbox) {
 												</c:choose>		
 												<td>
 													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retrieveClassInfo('${clazz.id}')"></i>&nbsp;
-				 									<i class="fa fa-trash text-danger fa-lg" data-toggle="tooltip" title="Delete" onclick="inactivateClass('${clazz.id}')"></i>
+				 									<!-- <i class="fa fa-trash text-danger fa-lg" data-toggle="tooltip" title="Delete" onclick="inactivateClass('${clazz.id}')"></i> -->
 												</td>
 											</tr>
 										</c:forEach>

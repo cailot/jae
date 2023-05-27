@@ -13,6 +13,9 @@ public interface ClazzService {
 	// list all class
 	List<ClazzDTO> allClasses();
 
+	// bring class list base on the condition
+	List<ClazzDTO> listClasses(String state, String branch, String grade, String year, String active);
+
 	// list all class for grade & year
 	List<ClazzDTO> findClassesForGradeNCycle(String grade, int year);
 	
