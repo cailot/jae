@@ -242,8 +242,9 @@ function associateOnline(){
 
 }
 
-
-// add elearning to basket
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Add elearning to basket
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 function addElearningToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
@@ -258,7 +259,9 @@ function addElearningToBasket(value){
 	$('#basketTable > tbody').append(row);
 }
 
-// add class to basket
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Add class to basket
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 function addClassToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
@@ -273,7 +276,9 @@ function addClassToBasket(value){
 	$('#basketTable > tbody').append(row);
 }
 
-// add book to basket
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Add book to basket
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 function addBookToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
@@ -289,7 +294,9 @@ function addBookToBasket(value){
 	$('#basketTable > tbody').append(row);
 }
 
-// add etc to basket
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Add etc to basket
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 function addEtcToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
@@ -305,6 +312,36 @@ function addEtcToBasket(value){
 	$('#basketTable > tbody').append(row);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Retrieve Enroloment
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function retrieveEnrolment(studentId){
+
+	//alert("Retrieving enrolment for student: " + studentId);
+	$.ajax({
+		url: '${pageContext.request.contextPath}/enrolment/search/student/' + studentId,
+		method: 'GET',
+		success: function(response) {
+			// Handle the response
+			console.log(response);
+			$.each(response, function(index, value){
+				if(value.type === ELEARNING){
+					addElearningToBasket(value);
+				}else if(value.type === CLASS){
+					addClassToBasket(value);
+				}else if(value.type === BOOK){
+					addBookToBasket(value);
+				}else if(value.type === ETC){
+					addEtcToBasket(value);
+				}
+			});
+		},
+		error: function(xhr, status, error) {
+			// Handle the error
+			console.error(error);
+		}
+	});
+}
 </script>
 
 <h5>Course Registration</h5>

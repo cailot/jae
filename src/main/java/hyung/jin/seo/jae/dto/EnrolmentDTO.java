@@ -30,11 +30,11 @@ public class EnrolmentDTO implements Serializable{
 
 	private String cancellationReason;
 
-    //@JsonIgnore
 	private String studentId;
 
-	//@JsonIgnore
 	private String clazzId;
+
+	//private String year;
 
 	public EnrolmentDTO(Enrolment enrol){
 		this.id = String.valueOf(enrol.getId());

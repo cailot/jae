@@ -271,6 +271,9 @@
 		$('#studentListResult').modal('hide');
 		// clear search keyword
 		$("#formKeyword").val('');
+
+		// trigger 'retrieveEnrolment' in courseInfo.jsp
+		retrieveEnrolment(value['id']);
 	
 	}
 
