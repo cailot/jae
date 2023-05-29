@@ -1,3 +1,4 @@
+
 <script>
 
 var academicYear;
@@ -49,6 +50,7 @@ $(document).ready(
 			$(this).closest('tr').remove();
 		});
 
+		$('#basketTable td').editable();
 
 
 	}
@@ -268,9 +270,9 @@ function addClassToBasket(value){
 	row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
 	row.append($('<td>').text(value.name));
 	row.append($('<td>').text('Class'));
-	row.append($('<td>').text(academicYear));
-	row.append($('<td>').text(academicWeek));
-	row.append($('<td>').text(0));
+	row.append($('<td contenteditable="true">').text(academicYear));
+	row.append($('<td contenteditable="true">').text(academicWeek));
+	row.append($('<td contenteditable="true">').text(0));
 	row.append($('<td>').text(value.fee));
 	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 	$('#basketTable > tbody').append(row);
@@ -486,4 +488,7 @@ function retrieveEnrolment(studentId){
 		</div>
 	</form>
 </div>
-			
+<!-- Bootstrap Editable Table JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.21.4/bootstrap-table.min.js"></script>
+    
+		
