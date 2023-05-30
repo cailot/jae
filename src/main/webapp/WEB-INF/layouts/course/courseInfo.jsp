@@ -50,7 +50,7 @@ $(document).ready(
 			$(this).closest('tr').remove();
 		});
 
-		$('#basketTable td').editable();
+		//$('#basketTable td').editable();
 
 
 	}
@@ -189,26 +189,52 @@ function associateOnline(){
 	}
 
 	var elearnings = [];
-	var clazzes = [];
+
+
+
+	// var clazzId = 0;
+	// var startWeek = 0;
+	// var endWeek = 0;
+	var clazzData = //[
+		{
+			"startWeek" : 0,
+			"endWeek" : 0,
+			"clazzId" : 0
+		};
+	//];
 
 	$('#basketTable tbody tr').each(function() {
   		var hiddens = $(this).find('.hidden-column').text();
 		var hiddenValues = hiddens.split('|');
-		hiddenValues[0]===ELEARNING ? elearnings.push(hiddenValues[1]) : clazzes.push(hiddenValues[1]);
-		//elearnings.push(hiddenColumnValue);
+		//hiddenValues[0]===ELEARNING ? elearnings.push(hiddenValues[1]) : clazzes.push(hiddenValues[1]);
+		//debugger
+		if(hiddenValues[0] === ELEARNING){
+			elearnings.push(hiddenValues[1]);
+		}else if(hiddenValues[0] === CLASS){
+			//clazzes.push(hiddenValues[1]);
+			clazzData.clazzId = hiddenValues[1];
+			// find value of next td whose class is 'start-year'
+			clazzData.startWeek = $(this).find('.start-week').text();
+			clazzData.endWeek = $(this).find('.end-week').text();
+			// startWeek = startColumnValue;
+			// endWeek = endColumnValue;
+		}
+		
 	});
 
-	console.log("Elearnings: " + elearnings);
-	console.log("Classes: " + clazzes);
+	// console.log("Elearnings: " + elearnings);
+	// console.log("Classes: " + clazzData);
 
 	var elearningData = elearnings.map(function(id) {
     	return parseInt(id);
 	});
 
-	var clazzData = clazzes.map(function(id) {
-    	return parseInt(id);
-	});
+	// var clazzData = clazzes.map(function(id) {
+    // 	return parseInt(id);
+	// });
 
+
+	//debugger
 	// Make the AJAX request for eLearning
 	$.ajax({
 		url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
@@ -271,9 +297,9 @@ function addClassToBasket(value){
 	row.append($('<td>').text(value.name));
 	row.append($('<td>').text('Class'));
 	row.append($('<td contenteditable="true">').text(academicYear));
-	row.append($('<td contenteditable="true">').text(academicWeek));
-	row.append($('<td contenteditable="true">').text(0));
-	row.append($('<td>').text(value.fee));
+	row.append($('<td contenteditable="true">').addClass('start-week').text(academicWeek));
+	row.append($('<td contenteditable="true">').addClass('end-week').text(0));
+	row.append($('<td contenteditable="true">').text(value.fee));
 	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 	$('#basketTable > tbody').append(row);
 }

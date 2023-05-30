@@ -52,4 +52,10 @@ public class Enrolment{ // bridge table between Student & Class
 	@Column(length = 100)
     private String cancellationReason;
 
+	@Column
+	private int startWeek;
+
+	@Column
+	private int endWeek;
+
 }
