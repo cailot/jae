@@ -89,8 +89,6 @@
 .admin-form-row {
 	margin-bottom: 0.5rem;
 }
-  
-
 
 .hidden-column{
     display: none !important;
@@ -115,7 +113,7 @@ td a i.fa-trash {
 .fieldset {
 	position: relative;
 	border: 2px solid #ddd;
-	padding: 20px;
+	padding: 10px;
   }
 
 

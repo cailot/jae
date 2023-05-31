@@ -38,7 +38,11 @@ public class EnrolmentDTO implements Serializable{
 
 	private String clazzId;
 
-	//private String year;
+	private String name;
+
+	private double fee;
+
+	private String year;
 
 	public EnrolmentDTO(Enrolment enrol){
 		this.id = String.valueOf(enrol.getId());
@@ -61,5 +65,17 @@ public class EnrolmentDTO implements Serializable{
 		if(StringUtils.isNotBlank(cancellationReason)) enrolement.setCancellationReason(cancellationReason);		
     	return enrolement;
     }
+
+	public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, String name, double fee, int year){
+		this.id = String.valueOf(id);
+		this.enrolmentDate = enrolmentDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		this.cancelled = cancelled;
+		this.cancellationReason = cancellationReason;
+		this.startWeek = startWeek;
+		this.endWeek = endWeek;
+		this.name = name;
+		this.fee = fee;
+		this.year = String.valueOf(year);
+	}
 
 }

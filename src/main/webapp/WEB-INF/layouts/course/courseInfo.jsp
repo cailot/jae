@@ -1,4 +1,3 @@
-
 <script>
 
 var academicYear;
@@ -29,9 +28,8 @@ $(document).ready(
 
 
 		$('#registerGrade').on('change',function() {
-			//debugger;
 			var grade = $(this).val();
-			console.log(grade);
+			//console.log(grade);
 			listElearns(grade);
 			listClasses(grade);
 			listBooks(grade);
@@ -49,10 +47,6 @@ $(document).ready(
 			e.preventDefault();
 			$(this).closest('tr').remove();
 		});
-
-		//$('#basketTable td').editable();
-
-
 	}
 );
 
@@ -189,52 +183,32 @@ function associateOnline(){
 	}
 
 	var elearnings = [];
-
-
-
-	// var clazzId = 0;
-	// var startWeek = 0;
-	// var endWeek = 0;
-	var clazzData = //[
-		{
-			"startWeek" : 0,
-			"endWeek" : 0,
-			"clazzId" : 0
-		};
-	//];
+	var clazzData = [];
 
 	$('#basketTable tbody tr').each(function() {
   		var hiddens = $(this).find('.hidden-column').text();
 		var hiddenValues = hiddens.split('|');
-		//hiddenValues[0]===ELEARNING ? elearnings.push(hiddenValues[1]) : clazzes.push(hiddenValues[1]);
-		//debugger
 		if(hiddenValues[0] === ELEARNING){
 			elearnings.push(hiddenValues[1]);
 		}else if(hiddenValues[0] === CLASS){
-			//clazzes.push(hiddenValues[1]);
 			clazzData.clazzId = hiddenValues[1];
 			// find value of next td whose class is 'start-year'
 			clazzData.startWeek = $(this).find('.start-week').text();
 			clazzData.endWeek = $(this).find('.end-week').text();
-			// startWeek = startColumnValue;
-			// endWeek = endColumnValue;
+			var clazz = {
+				"startWeek" : clazzData.startWeek,
+				"endWeek" : clazzData.endWeek,
+				"clazzId" : clazzData.clazzId
+			};
+			clazzData.push(clazz);
 		}
 		
 	});
-
-	// console.log("Elearnings: " + elearnings);
-	// console.log("Classes: " + clazzData);
 
 	var elearningData = elearnings.map(function(id) {
     	return parseInt(id);
 	});
 
-	// var clazzData = clazzes.map(function(id) {
-    // 	return parseInt(id);
-	// });
-
-
-	//debugger
 	// Make the AJAX request for eLearning
 	$.ajax({
 		url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
@@ -277,8 +251,8 @@ function addElearningToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
 	row.append($('<td>').addClass('hidden-column').text(ELEARNING + '|' + value.id));
-	row.append($('<td>').text('[' + value.grade.toUpperCase() + '] ' + value.name));
 	row.append($('<td>').text('eLearning'));
+	row.append($('<td>').text('[' + value.grade.toUpperCase() + '] ' + value.name));
 	row.append($('<td>').text(academicYear));
 	row.append($('<td>').text(academicWeek));
 	row.append($('<td>').text(0));
@@ -291,11 +265,11 @@ function addElearningToBasket(value){
 //		Add class to basket
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function addClassToBasket(value){
-	console.log(value);
+	//console.log(value);
 	var row = $("<tr>");
 	row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
-	row.append($('<td>').text(value.name));
 	row.append($('<td>').text('Class'));
+	row.append($('<td>').text(value.name));
 	row.append($('<td contenteditable="true">').text(academicYear));
 	row.append($('<td contenteditable="true">').addClass('start-week').text(academicWeek));
 	row.append($('<td contenteditable="true">').addClass('end-week').text(0));
@@ -310,10 +284,9 @@ function addClassToBasket(value){
 function addBookToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
-	row.append($('<td>').addClass('hidden-column').text(BOOK));
-	row.append($('<td>').addClass('hidden-column hidden-id').text(value.id));
-	row.append($('<td>').text('[' + value.grade.toUpperCase() + '] ' + value.name));
+	row.append($('<td>').addClass('hidden-column').text(BOOK + '|' + value.id));
 	row.append($('<td>').text('Book'));
+	row.append($('<td>').text('[' + value.grade.toUpperCase() + '] ' + value.name));
 	row.append($('<td>').text(academicYear));
 	row.append($('<td>').text(academicWeek));
 	row.append($('<td>').text(0));
@@ -328,10 +301,9 @@ function addBookToBasket(value){
 function addEtcToBasket(value){
 	console.log(value);
 	var row = $("<tr>");
-	row.append($('<td>').addClass('hidden-column').text(ETC));
-	row.append($('<td>').addClass('hidden-column hidden-id').text(value.id));
-	row.append($('<td>').text(value.name));
+	row.append($('<td>').addClass('hidden-column').text(ETC  + '|' + value.id));
 	row.append($('<td>').text('Etc'));
+	row.append($('<td>').text(value.name));
 	row.append($('<td>').text(academicYear));
 	row.append($('<td>').text(academicWeek));
 	row.append($('<td>').text(0));
@@ -345,23 +317,28 @@ function addEtcToBasket(value){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function retrieveEnrolment(studentId){
 
-	//alert("Retrieving enrolment for student: " + studentId);
 	$.ajax({
 		url: '${pageContext.request.contextPath}/enrolment/search/student/' + studentId,
 		method: 'GET',
 		success: function(response) {
 			// Handle the response
-			console.log(response);
 			$.each(response, function(index, value){
-				if(value.type === ELEARNING){
-					addElearningToBasket(value);
-				}else if(value.type === CLASS){
-					addClassToBasket(value);
-				}else if(value.type === BOOK){
-					addBookToBasket(value);
-				}else if(value.type === ETC){
-					addEtcToBasket(value);
-				}
+				
+				console.log(value);	
+				var row = $("<tr>");
+				row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
+				row.append($('<td>').text('Class'));
+				row.append($('<td>').text(value.name));
+				row.append($('<td contenteditable="true">').text(value.year));
+				row.append($('<td contenteditable="true">').addClass('start-week').text(value.startWeek));
+				row.append($('<td contenteditable="true">').addClass('end-week').text(value.endWeek));
+				row.append($('<td>').text(value.fee));
+				row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+				$('#basketTable > tbody').append(row);	
+
+
+
+
 			});
 		},
 		error: function(xhr, status, error) {
@@ -369,6 +346,13 @@ function retrieveEnrolment(studentId){
 			console.error(error);
 		}
 	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Clean basketTable
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function clearEnrolmentBasket(){
+	$('#basketTable > tbody').empty();
 }
 </script>
 
@@ -429,8 +413,8 @@ function retrieveEnrolment(studentId){
 								<thead>
 									<tr>
 										<th class="hidden-column"></th>
-										<th>Description</th>
 										<th>Item</th>
+										<th>Description</th>
 										<th>Year</th>
 										<th>Start</th>
 										<th>End</th>

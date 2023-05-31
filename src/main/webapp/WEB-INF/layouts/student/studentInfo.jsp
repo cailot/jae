@@ -280,6 +280,8 @@
 	// Clear all form
 	function clearStudentForm() {
 		document.getElementById("studentInfo").reset();
+		// clear enrolment basket
+		clearEnrolmentBasket();
 	}
 
 	// date format for datepicker. it changes date format from yyyy-mm-dd to dd/mm/yyyy
@@ -373,154 +375,143 @@
 		<div class="modal-content">
 			<div class="modal-body">
 				<section class="fieldset rounded border-primary">
-					<header class="text-primary font-weight-bold">Student Registration</header>
+				<header class="text-primary font-weight-bold">Student Registration</header>
 				<form id="studentRegister">
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-4">
-								<label for="addState" class="label-form">State</label> <select class="form-control" id="addState" name="addState">
-									<option value="vic">Victoria</option>
+					<div class="form-row mt-2">
+						<div class="col-md-4">
+							<label for="addState" class="label-form">State</label> <select class="form-control" id="addState" name="addState">
+								<option value="vic">Victoria</option>
+								</select>
+						</div>
+						<div class="col-md-5">
+							<label for="addBranch" class="label-form">Branch</label> <select class="form-control" id="addBranch" name="addBranch">
+								<option value="braybrook">Braybrook</option>
+								<option value="epping">Epping</option>
+								<option value="balwyn">Balwyn</option>
+								<option value="bayswater">Bayswater</option>
+								<option value="boxhill">Box Hill</option>
+								<option value="carolinesprings">Caroline Springs</option>
+								<option value="chadstone">Chadstone</option>
+								<option value="craigieburn">Craigieburn</option>
+								<option value="cranbourne">Cranbourne</option>
+								<option value="glenwaverley">Glen Waverley</option>
+								<option value="mitcha">Mitcham</option>
+								<option value="narrewarren">Narre Warren</option>
+								<option value="ormond">Ormond</option>
+								<option value="pointcook">Point Cook</option>
+								<option value="preston">Preston</option>
+								<option value="springvale">Springvale</option>
+								<option value="stalbans">St Albans</option>
+								<option value="werribee">Werribee</option>
+								<option value="mernda">Mernda</option>
+								<option value="melton">Melton</option>
+								<option value="glenroy">Glenroy</option>
+								<option value="packenham">Packenham</option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label for="addRegisterDate" class="label-form">Registration</label> 
+							<input type="text" class="form-control datepicker" id="addRegisterDate" name="addRegisterDate" placeholder="dd/mm/yyyy">
+						</div>
+						<script>
+							var today = new Date();
+							var day = today.getDate();
+							var month = today.getMonth() + 1; // Note: January is 0
+							var year = today.getFullYear();
+							var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
+							document.getElementById('addRegisterDate').value = formattedDate;
+						</script>
+					</div>
+					<div class="form-row mt-2">
+						<div class="col-md-5">
+							<label for="addFirstName" class="label-form">First Name:</label> <input type="text" class="form-control" id="addFirstName" name="addFirstName">
+						</div>
+						<div class="col-md-4">
+							<label for="addLastName" class="label-form">Last Name:</label> <input type="text" class="form-control" id="addLastName" name="addLastName">
+						</div>
+						<div class="col-md-3">
+							<label for="addGrade" class="label-form">Grade</label> <select class="form-control" id="addGrade" name="addGrade">
+								<option value="p2">P2</option>
+								<option value="p3">P3</option>
+								<option value="p4">P4</option>
+								<option value="p5">P5</option>
+								<option value="p6">P6</option>
+								<option value="s7">S7</option>
+								<option value="s8">S8</option>
+								<option value="s9">S9</option>
+								<option value="s10">S10</option>
+								<option value="s10e">S10E</option>
+								<option value="tt6">TT6</option>
+								<option value="tt8">TT8</option>
+								<option value="tt8e">TT8E</option>
+								<option value="srw4">SRW4</option>
+								<option value="srw5">SRW5</option>
+								<option value="srw6">SRW6</option>
+								<option value="srw8">SRW8</option>
+								<option value="jmss">JMSS</option>
+								<option value="vce">VCE</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-row mt-2">
+						<div class="col-md-12">
+							<label for="addAddress" class="label-form">Address</label> <input type="text" class="form-control" id="addAddress" name="addAddress">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col-md-12 mt-4">
+							<section class="fieldset rounded border-primary" style="padding: 10px;">
+								<header class="label-form" style="font-size: 0.9rem!important;">Main Contact</header>
+							<div class="row">
+								<div class="col-md-8">
+									<input type="text" class="form-control" id="addContact1" name="addContact1" placeholder="Contact No">
+								</div>
+								<div class="col-md-4">
+									<select class="form-control" id="addRelation1" name="addRelation1">
+										<option value="mother">Mother</option>
+										<option value="father">Father</option>
+										<option value="sibling">Sibling</option>
+										<option value="other">Other</option>
 									</select>
+								</div>	
 							</div>
-							<div class="col-md-5">
-								<label for="addBranch" class="label-form">Branch</label> <select class="form-control" id="addBranch" name="addBranch">
-									<option value="braybrook">Braybrook</option>
-									<option value="epping">Epping</option>
-									<option value="balwyn">Balwyn</option>
-									<option value="bayswater">Bayswater</option>
-									<option value="boxhill">Box Hill</option>
-									<option value="carolinesprings">Caroline Springs</option>
-									<option value="chadstone">Chadstone</option>
-									<option value="craigieburn">Craigieburn</option>
-									<option value="cranbourne">Cranbourne</option>
-									<option value="glenwaverley">Glen Waverley</option>
-									<option value="mitcha">Mitcham</option>
-									<option value="narrewarren">Narre Warren</option>
-									<option value="ormond">Ormond</option>
-									<option value="pointcook">Point Cook</option>
-									<option value="preston">Preston</option>
-									<option value="springvale">Springvale</option>
-									<option value="stalbans">St Albans</option>
-									<option value="werribee">Werribee</option>
-									<option value="mernda">Mernda</option>
-									<option value="melton">Melton</option>
-									<option value="glenroy">Glenroy</option>
-									<option value="packenham">Packenham</option>
-								</select>
+							<div class="row mt-2">
+								<div class="col-md-12">
+									<input type="text" class="form-control" id="addEmail1" name="addEmail1" placeholder="Email">
+								</div>
 							</div>
-							<div class="col-md-3">
-								<label for="addRegisterDate" class="label-form">Registration</label> 
-								<input type="text" class="form-control datepicker" id="addRegisterDate" name="addRegisterDate" placeholder="dd/mm/yyyy">
-							</div>
-							<script>
-								var today = new Date();
-								var day = today.getDate();
-								var month = today.getMonth() + 1; // Note: January is 0
-								var year = today.getFullYear();
-								var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
-								document.getElementById('addRegisterDate').value = formattedDate;
-							</script>
+							</section>
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-5">
-								<label for="addFirstName" class="label-form">First Name:</label> <input type="text" class="form-control" id="addFirstName" name="addFirstName">
+					<div class="form-row">
+						<div class="col-md-12 mt-4">
+							<section class="fieldset rounded border-primary" style="padding: 10px;">
+								<header class="label-form" style="font-size: 0.9rem!important;">Sub Contact</header>
+							<div class="row">
+								<div class="col-md-8">
+									<input type="text" class="form-control" id="addContact2" name="addContact2" placeholder="Contact No">
+								</div>
+								<div class="col-md-4">
+									<select class="form-control" id="addRelation2" name="addRelation2">
+										<option value="mother">Mother</option>
+										<option value="father">Father</option>
+										<option value="sibling">Sibling</option>
+										<option value="other">Other</option>
+									</select>
+								</div>
 							</div>
-							<div class="col-md-4">
-								<label for="addLastName" class="label-form">Last Name:</label> <input type="text" class="form-control" id="addLastName" name="addLastName">
+							<div class="row mt-2">
+								<div class="col-md-12">
+									<input type="text" class="form-control" id="addEmail2" name="addEmail2" placeholder="Email">
+								</div>
 							</div>
-							<div class="col-md-3">
-								<label for="addGrade" class="label-form">Grade</label> <select class="form-control" id="addGrade" name="addGrade">
-									<option value="p2">P2</option>
-									<option value="p3">P3</option>
-									<option value="p4">P4</option>
-									<option value="p5">P5</option>
-									<option value="p6">P6</option>
-									<option value="s7">S7</option>
-									<option value="s8">S8</option>
-									<option value="s9">S9</option>
-									<option value="s10">S10</option>
-									<option value="s10e">S10E</option>
-									<option value="tt6">TT6</option>
-									<option value="tt8">TT8</option>
-									<option value="tt8e">TT8E</option>
-									<option value="srw4">SRW4</option>
-									<option value="srw5">SRW5</option>
-									<option value="srw6">SRW6</option>
-									<option value="srw8">SRW8</option>
-									<option value="jmss">JMSS</option>
-									<option value="vce">VCE</option>
-								</select>
-							</div>
+							</section>
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-7">
-								<label for="addAddress" class="label-form">Address</label> <input type="text" class="form-control" id="addAddress" name="addAddress">
-							</div>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<div class="form-row admin-form-row">
-							<div class="col-md-6">
-								<section class="fieldset rounded border-secondary" style="padding: 10px;">
-									<header class="text-secondary" style="font-size: 1.1em;">Main Contact</header>
-								<div class="row">
-									<div class="col-md-8">
-										<input type="text" class="form-control" id="addContact1" name="addContact1" placeholder="Contact No">
-									</div>
-									<div class="col-md-4">
-										<select class="form-control" id="addRelation1" name="addRelation1">
-											<option value="mother">Mother</option>
-											<option value="father">Father</option>
-											<option value="other">Other</option>
-										</select>
-									</div>	
-								</div>
-								<div class="row">
-									<div class="col-md-12">
-										<input type="text" class="form-control" id="addEmail1" name="addEmail1" placeholder="Email">
-									</div>
-								</div>
-								</section>
-							</div>
-							<div class="col-md-6">
-								<section class="fieldset rounded border-secondary" style="padding: 10px;">
-									<header class="text-secondary" style="font-size: 1.1em;">Sub Contact</header>
-								
-								<div class="row">
-									<div class="col-md-8">
-										<input type="text" class="form-control" id="addContact2" name="addContact2" placeholder="Contact No">
-									</div>
-									<div class="col-md-4">
-										<select class="form-control" id="addRelation2" name="addRelation2">
-											<option value="mother">Mother</option>
-											<option value="father">Father</option>
-											<option value="other">Other</option>
-										</select>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12">
-										<input type="text" class="form-control" id="addEmail2" name="addEmail2" placeholder="Email">
-									</div>
-								</div>
-								</section>
-							</div>
-						</div>
-					</div>	
-
-
-
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-12">
-								<label for="addMemo" class="label-form">Memo</label>
-								<textarea class="form-control" style="height: 200px;" id="addMemo" name="addMemo"></textarea>
-							</div>
+					<div class="form-row mt-3">
+						<div class="col-md-12">
+							<label for="addMemo" class="label-form">Memo</label>
+							<textarea class="form-control" style="height: 200px;" id="addMemo" name="addMemo"></textarea>
 						</div>
 					</div>
 				</form>
@@ -538,7 +529,7 @@
 <div class="row">
 	<div class="modal-body">
 		<form id="studentInfo">
-			<div class="form-group">
+			<div>
 				<div class="form-row admin-form-row">
 					<div class="col-md-8">
 						<input type="text" class="form-control" style="background-color: #FCF7CA;" id="formKeyword" name="formKeyword" placeholder="ID or Name" />
@@ -548,7 +539,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
+			<div>
 				<div class="form-row admin-form-row">
 					<div class="col mx-auto">
 						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerModal">New</button>
@@ -564,7 +555,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
+			<div>
 				<div class="form-row admin-form-row">
 					<div class="col-md-4">
 						<label for="formState" class="label-form">State</label> 
@@ -604,7 +595,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
+			<div>
 				<div class="form-row admin-form-row">
 					<div class="col-md-3">
 						<input type="text"
@@ -619,7 +610,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
+			<div>
 				<div class="form-row admin-form-row">
 					<div class="input-group col-md-4">
 					  <div class="input-group-prepend">
@@ -631,7 +622,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
+			<div>
 				<div class="form-row admin-form-row">
 					<div class="col-md-9">
 						<input type="text"
@@ -662,7 +653,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
+			<div>
 				<div class="form-row admin-form-row">
 					<div class="col-md-6">
 						<section class="fieldset rounded border-secondary" style="padding: 10px;">
@@ -675,6 +666,7 @@
 								<select class="form-control" id="formRelation1" name="formRelation1">
 									<option value="mother">Mother</option>
 									<option value="father">Father</option>
+									<option value="sibling">Sibling</option>
 									<option value="other">Other</option>
 								</select>
 							</div>	
@@ -698,6 +690,7 @@
 								<select class="form-control" id="formRelation2" name="formRelation2">
 									<option value="mother">Mother</option>
 									<option value="father">Father</option>
+									<option value="sibling">Sibling</option>
 									<option value="other">Others</option>
 								</select>
 							</div>
@@ -712,7 +705,7 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div>
 				<div class="form-row admin-form-row">
 					<div class="col-md-12">
 						<textarea class="form-control" id="formMemo" name="formMemo" style="height: 200px;" placeholder="Memo"></textarea>

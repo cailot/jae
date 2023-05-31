@@ -178,28 +178,28 @@ public class JaeStudentController {
 
 	@PostMapping("/associateClazz/{id}")
 	@ResponseBody
-	public ResponseEntity<String> associateClazz(@PathVariable Long id, @RequestBody EnrolmentDTO formData) {
+	public ResponseEntity<String> associateClazz(@PathVariable Long id, @RequestBody EnrolmentDTO[] formData) {
 		// 1. get student
 		Student std = studentService.getStudent(id);
 		// 2. get clazz
-	//	for(Long clazzId : claszzIds) {
+		for(EnrolmentDTO data : formData) {
 			// 3. associate clazz with student
 			try{
-			Clazz clazz = clazzService.getClazz(Long.parseLong(formData.getClazzId()));
+			Clazz clazz = clazzService.getClazz(Long.parseLong(data.getClazzId()));
 			// 4. Create Enrolment
 			Enrolment enrolment = new Enrolment();
 			// 5. associate enrolment with clazz and student
 			enrolment.setClazz(clazz);
 			enrolment.setStudent(std);
-			enrolment.setStartWeek(formData.getStartWeek());
-			enrolment.setEndWeek(formData.getEndWeek());
+			enrolment.setStartWeek(data.getStartWeek());
+			enrolment.setEndWeek(data.getEndWeek());
 			// 6. save enrolment
 			enrolmentService.addEnrolment(enrolment);
 			}catch(NoSuchElementException e){
 				return ResponseEntity.ok("No such Clazz");
 			}
 				
-//		}
+		}
 		// 7. return success
 		return ResponseEntity.ok("Success");
 	}
