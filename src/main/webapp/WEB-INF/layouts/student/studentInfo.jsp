@@ -460,7 +460,7 @@
 					</div>
 					<div class="form-row">
 						<div class="col-md-12 mt-4">
-							<section class="fieldset rounded border-primary" style="padding: 10px;">
+							<section class="fieldset rounded" style="padding: 10px;">
 								<header class="label-form" style="font-size: 0.9rem!important;">Main Contact</header>
 							<div class="row">
 								<div class="col-md-8">
@@ -485,7 +485,7 @@
 					</div>
 					<div class="form-row">
 						<div class="col-md-12 mt-4">
-							<section class="fieldset rounded border-primary" style="padding: 10px;">
+							<section class="fieldset rounded" style="padding: 10px;">
 								<header class="label-form" style="font-size: 0.9rem!important;">Sub Contact</header>
 							<div class="row">
 								<div class="col-md-8">
