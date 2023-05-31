@@ -77,6 +77,12 @@
 .label-form {
 	font-size: 13px; 
 	margin-bottom: 0.1rem;
+	color : #000000;
+}
+
+.label-form-add {
+	font-size: 13px; 
+	margin-bottom: 0.1rem;
 	color : #0000FF;
 }
 

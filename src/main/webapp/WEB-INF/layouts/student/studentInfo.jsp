@@ -227,31 +227,37 @@
 		$("#formId").val(value['id']);
 		//debugger;
 		if(value['endDate']===''){ // active student
-			$("#formFirstName").val(value['firstName']).css("color", "black");
-			$("#formLastName").val(value['lastName']).css("color", "black");
-			$("#formEmail1").val(value['email1']).css("color", "black");
-			$("#formEmail2").val(value['email2']).css("color", "black");
-			$("#formRelation1").val(value['relation1']).css("color", "black");
-			$("#formRelation2").val(value['relation2']).css("color", "black");
-			$("#formGrade").val(value['grade']).css("color", "black");
-			$("#formAddress").val(value['address']).css("color", "black");
-			$("#formContact1").val(value['contactNo1']).css("color", "black");
-			$("#formContact2").val(value['contactNo2']).css("color", "black");
-			$("#formMemo").val(value['memo']).css("color", "black");
+			$("#formFirstName").val(value['firstName']).css("color", "black").prop('disabled', false);
+			$("#formLastName").val(value['lastName']).css("color", "black").prop('disabled', false);
+			$("#formEmail1").val(value['email1']).css("color", "black").prop('disabled', false);
+			$("#formEmail2").val(value['email2']).css("color", "black").prop('disabled', false);
+			$("#formRelation1").val(value['relation1']).css("color", "black").prop('disabled', false);
+			$("#formRelation2").val(value['relation2']).css("color", "black").prop('disabled', false);
+			$("#formGrade").val(value['grade']).css("color", "black").prop('disabled', false);
+			$("#formAddress").val(value['address']).css("color", "black").prop('disabled', false);
+			$("#formContact1").val(value['contactNo1']).css("color", "black").prop('disabled', false);
+			$("#formContact2").val(value['contactNo2']).css("color", "black").prop('disabled', false);
+			$("#formMemo").val(value['memo']).css("color", "black").prop('disabled', false);
+			$("#formState").prop('disabled', false);
+			$("#formBranch").prop('disabled', false);
+			$("#formRegisterDate").prop('disabled', false);
 			$('#formActive').prop('checked', true);
 			$("#formActive").prop("disabled", true);
 		}else{ // inactive student
-			$("#formFirstName").val(value['firstName']).css("color", "red");
-			$("#formLastName").val(value['lastName']).css("color", "red");
-			$("#formEmail1").val(value['email1']).css("color", "red");
-			$("#formEmail2").val(value['email2']).css("color", "red");
-			$("#formRelation1").val(value['relation1']).css("color", "red");
-			$("#formRelation2").val(value['relation2']).css("color", "red");
-			$("#formGrade").val(value['grade']).css("color", "red");
-			$("#formAddress").val(value['address']).css("color", "red");
-			$("#formContact1").val(value['contactNo1']).css("color", "red");
-			$("#formContact2").val(value['contactNo2']).css("color", "red");
-			$("#formMemo").val(value['memo']).css("color", "red");
+			$("#formFirstName").val(value['firstName']).css("color", "red").prop('disabled', true);
+			$("#formLastName").val(value['lastName']).css("color", "red").prop('disabled', true);
+			$("#formEmail1").val(value['email1']).css("color", "red").prop('disabled', true);
+			$("#formEmail2").val(value['email2']).css("color", "red").prop('disabled', true);
+			$("#formRelation1").val(value['relation1']).css("color", "red").prop('disabled', true);
+			$("#formRelation2").val(value['relation2']).css("color", "red").prop('disabled', true);
+			$("#formGrade").val(value['grade']).css("color", "red").prop('disabled', true);
+			$("#formAddress").val(value['address']).css("color", "red").prop('disabled', true);
+			$("#formContact1").val(value['contactNo1']).css("color", "red").prop('disabled', true);
+			$("#formContact2").val(value['contactNo2']).css("color", "red").prop('disabled', true);
+			$("#formMemo").val(value['memo']).css("color", "red").prop('disabled', true);
+			$("#formState").prop('disabled', true);
+			$("#formBranch").prop('disabled', true);
+			$("#formRegisterDate").prop('disabled', true);
 			$('#formActive').prop('checked', false);
 			$("#formActive").prop("disabled", false);
 		}
@@ -526,197 +532,178 @@
 </div>
 
 <!-- Administration Body -->
-<div class="row">
-	<div class="modal-body">
-		<form id="studentInfo">
-			<div>
-				<div class="form-row admin-form-row">
+<div class="modal-body">
+	<form id="studentInfo">
+		<div class="form-row">
+			<div class="col-md-8">
+				<input type="text" class="form-control" style="background-color: #FCF7CA;" id="formKeyword" name="formKeyword" placeholder="ID or Name" />
+			</div>
+			<div class="col-md-4">
+				<button type="button" class="btn btn-block btn-primary" onclick="searchStudent()">Search</button>
+			</div>
+		</div>
+		<div class="form-row mt-3">
+			<div class="col mx-auto">
+				<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerModal">New</button>
+			</div>
+			<div class="col mx-auto">
+				<button type="button" class="btn btn-block btn-warning" onclick="updateStudentInfo()">Save</button>
+			</div>
+			<div class="col mx-auto">
+				<button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deactivateModal">Suspend</button>
+			</div>
+			<div class="col mx-auto">
+				<button type="button" class="btn btn-block btn-info" onclick="clearStudentForm()">Clear</button>
+			</div>
+		</div>
+		<div class="form-row mt-3">
+			<div class="col-md-4">
+				<label for="formState" class="label-form">State</label> 
+				<select class="form-control" id="formState" name="formState">
+					<option value="vic">Victoria</option>
+				</select>
+			</div>
+			<div class="col-md-4">
+				<label for="formBranch" class="label-form">Branch</label> <select
+					class="form-control" id="formBranch" name="formBranch">
+					<option value="braybrook">Braybrook</option>
+					<option value="epping">Epping</option>
+					<option value="balwyn">Balwyn</option>
+					<option value="bayswater">Bayswater</option>
+					<option value="boxhill">Box Hill</option>
+					<option value="carolinesprings">Caroline Springs</option>
+					<option value="chadstone">Chadstone</option>
+					<option value="craigieburn">Craigieburn</option>
+					<option value="cranbourne">Cranbourne</option>
+					<option value="glenwaverley">Glen Waverley</option>
+					<option value="mitcha">Mitcham</option>
+					<option value="narrewarren">Narre Warren</option>
+					<option value="ormond">Ormond</option>
+					<option value="pointcook">Point Cook</option>
+					<option value="preston">Preston</option>
+					<option value="springvale">Springvale</option>
+					<option value="stalbans">St Albans</option>
+					<option value="werribee">Werribee</option>
+					<option value="mernda">Mernda</option>
+					<option value="melton">Melton</option>
+					<option value="glenroy">Glenroy</option>
+					<option value="packenham">Packenham</option>
+				</select>
+			</div>
+			<div class="col-md-4">
+				<label for="datepicker" class="label-form">Registration Date</label> <input type="text" class="form-control datepicker" id="formRegisterDate" name="formRegisterDate" placeholder=" Select a date" required>
+			</div>
+		</div>
+		<div class="form-row mt-3">
+			<div class="col-md-4">
+				<input type="text"
+					class="form-control" id="formId" name="formId" placeholder="ID" readonly>
+			</div>
+			<div class="input-group col-md-5">
+				<div class="input-group-prepend">
+				<div class="input-group-text">
+					<input type="checkbox" id="formActive" name="formActive" disabled>
+				</div>
+				</div>
+				<input type="text" id="formActiveLabel" class="form-control" placeholder="Activated" readonly>
+			</div>
+			<div class="col-md-3">
+				<select class="form-control" id="formGrade" name="formGrade">
+					<option value="p2">P2</option>
+					<option value="p3">P3</option>
+					<option value="p4">P4</option>
+					<option value="p5">P5</option>
+					<option value="p6">P6</option>
+					<option value="s7">S7</option>
+					<option value="s8">S8</option>
+					<option value="s9">S9</option>
+					<option value="s10">S10</option>
+					<option value="s10e">S10E</option>
+					<option value="tt6">TT6</option>
+					<option value="tt8">TT8</option>
+					<option value="tt8e">TT8E</option>
+					<option value="srw4">SRW4</option>
+					<option value="srw5">SRW5</option>
+					<option value="srw6">SRW6</option>
+					<option value="srw8">SRW8</option>
+					<option value="jmss">JMSS</option>
+					<option value="vce">VCE</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-row mt-3">
+			<div class="col-md-6">
+				<input type="text"
+					class="form-control" id="formFirstName" name="formFirstName" placeholder="First Name">
+			</div>
+			<div class="col-md-6">
+				<input type="text" class="form-control" id="formLastName" name="formLastName" placeholder="Last Name">
+			</div>
+		</div>
+		<div class="form-row mt-3">
+			<div class="col-md-12">
+				<input type="text" class="form-control" id="formAddress" name="formAddress" placeholder="Address">
+			</div>
+			
+		</div>
+		<div class="form-row">
+			<div class="col-md-12 mt-4">
+				<section class="fieldset rounded" style="padding: 10px;">
+					<header class="label-form" style="font-size: 0.9em!important;">Main Contact</header>
+				<div class="row">
 					<div class="col-md-8">
-						<input type="text" class="form-control" style="background-color: #FCF7CA;" id="formKeyword" name="formKeyword" placeholder="ID or Name" />
+						<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Contact No">
 					</div>
 					<div class="col-md-4">
-						<button type="button" class="btn btn-block btn-primary" onclick="searchStudent()">Search</button>
-					</div>
-				</div>
-			</div>
-			<div>
-				<div class="form-row admin-form-row">
-					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerModal">New</button>
-					</div>
-					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-warning" onclick="updateStudentInfo()">Save</button>
-					</div>
-					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deactivateModal">Suspend</button>
-					</div>
-					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-info" onclick="clearStudentForm()">Clear</button>
-					</div>
-				</div>
-			</div>
-			<div>
-				<div class="form-row admin-form-row">
-					<div class="col-md-4">
-						<label for="formState" class="label-form">State</label> 
-						<select class="form-control" id="formState" name="formState">
-							<option value="vic">Victoria</option>
+						<select class="form-control" id="formRelation1" name="formRelation1">
+							<option value="mother">Mother</option>
+							<option value="father">Father</option>
+							<option value="sibling">Sibling</option>
+							<option value="other">Other</option>
 						</select>
+					</div>	
+				</div>
+					<div class="row mt-2">
+						<div class="col-md-12">
+							<input type="text" class="form-control" id="formEmail1" name="formEmail1" placeholder="Email">
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+		<div class="form-row">
+			<div class="col-md-12 mt-4">
+				<section class="fieldset rounded" style="padding: 10px;">
+					<header class="label-form" style="font-size: 0.9em !important;">Sub Contact</header>
+				<div class="row">
+					<div class="col-md-8">
+						<input type="text" class="form-control" id="formContact2" name="formContact2" placeholder="Contact No">
 					</div>
 					<div class="col-md-4">
-						<label for="formBranch" class="label-form">Branch</label> <select
-							class="form-control" id="formBranch" name="formBranch">
-							<option value="braybrook">Braybrook</option>
-							<option value="epping">Epping</option>
-							<option value="balwyn">Balwyn</option>
-							<option value="bayswater">Bayswater</option>
-							<option value="boxhill">Box Hill</option>
-							<option value="carolinesprings">Caroline Springs</option>
-							<option value="chadstone">Chadstone</option>
-							<option value="craigieburn">Craigieburn</option>
-							<option value="cranbourne">Cranbourne</option>
-							<option value="glenwaverley">Glen Waverley</option>
-							<option value="mitcha">Mitcham</option>
-							<option value="narrewarren">Narre Warren</option>
-							<option value="ormond">Ormond</option>
-							<option value="pointcook">Point Cook</option>
-							<option value="preston">Preston</option>
-							<option value="springvale">Springvale</option>
-							<option value="stalbans">St Albans</option>
-							<option value="werribee">Werribee</option>
-							<option value="mernda">Mernda</option>
-							<option value="melton">Melton</option>
-							<option value="glenroy">Glenroy</option>
-							<option value="packenham">Packenham</option>
-						</select>
-					</div>
-					<div class="col-md-4">
-						<label for="datepicker" class="label-form">Registration Date</label> <input type="text" class="form-control datepicker" id="formRegisterDate" name="formRegisterDate" placeholder=" Select a date" required>
-					</div>
-				</div>
-			</div>
-			<div>
-				<div class="form-row admin-form-row">
-					<div class="col-md-3">
-						<input type="text"
-							class="form-control" id="formId" name="formId" placeholder="ID" readonly>
-					</div>
-					<div class="col-md-5">
-						<input type="text"
-							class="form-control" id="formFirstName" name="formFirstName" placeholder="First Name">
-					</div>
-					<div class="col-md-4">
-						<input type="text" class="form-control" id="formLastName" name="formLastName" placeholder="Last Name">
-					</div>
-				</div>
-			</div>
-			<div>
-				<div class="form-row admin-form-row">
-					<div class="input-group col-md-4">
-					  <div class="input-group-prepend">
-					    <div class="input-group-text">
-					      <input type="checkbox" id="formActive" name="formActive" disabled>
-					    </div>
-					  </div>
-					  <input type="text" id="formActiveLabel" class="form-control" placeholder="Activated" readonly>
-					</div>
-				</div>
-			</div>
-			<div>
-				<div class="form-row admin-form-row">
-					<div class="col-md-9">
-						<input type="text"
-							class="form-control" id="formAddress" name="formAddress" placeholder="Address">
-					</div>
-					<div class="col-md-3">
-						<select class="form-control" id="formGrade" name="formGrade">
-							<option value="p2">P2</option>
-							<option value="p3">P3</option>
-							<option value="p4">P4</option>
-							<option value="p5">P5</option>
-							<option value="p6">P6</option>
-							<option value="s7">S7</option>
-							<option value="s8">S8</option>
-							<option value="s9">S9</option>
-							<option value="s10">S10</option>
-							<option value="s10e">S10E</option>
-							<option value="tt6">TT6</option>
-							<option value="tt8">TT8</option>
-							<option value="tt8e">TT8E</option>
-							<option value="srw4">SRW4</option>
-							<option value="srw5">SRW5</option>
-							<option value="srw6">SRW6</option>
-							<option value="srw8">SRW8</option>
-							<option value="jmss">JMSS</option>
-							<option value="vce">VCE</option>
+						<select class="form-control" id="formRelation2" name="formRelation2">
+							<option value="mother">Mother</option>
+							<option value="father">Father</option>
+							<option value="sibling">Sibling</option>
+							<option value="other">Others</option>
 						</select>
 					</div>
 				</div>
-			</div>
-			<div>
-				<div class="form-row admin-form-row">
-					<div class="col-md-6">
-						<section class="fieldset rounded border-secondary" style="padding: 10px;">
-							<header class="text-secondary" style="font-size: 1.1em;">Main Contact</header>
-						<div class="row">
-							<div class="col-md-8">
-								<input type="text" class="form-control" id="formContact1" name="formContact1" placeholder="Contact No">
-							</div>
-							<div class="col-md-4">
-								<select class="form-control" id="formRelation1" name="formRelation1">
-									<option value="mother">Mother</option>
-									<option value="father">Father</option>
-									<option value="sibling">Sibling</option>
-									<option value="other">Other</option>
-								</select>
-							</div>	
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<input type="text" class="form-control" id="formEmail1" name="formEmail1" placeholder="Email">
-							</div>
-						</div>
-						</section>
-					</div>
-					<div class="col-md-6">
-						<section class="fieldset rounded border-secondary" style="padding: 10px;">
-							<header class="text-secondary" style="font-size: 1.1em;">Sub Contact</header>
-						
-						<div class="row">
-							<div class="col-md-8">
-								<input type="text" class="form-control" id="formContact2" name="formContact2" placeholder="Contact No">
-							</div>
-							<div class="col-md-4">
-								<select class="form-control" id="formRelation2" name="formRelation2">
-									<option value="mother">Mother</option>
-									<option value="father">Father</option>
-									<option value="sibling">Sibling</option>
-									<option value="other">Others</option>
-								</select>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12">
-								<input type="text" class="form-control" id="formEmail2" name="formEmail2" placeholder="Email">
-							</div>
-						</div>
-						</section>
-					</div>
-				</div>
-			</div>
-
-			<div>
-				<div class="form-row admin-form-row">
+				<div class="row mt-2">
 					<div class="col-md-12">
-						<textarea class="form-control" id="formMemo" name="formMemo" style="height: 200px;" placeholder="Memo"></textarea>
+						<input type="text" class="form-control" id="formEmail2" name="formEmail2" placeholder="Email">
 					</div>
 				</div>
+				</section>
 			</div>
-			<input type="hidden" id="formEndDate" name="formEndDate" />
-		</form>
-	</div>
+		</div>
+		<div class="form-row mt-3">
+			<div class="col-md-12">
+				<textarea class="form-control" id="formMemo" name="formMemo" style="height: 200px;" placeholder="Memo"></textarea>
+			</div>
+		</div>
+		<input type="hidden" id="formEndDate" name="formEndDate" />
+	</form>
 </div>
-
 
 
 
