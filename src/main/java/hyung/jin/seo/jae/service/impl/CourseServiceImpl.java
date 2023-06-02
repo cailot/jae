@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import hyung.jin.seo.jae.dto.CourseDTO;
 import hyung.jin.seo.jae.model.Course;
 import hyung.jin.seo.jae.repository.CourseRepository;
+import hyung.jin.seo.jae.repository.SubjectRepository;
 import hyung.jin.seo.jae.service.CourseService;
 
 @Service
@@ -17,6 +18,9 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Autowired
 	private CourseRepository courseRepository;
+
+	@Autowired
+	private SubjectRepository subjectRepository;
 
 	@Override
 	public long checkCount() {
@@ -37,10 +41,18 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	public List<CourseDTO> findByGrade(String grade) {
+		// 1. get courses
 		List<Course> crs = courseRepository.findByGrade(grade);
+		// 2. get subjects
+		List<String> subjects = subjectRepository.findSubjectAbbrForGrade(grade);
+		// 3. create DTOs
 		List<CourseDTO> dtos = new ArrayList<>();
 		for(Course course: crs){
 			CourseDTO dto = new CourseDTO(course);
+			// 4. assign subjects to classes
+			for(String subject : subjects){
+				dto.addSubject(subject);
+			}
 			dtos.add(dto);
 		}
 		return dtos;

@@ -31,14 +31,14 @@ $(document).ready(
 			var grade = $(this).val();
 			//console.log(grade);
 			listElearns(grade);
-			listClasses(grade);
+			listCourses(grade);
 			listBooks(grade);
 			listEtcs(grade);
 		});
 		
 		// when page loads, search course fees for grade 'p2' as first entry --> No need as there is no student selected yet
 		// listElearns('p2');
-		// listClasses('p2');
+		// listCourses('p2');
 		// listBooks('p2');
 		// listEtcs('p2');
 
@@ -80,13 +80,13 @@ function listElearns(grade) {
 	});
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Search Fees based on Grade	
+//		Search Class based on Grade	
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function listClasses(grade) {
+function listCourses(grade) {
 	// clear 'courseFeeTable' table body
 	$('#courseFeeTable tbody').empty();
 	$.ajax({
-		url : '${pageContext.request.contextPath}/class/search',
+		url : '${pageContext.request.contextPath}/class/coursesByGrade',
 		type : 'GET',
 		data : {
 			grade : grade,
@@ -94,12 +94,12 @@ function listClasses(grade) {
 		success : function(data) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				// console.log(cleaned);
+				console.log(cleaned);
 				var row = $('<tr>');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
-				row.append($('<td>').text(value.name));
+				row.append($('<td>').text(value.description));
 				row.append($('<td>').text(value.subjects));
-				row.append($('<td>').text(value.fee));
+				row.append($('<td>').text(value.price));
 				row.append($("<td onclick='addClassToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Class"><i class="fa fa-plus-circle"></i></a>'));
 				$('#courseFeeTable > tbody').append(row);
 			});
@@ -270,9 +270,10 @@ function addClassToBasket(value){
 	row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
 	row.append($('<td>').text('Class'));
 	row.append($('<td>').text(value.name));
-	row.append($('<td contenteditable="true">').text(academicYear));
+	row.append($('<td contenteditable="true">').text(value.year));
 	row.append($('<td contenteditable="true">').addClass('start-week').text(academicWeek));
 	row.append($('<td contenteditable="true">').addClass('end-week').text(0));
+	row.append($('<td contenteditable="true">').text(0));
 	row.append($('<td contenteditable="true">').text(value.fee));
 	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 	$('#basketTable > tbody').append(row);
@@ -332,12 +333,10 @@ function retrieveEnrolment(studentId){
 				row.append($('<td contenteditable="true">').text(value.year));
 				row.append($('<td contenteditable="true">').addClass('start-week').text(value.startWeek));
 				row.append($('<td contenteditable="true">').addClass('end-week').text(value.endWeek));
+				row.append($('<td contenteditable="true">').addClass('end-week').text(value.endWeek - value.startWeek + 1));
 				row.append($('<td>').text(value.fee));
 				row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 				$('#basketTable > tbody').append(row);	
-
-
-
 
 			});
 		},
@@ -400,7 +399,7 @@ function clearEnrolmentBasket(){
                           <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
 								<a class="nav-item nav-link active" id="nav-basket-tab" data-toggle="tab" href="#nav-basket" role="tab" aria-controls="nav-basket" aria-selected="true">My Lecture</a>
 								<a class="nav-item nav-link" id="nav-elearn-tab" data-toggle="tab" href="#nav-elearn" role="tab" aria-controls="nav-elearn" aria-selected="true">e-Learning</a>
-                            	<a class="nav-item nav-link" id="nav-fee-tab" data-toggle="tab" href="#nav-fee" role="tab" aria-controls="nav-fee" aria-selected="true">Class</a>
+                            	<a class="nav-item nav-link" id="nav-fee-tab" data-toggle="tab" href="#nav-fee" role="tab" aria-controls="nav-fee" aria-selected="true">Course</a>
                               	<a class="nav-item nav-link" id="nav-book-tab" data-toggle="tab" href="#nav-book" role="tab" aria-controls="nav-book" aria-selected="false">Books</a>
                               	<a class="nav-item nav-link" id="nav-etc-tab" data-toggle="tab" href="#nav-etc" role="tab" aria-controls="nav-etc" aria-selected="false">Etc</a>
                           </div>
@@ -418,7 +417,8 @@ function clearEnrolmentBasket(){
 										<th>Year</th>
 										<th>Start</th>
 										<th>End</th>
-										<th>Fee</th>
+										<th>Weeks</th>
+										<th>Price</th>
 										<th>Action</th>
 									</tr>
 								</thead>
@@ -443,7 +443,7 @@ function clearEnrolmentBasket(){
 								</tbody>
 							</table>
 						</div>
-						<!-- Class -->
+						<!-- Course -->
 						<div class="tab-pane fade" id="nav-fee" role="tabpanel" aria-labelledby="nav-fee-tab">
                               <table class="table" id="courseFeeTable" name="courseFeeTable">
                                   <thead>
@@ -451,7 +451,7 @@ function clearEnrolmentBasket(){
 										  <th class="hidden-column"></th>
                                           <th>Name</th>
                                           <th>Subjects</th>
-                                          <th>Price</th>
+										  <th>Price</th>
 										  <th>Add</th>
                                       </tr>
                                   </thead>

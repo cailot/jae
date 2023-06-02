@@ -1,6 +1,8 @@
 package hyung.jin.seo.jae.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -87,9 +89,24 @@ public class JaeClazzController {
 	@GetMapping("/coursesByGrade")
 	@ResponseBody
 	public List<CourseDTO> getCoursesByGrade(@RequestParam(value="grade", required=true) String grade) {
+		int year = cycleService.academicYear();
+		int week = cycleService.academicWeeks();
 		List<CourseDTO> dtos = courseService.findByGrade(grade);
+		// if new academic year is going to start, display next year classes
+		if(week > JaeConstants.ACADEMIC_START_COMMING_WEEKS) {
+			// display next year courses by increasing price
+			//List<CourseDTO> nexts = dtos.stream().collect(Collectors.toList());
+			for(CourseDTO next : nexts) {
+				//CourseDTO next = dto;
+				next.setPrice(next.getPrice() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_PRICE_INCREASE);
+				next.setDescription(next.getDescription() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_SUFFIX);
+				dtos.add(next);
+			}
+		}
 		return dtos;
 	}
+
+
 
 	// get class by Id
 	@GetMapping("/get/{id}")

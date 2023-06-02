@@ -3,7 +3,6 @@ package hyung.jin.seo.jae.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import hyung.jin.seo.jae.dto.ClazzDTO;
@@ -21,8 +20,11 @@ public interface ClazzRepository extends JpaRepository<Clazz, Long>{
 	List<ClazzDTO> findClassForYear(int year);
 
 	// list all class for grade & year
-	@Query("SELECT new hyung.jin.seo.jae.dto.ClazzDTO(c.id, c.fee, c.name, c.day, c.startDate, c.active, c.course.id, c.cycle.id, c.course.grade, c.course.description, c.cycle.year) FROM Clazz c WHERE c.course.grade = ?1 AND c.cycle.year = ?2")
+	// @Query("SELECT new hyung.jin.seo.jae.dto.ClazzDTO(c.id, c.fee, c.name, c.day, c.startDate, c.active, c.course.id, c.cycle.id, c.course.grade, c.course.description, c.cycle.year) FROM Clazz c WHERE c.course.grade = ?1 AND c.cycle.year = ?2")
+	// List<ClazzDTO> findClassForGradeNCycle(String grade, int year);
+	@Query("SELECT new hyung.jin.seo.jae.dto.ClazzDTO(c.id, c.fee, c.course.description, c.day, c.startDate, c.active, c.course.id, c.cycle.id, c.course.grade, c.course.description, c.cycle.year) FROM Clazz c WHERE c.course.grade = ?1 AND c.cycle.year = ?2")
 	List<ClazzDTO> findClassForGradeNCycle(String grade, int year);
+
 
 	// list all class for state, branch, grade
 	@Query("SELECT new hyung.jin.seo.jae.dto.ClazzDTO(c.id, c.fee, c.name, c.day, c.startDate, c.active, c.course.id, c.cycle.id, c.course.grade, c.course.description, c.cycle.year) FROM Clazz c WHERE (?1 = 'All' OR c.state = ?1) AND (?2 = 'All' OR c.branch = ?2) AND (?3 = 'All' OR c.course.grade = ?3)")

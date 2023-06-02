@@ -48,7 +48,9 @@ public class ClazzServiceImpl implements ClazzService {
 		// 1. get classes
 		List<ClazzDTO> dtos = clazzRepository.findClassForGradeNCycle(grade, year);
 		// 2. get subjects
-		List<String> subjects = subjectRepository.findSubjectNamesForGrade(grade);
+		// List<String> subjects = subjectRepository.findSubjectNamesForGrade(grade);
+		// 2. get subjects as abbreviation
+		List<String> subjects = subjectRepository.findSubjectAbbrForGrade(grade);
 		// 3. assign subjects to classes
 		for(ClazzDTO clazz : dtos){
 			for(String subject : subjects){

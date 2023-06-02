@@ -44,10 +44,10 @@ public class Course{
     
     @Column(length = 400, nullable = false)
     private String description;
-    
-    // @Column(length = 10, nullable = false)
-    // private String day;
 
+    @Column(columnDefinition = "DECIMAL(10,2)")
+	private double price;
+    
     @CreationTimestamp
     private LocalDate registerDate;
 

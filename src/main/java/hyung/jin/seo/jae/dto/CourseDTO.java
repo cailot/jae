@@ -2,39 +2,17 @@ package hyung.jin.seo.jae.dto;
 
 import java.io.Serializable;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
 import hyung.jin.seo.jae.model.Course;
-import hyung.jin.seo.jae.model.Cycle;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 @Getter
@@ -54,8 +32,14 @@ public class CourseDTO implements Serializable{
     
     private String grade;
 
-    private String day;
-	
+	private String price;
+
+	private List<String> subjects = new ArrayList<>();
+
+	public void addSubject(String subject){
+		subjects.add(subject);
+	}
+
 
 	public CourseDTO(Course course) {
     	this.id = (course.getId()!=null) ? course.getId().toString() : "";
@@ -63,8 +47,7 @@ public class CourseDTO implements Serializable{
     	this.description = (course.getDescription()!=null) ? course.getDescription() : "";
     	this.registerDate = (course.getRegisterDate()!=null) ? course.getRegisterDate().toString() : "";
     	this.grade = (course.getGrade()!=null) ? course.getGrade() : "";
-    	// this.day = (course.getDay()!=null) ? course.getDay() : "";
-		
+		this.price = (course.getPrice()!=0) ? Double.toString(course.getPrice()) : "";
     }
     
     public Course convertToCourse() {
@@ -74,7 +57,18 @@ public class CourseDTO implements Serializable{
     	if(StringUtils.isNotBlank(description)) course.setDescription(this.description);
     	if(StringUtils.isNotBlank(registerDate)) course.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(grade)) course.setGrade(this.grade);
-    	// if(StringUtils.isNotBlank(day)) course.setDay(this.day);
+		if(StringUtils.isNotBlank(price)) course.setPrice(Double.parseDouble(this.price));
     	return course;
     }
+
+	// // for new academic year Object
+	// @Override
+	// public CourseDTO clone() {
+	// 	try{
+	// 		return (CourseDTO) super.clone();
+	// 	}catch(CloneNotSupportedException e){
+	// 		// Handle clone not supported exception
+	// 		return new CourseDTO();
+	// 	}
+	// }
 }
