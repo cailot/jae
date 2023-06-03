@@ -42,18 +42,18 @@ public class JaeClazzController {
 	@ResponseBody
 	List<ClazzDTO> searchClasses(@RequestParam("grade") String grade) {
 		int year = cycleService.academicYear();
-		int week = cycleService.academicWeeks();
+		// int week = cycleService.academicWeeks();
 		List<ClazzDTO> dtos = clazzService.findClassesForGradeNCycle(grade, year);
 		// if new academic year is going to start, display next year classes
-		if(week > JaeConstants.ACADEMIC_START_COMMING_WEEKS) {
-			// display next year classes
-			List<ClazzDTO> nexts = clazzService.findClassesForGradeNCycle(grade, year+1);
-			for(ClazzDTO next : nexts) {
-				String append = next.getName() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_SUFFIX;
-				next.setName(append);
-				dtos.add(next);
-			}
-		}
+		// if(week > JaeConstants.ACADEMIC_START_COMMING_WEEKS) {
+		// 	// display next year classes
+		// 	List<ClazzDTO> nexts = clazzService.findClassesForGradeNCycle(grade, year+1);
+		// 	for(ClazzDTO next : nexts) {
+		// 		String append = next.getName() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_SUFFIX;
+		// 		next.setName(append);
+		// 		dtos.add(next);
+		// 	}
+		// }
 		return dtos;
 	}
 
@@ -117,8 +117,8 @@ public class JaeClazzController {
 	// search classes by grade & year
 	@GetMapping("/classesByCourse")
 	@ResponseBody
-	List<ClazzDTO> getClassesByGrade(@RequestParam("courseId") String courseId, @RequestParam("year") int year) {
-		List<ClazzDTO> dtos = clazzService.findClassesForGradeNCycle("p3", 2022);
+	List<ClazzDTO> getClassesByGrade(@RequestParam("courseId") Long courseId, @RequestParam("year") int year) {
+		List<ClazzDTO> dtos = clazzService.findClassesForCourseIdNCycle(courseId, year);
 		return dtos;
 	}
 

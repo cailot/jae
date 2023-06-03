@@ -50,14 +50,20 @@ public class ClazzServiceImpl implements ClazzService {
 		// 2. get subjects
 		// List<String> subjects = subjectRepository.findSubjectNamesForGrade(grade);
 		// 2. get subjects as abbreviation
-		List<String> subjects = subjectRepository.findSubjectAbbrForGrade(grade);
-		// 3. assign subjects to classes
-		for(ClazzDTO clazz : dtos){
-			for(String subject : subjects){
-				clazz.addSubject(subject);
-			}
-		}
+		// List<String> subjects = subjectRepository.findSubjectAbbrForGrade(grade);
+		// // 3. assign subjects to classes
+		// for(ClazzDTO clazz : dtos){
+		// 	for(String subject : subjects){
+		// 		clazz.addSubject(subject);
+		// 	}
+		// }
 		// 4. return DTOs
+		return dtos;	
+	}
+
+	@Override
+	public List<ClazzDTO> findClassesForCourseIdNCycle(Long id, int year) {
+		List<ClazzDTO> dtos = clazzRepository.findClassForCourseIdNCycle(id, year);
 		return dtos;	
 	}
 
@@ -98,8 +104,8 @@ public class ClazzServiceImpl implements ClazzService {
 		LocalDate newStartDate = clazz.getStartDate();
 		existing.setStartDate(newStartDate);
 		// name
-		String newName = clazz.getName();
-		existing.setName(newName);
+		// String newName = clazz.getName();
+		// existing.setName(newName);
 		// day
 		String newDay = clazz.getDay();
 		existing.setDay(newDay);

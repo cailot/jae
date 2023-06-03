@@ -19,6 +19,9 @@ public interface ClazzService {
 	// list all class for grade & year
 	List<ClazzDTO> findClassesForGradeNCycle(String grade, int year);
 	
+	// list all class for courseId & year
+	List<ClazzDTO> findClassesForCourseIdNCycle(Long id, int year);
+
 	// return total count
 	long checkCount();
 

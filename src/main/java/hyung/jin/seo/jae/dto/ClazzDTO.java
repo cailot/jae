@@ -30,7 +30,7 @@ public class ClazzDTO implements Serializable{
     
     private String fee;
 
-	private String name;
+	// private String name;
    
    	private String description; // Course.description
 
@@ -40,27 +40,26 @@ public class ClazzDTO implements Serializable{
 
 	private boolean active;
 
-    //@JsonIgnore
-	private String courseId;
+   	private String courseId;
 
 	@JsonIgnore
 	private String cycleId;
 
-	//@JsonIgnore
 	private String grade; // Course.grade
 
 	private String year; // Cycle.year
 
-	private List<String> subjects = new ArrayList<>();
+	// private List<String> subjects = new ArrayList<>();
 
-	public void addSubject(String subject){
-		subjects.add(subject);
-	}
+	// public void addSubject(String subject){
+	// 	subjects.add(subject);
+	// }
 
-	public ClazzDTO(long id, double fee, String name, String day, LocalDate startDate, boolean active, long courseId, long cycleId, String grade, String description, int year) {
+	public ClazzDTO(long id, String state, String branch, double fee, String day, LocalDate startDate, boolean active, long courseId, long cycleId, String grade, String description, int year) {
 		this.id = Long.toString(id);
+		this.state = state;
+		this.branch = branch;
 		this.fee = Double.toString(fee);
-		this.name = name;
 		this.day = day;
 		this.startDate = startDate.toString();
 		this.active = active;
@@ -76,7 +75,6 @@ public class ClazzDTO implements Serializable{
 		this.fee = Double.toString(clazz.getFee());
 		this.state = clazz.getState();
 		this.branch = clazz.getBranch();
-		this.name = clazz.getName();
 		this.day = clazz.getDay();
 		this.startDate = clazz.getStartDate().toString();
 		this.active = clazz.isActive();
@@ -95,8 +93,7 @@ public class ClazzDTO implements Serializable{
     	if(StringUtils.isNotBlank(branch)) clazz.setBranch(this.branch);
 		if(StringUtils.isNotBlank(startDate)) clazz.setStartDate(LocalDate.parse(startDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		if(StringUtils.isNotBlank(fee)) clazz.setFee(Double.parseDouble(this.fee));
-		if(StringUtils.isNotBlank(name)) clazz.setName(this.name);		
-    	if(StringUtils.isNotBlank(day)) clazz.setDay(this.day);
+		if(StringUtils.isNotBlank(day)) clazz.setDay(this.day);
 		clazz.setActive(this.active);
     	return clazz;
     }

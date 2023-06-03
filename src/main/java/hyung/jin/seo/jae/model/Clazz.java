@@ -58,8 +58,8 @@ public class Clazz{ // bridge table between Course & Cycle
 	@Column(length = 50)
     private String branch;
 
-	@Column(length = 100)
-    private String name;
+	// @Column(length = 100)
+    // private String name;
 
 	@CreatedDate
     private LocalDate startDate;
