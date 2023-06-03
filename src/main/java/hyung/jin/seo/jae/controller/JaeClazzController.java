@@ -2,8 +2,6 @@ package hyung.jin.seo.jae.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -92,20 +90,37 @@ public class JaeClazzController {
 		int year = cycleService.academicYear();
 		int week = cycleService.academicWeeks();
 		List<CourseDTO> dtos = courseService.findByGrade(grade);
-		// if new academic year is going to start, display next year classes
+		// set year
+		for(CourseDTO dto : dtos) {
+			dto.setYear(year);
+		}
+		// if new academic year is going to start, display next year classes	
 		if(week > JaeConstants.ACADEMIC_START_COMMING_WEEKS) {
+			List<CourseDTO> nexts = new ArrayList<>();
 			// display next year courses by increasing price
-			//List<CourseDTO> nexts = dtos.stream().collect(Collectors.toList());
-			for(CourseDTO next : nexts) {
-				//CourseDTO next = dto;
+			for(CourseDTO dto : dtos) {
+				CourseDTO next = dto.clone();
+				next.setYear(year+1);
 				next.setPrice(next.getPrice() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_PRICE_INCREASE);
 				next.setDescription(next.getDescription() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_SUFFIX);
-				dtos.add(next);
+				nexts.add(next);
 			}
+			// add next year courses to the end of the list
+			if(nexts.size() > 0) {
+				dtos.addAll(nexts);
+			}	
 		}
 		return dtos;
 	}
 
+
+	// search classes by grade & year
+	@GetMapping("/classesByCourse")
+	@ResponseBody
+	List<ClazzDTO> getClassesByGrade(@RequestParam("courseId") String courseId, @RequestParam("year") int year) {
+		List<ClazzDTO> dtos = clazzService.findClassesForGradeNCycle("p3", 2022);
+		return dtos;
+	}
 
 
 	// get class by Id

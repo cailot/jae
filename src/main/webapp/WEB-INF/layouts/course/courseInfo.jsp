@@ -80,7 +80,7 @@ function listElearns(grade) {
 	});
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Search Class based on Grade	
+//		Search Course based on Grade	
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function listCourses(grade) {
 	// clear 'courseFeeTable' table body
@@ -266,17 +266,51 @@ function addElearningToBasket(value){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function addClassToBasket(value){
 	//console.log(value);
-	var row = $("<tr>");
-	row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
-	row.append($('<td>').text('Class'));
-	row.append($('<td>').text(value.name));
-	row.append($('<td contenteditable="true">').text(value.year));
-	row.append($('<td contenteditable="true">').addClass('start-week').text(academicWeek));
-	row.append($('<td contenteditable="true">').addClass('end-week').text(0));
-	row.append($('<td contenteditable="true">').text(0));
-	row.append($('<td contenteditable="true">').text(value.fee));
-	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
-	$('#basketTable > tbody').append(row);
+
+	$.ajax({
+		url : '${pageContext.request.contextPath}/class/classesByCourse',
+		type : 'GET',
+		data : {
+			courseId : value.id,
+			year : value.year
+		},
+		success : function(data) {
+			$.each(data, function(index, value) {
+				const cleaned = cleanUpJson(value);
+				console.log(cleaned);
+				var row = $('<tr>');
+				row.append($('<td>').addClass('hidden-column').text(value.id));
+				row.append($('<td>').text(value.description));
+				row.append($('<td>').text(value.subjects));
+				row.append($('<td>').text(value.price));
+				row.append($("<td onclick='addClassToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Class"><i class="fa fa-plus-circle"></i></a>'));
+				$('#basketTable > tbody').append(row);
+			});
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+
+
+
+
+
+
+
+
+	// var row = $("<tr>");
+	// row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
+	// row.append($('<td>').text('Class'));
+	// row.append($('<td>').text(value.name));
+	// row.append($('<td contenteditable="true">').text(value.year)); // dropdown list
+	// row.append($('<td contenteditable="true">').text(value.year));	
+	// row.append($('<td contenteditable="true">').addClass('start-week').text(academicWeek));
+	// row.append($('<td contenteditable="true">').addClass('end-week').text(0));
+	// row.append($('<td contenteditable="true">').text(0));
+	// row.append($('<td contenteditable="true">').text(value.fee));
+	// row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+	// $('#basketTable > tbody').append(row);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -414,6 +448,7 @@ function clearEnrolmentBasket(){
 										<th class="hidden-column"></th>
 										<th>Item</th>
 										<th>Description</th>
+										<th>Day</th>
 										<th>Year</th>
 										<th>Start</th>
 										<th>End</th>

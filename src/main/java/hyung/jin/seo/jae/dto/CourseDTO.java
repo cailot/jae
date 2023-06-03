@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CourseDTO implements Serializable{
+public class CourseDTO implements Serializable, Cloneable{
     
 	private String id;
     
@@ -32,7 +32,9 @@ public class CourseDTO implements Serializable{
     
     private String grade;
 
-	private String price;
+	private double price;
+
+	private int year;
 
 	private List<String> subjects = new ArrayList<>();
 
@@ -47,7 +49,7 @@ public class CourseDTO implements Serializable{
     	this.description = (course.getDescription()!=null) ? course.getDescription() : "";
     	this.registerDate = (course.getRegisterDate()!=null) ? course.getRegisterDate().toString() : "";
     	this.grade = (course.getGrade()!=null) ? course.getGrade() : "";
-		this.price = (course.getPrice()!=0) ? Double.toString(course.getPrice()) : "";
+		this.price = (course.getPrice()!=0) ? course.getPrice() : 0;
     }
     
     public Course convertToCourse() {
@@ -57,18 +59,18 @@ public class CourseDTO implements Serializable{
     	if(StringUtils.isNotBlank(description)) course.setDescription(this.description);
     	if(StringUtils.isNotBlank(registerDate)) course.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(grade)) course.setGrade(this.grade);
-		if(StringUtils.isNotBlank(price)) course.setPrice(Double.parseDouble(this.price));
+		if(price!=0) course.setPrice(this.price);
     	return course;
     }
 
-	// // for new academic year Object
-	// @Override
-	// public CourseDTO clone() {
-	// 	try{
-	// 		return (CourseDTO) super.clone();
-	// 	}catch(CloneNotSupportedException e){
-	// 		// Handle clone not supported exception
-	// 		return new CourseDTO();
-	// 	}
-	// }
+	// for new academic year Object
+	@Override
+	public CourseDTO clone() {
+		try{
+			return (CourseDTO) super.clone();
+		}catch(CloneNotSupportedException e){
+			// Handle clone not supported exception
+			return new CourseDTO();
+		}
+	}
 }
