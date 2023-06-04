@@ -23,4 +23,13 @@ public interface EnrolmentService {
 
 	// add enrolment
 	EnrolmentDTO addEnrolment(Enrolment enrolment);
+
+	// update enrolment
+	Enrolment updateEnrolment(Enrolment enrolment, Long id);
+
+	// find clazz Id by student Id
+	List<Long> findClazzIdByStudentId(Long studentId);
+
+	// find enrolment by id
+	Enrolment getEnrolment(Long id);
 }

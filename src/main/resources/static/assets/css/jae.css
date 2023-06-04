@@ -132,3 +132,7 @@ td a i.fa-trash {
 	background: #fff;
 	padding: 0 10px;
   } 
+
+.smaller-table-font {
+	font-size: smaller;
+}

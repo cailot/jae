@@ -3,13 +3,8 @@ package hyung.jin.seo.jae.dto;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Enrolment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +37,11 @@ public class EnrolmentDTO implements Serializable{
 
 	private double fee;
 
+	private String grade;
+
 	private String year;
+
+	private String day;
 
 	public EnrolmentDTO(Enrolment enrol){
 		this.id = String.valueOf(enrol.getId());
@@ -66,16 +65,20 @@ public class EnrolmentDTO implements Serializable{
     	return enrolement;
     }
 
-	public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, String name, double fee, int year){
+	public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, long studentId, long clazzId, String name, double fee, int year, String grade, String day){
 		this.id = String.valueOf(id);
+		this.clazzId = String.valueOf(clazzId);
 		this.enrolmentDate = enrolmentDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.cancelled = cancelled;
 		this.cancellationReason = cancellationReason;
 		this.startWeek = startWeek;
 		this.endWeek = endWeek;
+		this.studentId = String.valueOf(studentId);
 		this.name = name;
 		this.fee = fee;
 		this.year = String.valueOf(year);
+		this.grade = grade;
+		this.day = day;
 	}
 
 }

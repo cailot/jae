@@ -182,19 +182,27 @@ public class JaeStudentController {
 		Student std = studentService.getStudent(id);
 		// 2. get clazz
 		for(EnrolmentDTO data : formData) {
-			// 3. associate clazz with student
 			try{
-			Clazz clazz = clazzService.getClazz(Long.parseLong(data.getClazzId()));
-			// 4. Create Enrolment
-			Enrolment enrolment = new Enrolment();
-			// 5. associate enrolment with clazz and student
-			enrolment.setClazz(clazz);
-			enrolment.setStudent(std);
-			enrolment.setStartWeek(data.getStartWeek());
-			enrolment.setEndWeek(data.getEndWeek());
-			// 6. save enrolment
-			enrolmentService.addEnrolment(enrolment);
-			}catch(NoSuchElementException e){
+			// New Enrolment if no id comes in
+			if(data.getId()==null) {
+				// 3. associate clazz with student
+				Clazz clazz = clazzService.getClazz(Long.parseLong(data.getClazzId()));
+				// 4-A. create Enrolment
+				Enrolment enrolment = new Enrolment();
+				// 5-A. associate enrolment with clazz and student
+				enrolment.setClazz(clazz);
+				enrolment.setStudent(std);
+				enrolment.setStartWeek(data.getStartWeek());
+				enrolment.setEndWeek(data.getEndWeek());
+				// 6-A. save enrolment
+				enrolmentService.addEnrolment(enrolment);
+			}else {	// Update Enrolment if id comes in
+				// 4-B. get Enrolment
+				Enrolment enrolment = data.convertToEnrolment();
+				// 5-B. update Enrolment
+				enrolment = enrolmentService.updateEnrolment(enrolment, enrolment.getId());
+			}
+		}catch(NoSuchElementException e){
 				return ResponseEntity.ok("No such Clazz");
 			}
 				

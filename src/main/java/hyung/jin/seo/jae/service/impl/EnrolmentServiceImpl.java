@@ -2,6 +2,10 @@ package hyung.jin.seo.jae.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.EntityNotFoundException;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,6 +76,44 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 	public long checkCount() {
 		long count = enrolmentRepository.count();
 		return count;
+	}
+
+	@Override
+	public List<Long> findClazzIdByStudentId(Long studentId) {
+		List<Long> clazzIds = enrolmentRepository.findClazzIdByStudentId(studentId);
+		return clazzIds;
+	}
+
+	@Override
+	public Enrolment getEnrolment(Long id) {
+		Enrolment enrol = enrolmentRepository.findById(id).get();
+		return enrol;
+	}
+
+	@Override
+	public Enrolment updateEnrolment(Enrolment enrolment, Long id) {
+		// search by getId
+		Enrolment existing = enrolmentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Enrolment not found"));
+		// Update info
+		// StartWeek
+		if(enrolment.getStartWeek()!=existing.getStartWeek()){
+			existing.setStartWeek(enrolment.getStartWeek());
+		}
+		// EndWeek
+		if(enrolment.getEndWeek()!=existing.getEndWeek()){
+			existing.setEndWeek(enrolment.getEndWeek());
+		}
+		// cancelled
+		if(enrolment.isCancelled()!=existing.isCancelled()){
+			existing.setCancelled(enrolment.isCancelled());
+		}
+		// cancellationReason
+		if(!StringUtils.equalsIgnoreCase(StringUtils.defaultString(enrolment.getCancellationReason()), StringUtils.defaultString(existing.getCancellationReason()))){
+			existing.setCancellationReason(StringUtils.defaultString(enrolment.getCancellationReason()));
+		}
+		// update the existing record
+		Enrolment updated = enrolmentRepository.save(existing);
+		return updated;
 	}
 
 }

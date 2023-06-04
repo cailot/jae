@@ -1,5 +1,6 @@
 package hyung.jin.seo.jae.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Enrolment;
@@ -94,5 +96,18 @@ public class JaeEnrolmentController {
 		return dto;
 	}
 
+	// search clazz by student Id
+	@GetMapping("/getClazz/student/{id}")
+	@ResponseBody
+	List<ClazzDTO> searchClazzByStudent(@PathVariable Long id) {
+		List<Long> clazzIds = enrolmentService.findClazzIdByStudentId(id);
+		List<ClazzDTO> dtos = new ArrayList<ClazzDTO>();
+		for (Long clazzId : clazzIds) {
+			Clazz clazz = clazzService.getClazz(clazzId);
+			ClazzDTO dto = new ClazzDTO(clazz);
+			dtos.add(dto);
+		}
+		return dtos;
+	}
 
 }
