@@ -254,11 +254,10 @@ function associateOnline(){
 		return;	
 	}
 
+	var elearnings = [];
 	var enrolData = [];
 
 	$('#basketTable tbody tr').each(function() {
-		
-		//debugger;
 		// in case of update, enrolId is not null
 		var enrolId = null;
 		var hiddens = $(this).find('.hidden-column').text();
@@ -266,15 +265,13 @@ function associateOnline(){
 			var hiddenValues = hiddens.split('|');
 			// if hiddenValues[0] is ELEARNING, push hiddenValues[1] to elearnings array
 			if(hiddenValues[0] === ELEARNING){
-				//elearnings.push(hiddenValues[1]);
+				elearnings.push(hiddenValues[1]);
+				// how to jump to next <tr>
+				return true;
 			}else if(hiddenValues[0] === CLASS){
 				enrolId = hiddenValues[1];
 			}
 		}
-		
-
-
-
 		enrolData.clazzId =  $(this).find('.clazzChoice').val();
 		// find value of next td whose class is 'start-year'
 		enrolData.startWeek = $(this).find('.start-week').text();
@@ -288,25 +285,47 @@ function associateOnline(){
 		enrolData.push(clazz);	
 	});
 
-	console.log(enrolData);
+	var elearningData = elearnings.map(function(id) {
+    	return parseInt(id);
+	});
+
+	// Make the AJAX request for eLearning
+	if(elearningData.length > 0){
+		$.ajax({
+			url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
+			method: 'POST',
+			data: JSON.stringify(elearningData),
+			contentType: 'application/json',
+			success: function(response) {
+				// Handle the response
+				console.log(response);
+			},
+			error: function(xhr, status, error) {
+				// Handle the error
+				console.error(error);
+			}
+		});
+	}
 
 	// Make the AJAX request for class
-	$.ajax({
-		url: '${pageContext.request.contextPath}/student/associateClazz/' + studentId,
-		method: 'POST',
-		data: JSON.stringify(enrolData),
-		contentType: 'application/json',
-		success: function(response) {
-			// Handle the response
-			console.log(response);
-			$('#success-alert .modal-body').html('ID : <b>' + studentId + '</b> enrolment saved successfully');
-			$('#success-alert').modal('toggle');
-		},
-		error: function(xhr, status, error) {
-			// Handle the error
-			console.error(error);
-		}
-	});
+	if(enrolData.length > 0){
+		$.ajax({
+			url: '${pageContext.request.contextPath}/student/associateClazz/' + studentId,
+			method: 'POST',
+			data: JSON.stringify(enrolData),
+			contentType: 'application/json',
+			success: function(response) {
+				// Handle the response
+				console.log(response);
+				$('#success-alert .modal-body').html('ID : <b>' + studentId + '</b> enrolment saved successfully');
+				$('#success-alert').modal('toggle');
+			},
+			error: function(xhr, status, error) {
+				// Handle the error
+				console.error(error);
+			}
+		});
+	}
 }
 
 

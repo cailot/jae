@@ -85,6 +85,12 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 	}
 
 	@Override
+	public List<Long> findEnrolmentIdByStudentId(Long studentId) {
+		List<Long> enrolmentIds = enrolmentRepository.findEnrolmentIdByStudentId(studentId);
+		return enrolmentIds;
+	}
+
+	@Override
 	public Enrolment getEnrolment(Long id) {
 		Enrolment enrol = enrolmentRepository.findById(id).get();
 		return enrol;
@@ -116,4 +122,8 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 		return updated;
 	}
 
+	@Override
+	public void deleteEnrolment(Long id) {
+		enrolmentRepository.deleteById(id);
+	}
 }

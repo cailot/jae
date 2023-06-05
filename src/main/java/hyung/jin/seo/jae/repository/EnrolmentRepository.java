@@ -22,4 +22,8 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Long>{
 	// return class id by student id
 	@Query("SELECT e.clazz.id FROM Enrolment e WHERE e.student.id = ?1")
 	List<Long> findClazzIdByStudentId(long studentId);
+
+	// return enrolment id by student id
+	@Query("SELECT e.id FROM Enrolment e WHERE e.student.id = ?1")
+	List<Long> findEnrolmentIdByStudentId(long studentId);
 }

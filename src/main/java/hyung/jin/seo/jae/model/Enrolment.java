@@ -33,11 +33,13 @@ public class Enrolment{ // bridge table between Student & Class
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
-	@ManyToOne(cascade = CascadeType.ALL)
+	// @ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "studentId")
 	private Student student;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	// @ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "clazzId")
 	private Clazz clazz;
 	

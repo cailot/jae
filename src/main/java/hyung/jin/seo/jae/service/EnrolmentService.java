@@ -24,11 +24,17 @@ public interface EnrolmentService {
 	// add enrolment
 	EnrolmentDTO addEnrolment(Enrolment enrolment);
 
+	// delete enrolment
+	void deleteEnrolment(Long id);
+
 	// update enrolment
 	Enrolment updateEnrolment(Enrolment enrolment, Long id);
 
 	// find clazz Id by student Id
 	List<Long> findClazzIdByStudentId(Long studentId);
+
+	// find enrolment Id by student Id
+	List<Long> findEnrolmentIdByStudentId(Long studentId);
 
 	// find enrolment by id
 	Enrolment getEnrolment(Long id);
