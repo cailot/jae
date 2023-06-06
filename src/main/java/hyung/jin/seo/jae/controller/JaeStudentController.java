@@ -130,25 +130,18 @@ public class JaeStudentController {
 	public ResponseEntity<String> associateElearning(@PathVariable Long id, @RequestBody Long[] elearningIds) {
 		// 1. get student
 		Student std = studentService.getStudent(id);
-		// 2. check whether elearnings are empty
-		// if(elearningIds.length==0) {
-		// 	// 3-1. simply return success
-		// 	return ResponseEntity.ok("Nothing associated");
-		// }else{
-			// 3-2. empty elearning list
-			Set<Elearning> elearningSet = std.getElearnings();
-			elearningSet.clear();
-			// 4. associate elearnings
-			for(Long elearningId : elearningIds) {
-				Elearning elearning = elearningService.getElearning(elearningId);
-				// 5. associate elearning with student
-				elearningSet.add(elearning);
-			}
-			// 6. update student
-			studentService.updateStudent(std, id);
-			// 7. return success
-			return ResponseEntity.ok("eLearning Success");
-		// }
+		// 2. empty elearning list
+		Set<Elearning> elearningSet = std.getElearnings();
+		elearningSet.clear();
+		// 3. associate elearnings
+		for(Long elearningId : elearningIds) {
+			Elearning elearning = elearningService.getElearning(elearningId);
+			elearningSet.add(elearning);
+		}
+		// 4. update student
+		studentService.updateStudent(std, id);
+		// 5. return success
+		return ResponseEntity.ok("eLearning Success");
 	}
 
 	@PostMapping("/associateClazz/{id}")
@@ -161,19 +154,19 @@ public class JaeStudentController {
 		// 3. create or update Enrolment
 		for(EnrolmentDTO data : formData) {
 			try{
-					// New Enrolment if no id comes in
-					if(data.getId()==null) {
-					// 4-A. associate clazz with student
-					Clazz clazz = clazzService.getClazz(Long.parseLong(data.getClazzId()));
-					// 5-A. create Enrolment
-					Enrolment enrolment = new Enrolment();
-					// 6-A. associate enrolment with clazz and student
-					enrolment.setClazz(clazz);
-					enrolment.setStudent(std);
-					enrolment.setStartWeek(data.getStartWeek());
-					enrolment.setEndWeek(data.getEndWeek());
-					// 7-A. save enrolment
-					enrolmentService.addEnrolment(enrolment);
+				// New Enrolment if no id comes in
+				if(data.getId()==null) {
+				// 4-A. associate clazz with student
+				Clazz clazz = clazzService.getClazz(Long.parseLong(data.getClazzId()));
+				// 5-A. create Enrolment
+				Enrolment enrolment = new Enrolment();
+				// 6-A. associate enrolment with clazz and student
+				enrolment.setClazz(clazz);
+				enrolment.setStudent(std);
+				enrolment.setStartWeek(data.getStartWeek());
+				enrolment.setEndWeek(data.getEndWeek());
+				// 7-A. save enrolment
+				enrolmentService.addEnrolment(enrolment);
 				}else {	// Update Enrolment if id comes in
 					// 4-B. get Enrolment
 					Enrolment enrolment = data.convertToEnrolment();
