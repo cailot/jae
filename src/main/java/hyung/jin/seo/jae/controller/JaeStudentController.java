@@ -131,10 +131,10 @@ public class JaeStudentController {
 		// 1. get student
 		Student std = studentService.getStudent(id);
 		// 2. check whether elearnings are empty
-		if(elearningIds.length==0) {
-			// 3-1. simply return success
-			return ResponseEntity.ok("Nothing associated");
-		}else{
+		// if(elearningIds.length==0) {
+		// 	// 3-1. simply return success
+		// 	return ResponseEntity.ok("Nothing associated");
+		// }else{
 			// 3-2. empty elearning list
 			Set<Elearning> elearningSet = std.getElearnings();
 			elearningSet.clear();
@@ -147,8 +147,8 @@ public class JaeStudentController {
 			// 6. update student
 			studentService.updateStudent(std, id);
 			// 7. return success
-			return ResponseEntity.ok("Success");
-		}
+			return ResponseEntity.ok("eLearning Success");
+		// }
 	}
 
 	@PostMapping("/associateClazz/{id}")
@@ -156,50 +156,41 @@ public class JaeStudentController {
 	public ResponseEntity<String> associateClazz(@PathVariable Long id, @RequestBody EnrolmentDTO[] formData) {
 		// 1. get student
 		Student std = studentService.getStudent(id);
-		// 2. check whether clazzes are empty
-		if(formData.length==0) {
-			// 3-1. simply return success
-			return ResponseEntity.ok("Nothing associated");
-		}else{
-			// 3-2. get enrolmentIds by studentId
-			List<Long> enrolmentIds = enrolmentService.findEnrolmentIdByStudentId(id);
-			// 2. get clazz
-			for(EnrolmentDTO data : formData) {
-				try{
+		// 2. get enrolmentIds by studentId
+		List<Long> enrolmentIds = enrolmentService.findEnrolmentIdByStudentId(id);
+		// 3. create or update Enrolment
+		for(EnrolmentDTO data : formData) {
+			try{
 					// New Enrolment if no id comes in
 					if(data.getId()==null) {
-					// 3. associate clazz with student
+					// 4-A. associate clazz with student
 					Clazz clazz = clazzService.getClazz(Long.parseLong(data.getClazzId()));
-					// 4-A. create Enrolment
+					// 5-A. create Enrolment
 					Enrolment enrolment = new Enrolment();
-					// 5-A. associate enrolment with clazz and student
+					// 6-A. associate enrolment with clazz and student
 					enrolment.setClazz(clazz);
 					enrolment.setStudent(std);
 					enrolment.setStartWeek(data.getStartWeek());
 					enrolment.setEndWeek(data.getEndWeek());
-					// 6-A. save enrolment
+					// 7-A. save enrolment
 					enrolmentService.addEnrolment(enrolment);
-					// enrolmentSet.add(enrolment);
-					// studentService.updateStudent(std, id);
-					}else {	// Update Enrolment if id comes in
+				}else {	// Update Enrolment if id comes in
 					// 4-B. get Enrolment
 					Enrolment enrolment = data.convertToEnrolment();
 					// 5-B. update Enrolment
 					enrolment = enrolmentService.updateEnrolment(enrolment, enrolment.getId());
 					// 6-B remove enrolmentId from enrolmentIds
 					enrolmentIds.remove(enrolment.getId());
-					}
-				}catch(NoSuchElementException e){
-					return ResponseEntity.ok("No such Clazz");
-				}				
-			}
-			// 7. delete enrolments not in formData
-			for(Long enrolmentId : enrolmentIds) {
-				enrolmentService.deleteEnrolment(enrolmentId);
-				//System.out.println("enrolmentId: "+enrolmentId);
-			}
-			// 7. return success
-			return ResponseEntity.ok("Success");
-		}	
+				}
+			}catch(NoSuchElementException e){
+				return ResponseEntity.ok("No such Clazz");
+			}				
+		}
+		// 7. delete enrolments not in formData
+		for(Long enrolmentId : enrolmentIds) {
+			enrolmentService.deleteEnrolment(enrolmentId);
+		}
+		// 8. return success
+		return ResponseEntity.ok("Enrolment Success");	
 	}
 }
