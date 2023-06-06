@@ -432,13 +432,14 @@ function addEtcToBasket(value){
 //		Retrieve Enroloment
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function retrieveEnrolment(studentId){
+	// get the enrolment
 	$.ajax({
 		url: '${pageContext.request.contextPath}/enrolment/search/student/' + studentId,
 		method: 'GET',
 		success: function(response) {
 			// Handle the response
 			$.each(response, function(index, value){
-				console.log(value);	
+				//console.log(value);	
 				var row = $("<tr>");
 				row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
 				row.append($('<td><i class="fa fa-graduation-cap" title="class"></i></td>'));
@@ -448,6 +449,31 @@ function retrieveEnrolment(studentId){
 				row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('start-week').text(value.startWeek));
 				row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('end-week').text(value.endWeek));
 				row.append($('<td class="smaller-table-font" contenteditable="true">').text(value.endWeek - value.startWeek + 1));
+				row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+				$('#basketTable > tbody').append(row);	
+
+			});
+		},
+		error: function(xhr, status, error) {
+			// Handle the error
+			console.error(error);
+		}
+	});
+	// get the elearning
+	$.ajax({
+		url: '${pageContext.request.contextPath}/elearning/search/student/' + studentId,
+		method: 'GET',
+		success: function(response) {
+			// Handle the response
+			$.each(response, function(index, value){
+				console.log(value);	
+				var row = $("<tr>");
+				row.append($('<td>').addClass('hidden-column').text(ELEARNING + '|' + value.id));
+				row.append($('<td><i class="fa fa-laptop" title="class"></i></td>'));
+				row.append($('<td class="smaller-table-font" colspan="3">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
+				row.append($('<td class="smaller-table-font">').text(''));
+				row.append($('<td class="smaller-table-font">').text(''));
+				row.append($('<td class="smaller-table-font">').text(''));
 				row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 				$('#basketTable > tbody').append(row);	
 

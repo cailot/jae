@@ -11,6 +11,9 @@ public interface ElearningService {
 	// list elearnings belong to grade
 	List<Elearning> gradeElearnings(String grade);
 	
+	// list elearnings by student id
+	List<Elearning> studentElearnings(Long id);
+
 	// retrieve elearning by Id
 	public Elearning getElearning(Long id);
 	

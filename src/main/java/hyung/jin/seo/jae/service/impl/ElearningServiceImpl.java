@@ -82,5 +82,11 @@ public class ElearningServiceImpl implements ElearningService {
 		return courses;
 	}
 
+	@Override
+	public List<Elearning> studentElearnings(Long id) {
+		List<Elearning> courses = elearningRepository.findByStudentId(id);
+		return courses;
+	}
+
 
 }

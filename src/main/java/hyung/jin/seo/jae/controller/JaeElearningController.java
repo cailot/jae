@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import hyung.jin.seo.jae.dto.ElearningDTO;
 import hyung.jin.seo.jae.model.Elearning;
 import hyung.jin.seo.jae.service.ElearningService;
+import hyung.jin.seo.jae.service.EnrolmentService;
 
 @Controller
 @RequestMapping("elearning")
@@ -79,4 +80,18 @@ public class JaeElearningController {
 		}
         return dtos;
 	}
+
+	// search e-learning by student Id
+	@GetMapping("/search/student/{id}")
+	@ResponseBody
+	List<ElearningDTO> searchElearningByStudent(@PathVariable Long id) {
+		List<Elearning> crss = elearningService.studentElearnings(id);
+		List<ElearningDTO> dtos = new ArrayList<ElearningDTO>();
+		for(Elearning crs : crss) {
+			ElearningDTO dto = new ElearningDTO(crs);	
+			dtos.add(dto);
+		}
+        return dtos;
+	}
+	
 }
