@@ -66,10 +66,10 @@ function listElearns(grade) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
 				// console.log(cleaned);
-				var row = $("<tr>");
+				var row = $("<tr class='d-flex'>");
 				row.append($('<td>').addClass('hidden-column').text(value.id));
-				row.append($('<td>').text(value.grade.toUpperCase()));
-				row.append($('<td>').text(value.name));
+				row.append($('<td class="smaller-table-font col-1">').text(value.grade.toUpperCase()));
+				row.append($('<td class="smaller-table-font col-10">').text(value.name));
 				row.append($("<td onclick='addElearningToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add eLearning"><i class="fa fa-plus-circle"></i></a>'));
 				$('#elearnTable > tbody').append(row);
 			});
@@ -95,12 +95,12 @@ function listCourses(grade) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
 				// console.log(cleaned);
-				var row = $('<tr>');
+				var row = $('<tr class="d-flex">');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
-				row.append($('<td class="smaller-table-font">').text(value.description));
-				row.append($('<td class="smaller-table-font">').text(value.subjects));
-				row.append($('<td class="smaller-table-font">').text(value.price));
-				row.append($("<td onclick='addClassToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Class"><i class="fa fa-plus-circle"></i></a>'));
+				row.append($('<td class="smaller-table-font col-7">').text(value.description));
+				row.append($('<td class="smaller-table-font col-3">').text(value.subjects));
+				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(value.price));
+				row.append($("<td class='col-1' onclick='addClassToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Class"><i class="fa fa-plus-circle"></i></a>'));
 				$('#courseFeeTable > tbody').append(row);
 			});
 		},
@@ -125,12 +125,12 @@ function listBooks(grade) {
 		success : function(data) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				var row = $('<tr>');
+				var row = $('<tr class="d-flex">');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
-				row.append($('<td>').text(value.name));
-				row.append($('<td>').text(value.subjects));
-				row.append($('<td>').text(value.price));
-				row.append($("<td onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
+				row.append($('<td class="smaller-table-font col-5">').text(value.name));
+				row.append($('<td class="smaller-table-font col-5">').text(value.subjects));
+				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(value.price));
+				row.append($("<td class='col-1' onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
 				$('#courseBookTable > tbody').append(row);
 			});
 		},
@@ -154,11 +154,11 @@ function listEtcs(grade) {
 		success : function(data) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				var row = $('<tr>');
+				var row = $('<tr class="d-flex">');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
-				row.append($('<td>').text(value.name));
-				row.append($('<td>').text(value.price));
-				row.append($("<td onclick='addEtcToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Etc"><i class="fa fa-plus-circle"></i></a>'));
+				row.append($('<td class="smaller-table-font col-9">').text(value.name));
+				row.append($('<td class="smaller-table-font col-2 text-right pr-5">').text(value.price));
+				row.append($("<td class='col-1' onclick='addEtcToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Etc"><i class="fa fa-plus-circle"></i></a>'));
 				$('#courseEtcTable > tbody').append(row);
 			});
 		},
@@ -260,14 +260,14 @@ function associateOnline(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function addElearningToBasket(value){
 	console.log(value);
-	var row = $("<tr>");
+	var row = $("<tr class='d-flex'>");
 	row.append($('<td>').addClass('hidden-column').text(ELEARNING + '|' + value.id));
-	row.append($('<td><i class="fa fa-laptop" title="e-learning"></i></td>'));
-	row.append($('<td class="smaller-table-font" colspan="3">').text('[' + value.grade.toUpperCase() + '] ' + value.name));
-	row.append($('<td>').text(''));
-	row.append($('<td>').text(''));
-	row.append($('<td>').text(''));
-	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a>'));
+	row.append($('<td class="col-1"><i class="fa fa-laptop" title="e-learning"></i></td>'));
+	row.append($('<td class="smaller-table-font col-10" colspan="6">').text('[' + value.grade.toUpperCase() + '] ' + value.name));
+	// row.append($('<td>').text(''));
+	// row.append($('<td>').text(''));
+	// row.append($('<td>').text(''));
+	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete eLearning"><i class="fa fa-trash"></i></a>'));
 	$('#basketTable > tbody').append(row);
 }
 
@@ -296,20 +296,20 @@ function addClassToBasket(value){
 				var end_week = 10;
 				var weeks = (end_week - start_week)+1;
 			}
-			var row = $('<tr>');
-			row.append($('<td><i class="fa fa-graduation-cap" title="class"></i></td>'));
-			row.append($('<td class="smaller-table-font">').text('[' + value.grade.toUpperCase() + '] '+ value.description));
+			var row = $('<tr class="d-flex">');
+			row.append($('<td class="col-1"><i class="fa fa-graduation-cap" title="class"></i></td>'));
+			row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() + '] '+ value.description));
 			// Create a dropdown list for value.day and id is option value
 			var dropdown = $('<select class="clazzChoice">');
 			$.each(data, function(index, clazz) {
 				dropdown.append($('<option>').text(clazz.day).val(clazz.id));
 			});
-			row.append($('<td class="smaller-table-font">').append(dropdown));
-			row.append($('<td class="smaller-table-font">').text(value.year));
-			row.append($('<td class="start-week smaller-table-font" contenteditable="true">').text(start_week));
-			row.append($('<td class="end-week smaller-table-font" contenteditable="true">').text(end_week));
-			row.append($('<td class="smaller-table-font" contenteditable="true">').text(weeks));
-			row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+			row.append($('<td class="smaller-table-font col-2">').append(dropdown));
+			row.append($('<td class="smaller-table-font col-1">').text(value.year));
+			row.append($('<td class="start-week smaller-table-font col-1 text-center" contenteditable="true">').text(start_week));
+			row.append($('<td class="end-week smaller-table-font col-1 text-center" contenteditable="true">').text(end_week));
+			row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').text(weeks));
+			row.append($('<td class="col-1">').html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 			$('#basketTable > tbody').append(row);
 		},
 		error: function(xhr, status, error) {
@@ -366,16 +366,16 @@ function retrieveEnrolment(studentId){
 			// Handle the response
 			$.each(response, function(index, value){
 				//console.log(value);	
-				var row = $("<tr>");
+				var row = $('<tr class="d-flex">');
 				row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
-				row.append($('<td><i class="fa fa-graduation-cap" title="class"></i></td>'));
-				row.append($('<td class="smaller-table-font">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
-				row.append($('<td class="smaller-table-font">').text(value.day));
-				row.append($('<td class="smaller-table-font">').text(value.year));
-				row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('start-week').text(value.startWeek));
-				row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('end-week').text(value.endWeek));
-				row.append($('<td class="smaller-table-font" contenteditable="true">').text(value.endWeek - value.startWeek + 1));
-				row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+				row.append($('<td class="col-1"><i class="fa fa-graduation-cap" title="class"></i></td>'));
+				row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
+				row.append($('<td class="smaller-table-font col-2">').text(value.day));
+				row.append($('<td class="smaller-table-font col-1">').text(value.year));
+				row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('start-week').text(value.startWeek));
+				row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('end-week').text(value.endWeek));
+				row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').text(value.endWeek - value.startWeek + 1));
+				row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 				$('#basketTable > tbody').append(row);	
 
 			});
@@ -393,13 +393,13 @@ function retrieveEnrolment(studentId){
 			// Handle the response
 			$.each(response, function(index, value){
 				console.log(value);	
-				var row = $("<tr>");
+				var row = $("<tr class='d-flex'>");
 				row.append($('<td>').addClass('hidden-column').text(ELEARNING + '|' + value.id));
 				row.append($('<td><i class="fa fa-laptop" title="class"></i></td>'));
-				row.append($('<td class="smaller-table-font" colspan="3">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
-				row.append($('<td class="smaller-table-font">').text(''));
-				row.append($('<td class="smaller-table-font">').text(''));
-				row.append($('<td class="smaller-table-font">').text(''));
+				row.append($('<td class="smaller-table-font" colspan="6">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
+				// row.append($('<td class="smaller-table-font">').text(''));
+				// row.append($('<td class="smaller-table-font">').text(''));
+				// row.append($('<td class="smaller-table-font">').text(''));
 				row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 				$('#basketTable > tbody').append(row);	
 
@@ -475,16 +475,16 @@ function clearEnrolmentBasket(){
 						<div class="tab-pane fade show active" id="nav-basket" role="tabpanel" aria-labelledby="nav-basket-tab">
 							<table class="table" id="basketTable" name="basketTable">
 								<thead>
-									<tr>
+									<tr class="d-flex">
 										<th class="hidden-column"></th>
-										<th class="smaller-table-font">Item</th>
-										<th class="smaller-table-font">Description</th>
-										<th class="smaller-table-font">Day</th>
-										<th class="smaller-table-font">Year</th>
-										<th class="smaller-table-font">Start</th>
-										<th class="smaller-table-font">End</th>
-										<th class="smaller-table-font">Weeks</th>
-										<th class="smaller-table-font">Action</th>
+										<th class="smaller-table-font col-1">Item</th>
+										<th class="smaller-table-font col-4">Description</th>
+										<th class="smaller-table-font col-2">Day</th>
+										<th class="smaller-table-font col-1">Year</th>
+										<th class="smaller-table-font col-1">Start</th>
+										<th class="smaller-table-font col-1">End</th>
+										<th class="smaller-table-font col-1">Week</th>
+										<th class="smaller-table-font col-1"></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -496,11 +496,11 @@ function clearEnrolmentBasket(){
 						<div class="tab-pane fade" id="nav-elearn" role="tabpanel" aria-labelledby="nav-elearn-tab">
 							<table class="table" id="elearnTable" name="elearnTable">
 								<thead>
-									<tr>
+									<tr class="d-flex">
 										<th class="hidden-column"></th>
-										<th>Grade</th>
-										<th>Subjects</th>
-										<th>Action</th>
+										<th class="smaller-table-font col-1">Grade</th>
+										<th class="smaller-table-font text-center col-10">Subjects</th>
+										<th class="col-1"></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -512,12 +512,12 @@ function clearEnrolmentBasket(){
 						<div class="tab-pane fade" id="nav-fee" role="tabpanel" aria-labelledby="nav-fee-tab">
                               <table class="table" id="courseFeeTable" name="courseFeeTable">
                                   <thead>
-                                      <tr>
+                                      <tr class="d-flex">
 										  <th class="hidden-column"></th>
-                                          <th class="smaller-table-font">Name</th>
-                                          <th class="smaller-table-font">Subjects</th>
-										  <th class="smaller-table-font">Price</th>
-										  <th class="smaller-table-font">Add</th>
+                                          <th class="smaller-table-font col-7">Name</th>
+                                          <th class="smaller-table-font col-3">Subjects</th>
+										  <th class="smaller-table-font col-1">Price</th>
+										  <th class="smaller-table-font col-1"></th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -529,12 +529,12 @@ function clearEnrolmentBasket(){
                           <div class="tab-pane fade" id="nav-book" role="tabpanel" aria-labelledby="nav-book-tab">
                               <table class="table" cellspacing="0" id="courseBookTable" name="courseBookTable">
                                   <thead>
-                                      <tr>
+                                      <tr class="d-flex">
 										  <th class="hidden-column"></th>
-										  <th>Description</th>
-                                          <th>Subjects</th>
-                                          <th>Price</th>
-										  <th>Add</th>
+										  <th class="smaller-table-font col-5">Description</th>
+                                          <th class="smaller-table-font col-5">Subjects</th>
+                                          <th class="smaller-table-font col-1">Price</th>
+										  <th class="smaller-table-font col-1"></th>
                                       </tr>
                                   </thead>
                                   <tbody>
@@ -545,11 +545,11 @@ function clearEnrolmentBasket(){
                           <div class="tab-pane fade" id="nav-etc" role="tabpanel" aria-labelledby="nav-etc-tab">
                               <table class="table" cellspacing="0" id="courseEtcTable" name="courseEtcTable">
 								<thead>
-                                      <tr>
+                                      <tr class="d-flex">
 										  <th class="hidden-column"></th>
-										  <th>Description</th>
-                                          <th>Price</th>
-										  <th>Add</th>
+										  <th class="smaller-table-font col-9">Description</th>
+                                          <th class="smaller-table-font col-2">Price</th>
+										  <th class="smaller-table-font col-1"></th>
                                       </tr>
                                   </thead>
                                   <tbody>
