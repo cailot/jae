@@ -56,13 +56,13 @@ $(document).ready(function () {
     // When the Grade dropdown changes, send an Ajax request to get the corresponding Type
 	$('#addGrade').change(function() {
 	var grade = $(this).val();
-		addCourseByGrade(grade);
+		getCoursesByGrade(grade, '#addCourse');
 	});
 
 	// When the Grade dropdown changes, send an Ajax request to get the corresponding Type
 	$('#editGrade').change(function() {
 	var grade = $(this).val();
-		editCourseByGrade(grade);
+		getCoursesByGrade(grade, '#editCourse');
 	});
 
 
@@ -77,14 +77,14 @@ function addClass() {
 		state : $("#addState").val(),
 		branch : $("#addBranch").val(),
 		startDate : $("#addStartDate").val(),
-		name : $("#addName").val(),
+		//name : $("#addName").val(),
 		grade : $("#addGrade").val(),
 		courseId : $("#addCourse").val(),
-		day : $("#addDay").val(),
-		active : $("#addActive").val(),
-		fee : $("#addFee").val()
+		day : $("#addDay").val()
+		//active : $("#addActive").val(),
+		//fee : $("#addFee").val()
 	}
-	console.log(clazz);
+//	console.log(clazz);
 	
 	// Send AJAX to server
 	$.ajax({
@@ -131,8 +131,8 @@ function retrieveClassInfo(clazzId) {
 			$("#editStartDate").datepicker('setDate', date);
 			$("#editGrade").val(clazz.grade);
 			$("#editDay").val(clazz.day);
-			$("#editName").val(clazz.name);
-			$("#editFee").val(clazz.fee);
+			// $("#editName").val(clazz.name);
+			// $("#editFee").val(clazz.fee);
 			$("#editActive").val(clazz.active);
 			// if clazz.active = true, tick the checkbox 'editActiveCheckbox'
 			if(clazz.active == true){
@@ -159,12 +159,12 @@ function updateClassInfo(){
 		state : $("#editState").val(),
 		branch : $("#editBranch").val(),
 		startDate : $("#editStartDate").val(),
-		name : $("#editName").val(),
+		// name : $("#editName").val(),
 		grade : $("#editGrade").val(),
 		courseId : $("#editCourse").val(),
 		day : $("#editDay").val(),
-		active : $("#editActive").val(),
-		fee : $("#editFee").val()
+		active : $("#editActive").val()
+		// fee : $("#editFee").val()
 	}
 	
 	console.log(clazz);
@@ -194,18 +194,20 @@ function updateClassInfo(){
 	document.getElementById("classEdit").reset();
 }
 
-// populate courses by grade
-function addCourseByGrade(grade){
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Populate courses by grade
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function getCoursesByGrade(grade, toWhere){
 	$.ajax({
-		url: '${pageContext.request.contextPath}/class/coursesByGrade',
+		url: '${pageContext.request.contextPath}/class/listCoursesByGrade',
 		method: 'GET',
 		data: { grade: grade },
 		success: function(data) {
-			$('#addCourse').empty(); // clear the previous options
+			$(toWhere).empty(); // clear the previous options
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
 				//console.log(cleaned);
-				$('#addCourse').append($("<option value='" + value.id + "'>").text(value.description).val(value.id)); // add new option
+				$(toWhere).append($("<option value='" + value.id + "'>").text(value.description).val(value.id)); // add new option
 				});
 			},
 			error: function(xhr, status, error) {
@@ -214,31 +216,31 @@ function addCourseByGrade(grade){
 	});
 }
 
-
-// populate courses by grade
-function editCourseByGrade(grade){
-	$.ajax({
-		url: '${pageContext.request.contextPath}/class/coursesByGrade',
-		method: 'GET',
-		data: { grade: grade },
-		success: function(data) {
-			$('#editCourse').empty(); // clear the previous options
-			$.each(data, function(index, value) {
-				const cleaned = cleanUpJson(value);
-				//console.log(cleaned);
-				$('#editCourse').append($("<option value='" + value.id + "'>").text(value.description).val(value.id)); // add new option
-				});
-			},
-			error: function(xhr, status, error) {
-			console.error(xhr.responseText);
-			}
-	});
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Clear class register form
+/////////////////////////////////////////////////////////////////////////////////////////////////////////	
+function clearClassForm(elementId) {
+	document.getElementById(elementId).reset();
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Update hidden value according to edit activive checkbox
+/////////////////////////////////////////////////////////////////////////////////////////////////////////	
+
+function updateEditActiveValue(checkbox) {
+  var editActiveInput = document.getElementById("editActive");
+  if (checkbox.checked) {
+    editActiveInput.value = "true";
+  } else {
+    editActiveInput.value = "false";
+  }
+}
+
 
 // initialise courses by grade in edit dialog
 function editInitialiseCourseByGrade(grade, courseId) {
     $.ajax({
-        url: '${pageContext.request.contextPath}/class/coursesByGrade',
+        url: '${pageContext.request.contextPath}/class/listCoursesByGrade',
         method: 'GET',
         data: { grade: grade },
         success: function(data) {
@@ -285,35 +287,6 @@ function inactivateStudent(id) {
 	}else{
 		return;
 	}
-}
-
-
-
-
-
-
-
-
-
-
-// update hidden value according to add activive checkbox
-function updateAddActiveValue(checkbox) {
-  var addActiveInput = document.getElementById("addActive");
-  if (checkbox.checked) {
-    addActiveInput.value = "true";
-  } else {
-    addActiveInput.value = "false";
-  }
-}
-
-// update hidden value according to edit activive checkbox
-function updateEditActiveValue(checkbox) {
-  var addActiveInput = document.getElementById("editActive");
-  if (checkbox.checked) {
-    addActiveInput.value = "true";
-  } else {
-    addActiveInput.value = "false";
-  }
 }
 
 
@@ -384,6 +357,10 @@ function updateEditActiveValue(checkbox) {
 							<option value="tt6">TT6</option>
 							<option value="tt8">TT8</option>
 							<option value="tt8e">TT8E</option>
+							<option value="srw4">SRW4</option>
+							<option value="srw5">SRW5</option>
+							<option value="srw6">SRW6</option>
+							<option value="srw8">SRW8</option>
 							<option value="jmss">JMSS</option>
 							<option value="vce">VCE</option>
 						</select>
@@ -391,42 +368,35 @@ function updateEditActiveValue(checkbox) {
 					<div class="col-md-2">
 						<select class="form-control" id="listYear" name="listYear">
 							<option value="All">All</option>
+							<option value="2023">2023</option>
 							<option value="2022">2022</option>
 							<option value="2021">2021</option>
 							<option value="2020">2020</option>
 						</select>
 					</div>
-					<!-- <div class="col-md-2">
-						<select class="form-control" id="listActive" name="listActive">
-							<option value="All">All Classes</option>
-							<option value="true">Active Classes</option>
-							<option value="false">Inactive Classes</option>
-							</option>
-						</select>
-					</div> -->
 					<div class="col mx-auto">
 						<button type="submit" class="btn btn-primary btn-block"> <i class="fa fa-search"></i>&nbsp;Search</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerClassModal" onclick="addCourseByGrade('p2')"><i class="fa fa-plus"></i>&nbsp;New</button>
+						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerClassModal" onclick="getCoursesByGrade('p2', '#addCourse')"><i class="fa fa-plus"></i>&nbsp;New</button>
 					</div>
 				</div>
 			</div>
-
-
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-12">
 						<div class="table-wrap">
 							<table id="classListTable" class="table table-striped table-bordered"><thead class="table-primary">
 									<tr>
-										<th>Class Name</th>
+										<th>State</th>
+										<th>Branch</th>
+										<th>Grade</th>
 										<th>Description</th>
 										<th>Start Date</th>
 										<th>Day</th>
 										<th>Year</th>
-										<th>Activated</th>
-										<th>Action</th>
+										<th data-orderable="false">Activated</th>
+										<th data-orderable="false">Action</th>
 									</tr>
 								</thead>
 								<tbody id="list-class-body">
@@ -434,7 +404,9 @@ function updateEditActiveValue(checkbox) {
 									<c:when test="${ClassList != null}">
 										<c:forEach items="${ClassList}" var="clazz">
 											<tr>
-												<td class="small ellipsis"><span><c:out value="${clazz.name}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${clazz.state}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${clazz.branch}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${fn:toUpperCase(clazz.grade)}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.description}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.startDate}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.day}" /></span></td>
@@ -454,7 +426,6 @@ function updateEditActiveValue(checkbox) {
 												</c:choose>		
 												<td>
 													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retrieveClassInfo('${clazz.id}')"></i>&nbsp;
-				 									<!-- <i class="fa fa-trash text-danger fa-lg" data-toggle="tooltip" title="Delete" onclick="inactivateClass('${clazz.id}')"></i> -->
 												</td>
 											</tr>
 										</c:forEach>
@@ -483,12 +454,12 @@ function updateEditActiveValue(checkbox) {
 				<form id="classRegister">
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-4">
+							<div class="col-md-6">
 								<label for="addState" class="label-form">State</label> <select class="form-control" id="addState" name="addState">
 									<option value="vic">Victoria</option>
 								</select>
 							</div>
-							<div class="col-md-5">
+							<div class="col-md-6">
 								<label for="addBranch" class="label-form">Branch</label> <select class="form-control" id="addBranch" name="addBranch">
 									<option value="braybrook">Braybrook</option>
 									<option value="epping">Epping</option>
@@ -514,18 +485,7 @@ function updateEditActiveValue(checkbox) {
 									<option value="packenham">Packenham</option>
 								</select>
 							</div>
-							<div class="col-md-3">
-								<label for="addStartDate" class="label-form">Start Date</label> 
-								<input type="text" class="form-control datepicker" id="addStartDate" name="addStartDate" placeholder="dd/mm/yyyy">
-							</div>
-							<script>
-								var today = new Date();
-								var day = today.getDate();
-								var month = today.getMonth() + 1; // Note: January is 0
-								var year = today.getFullYear();
-								var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
-								document.getElementById('addStartDate').value = formattedDate;
-							</script>
+							
 						</div>
 					</div>
 					<div class="form-group">
@@ -554,12 +514,34 @@ function updateEditActiveValue(checkbox) {
 									<option value="vce">VCE</option>
 								</select>
 							</div>
-							<div class="col-md-5">
+							<div class="col-md-9">
 								<label for="addCourse" class="label-form">Course</label> 
 								<select class="form-control" id="addCourse" name="addCourse">
 								</select>
 							</div>
-							<div class="col-md-4">
+							
+							<!-- <div class="col-md-4">
+								<label for="addFee" class="label-form">Price</label> 
+								<input type="text" class="form-control" id="addFee" name="addFee" placeholder="Fee" title="Please enter a valid fee amount (e.g. 100 or 100.50)">
+						   	</div>
+						   	<div class="input-group col-md-4">
+								<div class="input-group-prepend">
+								 	<div class="input-group-text">
+								   	<input type="checkbox" id="addActiveCheckbox" name="addActiveCheckbox" onchange="updateAddActiveValue(this)">
+								 	</div>
+							   	</div>
+								<input type="hidden" id="addActive" name="addActive" value="false">
+							   	<input type="text" id="addActiveLabel" class="form-control" placeholder="Activate">
+						   	</div> -->
+
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="form-row">
+							<!-- <div class="col-md-6">
+								<input type="text" class="form-control" id="addName" name="addName" placeholder="Name" title="Please enter Class name">
+							</div> -->
+							<div class="col-md-7">
 								<label for="addDay" class="label-form">Day</label>
 								<select class="form-control" id="addDay" name="addDay">
 									<option value="All">All</option>
@@ -572,31 +554,25 @@ function updateEditActiveValue(checkbox) {
 									<option value="Sunday">Sunday</option>
 								</select>
 							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-6">
-								<input type="text" class="form-control" id="addName" name="addName" placeholder="Name" title="Please enter Class name">
+							<div class="col-md-5">
+								<label for="addStartDate" class="label-form">Start Date</label> 
+								<input type="text" class="form-control datepicker" id="addStartDate" name="addStartDate" placeholder="dd/mm/yyyy">
 							</div>
-							<div class="col-md-3">
-								 <input type="text" class="form-control" id="addFee" name="addFee" placeholder="Fee" title="Please enter a valid fee amount (e.g. 100 or 100.50)">
-							</div>
-							<div class="input-group col-md-3">
-								<div class="input-group-prepend">
-								  <div class="input-group-text">
-									<input type="checkbox" id="addActiveCheckbox" name="addActiveCheckbox" onchange="updateAddActiveValue(this)">
-								  </div>
-								</div>
-								<input type="hidden" id="addActive" name="addActive" value="false">
-								<input type="text" id="addActiveLabel" class="form-control" placeholder="Activate">
-							</div>
+							<script>
+								var today = new Date();
+								var day = today.getDate();
+								var month = today.getMonth() + 1; // Note: January is 0
+								var year = today.getFullYear();
+								var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
+								document.getElementById('addStartDate').value = formattedDate;
+							</script>
+							
 						</div>
 					</div>
 				</form>
 				<div class="d-flex justify-content-end">
 					<button type="submit" class="btn btn-primary" onclick="addClass()">Create</button>&nbsp;&nbsp;
-					<button type="button" class="btn btn-default btn-secondary" data-dismiss="modal">Close</button>	
+					<button type="button" class="btn btn-default btn-secondary" onclick="clearClassForm('classRegister')" data-dismiss="modal">Close</button>	
 				</div>	
 				</section>
 			</div>
@@ -706,13 +682,10 @@ function updateEditActiveValue(checkbox) {
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<div class="col-md-6">
+							<div class="col-md-8">
 								<input type="text" class="form-control" id="editName" name="editName" placeholder="Name" title="Please enter Class name">
 							</div>
-							<div class="col-md-3">
-								 <input type="text" class="form-control" id="editFee" name="editFee" placeholder="Fee" title="Please enter a valid fee amount (e.g. 100 or 100.50)">
-							</div>
-							<div class="input-group col-md-3">
+							<div class="input-group col-md-4">
 								<div class="input-group-prepend">
 								  <div class="input-group-text">
 									<input type="checkbox" id="editActiveCheckbox" name="editActiveCheckbox" onchange="updateEditActiveValue(this)">

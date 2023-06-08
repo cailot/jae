@@ -395,12 +395,12 @@ function retrieveEnrolment(studentId){
 				console.log(value);	
 				var row = $("<tr class='d-flex'>");
 				row.append($('<td>').addClass('hidden-column').text(ELEARNING + '|' + value.id));
-				row.append($('<td><i class="fa fa-laptop" title="class"></i></td>'));
-				row.append($('<td class="smaller-table-font" colspan="6">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
+				row.append($('<td class="col-1"><i class="fa fa-laptop" title="class"></i></td>'));
+				row.append($('<td class="smaller-table-font col-10" colspan="6">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
 				// row.append($('<td class="smaller-table-font">').text(''));
 				// row.append($('<td class="smaller-table-font">').text(''));
 				// row.append($('<td class="smaller-table-font">').text(''));
-				row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+				row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 				$('#basketTable > tbody').append(row);	
 
 			});

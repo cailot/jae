@@ -113,6 +113,20 @@ public class JaeClazzController {
 		return dtos;
 	}
 
+	// bring all courses based on grade
+	@GetMapping("/listCoursesByGrade")
+	@ResponseBody
+	public List<CourseDTO> listCoursesByGrade(@RequestParam(value="grade", required=true) String grade) {
+		int year = cycleService.academicYear();
+		int week = cycleService.academicWeeks();
+		List<CourseDTO> dtos = courseService.findByGrade(grade);
+		// set year
+		for(CourseDTO dto : dtos) {
+			dto.setYear(year);
+		}
+		return dtos;
+	}
+
 
 	// search classes by grade & year
 	@GetMapping("/classesByCourse")
@@ -139,16 +153,18 @@ public class JaeClazzController {
 		System.out.println(formData);
 		// 1. create bare Class
 		Clazz clazz = formData.convertToOnlyClass();
-		// 2. get Course
+		// 2. set active to true as default
+		clazz.setActive(true);
+		// 3. get Course
 		Course course = courseService.findById(formData.getCourseId());
-		// 3. get Cycle
+		// 4. get Cycle
 		Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
-		// 4. assign Course & Cycle
+		// 5. assign Course & Cycle
 		clazz.setCourse(course);
 		clazz.setCycle(cycle);
-		// 5. save Class
+		// 6. save Class
 		ClazzDTO dto = clazzService.addClass(clazz);
-		// 6. return dto;
+		// 7. return dto;
 		return dto;
 	}
 
