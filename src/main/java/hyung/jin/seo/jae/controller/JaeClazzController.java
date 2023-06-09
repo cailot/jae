@@ -74,14 +74,25 @@ public class JaeClazzController {
 		return count;
 	}
 
-	// bring all classes in database
-	@GetMapping("/list")
-	public String listClasses(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
+	// bring all courses in database
+	@GetMapping("/listCourse")
+	public String listCourses(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
         System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
 		List<ClazzDTO> dtos = clazzService.listClasses(state, branch, grade, year, active);//clazzService.allClasses();
 		model.addAttribute(JaeConstants.CLASS_LIST, dtos);
 		return "classListPage";
 	}
+
+
+	// bring all classes in database
+	@GetMapping("/listClass")
+	public String listClasses(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
+		System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
+		List<ClazzDTO> dtos = clazzService.listClasses(state, branch, grade, year, active);//clazzService.allClasses();
+		model.addAttribute(JaeConstants.CLASS_LIST, dtos);
+		return "classListPage";
+	}
+
 
 	// bring all courses based on grade
 	@GetMapping("/coursesByGrade")
@@ -145,9 +156,31 @@ public class JaeClazzController {
 		ClazzDTO dto = new ClazzDTO(clazz);
 		return dto;
 	}
-		
-	// register new student
-	@PostMapping("/register")
+	
+	// register new course
+	@PostMapping("/registerCourse")
+	@ResponseBody
+	public ClazzDTO registerCourse(@RequestBody CourseDTO formData) {
+		System.out.println(formData);
+		// 1. create bare Class
+		Clazz clazz = formData.convertToOnlyClass();
+		// 2. set active to true as default
+		clazz.setActive(true);
+		// 3. get Course
+		Course course = courseService.findById(formData.getCourseId());
+		// 4. get Cycle
+		Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
+		// 5. assign Course & Cycle
+		clazz.setCourse(course);
+		clazz.setCycle(cycle);
+		// 6. save Class
+		ClazzDTO dto = clazzService.addClass(clazz);
+		// 7. return dto;
+		return dto;
+	}
+
+	// register new class
+	@PostMapping("/registerClass")
 	@ResponseBody
 	public ClazzDTO registerClass(@RequestBody ClazzDTO formData) {
 		System.out.println(formData);
