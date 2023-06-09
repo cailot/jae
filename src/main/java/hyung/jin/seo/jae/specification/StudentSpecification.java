@@ -14,7 +14,6 @@ import hyung.jin.seo.jae.model.Student;
 
 public interface StudentSpecification {
 	
-	
 	// Id
 	static Specification<Student> idEquals(String keyword){
 		return (root, query, cb) -> cb.equal(root.get("id"), Integer.parseInt(keyword));
@@ -35,13 +34,11 @@ public interface StudentSpecification {
 	    return (root, query, builder) -> {
 	        String keywordLike = "%" + keyword + "%";
 	        return builder.or(
-	                builder.like(root.get("firstName"), keywordLike),
-	                builder.like(root.get("lastName"), keywordLike)
+	            builder.like(root.get("firstName"), keywordLike),
+	            builder.like(root.get("lastName"), keywordLike)
 	        );
 	    };
 	}
-
-	
 	
 	// state
 	static Specification<Student> stateEquals(String keyword){
@@ -67,8 +64,7 @@ public interface StudentSpecification {
 			public Predicate toPredicate(Root<Student> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 				Expression<LocalDate> dateField = root.get("registerDate");
 				return criteriaBuilder.between(dateField, startDate, endDate);
-			}
-			
+			}	
 		};
 	}
 	
@@ -77,19 +73,16 @@ public interface StudentSpecification {
 		  return (root, query, cb) -> cb.equal(root.get("registerDate"), date);
 	}
 
-	
 	// start date before
 	static Specification<Student> startDateLessThanOrEqualTo(LocalDate date) {
 	    return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("registerDate"), date);
 	}
-
 	
 	// start date after
 	static Specification<Student> startDateAfter(LocalDate date) {
 	    return (root, query, cb) -> cb.greaterThan(root.get("registerDate"), date);
 	}
 
-	
 	// is not null 
 	static Specification<Student> hasNotNullVaule(String column){
 		return (root, query, cb) -> cb.isNotNull(root.get(column));
@@ -99,6 +92,5 @@ public interface StudentSpecification {
 	static Specification<Student> hasNullVaule(String column){
 		return (root, query, cb) -> cb.isNull(root.get(column));
 	}
-	
 	
 }

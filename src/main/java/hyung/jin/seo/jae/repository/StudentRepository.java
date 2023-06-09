@@ -22,4 +22,7 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 	@Modifying
 	@Query("UPDATE Student s SET s.endDate = null WHERE s.id = ?1")
 	void setEndDateToNull(Long id);
+
+	@Query(value = "SELECT DISTINCT c.year FROM Cycle c WHERE c.id IN (SELECT l.cycleId FROM Class l WHERE l.id IN (SELECT e.clazzId FROM Enrolment e WHERE e.studentId = ?1))", nativeQuery = true)
+    List<Integer> findYearsByStudentId(Long id);	
 }

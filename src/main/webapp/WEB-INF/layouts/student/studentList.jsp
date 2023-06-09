@@ -316,6 +316,7 @@ function retrieveStudentInfo(std) {
 						<label for="listYear" class="label-form">Year</label> 
 						<select class="form-control" id="listYear" name="listYear">
 							<option value="All">All</option>
+							<option value="2023">2023</option>
 							<option value="2022">2022</option>
 							<option value="2021">2021</option>
 							<option value="2020">2020</option>
@@ -324,7 +325,7 @@ function retrieveStudentInfo(std) {
 					<div class="col-md-2">
 						<label for="listActive" class="label-form">Activated</label> 
 						<select class="form-control" id="listActive" name="listActive">
-							<option value="All">All Students</option>
+							<!-- <option value="All">All Students</option> -->
 							<option value="Current">Current Students</option>
 							<option value="Stopped">Stopped Students</option>
 						</select>

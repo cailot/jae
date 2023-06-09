@@ -1,6 +1,7 @@
 package hyung.jin.seo.jae.service.impl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,11 +61,6 @@ public class StudentServiceImpl implements StudentService {
 		if(StringUtils.isNotBlank(grade)&&(!StringUtils.equals(grade, JaeConstants.ALL))) {
 			spec = spec.and(StudentSpecification.gradeEquals(grade));
 		}
-		if(StringUtils.isNotBlank(year)&&(!StringUtils.equals(year, JaeConstants.ALL))) {
-			// LocalDate lastDate = JaeUtils.lastAcademicDate(year);
-			// spec = spec.and(StudentSpecification.startDateLessThanOrEqualTo(lastDate) );
-		}
-
 		switch ((active==null) ? JaeConstants.ALL : active) {
 
 		case JaeConstants.CURRENT:
@@ -79,8 +75,25 @@ public class StudentServiceImpl implements StudentService {
 
 		case JaeConstants.ALL:
 			students = studentRepository.findAll(spec);
-
 		}
+		if(StringUtils.isNotBlank(year)&&(!StringUtils.equals(year, JaeConstants.ALL))) {
+			List<Student> stds = new ArrayList<>();
+			int enrolYear = Integer.parseInt(year);
+			for(Student student : students){
+				List<Integer> years = studentRepository.findYearsByStudentId(student.getId());
+				//years.forEach(System.out::println);
+				years.forEach(item -> System.out.println(student.getId() + " --> " + item));
+				for(Integer yr : years){
+					if((yr!=null)&&(yr.intValue()==enrolYear)){
+						stds.add(student);
+						break;
+					}
+				}
+			}
+			// assign group of filtered Student List
+			students = stds;
+		}
+
 		return students;
 	}
 	
