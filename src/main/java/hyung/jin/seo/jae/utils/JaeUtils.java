@@ -3,6 +3,7 @@ package hyung.jin.seo.jae.utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -199,11 +200,17 @@ public class JaeUtils {
 
 	// check wether Today is between from and to
     public static boolean checkIfTodayBelongTo(String from, String to) throws ParseException {
-        // SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date fromDate = displayFormat.parse(from);
         Date toDate = displayFormat.parse(to);
-        Date today = new Date();
-        return (today.compareTo(fromDate) >= 0 && today.compareTo(toDate) <= 0);
+		// Truncate the time component from today
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		Date today = calendar.getTime();
+      	return (today.compareTo(fromDate) >= 0 && today.compareTo(toDate) <= 0); 
     }
 
 	// check wether date is between from and to.
@@ -211,8 +218,16 @@ public class JaeUtils {
 	public static boolean checkIfTodayBelongTo(String date, String from, String to) throws ParseException {
 		Date fromDate = displayFormat.parse(from);
 		Date toDate = displayFormat.parse(to);
-		Date today = dateFormat.parse(date);
-		return (today.compareTo(fromDate) >= 0 && today.compareTo(toDate) <= 0);
+		Date specificDate = dateFormat.parse(date);
+		// Truncate the time component from today
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(specificDate);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		Date checkDate = calendar.getTime();
+		return (checkDate.compareTo(fromDate) >= 0 && checkDate.compareTo(toDate) <= 0);
 	}
 	
 }

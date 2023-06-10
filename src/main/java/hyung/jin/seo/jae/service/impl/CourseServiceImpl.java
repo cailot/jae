@@ -66,5 +66,11 @@ public class CourseServiceImpl implements CourseService {
 		}else {
 			return null;
 		}
-	}	
+	}
+	
+	@Override
+	public Course addCourse(Course course) {
+		Course add = courseRepository.save(course);
+		return add;
+	}
 }

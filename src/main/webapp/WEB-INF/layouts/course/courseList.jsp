@@ -21,7 +21,7 @@
   
 <script>
 $(document).ready(function () {
-    $('#classListTable').DataTable({
+    $('#courseListTable').DataTable({
     	language: {
     		search: 'Filter:'
     	},
@@ -54,49 +54,44 @@ $(document).ready(function () {
 	});
 
     // When the Grade dropdown changes, send an Ajax request to get the corresponding Type
-	$('#addGrade').change(function() {
-	var grade = $(this).val();
-		getCoursesByGrade(grade, '#addCourse');
-	});
+	// $('#addGrade').change(function() {
+	// var grade = $(this).val();
+	// 	getCoursesByGrade(grade, '#addCourse');
+	// });
 
-	// When the Grade dropdown changes, send an Ajax request to get the corresponding Type
-	$('#editGrade').change(function() {
-	var grade = $(this).val();
-		getCoursesByGrade(grade, '#editCourse');
-	});
+	// // When the Grade dropdown changes, send an Ajax request to get the corresponding Type
+	// $('#editGrade').change(function() {
+	// var grade = $(this).val();
+	// 	getCoursesByGrade(grade, '#editCourse');
+	// });
 
 
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Register Class
+//		Register Course
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function addClass() {
+function addCourse() {
 	// Get from form data
-	var clazz = {
-		state : $("#addState").val(),
-		branch : $("#addBranch").val(),
-		startDate : $("#addStartDate").val(),
-		//name : $("#addName").val(),
+	var course = {
+		name : $("#addName").val(),
 		grade : $("#addGrade").val(),
-		courseId : $("#addCourse").val(),
-		day : $("#addDay").val()
-		//active : $("#addActive").val(),
-		//fee : $("#addFee").val()
+		description : $("#addDescription").val(),
+		price : $("#addPrice").val()
 	}
-//	console.log(clazz);
+	console.log(course);
 	
 	// Send AJAX to server
 	$.ajax({
-		url : '${pageContext.request.contextPath}/class/registerClass',
+		url : '${pageContext.request.contextPath}/class/registerCourse',
 		type : 'POST',
 		dataType : 'json',
-		data : JSON.stringify(clazz),
+		data : JSON.stringify(course),
 		contentType : 'application/json',
-		success : function(student) {
+		success : function(response) {
+			console.log(response);
 			// Display the success alert
-            $('#success-alert .modal-body').text(
-                    'New Class is registered successfully.');
+            $('#success-alert .modal-body').text('New Class is registered successfully.');
             $('#success-alert').modal('show');
 			$('#success-alert').on('hidden.bs.modal', function(e) {
 				location.reload();
@@ -106,15 +101,15 @@ function addClass() {
 			console.log('Error : ' + error);
 		}
 	});
-	$('#registerClassModal').modal('hide');
+	$('#registerCourseModal').modal('hide');
 	// flush all registered data
-	document.getElementById("classRegister").reset();
+	document.getElementById("courseRegister").reset();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Retrieve Class
+//		Retrieve Course
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function retrieveClassInfo(clazzId) {
+function retrieveCourseInfo(clazzId) {
 	// send query to controller
 	$.ajax({
 		url : '${pageContext.request.contextPath}/class/get/' + clazzId,
@@ -150,9 +145,9 @@ function retrieveClassInfo(clazzId) {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Update Class
+//		Update Course
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function updateClassInfo(){
+function updateCourseInfo(){
 	// get from formData
 	var clazz = {
 		id : $("#editId").val(),
@@ -194,76 +189,20 @@ function updateClassInfo(){
 	document.getElementById("classEdit").reset();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Populate courses by grade
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function getCoursesByGrade(grade, toWhere){
-	$.ajax({
-		url: '${pageContext.request.contextPath}/class/listCoursesByGrade',
-		method: 'GET',
-		data: { grade: grade },
-		success: function(data) {
-			$(toWhere).empty(); // clear the previous options
-			$.each(data, function(index, value) {
-				const cleaned = cleanUpJson(value);
-				//console.log(cleaned);
-				$(toWhere).append($("<option value='" + value.id + "'>").text(value.description).val(value.id)); // add new option
-				});
-			},
-			error: function(xhr, status, error) {
-			console.error(xhr.responseText);
-			}
-	});
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Clear class register form
 /////////////////////////////////////////////////////////////////////////////////////////////////////////	
-function clearClassForm(elementId) {
+function clearCourseForm(elementId) {
 	document.getElementById(elementId).reset();
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Update hidden value according to edit activive checkbox
-/////////////////////////////////////////////////////////////////////////////////////////////////////////	
-function updateEditActiveValue(checkbox) {
-  var editActiveInput = document.getElementById("editActive");
-  if (checkbox.checked) {
-    editActiveInput.value = "true";
-  } else {
-    editActiveInput.value = "false";
-  }
-}
-
-
-// initialise courses by grade in edit dialog
-function editInitialiseCourseByGrade(grade, courseId) {
-    $.ajax({
-        url: '${pageContext.request.contextPath}/class/listCoursesByGrade',
-        method: 'GET',
-        data: { grade: grade },
-        success: function(data) {
-            $('#editCourse').empty(); // clear the previous options
-            $.each(data, function(index, value) {
-                const cleaned = cleanUpJson(value);
-                console.log(cleaned);
-                $('#editCourse').append($("<option value='" + value.id + "'>").text(value.description).val(value.id)); // add new option
-            });
-            // Set the selected option
-            $("#editCourse").val(courseId);
-        },
-        error: function(xhr, status, error) {
-            console.error(xhr.responseText);
-        }
-    });
-}
 
 </script>
 
 <!-- List Body -->
 <div class="row">
 	<div class="modal-body">
-		<form id="classList" method="get" action="${pageContext.request.contextPath}/class/listClass">
+		<form id="classList" method="get" action="${pageContext.request.contextPath}/class/listCourse">
 			<div class="form-group">
 				<div class="form-row">
 					<div class="col-md-2">
@@ -343,7 +282,7 @@ function editInitialiseCourseByGrade(grade, courseId) {
 						<button type="submit" class="btn btn-primary btn-block"> <i class="fa fa-search"></i>&nbsp;Search</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerClassModal" onclick="getCoursesByGrade('p2', '#addCourse')"><i class="fa fa-plus"></i>&nbsp;New</button>
+						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerCourseModal"><i class="fa fa-plus"></i>&nbsp;New</button>
 					</div>
 				</div>
 			</div>
@@ -351,16 +290,12 @@ function editInitialiseCourseByGrade(grade, courseId) {
 				<div class="form-row">
 					<div class="col-md-12">
 						<div class="table-wrap">
-							<table id="classListTable" class="table table-striped table-bordered"><thead class="table-primary">
+							<table id="courseListTable" class="table table-striped table-bordered"><thead class="table-primary">
 									<tr>
-										<th>State</th>
-										<th>Branch</th>
-										<th>Grade</th>
+										<th>Name</th>
 										<th>Description</th>
-										<th>Start Date</th>
-										<th>Day</th>
-										<th>Year</th>
-										<th data-orderable="false">Activated</th>
+										<th>Grade</th>
+										<th>Price</th>
 										<th data-orderable="false">Action</th>
 									</tr>
 								</thead>
@@ -373,22 +308,6 @@ function editInitialiseCourseByGrade(grade, courseId) {
 												<td class="small ellipsis"><span><c:out value="${clazz.branch}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${fn:toUpperCase(clazz.grade)}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.description}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${clazz.startDate}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${clazz.day}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${clazz.year}" /></span></td>
-												<c:set var="active" value="${clazz.active}" />
-												<c:choose>
-													<c:when test="${active == true}">
-														<td>
-															<i class="fa fa-check-circle text-success"></i>
-														</td>
-													</c:when>
-													<c:otherwise>
-														<td>
-															<i class="fa fa-check-circle text-secondary"></i>
-														</td>
-													</c:otherwise>
-												</c:choose>		
 												<td>
 													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retrieveClassInfo('${clazz.id}')"></i>&nbsp;
 												</td>
@@ -409,136 +328,62 @@ function editInitialiseCourseByGrade(grade, courseId) {
 </div>
 
 <!-- Add Form Dialogue -->
-<div class="modal fade" id="registerClassModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="registerCourseModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-body">
 				<section class="fieldset rounded border-primary">
-					<header class="text-primary font-weight-bold">Class Registration</header>
-			
-				<form id="classRegister">
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-6">
-								<label for="addState" class="label-form">State</label> <select class="form-control" id="addState" name="addState">
-									<option value="vic">Victoria</option>
-								</select>
+					<header class="text-primary font-weight-bold">Course Registration</header>
+					<form id="courseRegister">
+						<div class="form-group mt-3">
+							<div class="form-row">
+								<div class="col-md-3">
+									<label for="addGrade" class="label-form">Grade</label>
+									<select class="form-control" id="addGrade" name="addGrade">
+										<option value="p2">P2</option>
+										<option value="p3">P3</option>
+										<option value="p4">P4</option>
+										<option value="p5">P5</option>
+										<option value="p6">P6</option>
+										<option value="s7">S7</option>
+										<option value="s8">S8</option>
+										<option value="s9">S9</option>
+										<option value="s10">S10</option>
+										<option value="s10e">S10E</option>
+										<option value="tt6">TT6</option>
+										<option value="tt8">TT8</option>
+										<option value="tt8e">TT8E</option>
+										<option value="srw4">SRW4</option>
+										<option value="srw5">SRW5</option>
+										<option value="srw6">SRW6</option>
+										<option value="srw8">SRW8</option>
+										<option value="jmss">JMSS</option>
+										<option value="vce">VCE</option>
+									</select>
+								</div>
+								<div class="col-md-9">
+									<label for="addName" class="label-form">Name</label> 
+									<input type="text" class="form-control" id="addName" name="addName" placeholder="Name" title="Please enter Course name">
+								</div>
 							</div>
-							<div class="col-md-6">
-								<label for="addBranch" class="label-form">Branch</label> <select class="form-control" id="addBranch" name="addBranch">
-									<option value="braybrook">Braybrook</option>
-									<option value="epping">Epping</option>
-									<option value="balwyn">Balwyn</option>
-									<option value="bayswater">Bayswater</option>
-									<option value="boxhill">Box Hill</option>
-									<option value="carolinesprings">Caroline Springs</option>
-									<option value="chadstone">Chadstone</option>
-									<option value="craigieburn">Craigieburn</option>
-									<option value="cranbourne">Cranbourne</option>
-									<option value="glenwaverley">Glen Waverley</option>
-									<option value="mitcha">Mitcham</option>
-									<option value="narrewarren">Narre Warren</option>
-									<option value="ormond">Ormond</option>
-									<option value="pointcook">Point Cook</option>
-									<option value="preston">Preston</option>
-									<option value="springvale">Springvale</option>
-									<option value="stalbans">St Albans</option>
-									<option value="werribee">Werribee</option>
-									<option value="mernda">Mernda</option>
-									<option value="melton">Melton</option>
-									<option value="glenroy">Glenroy</option>
-									<option value="packenham">Packenham</option>
-								</select>
-							</div>
-							
 						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-3">
-								<label for="addGrade" class="label-form">Grade</label>
-								<select class="form-control" id="addGrade" name="addGrade">
-									<option value="p2">P2</option>
-									<option value="p3">P3</option>
-									<option value="p4">P4</option>
-									<option value="p5">P5</option>
-									<option value="p6">P6</option>
-									<option value="s7">S7</option>
-									<option value="s8">S8</option>
-									<option value="s9">S9</option>
-									<option value="s10">S10</option>
-									<option value="s10e">S10E</option>
-									<option value="tt6">TT6</option>
-									<option value="tt8">TT8</option>
-									<option value="tt8e">TT8E</option>
-									<option value="srw4">SRW4</option>
-									<option value="srw5">SRW5</option>
-									<option value="srw6">SRW6</option>
-									<option value="srw8">SRW8</option>
-									<option value="jmss">JMSS</option>
-									<option value="vce">VCE</option>
-								</select>
+						<div class="form-group">
+							<div class="form-row">
+								<div class="col-md-3">
+									<label for="addPrice" class="label-form">Price</label> 
+									<input type="text" class="form-control" id="addPrice" name="addPrice" placeholder="Price" title="Please enter Course price">
+								</div>
+								<div class="col-md-9">
+									<label for="addDescription" class="label-form">Description</label> 
+									<input type="text" class="form-control" id="addDescription" name="addDescription" placeholder="Description" title="Please enter Course description">
+								</div>
 							</div>
-							<div class="col-md-9">
-								<label for="addCourse" class="label-form">Course</label> 
-								<select class="form-control" id="addCourse" name="addCourse">
-								</select>
-							</div>
-							
-							<!-- <div class="col-md-4">
-								<label for="addFee" class="label-form">Price</label> 
-								<input type="text" class="form-control" id="addFee" name="addFee" placeholder="Fee" title="Please enter a valid fee amount (e.g. 100 or 100.50)">
-						   	</div>
-						   	<div class="input-group col-md-4">
-								<div class="input-group-prepend">
-								 	<div class="input-group-text">
-								   	<input type="checkbox" id="addActiveCheckbox" name="addActiveCheckbox" onchange="updateAddActiveValue(this)">
-								 	</div>
-							   	</div>
-								<input type="hidden" id="addActive" name="addActive" value="false">
-							   	<input type="text" id="addActiveLabel" class="form-control" placeholder="Activate">
-						   	</div> -->
-
 						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
-							<!-- <div class="col-md-6">
-								<input type="text" class="form-control" id="addName" name="addName" placeholder="Name" title="Please enter Class name">
-							</div> -->
-							<div class="col-md-7">
-								<label for="addDay" class="label-form">Day</label>
-								<select class="form-control" id="addDay" name="addDay">
-									<option value="All">All</option>
-									<option value="Monday">Monday</option>
-									<option value="Tuesday">Tuesday</option>
-									<option value="Wednesday">Wednesday</option>
-									<option value="Thursday">Thursday</option>
-									<option value="Friday">Friday</option>
-									<option value="Saturday">Saturday</option>
-									<option value="Sunday">Sunday</option>
-								</select>
-							</div>
-							<div class="col-md-5">
-								<label for="addStartDate" class="label-form">Start Date</label> 
-								<input type="text" class="form-control datepicker" id="addStartDate" name="addStartDate" placeholder="dd/mm/yyyy">
-							</div>
-							<script>
-								var today = new Date();
-								var day = today.getDate();
-								var month = today.getMonth() + 1; // Note: January is 0
-								var year = today.getFullYear();
-								var formattedDate = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
-								document.getElementById('addStartDate').value = formattedDate;
-							</script>
-							
-						</div>
-					</div>
-				</form>
-				<div class="d-flex justify-content-end">
-					<button type="submit" class="btn btn-primary" onclick="addClass()">Create</button>&nbsp;&nbsp;
-					<button type="button" class="btn btn-default btn-secondary" onclick="clearClassForm('classRegister')" data-dismiss="modal">Close</button>	
-				</div>	
+					</form>
+					<div class="d-flex justify-content-end">
+						<button type="submit" class="btn btn-primary" onclick="addCourse()">Create</button>&nbsp;&nbsp;
+						<button type="button" class="btn btn-default btn-secondary" onclick="clearCourseForm('courseRegister')" data-dismiss="modal">Close</button>	
+					</div>	
 				</section>
 			</div>
 		</div>
@@ -675,6 +520,39 @@ function editInitialiseCourseByGrade(grade, courseId) {
 
 
 
+
+
+
+
+
+
+
+<!--  Password Modal HTML -->
+<div id="passwordStudentModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form method="POST" action="${pageContext.request.contextPath}/changePassword">
+				<div class="modal-header">
+					<h4 class="modal-title">Change Password</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label>Password</label> <input type="password" class="form-control" required="required" name="passwordpassword" id="passwordpassword" />
+					</div>
+					<div class="form-group">
+						<label>Confirm Password</label> <input type="password" class="form-control" required="required" name="confirmPasswordpassword" id="confirmPasswordpassword"/>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<button type="submit" class="btn btn-info" onclick="return passwordChange();">Change Password</button> 
+					<input type="hidden" name="usernamepassword" id="usernamepassword" />
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 
 
 <!-- Success Alert -->

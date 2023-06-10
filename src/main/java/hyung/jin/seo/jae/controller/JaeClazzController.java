@@ -3,6 +3,7 @@ package hyung.jin.seo.jae.controller;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -160,23 +161,16 @@ public class JaeClazzController {
 	// register new course
 	@PostMapping("/registerCourse")
 	@ResponseBody
-	public ClazzDTO registerCourse(@RequestBody CourseDTO formData) {
+	public ResponseEntity<String> registerCourse(@RequestBody CourseDTO formData) {
 		System.out.println(formData);
-		// 1. create bare Class
-		Clazz clazz = formData.convertToOnlyClass();
-		// 2. set active to true as default
-		clazz.setActive(true);
-		// 3. get Course
-		Course course = courseService.findById(formData.getCourseId());
-		// 4. get Cycle
-		Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
-		// 5. assign Course & Cycle
-		clazz.setCourse(course);
-		clazz.setCycle(cycle);
-		// 6. save Class
-		ClazzDTO dto = clazzService.addClass(clazz);
-		// 7. return dto;
-		return dto;
+		// 1. create Course
+		Course course = formData.convertToCourse();
+		// 2. save Class
+		courseService.addCourse(course);
+		// 3. return success;
+		// return ResponseEntity.ok("success");	
+		return ResponseEntity.ok("\"Course register success\"");
+
 	}
 
 	// register new class

@@ -76,6 +76,7 @@ public class StudentServiceImpl implements StudentService {
 		case JaeConstants.ALL:
 			students = studentRepository.findAll(spec);
 		}
+		// year filter using Enrolment, Class & Cycle
 		if(StringUtils.isNotBlank(year)&&(!StringUtils.equals(year, JaeConstants.ALL))) {
 			List<Student> stds = new ArrayList<>();
 			int enrolYear = Integer.parseInt(year);

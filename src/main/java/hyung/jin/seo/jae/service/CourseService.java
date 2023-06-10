@@ -17,4 +17,7 @@ public interface CourseService {
 
 	// get Course by id
     Course findById(String courseId);
+
+	// register Course
+	Course addCourse(Course course);	
 }
