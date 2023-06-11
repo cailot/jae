@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,8 +61,8 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public Course findById(String courseId) {
-		Optional<Course> course = courseRepository.findById(Long.parseLong(courseId));
+	public Course getCourse(Long id) {
+		Optional<Course> course = courseRepository.findById(id);
 		if(course.isPresent()) {
 			return course.get();
 		}else {
@@ -73,4 +75,27 @@ public class CourseServiceImpl implements CourseService {
 		Course add = courseRepository.save(course);
 		return add;
 	}
+
+	@Override
+	public CourseDTO updateCourse(Course course) {
+		// search by Id
+		Course existing = courseRepository.findById(course.getId()).orElseThrow(() -> new EntityNotFoundException("Course Not Found"));
+		// update grade
+		String newGrade = course.getGrade();
+		existing.setGrade(newGrade);
+		// update name
+		String newName = course.getName();
+		existing.setName(newName);
+		// update price
+		double newPrice = course.getPrice();
+		existing.setPrice(newPrice);
+		// update description
+		String newDescription = course.getDescription();
+		existing.setDescription(newDescription);
+		// update the existing record
+		Course updated = courseRepository.save(existing);
+		CourseDTO dto = new CourseDTO(updated);
+		return dto;
+	}
 }
+

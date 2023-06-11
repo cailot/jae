@@ -16,8 +16,11 @@ public interface CourseService {
 	long checkCount();
 
 	// get Course by id
-    Course findById(String courseId);
+    Course getCourse(Long id);
 
 	// register Course
 	Course addCourse(Course course);	
+
+	// update Course
+	CourseDTO updateCourse(Course course);
 }

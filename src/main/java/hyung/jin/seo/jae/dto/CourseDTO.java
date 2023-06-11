@@ -63,6 +63,15 @@ public class CourseDTO implements Serializable, Cloneable{
     	return course;
     }
 
+	public CourseDTO(long id, String name, String description, String grade, double price){
+		this.id = Long.toString(id);
+		this.name = name;
+		this.description = description;
+		this.grade = grade;
+		this.price = price;		
+	}
+
+
 	// for new academic year Object
 	@Override
 	public CourseDTO clone() {

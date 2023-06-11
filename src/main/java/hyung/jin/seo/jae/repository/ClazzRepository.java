@@ -20,8 +20,6 @@ public interface ClazzRepository extends JpaRepository<Clazz, Long>{
 	List<ClazzDTO> findClassForYear(int year);
 
 	// list all class for grade & year
-	// @Query("SELECT new hyung.jin.seo.jae.dto.ClazzDTO(c.id, c.fee, c.day, c.startDate, c.active, c.course.id, c.cycle.id, c.course.grade, c.course.description, c.cycle.year) FROM Clazz c WHERE c.course.grade = ?1 AND c.cycle.year = ?2")
-	// List<ClazzDTO> findClassForGradeNCycle(String grade, int year);
 	@Query("SELECT new hyung.jin.seo.jae.dto.ClazzDTO(c.id, c.state, c.branch, c.fee, c.day, c.startDate, c.active, c.course.id, c.cycle.id, c.course.grade, c.course.description, c.cycle.year) FROM Clazz c WHERE c.course.grade = ?1 AND c.cycle.year = ?2")
 	List<ClazzDTO> findClassForGradeNCycle(String grade, int year);
 

@@ -24,6 +24,7 @@ import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.service.CycleService;
 import hyung.jin.seo.jae.service.CourseService;
 import hyung.jin.seo.jae.utils.JaeConstants;
+import io.micrometer.core.instrument.util.StringUtils;
 
 @Controller
 @RequestMapping("class")
@@ -76,8 +77,8 @@ public class JaeClazzController {
 	}
 
 	// bring all courses in database
-	@GetMapping("/listCourse")
-	public String listCourses(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
+	@GetMapping("/listClass")
+	public String listClasses(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
         System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
 		List<ClazzDTO> dtos = clazzService.listClasses(state, branch, grade, year, active);//clazzService.allClasses();
 		model.addAttribute(JaeConstants.CLASS_LIST, dtos);
@@ -86,12 +87,17 @@ public class JaeClazzController {
 
 
 	// bring all classes in database
-	@GetMapping("/listClass")
-	public String listClasses(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
-		System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
-		List<ClazzDTO> dtos = clazzService.listClasses(state, branch, grade, year, active);//clazzService.allClasses();
-		model.addAttribute(JaeConstants.CLASS_LIST, dtos);
-		return "classListPage";
+	@GetMapping("/listCourse")
+	public String listCourses(@RequestParam(value="listGrade", required=false) String grade, Model model) {
+		List<CourseDTO> dtos = null;
+		// if grade has some value
+		if((StringUtils.isNotBlank(grade)) && !(JaeConstants.ALL.equalsIgnoreCase(grade))){
+			dtos = courseService.findByGrade(grade);
+		}else{ // if grade has no value, simply bring all
+			dtos = courseService.allCourses();
+		}
+		model.addAttribute(JaeConstants.COURSE_LIST, dtos);
+		return "courseListPage";
 	}
 
 
@@ -130,7 +136,7 @@ public class JaeClazzController {
 	@ResponseBody
 	public List<CourseDTO> listCoursesByGrade(@RequestParam(value="grade", required=true) String grade) {
 		int year = cycleService.academicYear();
-		int week = cycleService.academicWeeks();
+		// int week = cycleService.academicWeeks();
 		List<CourseDTO> dtos = courseService.findByGrade(grade);
 		// set year
 		for(CourseDTO dto : dtos) {
@@ -150,11 +156,20 @@ public class JaeClazzController {
 
 
 	// get class by Id
-	@GetMapping("/get/{id}")
+	@GetMapping("/get/class/{id}")
 	@ResponseBody
 	public ClazzDTO getClass(@PathVariable("id") Long id) {
 		Clazz clazz = clazzService.getClazz(id);
 		ClazzDTO dto = new ClazzDTO(clazz);
+		return dto;
+	}
+
+	// get course by Id
+	@GetMapping("/get/course/{id}")
+	@ResponseBody
+	public CourseDTO getCourse(@PathVariable("id") Long id) {
+		Course course = courseService.getCourse(id);
+		CourseDTO dto = new CourseDTO(course);
 		return dto;
 	}
 	
@@ -170,7 +185,6 @@ public class JaeClazzController {
 		// 3. return success;
 		// return ResponseEntity.ok("success");	
 		return ResponseEntity.ok("\"Course register success\"");
-
 	}
 
 	// register new class
@@ -183,7 +197,7 @@ public class JaeClazzController {
 		// 2. set active to true as default
 		clazz.setActive(true);
 		// 3. get Course
-		Course course = courseService.findById(formData.getCourseId());
+		Course course = courseService.getCourse(Long.parseLong(formData.getCourseId()));
 		// 4. get Cycle
 		Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
 		// 5. assign Course & Cycle
@@ -196,24 +210,36 @@ public class JaeClazzController {
 	}
 
 
-	// update existing student
-	@PutMapping("/update")
+	// update existing class
+	@PutMapping("/update/class")
 	@ResponseBody
-	public ClazzDTO updateClazz(@RequestBody ClazzDTO formData) {
+	public ResponseEntity<String> updateClazz(@RequestBody ClazzDTO formData) {
 		// 1. create bare Class
 		Clazz clazz = formData.convertToOnlyClass();
 		// 1. get Course
-		Course course = courseService.findById(formData.getCourseId());		
+		Course course = courseService.getCourse(Long.parseLong(formData.getCourseId()));		
 		// 2. get Cycle
 		Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
 		// 3. assign Course & Cycle
 		clazz.setCourse(course);
 		clazz.setCycle(cycle);
 		// 4. save Class
-		ClazzDTO dto = clazzService.updateClazz(clazz);
-		return dto;
+		clazzService.updateClazz(clazz);
+		// 5. return flag
+		return ResponseEntity.ok("\"Class update success\"");
 	}
 	
+	// update existing course
+	@PutMapping("/update/course")
+	@ResponseBody
+	public ResponseEntity<String> updateCourse(@RequestBody CourseDTO formData) {
+		// 1. create Course
+		Course course = formData.convertToCourse();
+		// 4. save Class
+		courseService.updateCourse(course);
+		// 5. return flag
+		return ResponseEntity.ok("\"Course update success\"");
+	}
 
 
 }

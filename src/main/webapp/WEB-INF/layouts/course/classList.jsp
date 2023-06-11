@@ -117,7 +117,7 @@ function addClass() {
 function retrieveClassInfo(clazzId) {
 	// send query to controller
 	$.ajax({
-		url : '${pageContext.request.contextPath}/class/get/' + clazzId,
+		url : '${pageContext.request.contextPath}/class/get/class/' + clazzId,
 		type : 'GET',
 		success : async function(clazz) {
 			//console.log(clazz);
@@ -153,9 +153,10 @@ function retrieveClassInfo(clazzId) {
 //		Update Class
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function updateClassInfo(){
+	var clazzId = $("#editId").val();
 	// get from formData
 	var clazz = {
-		id : $("#editId").val(),
+		id : clazzId,
 		state : $("#editState").val(),
 		branch : $("#editBranch").val(),
 		startDate : $("#editStartDate").val(),
@@ -170,7 +171,7 @@ function updateClassInfo(){
 	console.log(clazz);
 	// send query to controller
 	$.ajax({
-		url : '${pageContext.request.contextPath}/class/update',
+		url : '${pageContext.request.contextPath}/class/update/class',
 		type : 'PUT',
 		dataType : 'json',
 		data : JSON.stringify(clazz),
@@ -178,7 +179,7 @@ function updateClassInfo(){
 		success : function(value) {
 			// Display success alert
 			$('#success-alert .modal-body').text(
-					'ID : ' + value.id + ' is updated successfully.');
+					'ID : ' + clazzId + ' is updated successfully.');
 			$('#success-alert').modal('show');
 			$('#success-alert').on('hidden.bs.modal', function(e) {
 				location.reload();
@@ -191,7 +192,7 @@ function updateClassInfo(){
 	
 	$('#editClassModal').modal('hide');
 	// flush all registered data
-	document.getElementById("classEdit").reset();
+	clearClassForm("classEdit");
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
