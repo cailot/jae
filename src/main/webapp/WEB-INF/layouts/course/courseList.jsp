@@ -166,53 +166,12 @@ function clearCourseForm(elementId) {
 
 
 </script>
-
 <!-- List Body -->
 <div class="row">
 	<div class="modal-body">
 		<form id="courseList" method="get" action="${pageContext.request.contextPath}/class/listCourse">
 			<div class="form-group">
 				<div class="form-row">
-					<!-- <div class="col-md-2">
-						<select class="form-control" id="listState" name="listState">
-							<option value="All">All State</option>
-							<option value="vic">Victoria</option>
-							<option value="nsw">New South Wales</option>
-							<option value="qld">Queensland</option>
-							<option value="sa">South Australia</option>
-							<option value="tas">Tasmania</option>
-							<option value="wa">Western Australia</option>
-							<option value="nt">Northern Territory</option>
-							<option value="act">ACT</option>
-						</select>
-					</div>
-					<div class="col-md-2">
-						<select class="form-control" id="listBranch" name="listBranch">
-							<option value="All">All Branch</option>
-							<option value="braybrook">Braybrook</option>
-							<option value="epping">Epping</option>
-							<option value="balwyn">Balwyn</option>
-							<option value="bayswater">Bayswater</option>
-							<option value="boxhill">Box Hill</option>
-							<option value="carolinesprings">Caroline Springs</option>
-							<option value="chadstone">Chadstone</option>
-							<option value="craigieburn">Craigieburn</option>
-							<option value="cranbourne">Cranbourne</option>
-							<option value="glenwaverley">Glen Waverley</option>
-							<option value="mitcha">Mitcham</option>
-							<option value="narrewarren">Narre Warren</option>
-							<option value="ormond">Ormond</option>
-							<option value="pointcook">Point Cook</option>
-							<option value="preston">Preston</option>
-							<option value="springvale">Springvale</option>
-							<option value="stalbans">St Albans</option>
-							<option value="werribee">Werribee</option>
-							<option value="mernda">Mernda</option>
-							<option value="melton">Melton</option>
-							<option value="glenroy">Glenroy</option>
-							<option value="packenham">Packenham</option>
-						</select>
-					</div> -->
 					<div class="col-md-2">
 						<select class="form-control" id="listGrade" name="listGrade">
 							<option value="All">All</option>
@@ -237,15 +196,6 @@ function clearCourseForm(elementId) {
 							<option value="vce">VCE</option>
 						</select>
 					</div>
-					<!-- <div class="col-md-2">
-						<select class="form-control" id="listYear" name="listYear">
-							<option value="All">All</option>
-							<option value="2023">2023</option>
-							<option value="2022">2022</option>
-							<option value="2021">2021</option>
-							<option value="2020">2020</option>
-						</select>
-					</div> -->
 					<div class="col mx-auto">
 						<button type="submit" class="btn btn-primary btn-block"> <i class="fa fa-search"></i>&nbsp;Search</button>
 					</div>

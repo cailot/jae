@@ -72,38 +72,41 @@
 
 <div class="container-fluid">
   <div class="row">
+	<!-- Student Info -->
     <div class="col-lg-4">
-      <div class="card-body">
-      	<h5>Student Information</h5>
-				<jsp:include page="student/studentInfo.jsp"></jsp:include>
-			</div>
-      </div>
+    	<div class="card-body">
+      		<h5>Student Information</h5>
+			<jsp:include page="student/studentInfo.jsp"></jsp:include>
+		</div>
+    </div>
 	<div class="col-lg-8">
       	<div class="row">
+			<!-- Course Info -->
 			<div class="col-lg-8">
-			<div class="card-body">
-				<jsp:include page="course/courseInfo.jsp"></jsp:include>
-			 </div>
+				<div class="card-body">
+					<h5>Course Registration</h5>
+					<jsp:include page="course/courseInfo.jsp"></jsp:include>
+				</div>
 			</div>
 			<div class="col-lg-4 bg-secondary">
-			 <div class="card-body">
-			 <h5 class="card-title">Attendance</h5>
-				<div class="modal-body">
-					<form id="">
-						<div class="form-group">
-							<div class="form-row">
-								<textarea class="form-control" rows="15"></textarea>
+				<div class="card-body">
+					<h5 class="card-title">Attendance</h5>
+					<div class="modal-body">
+						<form id="">
+							<div class="form-group">
+								<div class="form-row">
+									<textarea class="form-control" rows="15"></textarea>
+								</div>
 							</div>
-						</div>
-					</form>
+						</form>
+					</div>
 				</div>
-			 </div>
 			</div>
-      	</div>
+    	</div>
       	<div class="row">
-      		<div class="col-lg-12 bg-secondary">
-      		<div class="card-body">
-      				<form>
+      		<div class="col-lg-12">
+      			<div class="card-body">
+      				<!-- <form>
 						<div class="form-group">
 							<div class="form-row">
 								<div class="col-md-6">
@@ -134,7 +137,8 @@
 								<textarea class="form-control" rows="8"></textarea>
 							</div>
 						</div>
-					</form>
+					</form> -->
+					<jsp:include page="invoice/invoiceInfo.jsp"></jsp:include>
       			</div>
       		</div>
       	</div>     		

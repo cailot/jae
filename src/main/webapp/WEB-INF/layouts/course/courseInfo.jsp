@@ -420,12 +420,11 @@ function clearEnrolmentBasket(){
 }
 </script>
 
-<h5>Course Registration</h5>
 <div class="modal-body">
 	<form id="">
 		<div class="form-group">
 			<div class="form-row">
-				<div class="col-md-3">
+				<div class="col-md-2">
 					<select class="form-control form-control-sm" id="registerGrade" name="registerGrade">
 						<option>Grade</option>
 						<option value="p2">P2</option>
@@ -449,7 +448,7 @@ function clearEnrolmentBasket(){
 						<option value="vce">VCE</option>
 					</select>
 				</div>
-				<div class="col-md-7">
+				<div class="col-md-8">
 					<p class="text-truncate">Class change is possible after changing Please click Apply button</p>
 				</div>
 				<div class="col-md-2">
