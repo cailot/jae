@@ -165,7 +165,19 @@ public class StudentServiceImpl implements StudentService {
 		LocalDate newRegisterDate = newStudent.getRegisterDate();
 		existing.setRegisterDate(newRegisterDate);
 		String newMemo = StringUtils.defaultString(newStudent.getMemo());
-		existing.setMemo(newMemo);
+		//String existMemo = StringUtils.defaultString(existing.getMemo());
+		
+		// in case that user wants to clear memo
+		if(StringUtils.isBlank(newMemo)) {
+			// simply clear memo
+			existing.setMemo("");
+		}else{
+			// update memo with timestamp
+			existing.setMemo(newMemo + JaeUtils.getTodayForMemo());
+		}
+
+
+		//existing.setMemo(newMemo);
 		// update the existing record
 		Student updated = studentRepository.save(existing);
 		return updated;

@@ -196,6 +196,14 @@ public class JaeUtils {
 			return false;
 		}
 	}
+
+	// return date info
+	public static String getTodayForMemo(){
+		String pattern = "dd/MM/yyyy";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String date = simpleDateFormat.format(new Date());
+		return " - noted at [" + date + "]";
+	}
 	
 
 	// check wether Today is between from and to
