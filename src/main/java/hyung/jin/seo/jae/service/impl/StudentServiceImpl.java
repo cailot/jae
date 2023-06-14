@@ -175,9 +175,6 @@ public class StudentServiceImpl implements StudentService {
 			// update memo with timestamp
 			existing.setMemo(newMemo + JaeUtils.getTodayForMemo());
 		}
-
-
-		//existing.setMemo(newMemo);
 		// update the existing record
 		Student updated = studentRepository.save(existing);
 		return updated;
