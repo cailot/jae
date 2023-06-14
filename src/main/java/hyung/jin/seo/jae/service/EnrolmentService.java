@@ -24,8 +24,8 @@ public interface EnrolmentService {
 	// add enrolment
 	EnrolmentDTO addEnrolment(Enrolment enrolment);
 
-	// delete enrolment
-	void deleteEnrolment(Long id);
+	// deactivate enrolment
+	void archiveEnrolment(Long id);
 
 	// update enrolment
 	Enrolment updateEnrolment(Enrolment enrolment, Long id);

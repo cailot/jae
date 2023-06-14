@@ -60,4 +60,7 @@ public class Enrolment{ // bridge table between Student & Class
 	@Column
 	private int endWeek;
 
+	@Column
+	private boolean old;
+
 }

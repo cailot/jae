@@ -45,23 +45,25 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 
 	@Override
 	public List<EnrolmentDTO> findEnrolmentByClazz(Long claszzId) {
-		List<Enrolment> enrols = enrolmentRepository.findAllByClazzId(claszzId);
-		List<EnrolmentDTO> dtos = new ArrayList<>();
-		for(Enrolment enrol: enrols){
-			EnrolmentDTO dto = new EnrolmentDTO(enrol);
-			dtos.add(dto);
-		}
+		// List<Enrolment> enrols = enrolmentRepository.findAllByClazzId(claszzId);
+		// List<EnrolmentDTO> dtos = new ArrayList<>();
+		// for(Enrolment enrol: enrols){
+		// 	EnrolmentDTO dto = new EnrolmentDTO(enrol);
+		// 	dtos.add(dto);
+		// }
+		List<EnrolmentDTO> dtos = enrolmentRepository.findEnrolmentByClazzId(claszzId);
 		return dtos;
 	}
 
 	@Override
 	public List<EnrolmentDTO> findEnrolmentByClazzAndStudent(Long clazzId, Long studentId) {
-		List<Enrolment> enrols = enrolmentRepository.findAllByClazzIdAndStudentId(clazzId, studentId);
-		List<EnrolmentDTO> dtos = new ArrayList<>();
-		for(Enrolment enrol: enrols){
-			EnrolmentDTO dto = new EnrolmentDTO(enrol);
-			dtos.add(dto);
-		}
+		// List<Enrolment> enrols = enrolmentRepository.findAllByClazzIdAndStudentId(clazzId, studentId);
+		// List<EnrolmentDTO> dtos = new ArrayList<>();
+		// for(Enrolment enrol: enrols){
+		// 	EnrolmentDTO dto = new EnrolmentDTO(enrol);
+		// 	dtos.add(dto);
+		// }
+		List<EnrolmentDTO> dtos = enrolmentRepository.findEnrolmentByClazzIdAndStudentId(clazzId, studentId);
 		return dtos;
 	}
 
@@ -123,7 +125,12 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 	}
 
 	@Override
-	public void deleteEnrolment(Long id) {
-		enrolmentRepository.deleteById(id);
+	public void archiveEnrolment(Long id) {
+		// 1. get Enrolment
+		Enrolment enrol = enrolmentRepository.findById(id).get();
+		// 2. set old to true
+		enrol.setOld(true);
+		// 3. save
+		enrolmentRepository.save(enrol);		
 	}
 }

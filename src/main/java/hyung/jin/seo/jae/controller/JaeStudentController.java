@@ -179,9 +179,9 @@ public class JaeStudentController {
 				return ResponseEntity.ok("No such Clazz");
 			}				
 		}
-		// 7. delete enrolments not in formData
+		// 7. archive enrolments not in formData
 		for(Long enrolmentId : enrolmentIds) {
-			enrolmentService.deleteEnrolment(enrolmentId);
+			enrolmentService.archiveEnrolment(enrolmentId);
 		}
 		// 8. return success
 		return ResponseEntity.ok("Enrolment Success");	
