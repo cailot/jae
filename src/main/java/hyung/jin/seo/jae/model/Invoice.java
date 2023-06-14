@@ -1,6 +1,8 @@
 package hyung.jin.seo.jae.model;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,20 +36,32 @@ public class Invoice{
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
-	// @ManyToOne(cascade = CascadeType.ALL)
-	@OneToMany
-	@JoinColumn(name = "bookId")
+
+	// vice versa
+	// @OneToMany
+	// @JoinColumn(name = "clazzId")
+	// private Set<Clazz> clazzs = new LinkedHashSet<>();
+
+	// @OneToMany
+	// @JoinColumn(name = "bookId")
+	// private Set<Book> books = new LinkedHashSet<>();
+
+	// @OneToMany
+	// @JoinColumn(name = "etcId")
+	// private Set<CourseEtc> etcs = new LinkedHashSet<>();
+
+	// studentId
+	@OneToOne
+	@JoinColumn(name = "studentId")
 	private Student student;
 	
-	// @ManyToOne(cascade = CascadeType.ALL)
-	@ManyToOne
-	@JoinColumn(name = "clazzId")
-	private Clazz clazz;
-	
-	// @CreatedDate
 	// auto update to current date
 	@CreationTimestamp
-    private LocalDate enrolmentDate;
+    private LocalDate registerDate;
+
+
+
+
 
 	@Column
 	private boolean cancelled;

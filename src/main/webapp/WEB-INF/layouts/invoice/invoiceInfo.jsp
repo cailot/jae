@@ -1,41 +1,48 @@
 <script>
-
-var academicYear;
-var academicWeek;
-
-const ELEARNING = 'eLearning';
-const CLASS = 'class';
-const BOOK = 'book';
-const ETC = 'etc';
-
 $(document).ready(
 	function() {
-		// make an AJAX call on page load
-		// to get the academic year and week
-		$.ajax({
-		  url : '${pageContext.request.contextPath}/class/academy',
-	      method: "GET",
-	      success: function(response) {
-	        // save the response into the variable
-	        academicYear = response[0];
-	        academicWeek = response[1];
-			// console.log(response);
-	      },
-	      error: function(jqXHR, textStatus, errorThrown) {
-	        // handle error
-	      }
-	    });
-
-
 		// remove records from basket when click on delete icon
-		$('#basketTable').on('click', 'a', function(e) {
+		$('#invoiceListTable').on('click', 'a', function(e) {
 			e.preventDefault();
 			$(this).closest('tr').remove();
 		});
 	}
 );
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Retrieve invoiceListTable
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function retrieveInvoiceListTable(data) {
+	console.log(data);
+	var row = $('<tr>');
+	row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + data.id)); // 0
+	row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>')); // item
+	row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name)); // description
+	row.append($('<td class="smaller-table-font">').text(data.year)); // year
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek)); // start week
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek)); // end week
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1)); // weeks
+	
 
+	row.append($('<td class="smaller-table-font">').addClass('fee').text(data.price));// price
+	row.append($('<td class="smaller-table-font">').text('0'));// credit	
+	row.append($('<td class="smaller-table-font">').text('0'));// credit date
+	row.append($('<td class="smaller-table-font">').text('0'));// DC %
+	row.append($('<td class="smaller-table-font">').text('0'));// DC $
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)));
+
+	row.append($('<td class="smaller-table-font">').text('0'));// Date
+	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>')); // Action
+
+	$('#invoiceListTable > tbody').append(row);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Clean invoiceTable
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function clearInvoiceTable(){
+	$('#invoiceListTable > tbody').empty();
+}
 </script>
 
 <div class="modal-body" style="padding-top: 0.25rem; padding-left: 0rem; padding-right: 0rem;">
@@ -99,33 +106,7 @@ $(document).ready(
 									<th class="smaller-table-font" data-orderable="false">Action</th>
 								</tr>
 							</thead>
-							<tbody id="list-class-body">
-							<c:choose>
-								<c:when test="${InvoiceList != null}">
-									<c:forEach items="${InvoiceList}" var="invoice">
-										<tr>
-											<td class="small ellipsis"><span><c:out value="${invoice.name}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.description}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.grade}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.price}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.name}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.description}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.grade}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.price}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.name}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.description}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.grade}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.price}" /></span></td>
-											<td class="small ellipsis"><span><c:out value="${invoice.price}" /></span></td>
-											<td>
-												<i class="fa fa-edit text-primary" data-toggle="tooltip" title="Edit" onclick="retrieveCourseInfo('${invoice.id}')"></i>&nbsp;
-												<i class="fa fa-sticky-note text-primary" data-toggle="tooltip" title="Note" onclick="retrieveCourseInfo('${invoice.id}')"></i>
-											</td>
-										</tr>
-									</c:forEach>
-								
-								</c:when>
-							</c:choose>
+							<tbody>
 							</tbody>
 						</table>
 					</div>

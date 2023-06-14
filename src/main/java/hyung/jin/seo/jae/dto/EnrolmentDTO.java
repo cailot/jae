@@ -35,7 +35,7 @@ public class EnrolmentDTO implements Serializable{
 
 	private String name;
 
-	private double fee;
+	private double price;
 
 	private String grade;
 
@@ -65,7 +65,7 @@ public class EnrolmentDTO implements Serializable{
     	return enrolement;
     }
 
-	public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, long studentId, long clazzId, String name, double fee, int year, String grade, String day){
+	public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, long studentId, long clazzId, String name, double price, int year, String grade, String day){
 		this.id = String.valueOf(id);
 		this.clazzId = String.valueOf(clazzId);
 		this.enrolmentDate = enrolmentDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -75,7 +75,7 @@ public class EnrolmentDTO implements Serializable{
 		this.endWeek = endWeek;
 		this.studentId = String.valueOf(studentId);
 		this.name = name;
-		this.fee = fee;
+		this.price = price;
 		this.year = String.valueOf(year);
 		this.grade = grade;
 		this.day = day;

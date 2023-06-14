@@ -288,6 +288,8 @@
 		document.getElementById("studentInfo").reset();
 		// clear enrolment basket
 		clearEnrolmentBasket();
+		// clear invoice table
+		clearInvoiceTable();
 	}
 
 	// date format for datepicker. it changes date format from yyyy-mm-dd to dd/mm/yyyy

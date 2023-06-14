@@ -68,6 +68,7 @@ function listElearns(grade) {
 				// console.log(cleaned);
 				var row = $("<tr class='d-flex'>");
 				row.append($('<td>').addClass('hidden-column').text(value.id));
+				row.append($('<td class="col-1"><i class="fa fa-laptop" title="e-learning"></i></td>'));
 				row.append($('<td class="smaller-table-font col-1">').text(value.grade.toUpperCase()));
 				row.append($('<td class="smaller-table-font col-10">').text(value.name));
 				row.append($("<td onclick='addElearningToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add eLearning"><i class="fa fa-plus-circle"></i></a>'));
@@ -97,9 +98,10 @@ function listCourses(grade) {
 				// console.log(cleaned);
 				var row = $('<tr class="d-flex">');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
+				row.append($('<td class="col-1"><i class="fa fa-graduation-cap" title="class"></i></td>'));
 				row.append($('<td class="smaller-table-font col-7">').text(value.description));
 				row.append($('<td class="smaller-table-font col-3">').text(value.subjects));
-				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(value.price));
+				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(Number(value.price).toFixed(2)));
 				row.append($("<td class='col-1' onclick='addClassToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Class"><i class="fa fa-plus-circle"></i></a>'));
 				$('#courseFeeTable > tbody').append(row);
 			});
@@ -127,10 +129,11 @@ function listBooks(grade) {
 				const cleaned = cleanUpJson(value);
 				var row = $('<tr class="d-flex">');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
+				row.append($('<td class="col-1"><i class="fa fa-book" title="book"></i></td>'));
 				row.append($('<td class="smaller-table-font col-5">').text(value.name));
 				row.append($('<td class="smaller-table-font col-5">').text(value.subjects));
-				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(value.price));
-				row.append($("<td class='col-1' onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
+				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(Number(value.price).toFixed(2)));
+				row.append($("<td class='col-1' onclick='addBookToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
 				$('#courseBookTable > tbody').append(row);
 			});
 		},
@@ -156,9 +159,10 @@ function listEtcs(grade) {
 				const cleaned = cleanUpJson(value);
 				var row = $('<tr class="d-flex">');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
+					row.append($('<td class="col-1"><i class="fa fa-ellipsis-h" title="etc"></i></td>'));
 				row.append($('<td class="smaller-table-font col-9">').text(value.name));
-				row.append($('<td class="smaller-table-font col-2 text-right pr-5">').text(value.price));
-				row.append($("<td class='col-1' onclick='addEtcToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Etc"><i class="fa fa-plus-circle"></i></a>'));
+				row.append($('<td class="smaller-table-font col-2 text-right pr-5">').text(Number(value.price).toFixed(2)));
+				row.append($("<td class='col-1' onclick='addEtcToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Etc"><i class="fa fa-plus-circle"></i></a>'));
 				$('#courseEtcTable > tbody').append(row);
 			});
 		},
@@ -259,7 +263,7 @@ function associateOnline(){
 //		Add elearning to basket
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function addElearningToBasket(value){
-	console.log(value);
+	// console.log(value);
 	var row = $("<tr class='d-flex'>");
 	row.append($('<td>').addClass('hidden-column').text(ELEARNING + '|' + value.id));
 	row.append($('<td class="col-1"><i class="fa fa-laptop" title="e-learning"></i></td>'));
@@ -283,7 +287,7 @@ function addClassToBasket(value){
 			year: value.year
 		},
 		success: function(data) {
-			console.log(data);
+			// console.log(data);
 			if(value.year == academicYear){
 				var start_week = academicWeek;
 				var end_week = academicWeek + 10;
@@ -321,41 +325,65 @@ function addClassToBasket(value){
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Add book to basket
+//		Add book to invoice
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function addBookToBasket(value){
-	console.log(value);
-	var row = $("<tr>");
-	row.append($('<td>').addClass('hidden-column').text(BOOK + '|' + value.id));
-	row.append($('<td>').text('Book'));
-	row.append($('<td>').text('[' + value.grade.toUpperCase() + '] ' + value.name));
-	row.append($('<td>').text(academicYear));
-	row.append($('<td>').text(academicWeek));
-	row.append($('<td>').text(0));
-	row.append($('<td>').text(value.price));
-	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Book"><i class="fa fa-trash"></i></a>'));
-	$('#basketTable > tbody').append(row);
+function addBookToInvoice(value){
+	var row = $('<tr>');
+	row.append($('<td>').addClass('hidden-column').text(BOOK + '|' + value.id)); // 0
+	row.append($('<td class="text-center"><i class="fa fa-book" title="book"></i></td>')); // item
+	row.append($('<td class="smaller-table-font">').text('[' + value.grade.toUpperCase() +'] ' + value.name)); // description
+	row.append($('<td class="smaller-table-font">').text(0)); // year
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(0)); // start week
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(0)); // end week
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(1)); // weeks
+	row.append($('<td class="smaller-table-font">').addClass('fee').text(Number(value.price).toFixed(2)));// price
+	row.append($('<td class="smaller-table-font">').text(0));// credit	
+	row.append($('<td class="smaller-table-font">').text('0'));// credit date
+	row.append($('<td class="smaller-table-font">').text('0'));// DC %
+	row.append($('<td class="smaller-table-font">').text('0'));// DC $
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text(Number(value.price).toFixed(2)));// Total
+	row.append($('<td class="smaller-table-font">').text('0'));// Date
+	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>')); // Action
+	$('#invoiceListTable > tbody').append(row);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Add etc to basket
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function addEtcToBasket(value){
+function addEtcToInvoice(value){
 	console.log(value);
-	var row = $("<tr>");
-	row.append($('<td>').addClass('hidden-column').text(ETC  + '|' + value.id));
-	row.append($('<td>').text('Etc'));
-	row.append($('<td>').text(value.name));
-	row.append($('<td>').text(academicYear));
-	row.append($('<td>').text(academicWeek));
-	row.append($('<td>').text(0));
-	row.append($('<td>').text(value.price));
-	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Etc"><i class="fa fa-trash"></i></a>'));
-	$('#basketTable > tbody').append(row);
+	// var row = $("<tr>");
+	// row.append($('<td>').addClass('hidden-column').text(ETC  + '|' + value.id));
+	// row.append($('<td>').text('Etc'));
+	// row.append($('<td>').text(value.name));
+	// row.append($('<td>').text(academicYear));
+	// row.append($('<td>').text(academicWeek));
+	// row.append($('<td>').text(0));
+	// row.append($('<td>').text(value.price));
+	// row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Etc"><i class="fa fa-trash"></i></a>'));
+	// $('#basketTable > tbody').append(row);
+	var row = $('<tr>');
+	row.append($('<td>').addClass('hidden-column').text(ETC + '|' + value.id)); // 0
+	row.append($('<td class="text-center"><i class="fa fa-ellipsis-h" title="etc"></i></td>')); // item
+	row.append($('<td class="smaller-table-font">').text(value.name)); // description
+	row.append($('<td class="smaller-table-font">').text(0)); // year
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(0)); // start week
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(0)); // end week
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(1)); // weeks
+	row.append($('<td class="smaller-table-font">').addClass('fee').text(Number(value.price).toFixed(2)));// price
+	row.append($('<td class="smaller-table-font">').text(0));// credit	
+	row.append($('<td class="smaller-table-font">').text('0'));// credit date
+	row.append($('<td class="smaller-table-font">').text('0'));// DC %
+	row.append($('<td class="smaller-table-font">').text('0'));// DC $
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text(Number(value.price).toFixed(2)));// Total
+	row.append($('<td class="smaller-table-font">').text('0'));// Date
+	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>')); // Action
+	$('#invoiceListTable > tbody').append(row);
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Retrieve Enroloment
+//		Retrieve Enroloment & Update Invoice Table
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function retrieveEnrolment(studentId){
 	// get the enrolment
@@ -365,7 +393,7 @@ function retrieveEnrolment(studentId){
 		success: function(response) {
 			// Handle the response
 			$.each(response, function(index, value){
-				//console.log(value);	
+				// console.log(value);	
 				var row = $('<tr class="d-flex">');
 				row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
 				row.append($('<td class="col-1"><i class="fa fa-graduation-cap" title="class"></i></td>'));
@@ -377,6 +405,10 @@ function retrieveEnrolment(studentId){
 				row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').text(value.endWeek - value.startWeek + 1));
 				row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 				$('#basketTable > tbody').append(row);	
+
+				// update the invoice table
+				retrieveInvoiceListTable(value);
+
 
 			});
 		},
@@ -392,10 +424,10 @@ function retrieveEnrolment(studentId){
 		success: function(response) {
 			// Handle the response
 			$.each(response, function(index, value){
-				console.log(value);	
+				// console.log(value);	
 				var row = $("<tr class='d-flex'>");
 				row.append($('<td>').addClass('hidden-column').text(ELEARNING + '|' + value.id));
-				row.append($('<td class="col-1"><i class="fa fa-laptop" title="class"></i></td>'));
+				row.append($('<td class="col-1"><i class="fa fa-laptop" title="e-learning"></i></td>'));
 				row.append($('<td class="smaller-table-font col-10" colspan="6">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
 				// row.append($('<td class="smaller-table-font">').text(''));
 				// row.append($('<td class="smaller-table-font">').text(''));
@@ -418,6 +450,7 @@ function retrieveEnrolment(studentId){
 function clearEnrolmentBasket(){
 	$('#basketTable > tbody').empty();
 }
+
 </script>
 
 <div class="modal-body">
@@ -497,8 +530,9 @@ function clearEnrolmentBasket(){
 								<thead>
 									<tr class="d-flex">
 										<th class="hidden-column"></th>
+										<th class="smaller-table-font col-1">Item</th>
 										<th class="smaller-table-font col-1">Grade</th>
-										<th class="smaller-table-font text-center col-10">Subjects</th>
+										<th class="smaller-table-font text-center col-9">Subjects</th>
 										<th class="col-1"></th>
 									</tr>
 								</thead>
@@ -513,7 +547,8 @@ function clearEnrolmentBasket(){
                                   <thead>
                                       <tr class="d-flex">
 										  <th class="hidden-column"></th>
-                                          <th class="smaller-table-font col-7">Name</th>
+										  <th class="smaller-table-font col-1">Item</th>
+                                          <th class="smaller-table-font col-6">Name</th>
                                           <th class="smaller-table-font col-3">Subjects</th>
 										  <th class="smaller-table-font col-1">Price</th>
 										  <th class="smaller-table-font col-1"></th>
@@ -530,7 +565,8 @@ function clearEnrolmentBasket(){
                                   <thead>
                                       <tr class="d-flex">
 										  <th class="hidden-column"></th>
-										  <th class="smaller-table-font col-5">Description</th>
+										  <th class="smaller-table-font col-1">Item</th>
+										  <th class="smaller-table-font col-4">Description</th>
                                           <th class="smaller-table-font col-5">Subjects</th>
                                           <th class="smaller-table-font col-1">Price</th>
 										  <th class="smaller-table-font col-1"></th>
@@ -546,7 +582,8 @@ function clearEnrolmentBasket(){
 								<thead>
                                       <tr class="d-flex">
 										  <th class="hidden-column"></th>
-										  <th class="smaller-table-font col-9">Description</th>
+										  <th class="smaller-table-font col-1">Item</th>
+										  <th class="smaller-table-font col-8">Description</th>
                                           <th class="smaller-table-font col-2">Price</th>
 										  <th class="smaller-table-font col-1"></th>
                                       </tr>
