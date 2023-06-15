@@ -36,43 +36,21 @@ public class Invoice{
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
+	@OneToMany
+	@JoinColumn(name = "invoiceId")
+	private Set<Enrolment> enrolments = new LinkedHashSet<>();
 
-	// vice versa
-	// @OneToMany
-	// @JoinColumn(name = "clazzId")
-	// private Set<Clazz> clazzs = new LinkedHashSet<>();
-
-	// @OneToMany
-	// @JoinColumn(name = "bookId")
-	// private Set<Book> books = new LinkedHashSet<>();
-
-	// @OneToMany
-	// @JoinColumn(name = "etcId")
-	// private Set<CourseEtc> etcs = new LinkedHashSet<>();
-
-	// studentId
-	@OneToOne
-	@JoinColumn(name = "studentId")
-	private Student student;
-	
 	// auto update to current date
 	@CreationTimestamp
     private LocalDate registerDate;
 
-
-
-
+	@Column
+    private double credit;
 
 	@Column
-	private boolean cancelled;
-
-	@Column(length = 100)
-    private String cancellationReason;
+    private double discount;
 
 	@Column
-	private int startWeek;
-
-	@Column
-	private int endWeek;
+    private double amount;
 
 }
