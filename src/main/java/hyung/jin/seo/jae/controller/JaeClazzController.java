@@ -3,6 +3,7 @@ package hyung.jin.seo.jae.controller;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -177,36 +178,44 @@ public class JaeClazzController {
 	@PostMapping("/registerCourse")
 	@ResponseBody
 	public ResponseEntity<String> registerCourse(@RequestBody CourseDTO formData) {
-		System.out.println(formData);
-		// 1. create Course
-		Course course = formData.convertToCourse();
-		// 2. save Class
-		courseService.addCourse(course);
-		// 3. return success;
-		// return ResponseEntity.ok("success");	
-		return ResponseEntity.ok("\"Course register success\"");
+		// System.out.println(formData);
+		try{
+			// 1. create Course
+			Course course = formData.convertToCourse();
+			// 2. save Class
+			courseService.addCourse(course);
+			// 3. return success;
+			return ResponseEntity.ok("\"Course register success\"");
+		} catch (Exception e) {
+			String message = "Error registering Course: " + e.getMessage();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+		}
 	}
 
 	// register new class
 	@PostMapping("/registerClass")
 	@ResponseBody
-	public ClazzDTO registerClass(@RequestBody ClazzDTO formData) {
-		System.out.println(formData);
-		// 1. create bare Class
-		Clazz clazz = formData.convertToOnlyClass();
-		// 2. set active to true as default
-		clazz.setActive(true);
-		// 3. get Course
-		Course course = courseService.getCourse(Long.parseLong(formData.getCourseId()));
-		// 4. get Cycle
-		Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
-		// 5. assign Course & Cycle
-		clazz.setCourse(course);
-		clazz.setCycle(cycle);
-		// 6. save Class
-		ClazzDTO dto = clazzService.addClass(clazz);
-		// 7. return dto;
-		return dto;
+	public ResponseEntity<String> registerClass(@RequestBody ClazzDTO formData) {
+		try{
+			// 1. create bare Class
+			Clazz clazz = formData.convertToOnlyClass();
+			// 2. set active to true as default
+			clazz.setActive(true);
+			// 3. get Course
+			Course course = courseService.getCourse(Long.parseLong(formData.getCourseId()));
+			// 4. get Cycle
+			Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
+			// 5. assign Course & Cycle
+			clazz.setCourse(course);
+			clazz.setCycle(cycle);
+			// 6. add Class
+			clazzService.addClass(clazz);
+			// 3. return success;
+			return ResponseEntity.ok("\"Class register success\"");
+		} catch (Exception e) {
+			String message = "Error registering Class: " + e.getMessage();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+		}
 	}
 
 
@@ -214,31 +223,41 @@ public class JaeClazzController {
 	@PutMapping("/update/class")
 	@ResponseBody
 	public ResponseEntity<String> updateClazz(@RequestBody ClazzDTO formData) {
-		// 1. create bare Class
-		Clazz clazz = formData.convertToOnlyClass();
-		// 1. get Course
-		Course course = courseService.getCourse(Long.parseLong(formData.getCourseId()));		
-		// 2. get Cycle
-		Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
-		// 3. assign Course & Cycle
-		clazz.setCourse(course);
-		clazz.setCycle(cycle);
-		// 4. save Class
-		clazzService.updateClazz(clazz);
-		// 5. return flag
-		return ResponseEntity.ok("\"Class update success\"");
+		try{
+			// 1. create bare Class
+			Clazz clazz = formData.convertToOnlyClass();
+			// 1. get Course
+			Course course = courseService.getCourse(Long.parseLong(formData.getCourseId()));		
+			// 2. get Cycle
+			Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
+			// 3. assign Course & Cycle
+			clazz.setCourse(course);
+			clazz.setCycle(cycle);
+			// 4. save Class
+			clazzService.updateClazz(clazz);
+			// 5. return flag
+			return ResponseEntity.ok("\"Class update success\"");
+		}catch(Exception e){
+			String message = "Error updating class: " + e.getMessage();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+		}
 	}
 	
 	// update existing course
 	@PutMapping("/update/course")
 	@ResponseBody
 	public ResponseEntity<String> updateCourse(@RequestBody CourseDTO formData) {
-		// 1. create Course
-		Course course = formData.convertToCourse();
-		// 4. save Class
-		courseService.updateCourse(course);
-		// 5. return flag
-		return ResponseEntity.ok("\"Course update success\"");
+		try{
+			// 1. create Course
+			Course course = formData.convertToCourse();
+			// 4. save Class
+			courseService.updateCourse(course);
+			// 5. return flag
+			return ResponseEntity.ok("\"Course update success\"");
+		} catch (Exception e) {
+			String message = "Error updating course: " + e.getMessage();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+		}
 	}
 
 

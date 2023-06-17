@@ -30,7 +30,7 @@ public class ClazzDTO implements Serializable{
     
     private String fee;
 
-	// private String name;
+	private String name;
    
    	private String description; // Course.description
 
@@ -49,18 +49,13 @@ public class ClazzDTO implements Serializable{
 
 	private String year; // Cycle.year
 
-	// private List<String> subjects = new ArrayList<>();
-
-	// public void addSubject(String subject){
-	// 	subjects.add(subject);
-	// }
-
-	public ClazzDTO(long id, String state, String branch, double fee, String day, LocalDate startDate, boolean active, long courseId, long cycleId, String grade, String description, int year) {
+	public ClazzDTO(long id, String state, String branch, double fee, String day, String name, LocalDate startDate, boolean active, long courseId, long cycleId, String grade, String description, int year) {
 		this.id = Long.toString(id);
 		this.state = state;
 		this.branch = branch;
 		this.fee = Double.toString(fee);
 		this.day = day;
+		this.name = name;
 		this.startDate = startDate.toString();
 		this.active = active;
 		this.courseId = Long.toString(courseId);
@@ -72,10 +67,10 @@ public class ClazzDTO implements Serializable{
 
 	public ClazzDTO(Clazz clazz){
 		this.id = Long.toString(clazz.getId());
-		this.fee = Double.toString(clazz.getFee());
 		this.state = clazz.getState();
 		this.branch = clazz.getBranch();
 		this.day = clazz.getDay();
+		this.name = clazz.getName();
 		this.startDate = clazz.getStartDate().toString();
 		this.active = clazz.isActive();
 		this.courseId = Long.toString(clazz.getCourse().getId());
@@ -91,8 +86,8 @@ public class ClazzDTO implements Serializable{
 		if(StringUtils.isNotBlank(id)) clazz.setId(Long.parseLong(this.id));
 		if(StringUtils.isNotBlank(state)) clazz.setState(this.state);
     	if(StringUtils.isNotBlank(branch)) clazz.setBranch(this.branch);
+		if(StringUtils.isNotBlank(name)) clazz.setName(this.name);
 		if(StringUtils.isNotBlank(startDate)) clazz.setStartDate(LocalDate.parse(startDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
-		if(StringUtils.isNotBlank(fee)) clazz.setFee(Double.parseDouble(this.fee));
 		if(StringUtils.isNotBlank(day)) clazz.setDay(this.day);
 		clazz.setActive(this.active);
     	return clazz;

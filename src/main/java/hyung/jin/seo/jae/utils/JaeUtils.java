@@ -190,19 +190,19 @@ public class JaeUtils {
 	public static boolean isValidDateFormat(String date) {
 		dateFormat.setLenient(false);
 		try {
-			Date d = dateFormat.parse(date);
+			dateFormat.parse(date);
 			return true;
 		}catch(ParseException e) {
 			return false;
 		}
 	}
 
-	// return date info
+	// return date info for Student Memo
 	public static String getTodayForMemo(){
 		String pattern = "dd/MM/yyyy";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 		String date = simpleDateFormat.format(new Date());
-		return " - noted at [" + date + "]";
+		return " [" + date + "]";
 	}
 	
 

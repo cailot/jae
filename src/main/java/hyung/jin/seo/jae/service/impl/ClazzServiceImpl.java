@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.repository.ClazzRepository;
-import hyung.jin.seo.jae.repository.SubjectRepository;
 import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 
@@ -22,9 +21,6 @@ public class ClazzServiceImpl implements ClazzService {
 	
 	@Autowired
 	private ClazzRepository clazzRepository;
-
-	@Autowired
-	private SubjectRepository subjectRepository;
 
 	@Override
 	public long checkCount() {
@@ -104,17 +100,14 @@ public class ClazzServiceImpl implements ClazzService {
 		LocalDate newStartDate = clazz.getStartDate();
 		existing.setStartDate(newStartDate);
 		// name
-		// String newName = clazz.getName();
-		// existing.setName(newName);
+		String newName = clazz.getName();
+		existing.setName(newName);
 		// day
 		String newDay = clazz.getDay();
 		existing.setDay(newDay);
 		// active
 		boolean newActive = clazz.isActive();
 		existing.setActive(newActive);
-		// fee
-		Double newFee = clazz.getFee();
-		existing.setFee(newFee);
 		// update Course & Cycle
 		existing.setCourse(clazz.getCourse());
 		existing.setCycle(clazz.getCycle());		

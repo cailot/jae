@@ -20,7 +20,6 @@
 		<put-attribute name="body" value="/WEB-INF/layouts/student/studentList.jsp" />
 	</definition>
 
-
 	<!--Course -->
 	<definition name="courseListPage" extends="base.definition">
 		<put-attribute name="title" value="Course List" />
@@ -33,18 +32,16 @@
 		<put-attribute name="body" value="/WEB-INF/layouts/course/classList.jsp" />
 	</definition>
 
-
-
-
-
-
-
-
-
-
+	<!--Teacher -->
 	<definition name="teacherPage" extends="base.definition">
 		<put-attribute name="title" value="Teacher List" />
 		<put-attribute name="body" value="/WEB-INF/layouts/teacher.jsp" />
+	</definition>
+
+	<!-- Setting -->
+	<definition name="settingPage" extends="base.definition">
+		<put-attribute name="title" value="Setting" />
+		<put-attribute name="body" value="/WEB-INF/layouts/setting/adminSetting.jsp" />
 	</definition>
 	
 </tiles-definitions>

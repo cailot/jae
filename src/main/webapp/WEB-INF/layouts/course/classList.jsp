@@ -77,7 +77,7 @@ function addClass() {
 		state : $("#addState").val(),
 		branch : $("#addBranch").val(),
 		startDate : $("#addStartDate").val(),
-		//name : $("#addName").val(),
+		name : $("#addName").val(),
 		grade : $("#addGrade").val(),
 		courseId : $("#addCourse").val(),
 		day : $("#addDay").val()
@@ -131,8 +131,7 @@ function retrieveClassInfo(clazzId) {
 			$("#editStartDate").datepicker('setDate', date);
 			$("#editGrade").val(clazz.grade);
 			$("#editDay").val(clazz.day);
-			// $("#editName").val(clazz.name);
-			// $("#editFee").val(clazz.fee);
+			$("#editName").val(clazz.name);
 			$("#editActive").val(clazz.active);
 			// if clazz.active = true, tick the checkbox 'editActiveCheckbox'
 			if(clazz.active == true){
@@ -160,7 +159,7 @@ function updateClassInfo(){
 		state : $("#editState").val(),
 		branch : $("#editBranch").val(),
 		startDate : $("#editStartDate").val(),
-		// name : $("#editName").val(),
+		name : $("#editName").val(),
 		grade : $("#editGrade").val(),
 		courseId : $("#editCourse").val(),
 		day : $("#editDay").val(),
@@ -357,6 +356,7 @@ function editInitialiseCourseByGrade(grade, courseId) {
 										<th>State</th>
 										<th>Branch</th>
 										<th>Grade</th>
+										<th>Name</th>
 										<th>Description</th>
 										<th>Start Date</th>
 										<th>Day</th>
@@ -373,6 +373,7 @@ function editInitialiseCourseByGrade(grade, courseId) {
 												<td class="small ellipsis"><span><c:out value="${clazz.state}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.branch}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${fn:toUpperCase(clazz.grade)}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${clazz.name}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.description}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.startDate}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.day}" /></span></td>
@@ -504,10 +505,10 @@ function editInitialiseCourseByGrade(grade, courseId) {
 					</div>
 					<div class="form-group">
 						<div class="form-row">
-							<!-- <div class="col-md-6">
+							<div class="col-md-5">
 								<input type="text" class="form-control" id="addName" name="addName" placeholder="Name" title="Please enter Class name">
-							</div> -->
-							<div class="col-md-7">
+							</div>
+							<div class="col-md-4">
 								<label for="addDay" class="label-form">Day</label>
 								<select class="form-control" id="addDay" name="addDay">
 									<option value="All">All</option>
@@ -520,7 +521,7 @@ function editInitialiseCourseByGrade(grade, courseId) {
 									<option value="Sunday">Sunday</option>
 								</select>
 							</div>
-							<div class="col-md-5">
+							<div class="col-md-3">
 								<label for="addStartDate" class="label-form">Start Date</label> 
 								<input type="text" class="form-control datepicker" id="addStartDate" name="addStartDate" placeholder="dd/mm/yyyy">
 							</div>

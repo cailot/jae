@@ -3,6 +3,7 @@
 var academicYear;
 var academicWeek;
 
+const ENROLMENT = 'enrolment';
 const ELEARNING = 'eLearning';
 const CLASS = 'class';
 const BOOK = 'book';
@@ -25,7 +26,6 @@ $(document).ready(
 	        // handle error
 	      }
 	    });
-
 
 		$('#registerGrade').on('change',function() {
 			var grade = $(this).val();
@@ -287,10 +287,12 @@ function addClassToBasket(value){
 			year: value.year
 		},
 		success: function(data) {
-			// console.log(data);
 			if(value.year == academicYear){
-				var start_week = academicWeek;
-				var end_week = academicWeek + 10;
+				// var start_week = academicWeek;
+				// var end_week = academicWeek + 10;
+				var start_week = parseInt(academicWeek);
+				var end_week = parseInt(academicWeek) + 9;
+
 				if(end_week >= 49){
 					end_week = 49;
 				}
@@ -338,7 +340,7 @@ function addBookToInvoice(value){
 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(1)); // weeks
 	row.append($('<td class="smaller-table-font">').addClass('fee').text(Number(value.price).toFixed(2)));// price
 	row.append($('<td class="smaller-table-font">').text(0));// credit	
-	row.append($('<td class="smaller-table-font">').text('0'));// credit date
+	// row.append($('<td class="smaller-table-font">').text('0'));// credit date
 	row.append($('<td class="smaller-table-font">').text('0'));// DC %
 	row.append($('<td class="smaller-table-font">').text('0'));// DC $
 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text(Number(value.price).toFixed(2)));// Total
@@ -372,7 +374,7 @@ function addEtcToInvoice(value){
 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(1)); // weeks
 	row.append($('<td class="smaller-table-font">').addClass('fee').text(Number(value.price).toFixed(2)));// price
 	row.append($('<td class="smaller-table-font">').text(0));// credit	
-	row.append($('<td class="smaller-table-font">').text('0'));// credit date
+	// row.append($('<td class="smaller-table-font">').text('0'));// credit date
 	row.append($('<td class="smaller-table-font">').text('0'));// DC %
 	row.append($('<td class="smaller-table-font">').text('0'));// DC $
 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text(Number(value.price).toFixed(2)));// Total
@@ -393,7 +395,7 @@ function retrieveEnrolment(studentId){
 		success: function(response) {
 			// Handle the response
 			$.each(response, function(index, value){
-				// console.log(value);	
+				// console.log('--- ' + value);	
 				var row = $('<tr class="d-flex">');
 				row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
 				row.append($('<td class="col-1"><i class="fa fa-graduation-cap" title="class"></i></td>'));

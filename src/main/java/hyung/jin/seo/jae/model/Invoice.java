@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,9 +37,18 @@ public class Invoice{
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
-	@OneToMany
+	// @OneToOne
+	// @JoinColumn(name = "enrolmentId")
+	// private Enrolment enrolment;
+	
+	
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "invoiceId")
 	private Set<Enrolment> enrolments = new LinkedHashSet<>();
+
+	public void addEnrolment(Enrolment enrolment){
+		enrolments.add(enrolment);
+	}
 
 	// auto update to current date
 	@CreationTimestamp

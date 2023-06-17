@@ -30,8 +30,13 @@ public class JaeController {
 	}
 
 	@GetMapping("/teacher")
-	public String setting(HttpSession session) {
+	public String teacher(HttpSession session) {
 		return "teacherPage";
+	}
+
+	@GetMapping("/setting")
+	public String setting(HttpSession session) {
+		return "settingPage";
 	}
 	
 }

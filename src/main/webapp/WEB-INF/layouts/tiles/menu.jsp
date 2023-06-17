@@ -119,8 +119,8 @@
 			  Setting
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/classList">Class List</a>
-				<a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
+			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/setting">Admin Automation</a>
+				<a class="dropdown-item" style="color: #212529;" href="#">Admin Property</a>
 			</div>
 		</li>
 
