@@ -93,49 +93,67 @@ public class JaeInvoiceController {
 		double total = 0;
 		boolean alreadyInvoiced = false;
 		long invoiceId = 0;
-		for(EnrolmentDTO data : formData) {
-			// 2. get Enrolment
-			Enrolment enrolment = enrolmentService.getEnrolment(Long.parseLong(data.getId()));
-			// 3. check whether Enrolment is already invoiced
-			alreadyInvoiced = (enrolment.getInvoice()!=null) ? true : false;
-			if(alreadyInvoiced){
-				invoiceId = enrolment.getInvoice().getId();
-			}
-		}
 		// any null included, it should re-issue invoice
-		List<Long> invoieIds = invoiceService.findInvoiceIdByStudentId(studentId);
-		// 4. retrieve Invoice if Enrolment is invoiced
-		if(alreadyInvoiced) {
-			InvoiceDTO dto = invoiceService.getInvoice(invoiceId);
-			return dto;
-		}else{
-			// 5. create new invoice when no Invoice is found
-			Invoice invoice = new Invoice();
-			for(EnrolmentDTO data : formData) {
-				// 6. get Enrolment
-				Enrolment enrolment = enrolmentService.getEnrolment(Long.parseLong(data.getId())); /// do i need to invoice same thing twice times ??
+		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
+		alreadyInvoiced = invoiceIds.contains(null) ? false : true;
+		if(alreadyInvoiced){ // if already invoiced, get first invoice id
+			for(Long invoId : invoiceIds){
+				if(invoId!=null){
+					invoiceId = invoId;
+					break;
+				}
+			}
+			// 2. find Invoice if Enrolment is invoiced
+			Invoice invoice = invoiceService.findInvoiceById(invoiceId);
 
-				// 7. assign start-week, end-week, amount, credit, discount
+			// update Invoice in case of any change from client
+
+			for(EnrolmentDTO data : formData) {
+				// 4. get Enrolment
+				Enrolment enrolment = enrolmentService.getEnrolment(Long.parseLong(data.getId()));
+				// 5. assign start-week, end-week, amount, credit, discount
 				enrolment.setStartWeek(data.getStartWeek());
 				enrolment.setEndWeek(data.getEndWeek());
 				enrolment.setCredit(data.getCredit());
 				enrolment.setDiscount(data.getDiscount());
 				double amount = data.getAmount();
 				enrolment.setAmount(amount);
-				// 8. sum total amount
+				// 6. sum total amount
 				total += amount;
-			
-				// 9. add Enrolments to Invoice
+				// 7. add Enrolments to Invoice
 				invoice.addEnrolment(enrolment);
 			}
-			// 10. update total
+			// 8. update total
 			invoice.setTotalAmount(total);
-			
-			// 11. create Invoice
-			InvoiceDTO dto = invoiceService.addInvoice(invoice);
-			// 12. return flag;
+			// 9. update Invoice
+			InvoiceDTO dto = invoiceService.updateInvoice(invoice, invoiceId);
+			// return dto
 			return dto;
+		}else{
 
+			// 3. create new invoice when no Invoice is found
+			Invoice invoice = new Invoice();
+			for(EnrolmentDTO data : formData) {
+				// 4. get Enrolment
+				Enrolment enrolment = enrolmentService.getEnrolment(Long.parseLong(data.getId()));
+				// 5. assign start-week, end-week, amount, credit, discount
+				enrolment.setStartWeek(data.getStartWeek());
+				enrolment.setEndWeek(data.getEndWeek());
+				enrolment.setCredit(data.getCredit());
+				enrolment.setDiscount(data.getDiscount());
+				double amount = data.getAmount();
+				enrolment.setAmount(amount);
+				// 6. sum total amount
+				total += amount;
+				// 7. add Enrolments to Invoice
+				invoice.addEnrolment(enrolment);
+			}
+			// 8. update total
+			invoice.setTotalAmount(total);
+			// 9. create Invoice
+			InvoiceDTO dto = invoiceService.addInvoice(invoice);
+			// 10. return flag;
+			return dto;
 		}
 	}
 

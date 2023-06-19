@@ -17,14 +17,17 @@ public interface InvoiceService {
     InvoiceDTO getInvoice(Long id);
 
 	// get Invoice by student Id
-	InvoiceDTO findInvoiceByStudentId(Long studentId);
+	InvoiceDTO getInvoiceByStudentId(Long studentId);
 
 	// get Invoice Id by student Id
-	List<Long> findInvoiceIdByStudentId(Long studentId);
+	List<Long> getInvoiceIdByStudentId(Long studentId);
 
 	// add Invoice
 	InvoiceDTO addInvoice(Invoice invoice);
 
 	// update Invoice
 	InvoiceDTO updateInvoice(Invoice invoice, Long id);
+
+	// find Invoice by Id
+	Invoice findInvoiceById(Long id);
 }

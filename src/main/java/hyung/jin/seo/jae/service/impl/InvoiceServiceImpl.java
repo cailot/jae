@@ -60,22 +60,22 @@ public class InvoiceServiceImpl implements InvoiceService {
 		// search by getId
 		Invoice existing = invoiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Enrolment not found"));
 		// Update info
-		// StartWeek
-		// if(enrolment.getStartWeek()!=existing.getStartWeek()){
-		// 	existing.setStartWeek(enrolment.getStartWeek());
-		// }
-		// // EndWeek
-		// if(enrolment.getEndWeek()!=existing.getEndWeek()){
-		// 	existing.setEndWeek(enrolment.getEndWeek());
-		// }
-		// // cancelled
-		// if(enrolment.isCancelled()!=existing.isCancelled()){
-		// 	existing.setCancelled(enrolment.isCancelled());
-		// }
-		// // cancellationReason
-		// if(!StringUtils.equalsIgnoreCase(StringUtils.defaultString(enrolment.getCancellationReason()), StringUtils.defaultString(existing.getCancellationReason()))){
-		// 	existing.setCancellationReason(StringUtils.defaultString(enrolment.getCancellationReason()));
-		// }
+		// credit
+		if(invoice.getCredit()!=existing.getCredit()){
+			existing.setCredit(invoice.getCredit());
+		}
+		// discount
+		if(invoice.getDiscount()!=existing.getDiscount()){
+			existing.setDiscount(invoice.getDiscount());
+		}
+		// paidAmount
+		if(invoice.getPaidAmount()!=existing.getPaidAmount()){
+			existing.setPaidAmount(invoice.getPaidAmount());
+		}
+		// totalAmount
+		if(invoice.getTotalAmount()!=existing.getTotalAmount()){
+			existing.setTotalAmount(invoice.getTotalAmount());
+		}
 		// update the existing record
 		Invoice updated = invoiceRepository.save(existing);
 		InvoiceDTO dto = new InvoiceDTO(updated);
@@ -83,13 +83,18 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public InvoiceDTO findInvoiceByStudentId(Long studentId) {
+	public InvoiceDTO getInvoiceByStudentId(Long studentId) {
 		return invoiceRepository.findByStudentId(studentId);
 	}
 
 	@Override
-	public List<Long> findInvoiceIdByStudentId(Long studentId) {
+	public List<Long> getInvoiceIdByStudentId(Long studentId) {
 		return invoiceRepository.findInvoiceIdByStudentId(studentId);
+	}
+
+	@Override
+	public Invoice findInvoiceById(Long id) {
+		return invoiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Enrolment not found"));
 	}
 
 
