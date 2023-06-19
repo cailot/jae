@@ -59,6 +59,7 @@ function makePayment(){
 function createInvoice(){
 
 	var enrols = [];
+	var studentId = $('#formId').val();
 	
 	$('#invoiceListTable tbody tr').each(function() {
 		var hiddens = $(this).find('.hidden-column').text();
@@ -87,7 +88,7 @@ function createInvoice(){
 
 	// Send AJAX to server
 	$.ajax({
-		url : '${pageContext.request.contextPath}/invoice/create',
+		url : '${pageContext.request.contextPath}/invoice/create/' + studentId,
 		type : 'POST',
 		dataType : 'json',
 		data : JSON.stringify(enrols),

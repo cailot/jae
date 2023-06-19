@@ -19,6 +19,9 @@ public interface InvoiceService {
 	// get Invoice by student Id
 	InvoiceDTO findInvoiceByStudentId(Long studentId);
 
+	// get Invoice Id by student Id
+	List<Long> findInvoiceIdByStudentId(Long studentId);
+
 	// add Invoice
 	InvoiceDTO addInvoice(Invoice invoice);
 

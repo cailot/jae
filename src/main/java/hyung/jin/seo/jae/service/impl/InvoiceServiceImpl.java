@@ -87,5 +87,10 @@ public class InvoiceServiceImpl implements InvoiceService {
 		return invoiceRepository.findByStudentId(studentId);
 	}
 
+	@Override
+	public List<Long> findInvoiceIdByStudentId(Long studentId) {
+		return invoiceRepository.findInvoiceIdByStudentId(studentId);
+	}
+
 
 }

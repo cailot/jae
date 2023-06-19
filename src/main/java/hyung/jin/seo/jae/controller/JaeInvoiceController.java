@@ -82,9 +82,9 @@ public class JaeInvoiceController {
 	}
 		
 	// register new invoice
-	@PostMapping("/create")
+	@PostMapping("/create/{studentId}")
 	@ResponseBody
-	public InvoiceDTO createInvoice(@RequestBody EnrolmentDTO[] formData) {
+	public InvoiceDTO createInvoice(@PathVariable("studentId") Long studentId, @RequestBody EnrolmentDTO[] formData) {
 		// 0. if no data comes, simply return null
 		if((formData==null) || (formData.length==0)) {
 			return null;
@@ -102,6 +102,8 @@ public class JaeInvoiceController {
 				invoiceId = enrolment.getInvoice().getId();
 			}
 		}
+		// any null included, it should re-issue invoice
+		List<Long> invoieIds = invoiceService.findInvoiceIdByStudentId(studentId);
 		// 4. retrieve Invoice if Enrolment is invoiced
 		if(alreadyInvoiced) {
 			InvoiceDTO dto = invoiceService.getInvoice(invoiceId);
