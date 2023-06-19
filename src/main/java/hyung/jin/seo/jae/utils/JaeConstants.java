@@ -93,5 +93,22 @@ public interface JaeConstants {
 	String ACADEMIC_NEXT_YEAR_COURSE_SUFFIX = " (From New Academic Year)";
 
 	int ACADEMIC_NEXT_YEAR_COURSE_PRICE_INCREASE = 3;
+
+	///////////////////////////////////////////////////////////////////////
+	//
+	//	PAYMENT METHOD LIST
+	//
+	////////////////////////////////////////////////////////////////////////
+
+	String CASH = "cash";
+
+	String BANK = "bank";
+
+	String CARD = "card";
+
+	String CHEQUE = "cheque";
+
+
+
 	
 }

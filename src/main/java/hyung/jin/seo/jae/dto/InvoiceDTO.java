@@ -25,7 +25,9 @@ public class InvoiceDTO implements Serializable{
 
 	private double discount;
 
-	private double amount;
+	private double totalAmount;
+
+	private double paidAmount;
 
 	private String enrolmentId;
 
@@ -35,7 +37,8 @@ public class InvoiceDTO implements Serializable{
 		this.registerDate = invoice.getRegisterDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.credit = invoice.getCredit();
 		this.discount = invoice.getDiscount();
-		this.amount = invoice.getAmount();
+		this.totalAmount = invoice.getTotalAmount();
+		this.paidAmount = invoice.getPaidAmount();
 	}
 
 	public Invoice convertToOnlyInvoice() {
@@ -44,24 +47,18 @@ public class InvoiceDTO implements Serializable{
     	if(StringUtils.isNotBlank(registerDate)) invoice.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		invoice.setCredit(credit);
 		invoice.setDiscount(discount);
-		invoice.setAmount(amount);
+		invoice.setTotalAmount(totalAmount);
+		invoice.setPaidAmount(paidAmount);
 		return invoice;
     }
 
-	// public InvoiceDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, long studentId, long clazzId, String name, double price, int year, String grade, String day){
-	// 	this.id = String.valueOf(id);
-	// 	this.clazzId = String.valueOf(clazzId);
-	// 	this.enrolmentDate = enrolmentDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-	// 	this.cancelled = cancelled;
-	// 	this.cancellationReason = cancellationReason;
-	// 	this.startWeek = startWeek;
-	// 	this.endWeek = endWeek;
-	// 	this.studentId = String.valueOf(studentId);
-	// 	this.name = name;
-	// 	this.price = price;
-	// 	this.year = String.valueOf(year);
-	// 	this.grade = grade;
-	// 	this.day = day;
-	// }
+	public InvoiceDTO(long id, double credit, double discount, double paidAmount, double totalAmount, LocalDate registerDate){
+		this.id = String.valueOf(id);
+		this.credit = credit;
+		this.discount = discount;
+		this.paidAmount = paidAmount;
+		this.totalAmount = totalAmount;
+		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	}
 
 }

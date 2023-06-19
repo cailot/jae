@@ -58,7 +58,7 @@ function makePayment(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function createInvoice(){
 
-	var invoices = [];
+	var enrols = [];
 	
 	$('#invoiceListTable tbody tr').each(function() {
 		var hiddens = $(this).find('.hidden-column').text();
@@ -67,26 +67,30 @@ function createInvoice(){
 			enrolId = hiddenValues[1];	
 		}
 		// find value of next td whose class is 'start-year'
+		startWeek = $(this).find('.start-week').text();
+		endWeek = $(this).find('.end-week').text();
 		amount = $(this).find('.amount').text();
 		credit = $(this).find('.credit').text();
 		discount = $(this).find('.discount').text();
-		var invoice = {
-			"enrolmentId" : enrolId,
+		var enrol = {
+			"id" : enrolId,
+			"startWeek" : startWeek,
+			"endWeek" : endWeek,
 			"amount" : amount,
 			"credit" : credit,
 			"discount" : discount
 		};
-		invoices.push(invoice);	
+		enrols.push(enrol);	
 	});
 
-	console.log(invoices);
+	console.log(enrols);
 
 	// Send AJAX to server
 	$.ajax({
 		url : '${pageContext.request.contextPath}/invoice/create',
 		type : 'POST',
 		dataType : 'json',
-		data : JSON.stringify(invoices),
+		data : JSON.stringify(enrols),
 		contentType : 'application/json',
 		success : function(student) {
 			// Display the success alert

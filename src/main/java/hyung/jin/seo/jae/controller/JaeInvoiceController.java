@@ -84,36 +84,56 @@ public class JaeInvoiceController {
 	// register new invoice
 	@PostMapping("/create")
 	@ResponseBody
-	public ResponseEntity<String> createInvoice(@RequestBody InvoiceDTO[] formData) {
-		try {
-			if((formData==null) || (formData.length==0)) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("\"No Invoice data\"");
+	public InvoiceDTO createInvoice(@RequestBody EnrolmentDTO[] formData) {
+		// 0. if no data comes, simply return null
+		if((formData==null) || (formData.length==0)) {
+			return null;
+		}
+		// 1. check whether Enrolment is already invoiced
+		double total = 0;
+		boolean alreadyInvoiced = false;
+		long invoiceId = 0;
+		for(EnrolmentDTO data : formData) {
+			// 2. get Enrolment
+			Enrolment enrolment = enrolmentService.getEnrolment(Long.parseLong(data.getId()));
+			// 3. check whether Enrolment is already invoiced
+			alreadyInvoiced = (enrolment.getInvoice()!=null) ? true : false;
+			if(alreadyInvoiced){
+				invoiceId = enrolment.getInvoice().getId();
 			}
-			// 1. create bare Invoice
+		}
+		// 4. retrieve Invoice if Enrolment is invoiced
+		if(alreadyInvoiced) {
+			InvoiceDTO dto = invoiceService.getInvoice(invoiceId);
+			return dto;
+		}else{
+			// 5. create new invoice when no Invoice is found
 			Invoice invoice = new Invoice();
-			double amount = 0;
-			double credit = 0;
-			double discount = 0;	
-			for(InvoiceDTO data : formData) {
-				amount += data.getAmount();
-				credit += data.getCredit();
-				discount += data.getDiscount();
-				// 2. get Enrolment
-				Enrolment enrolment = enrolmentService.getEnrolment(Long.parseLong(data.getEnrolmentId()));
-				// 3. assign Enrolment
+			for(EnrolmentDTO data : formData) {
+				// 6. get Enrolment
+				Enrolment enrolment = enrolmentService.getEnrolment(Long.parseLong(data.getId())); /// do i need to invoice same thing twice times ??
+
+				// 7. assign start-week, end-week, amount, credit, discount
+				enrolment.setStartWeek(data.getStartWeek());
+				enrolment.setEndWeek(data.getEndWeek());
+				enrolment.setCredit(data.getCredit());
+				enrolment.setDiscount(data.getDiscount());
+				double amount = data.getAmount();
+				enrolment.setAmount(amount);
+				// 8. sum total amount
+				total += amount;
+			
+				// 9. add Enrolments to Invoice
 				invoice.addEnrolment(enrolment);
 			}
-			// 4. assign amount, credit, discount
-			invoice.setAmount(amount);
-			invoice.setCredit(credit);
-			invoice.setDiscount(discount);
-			// 5. add Invoice
-			invoiceService.addInvoice(invoice);
-			// 6. return flag;
-			return ResponseEntity.ok("\"Invoice create success\"");
-		} catch (Exception e) {
-			String message = "Error creating Invoice: " + e.getMessage();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+			// 10. update total
+			invoice.setTotalAmount(total);
+			
+			// 11. create Invoice
+			InvoiceDTO dto = invoiceService.addInvoice(invoice);
+			// 12. return flag;
+			return dto;
+
 		}
 	}
 

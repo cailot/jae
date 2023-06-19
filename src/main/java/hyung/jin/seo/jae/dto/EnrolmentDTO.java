@@ -29,6 +29,12 @@ public class EnrolmentDTO implements Serializable{
 
 	private int endWeek;
 
+	private double credit;
+
+	private double discount;
+
+	private double amount;
+
 	private String studentId;
 
 	private String clazzId;
@@ -50,6 +56,9 @@ public class EnrolmentDTO implements Serializable{
 		this.cancellationReason = enrol.getCancellationReason();
 		this.startWeek = enrol.getStartWeek();
 		this.endWeek = enrol.getEndWeek();
+		this.credit = enrol.getCredit();
+		this.discount = enrol.getDiscount();
+		this.amount = enrol.getAmount();
 		this.studentId = (enrol.getStudent()!=null) ? String.valueOf(enrol.getStudent().getId()) : "";
 		this.clazzId = (enrol.getClazz()!=null) ? String.valueOf(enrol.getClazz().getId()) : "";
 	}
@@ -61,11 +70,14 @@ public class EnrolmentDTO implements Serializable{
 		enrolement.setCancelled(cancelled);
 		enrolement.setStartWeek(startWeek);
 		enrolement.setEndWeek(endWeek);
+		enrolement.setCredit(credit);
+		enrolement.setDiscount(discount);
+		enrolement.setAmount(amount);
 		if(StringUtils.isNotBlank(cancellationReason)) enrolement.setCancellationReason(cancellationReason);		
     	return enrolement;
     }
 
-	public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, long studentId, long clazzId, String name, double price, int year, String grade, String day){
+	public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, double credit, double discount, double amount, long studentId, long clazzId, String name, double price, int year, String grade, String day){
 		this.id = String.valueOf(id);
 		this.clazzId = String.valueOf(clazzId);
 		this.enrolmentDate = enrolmentDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -73,6 +85,12 @@ public class EnrolmentDTO implements Serializable{
 		this.cancellationReason = cancellationReason;
 		this.startWeek = startWeek;
 		this.endWeek = endWeek;
+		
+		//this.credit = (credit == null) ? 0 : credit;
+		//this.credit = credit;
+		//this.discount = discount;
+		//this.amount = amount;
+		System.out.println(credit + "--" + discount + "--" + amount);
 		this.studentId = String.valueOf(studentId);
 		this.name = name;
 		this.price = price;

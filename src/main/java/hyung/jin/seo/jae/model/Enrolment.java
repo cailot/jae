@@ -42,6 +42,11 @@ public class Enrolment{ // bridge table between Student & Class
 	@ManyToOne
 	@JoinColumn(name = "clazzId")
 	private Clazz clazz;
+
+
+	@ManyToOne
+	@JoinColumn(name = "invoiceId")
+	private Invoice invoice;
 	
 	// @CreatedDate
 	// auto update to current date
@@ -62,5 +67,15 @@ public class Enrolment{ // bridge table between Student & Class
 
 	@Column
 	private boolean old;
+
+	@Column
+	private double credit;
+
+	@Column
+	private double discount;
+
+	@Column
+	private double amount;
+
 
 }

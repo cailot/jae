@@ -50,6 +50,14 @@ public class Invoice{
 		enrolments.add(enrolment);
 	}
 
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "invoiceId")
+	private Set<Payment> payments = new LinkedHashSet<>();
+
+	public void addPayment(Payment payment){
+		payments.add(payment);
+	}
+
 	// auto update to current date
 	@CreationTimestamp
     private LocalDate registerDate;
@@ -61,6 +69,9 @@ public class Invoice{
     private double discount;
 
 	@Column
-    private double amount;
+    private double totalAmount;
+
+	@Column
+	private double paidAmount;
 
 }

@@ -5,13 +5,11 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.dto.InvoiceDTO;
-import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Invoice;
 import hyung.jin.seo.jae.repository.InvoiceRepository;
 import hyung.jin.seo.jae.service.InvoiceService;
@@ -82,6 +80,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 		Invoice updated = invoiceRepository.save(existing);
 		InvoiceDTO dto = new InvoiceDTO(updated);
 		return dto;
+	}
+
+	@Override
+	public InvoiceDTO findInvoiceByStudentId(Long studentId) {
+		return invoiceRepository.findByStudentId(studentId);
 	}
 
 
