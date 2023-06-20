@@ -46,6 +46,7 @@ $(document).ready(
 		$('#basketTable').on('click', 'a', function(e) {
 			e.preventDefault();
 			$(this).closest('tr').remove();
+			showAlertMessage('deleteAlert', '<center><i class="fa fa-trash"></i> &nbsp;&nbsp Item is now removed from My Lecture</center>');
 		});
 	}
 );
@@ -131,7 +132,7 @@ function listBooks(grade) {
 		success : function(data) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				console.log(cleaned);
+				// console.log(cleaned);
 				var row = $('<tr class="d-flex">');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
 				row.append($('<td class="col-1"><i class="fa fa-book" title="book"></i></td>'));
@@ -324,6 +325,9 @@ function addClassToBasket(value){
 			row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').text(weeks));
 			row.append($('<td class="col-1">').html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 			$('#basketTable > tbody').append(row);
+
+			// Automatically dismiss the alert after 2 seconds
+			showAlertMessage('addAlert', '<center><i class="fa fa-graduation-cap"></i> &nbsp;&nbsp' + value.description +' added to My Lecture</center>');
 		},
 		error: function(xhr, status, error) {
 			console.log('Error: ' + error);
@@ -343,6 +347,8 @@ function addBookToBasket(value){
 	row.append($('<td class="smaller-table-font col-10" colspan="6">').text(value.name)); // description
 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>')); // Action
 	$('#basketTable > tbody').append(row);
+	// Automatically dismiss the alert after 2 seconds
+	showAlertMessage('addAlert', '<center><i class="fa fa-book"></i> &nbsp;&nbsp' + value.name +' added to My Lecture</center>');
 }
 
 
