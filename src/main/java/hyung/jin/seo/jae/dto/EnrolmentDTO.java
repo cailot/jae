@@ -39,6 +39,8 @@ public class EnrolmentDTO implements Serializable{
 
 	private String clazzId;
 
+	private String invoiceId;
+
 	private String name;
 
 	private double price;
@@ -61,6 +63,7 @@ public class EnrolmentDTO implements Serializable{
 		this.amount = enrol.getAmount();
 		this.studentId = (enrol.getStudent()!=null) ? String.valueOf(enrol.getStudent().getId()) : "";
 		this.clazzId = (enrol.getClazz()!=null) ? String.valueOf(enrol.getClazz().getId()) : "";
+		this.invoiceId = (enrol.getInvoice()!=null) ? String.valueOf(enrol.getInvoice().getId()) : "";
 	}
 
 	public Enrolment convertToEnrolment() {
@@ -79,19 +82,13 @@ public class EnrolmentDTO implements Serializable{
 
 	public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, double credit, double discount, double amount, long studentId, long clazzId, String name, double price, int year, String grade, String day){
 		this.id = String.valueOf(id);
-		this.clazzId = String.valueOf(clazzId);
 		this.enrolmentDate = enrolmentDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.cancelled = cancelled;
 		this.cancellationReason = cancellationReason;
 		this.startWeek = startWeek;
 		this.endWeek = endWeek;
-		
-		//this.credit = (credit == null) ? 0 : credit;
-		//this.credit = credit;
-		//this.discount = discount;
-		//this.amount = amount;
-		System.out.println(credit + "--" + discount + "--" + amount);
 		this.studentId = String.valueOf(studentId);
+		this.clazzId = String.valueOf(clazzId);
 		this.name = name;
 		this.price = price;
 		this.year = String.valueOf(year);

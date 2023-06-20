@@ -133,4 +133,16 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 		// 3. save
 		enrolmentRepository.save(enrol);		
 	}
+
+	@Override
+	public List<EnrolmentDTO> findEnrolmentByInvoice(Long invoiceId) {
+		List<EnrolmentDTO> dtos = enrolmentRepository.findEnrolmentByInvoiceId(invoiceId);
+		return dtos;
+	}
+
+	@Override
+	public List<Long> findEnrolmentIdByInvoiceId(Long invoiceId) {
+		List<Long> enrolmentIds = enrolmentRepository.findEnrolmentIdByInvoiceId(invoiceId);
+		return enrolmentIds;
+	}
 }

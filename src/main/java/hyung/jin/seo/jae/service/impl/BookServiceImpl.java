@@ -1,9 +1,11 @@
 package hyung.jin.seo.jae.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +51,8 @@ public class BookServiceImpl implements BookService {
 		// 1. get books
 		List<Book> books = bookRepository.findByGrade(grade);
 		// 2. get subjects
-		List<String> subjects = subjectRepository.findSubjectNamesForGrade(grade);
+		//List<String> subjects = subjectRepository.findSubjectNamesForGrade(grade);
+		List<String> subjects = subjectRepository.findSubjectAbbrForGrade(grade);
 		// 3. assign subjects to books
 		List<BookDTO> dtos = new ArrayList<BookDTO>();
 		for(Book book : books){
@@ -59,7 +62,16 @@ public class BookServiceImpl implements BookService {
 			}
 			dtos.add(dto);
 		}
-		// 4. return DTOs
+		// 4. add postage for all years
+		List<Book> postageBooks = bookRepository.findByGrade("all");
+		for(Book postageBook : postageBooks){
+			BookDTO dto = new BookDTO(postageBook);
+			// put empty string to avoid JSON error
+			List<String> temp = Collections.singletonList("");
+			dto.setSubjects(temp);
+			dtos.add(dto);
+		}
+		// 5. return DTOs
 		return dtos;	
 	}
 

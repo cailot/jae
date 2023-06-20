@@ -85,16 +85,35 @@ public class JaeInvoiceController {
 	@PostMapping("/create/{studentId}")
 	@ResponseBody
 	public InvoiceDTO createInvoice(@PathVariable("studentId") Long studentId, @RequestBody EnrolmentDTO[] formData) {
-		// 0. if no data comes, simply return null
+		
+		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
+		
+		///////////////////////////////////////////////////////
+		// if no data comes, it means no enrolment in invoice
+		///////////////////////////////////////////////////////
 		if((formData==null) || (formData.length==0)) {
+			// 1. get Enrolment by invoice Id
+			for(Long invoId : invoiceIds){
+				if(invoId!=null){
+					// 2. get enrolment Id by invoice Id
+					List<Long> enrolmentIds = enrolmentService.findEnrolmentIdByInvoiceId(invoId);
+					for(Long data : enrolmentIds) {
+						// 3. archive Enrolment
+						enrolmentService.archiveEnrolment(data);
+					}
+				}
+			}
 			return null;
 		}
+
+
 		// 1. check whether Enrolment is already invoiced
 		double total = 0;
+		double credit = 0;
+		double discount = 0;
 		boolean alreadyInvoiced = false;
 		long invoiceId = 0;
 		// any null included, it should re-issue invoice
-		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
 		alreadyInvoiced = invoiceIds.contains(null) ? false : true;
 		if(alreadyInvoiced){ // if already invoiced, get first invoice id
 			for(Long invoId : invoiceIds){
@@ -114,16 +133,22 @@ public class JaeInvoiceController {
 				// 5. assign start-week, end-week, amount, credit, discount
 				enrolment.setStartWeek(data.getStartWeek());
 				enrolment.setEndWeek(data.getEndWeek());
-				enrolment.setCredit(data.getCredit());
-				enrolment.setDiscount(data.getDiscount());
+				double cred = data.getCredit();
+				enrolment.setCredit(cred);
+				double disc = data.getDiscount();
+				enrolment.setDiscount(disc);
 				double amount = data.getAmount();
 				enrolment.setAmount(amount);
 				// 6. sum total amount
+				credit += cred;
+				discount += disc;
 				total += amount;
 				// 7. add Enrolments to Invoice
 				invoice.addEnrolment(enrolment);
 			}
 			// 8. update total
+			invoice.setCredit(credit);
+			invoice.setDiscount(discount);
 			invoice.setTotalAmount(total);
 			// 9. update Invoice
 			InvoiceDTO dto = invoiceService.updateInvoice(invoice, invoiceId);
@@ -139,16 +164,22 @@ public class JaeInvoiceController {
 				// 5. assign start-week, end-week, amount, credit, discount
 				enrolment.setStartWeek(data.getStartWeek());
 				enrolment.setEndWeek(data.getEndWeek());
-				enrolment.setCredit(data.getCredit());
-				enrolment.setDiscount(data.getDiscount());
+				double cred = data.getCredit();
+				enrolment.setCredit(cred);
+				double disc = data.getDiscount();
+				enrolment.setDiscount(disc);
 				double amount = data.getAmount();
 				enrolment.setAmount(amount);
 				// 6. sum total amount
+				credit += cred;
+				discount += disc;
 				total += amount;
 				// 7. add Enrolments to Invoice
 				invoice.addEnrolment(enrolment);
 			}
 			// 8. update total
+			invoice.setCredit(credit);
+			invoice.setDiscount(discount);
 			invoice.setTotalAmount(total);
 			// 9. create Invoice
 			InvoiceDTO dto = invoiceService.addInvoice(invoice);

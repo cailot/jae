@@ -12,6 +12,9 @@ public interface EnrolmentService {
 	// list enrolments by student Id
 	List<EnrolmentDTO> findEnrolmentByStudent(Long studentId);
 
+	// list enrolments by invoice Id
+	List<EnrolmentDTO> findEnrolmentByInvoice(Long invoiceId);
+
 	// list enrolments by clazz Id
 	List<EnrolmentDTO> findEnrolmentByClazz(Long claszzId);
 
@@ -35,6 +38,9 @@ public interface EnrolmentService {
 
 	// find enrolment Id by student Id
 	List<Long> findEnrolmentIdByStudentId(Long studentId);
+
+	// find enrolment Id by invoice Id
+	List<Long> findEnrolmentIdByInvoiceId(Long invoiceId);
 
 	// find enrolment by id
 	Enrolment getEnrolment(Long id);

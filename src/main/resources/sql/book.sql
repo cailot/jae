@@ -120,5 +120,5 @@ INSERT INTO jae.Book (name, grade, price, registerDate) VALUES ('[V1] JMSS','jms
 INSERT INTO jae.Book (name, grade, price, registerDate) VALUES ('[V2] JMSS','jmss', 33, CURDATE());
 INSERT INTO jae.Book (name, grade, price, registerDate) VALUES ('[V3] JMSS','jmss', 33, CURDATE());
 INSERT INTO jae.Book (name, grade, price, registerDate) VALUES ('VCE Book','vce', 1, CURDATE());
-
+INSERT INTO jae.Book (name, grade, price, registerDate) VALUES ('Postage','all', 9.99, CURDATE());
 COMMIT;
