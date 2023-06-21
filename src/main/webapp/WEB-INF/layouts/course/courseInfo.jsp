@@ -139,8 +139,8 @@ function listBooks(grade) {
 				row.append($('<td class="smaller-table-font col-5">').text(value.name));
 				row.append($('<td class="smaller-table-font col-4">').text(addSpace(JSON.stringify(value.subjects))));
 				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(Number(value.price).toFixed(2)));
-				// row.append($("<td class='col-1' onclick='addBookToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
-				row.append($("<td class='col-1' onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
+				row.append($("<td class='col-1' onclick='addBookToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
+				//row.append($("<td class='col-1' onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
 				$('#courseBookTable > tbody').append(row);
 			});
 		},
@@ -286,56 +286,124 @@ function addElearningToBasket(value){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Add class to basket
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function addClassToBasket(value){
-	$.ajax({
-		url: '${pageContext.request.contextPath}/class/classesByCourse',
-		type: 'GET',
-		data: {
-			courseId: value.id,
-			year: value.year
-		},
-		success: function(data) {
-			if(value.year == academicYear){
-				// var start_week = academicWeek;
-				// var end_week = academicWeek + 10;
-				var start_week = parseInt(academicWeek);
-				var end_week = parseInt(academicWeek) + 9;
+// function addClassToBasket(value){
+// 	$.ajax({
+// 		url: '${pageContext.request.contextPath}/class/classesByCourse',
+// 		type: 'GET',
+// 		data: {
+// 			courseId: value.id,
+// 			year: value.year
+// 		},
+// 		success: function(data) {
+// 			if(value.year == academicYear){
+// 				// var start_week = academicWeek;
+// 				// var end_week = academicWeek + 10;
+// 				var start_week = parseInt(academicWeek);
+// 				var end_week = parseInt(academicWeek) + 9;
 
-				if(end_week >= 49){
-					end_week = 49;
-				}
-				var weeks = (end_week - start_week)+1;
-			}else{
-				var start_week = 1;
-				var end_week = 10;
-				var weeks = (end_week - start_week)+1;
+// 				if(end_week >= 49){
+// 					end_week = 49;
+// 				}
+// 				var weeks = (end_week - start_week)+1;
+// 			}else{
+// 				var start_week = 1;
+// 				var end_week = 10;
+// 				var weeks = (end_week - start_week)+1;
+// 			}
+// 			var row = $('<tr class="d-flex">');
+// 			row.append($('<td class="col-1"><i class="fa fa-graduation-cap" title="class"></i></td>'));
+// 			row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() + '] '+ value.description));
+// 			// Create a dropdown list for value.day and id is option value
+// 			var dropdown = $('<select class="clazzChoice">');
+// 			$.each(data, function(index, clazz) {
+// 				dropdown.append($('<option>').text(clazz.day).val(clazz.id));
+// 			});
+// 			row.append($('<td class="smaller-table-font col-2">').append(dropdown));
+// 			row.append($('<td class="smaller-table-font col-1">').text(value.year));
+// 			row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('start-week').text(start_week));
+// 			row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('end-week').text(end_week));
+// 			row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('weeks').text(weeks));
+// 			row.append($('<td class="col-1">').html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+// 			$('#basketTable > tbody').append(row);
+
+// 			// Automatically dismiss the alert after 2 seconds
+// 			showAlertMessage('addAlert', '<center><i class="fa fa-graduation-cap"></i> &nbsp;&nbsp' + value.description +' added to My Lecture</center>');
+
+// 		},
+// 		error: function(xhr, status, error) {
+// 			console.log('Error: ' + error);
+// 		}
+// 	});
+// }
+function addClassToBasket(value) {
+  $.ajax({
+    url: '${pageContext.request.contextPath}/class/classesByCourse',
+    type: 'GET',
+    data: {
+      courseId: value.id,
+      year: value.year
+    },
+    success: function(data) {
+		var start_week, end_week, weeks;
+		
+		if (value.year == academicYear) {
+			start_week = parseInt(academicWeek);
+			end_week = parseInt(academicWeek) + 9;
+
+			if (end_week >= 49) {
+			end_week = 49;
 			}
-			var row = $('<tr class="d-flex">');
-			row.append($('<td class="col-1"><i class="fa fa-graduation-cap" title="class"></i></td>'));
-			row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() + '] '+ value.description));
-			// Create a dropdown list for value.day and id is option value
-			var dropdown = $('<select class="clazzChoice">');
-			$.each(data, function(index, clazz) {
-				dropdown.append($('<option>').text(clazz.day).val(clazz.id));
-			});
-			row.append($('<td class="smaller-table-font col-2">').append(dropdown));
-			row.append($('<td class="smaller-table-font col-1">').text(value.year));
-			row.append($('<td class="start-week smaller-table-font col-1 text-center" contenteditable="true">').text(start_week));
-			row.append($('<td class="end-week smaller-table-font col-1 text-center" contenteditable="true">').text(end_week));
-			row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').text(weeks));
-			row.append($('<td class="col-1">').html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
-			$('#basketTable > tbody').append(row);
-
-			// Automatically dismiss the alert after 2 seconds
-			showAlertMessage('addAlert', '<center><i class="fa fa-graduation-cap"></i> &nbsp;&nbsp' + value.description +' added to My Lecture</center>');
-		},
-		error: function(xhr, status, error) {
-			console.log('Error: ' + error);
+			weeks = (end_week - start_week) + 1;
+		} else {
+			start_week = 1;
+			end_week = 10;
+			weeks = (end_week - start_week) + 1;
 		}
-	});
-
-
+      
+		var row = $('<tr class="d-flex">');
+		row.append($('<td class="col-1"><i class="fa fa-graduation-cap" title="class"></i></td>'));
+		row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() + '] '+ value.description));
+		// Create a dropdown list for value.day and id is option value
+		var dropdown = $('<select class="clazzChoice">');
+		$.each(data, function(index, clazz) {
+			dropdown.append($('<option>').text(clazz.day).val(clazz.id));
+		});
+		row.append($('<td class="smaller-table-font col-2">').append(dropdown));
+		row.append($('<td class="smaller-table-font col-1">').text(value.year));
+		row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('start-week').text(start_week));
+		row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('end-week').text(end_week));
+		row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('weeks').text(weeks));
+		row.append($('<td class="col-1">').html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+		
+		var startWeekCell = row.find('.start-week');
+		var endWeekCell = row.find('.end-week');
+		var weeksCell = row.find('.weeks');
+		
+		function updateWeeks() {
+		start_week = parseInt(startWeekCell.text());
+		end_week = parseInt(endWeekCell.text());
+		weeks = (end_week - start_week) + 1;
+		weeksCell.text(weeks);
+		}
+		
+		function updateEndWeek() {
+		start_week = parseInt(startWeekCell.text());
+		weeks = parseInt(weeksCell.text());
+		end_week = start_week + weeks - 1;
+		endWeekCell.text(end_week);
+		}
+		
+		startWeekCell.on('input', function() {updateWeeks();});
+		endWeekCell.on('input', function() {updateWeeks();});
+		weeksCell.on('input', function() {updateEndWeek();});
+		
+		$('#basketTable > tbody').append(row);
+		
+		showAlertMessage('addAlert', '<center><i class="fa fa-graduation-cap"></i> &nbsp;&nbsp' + value.description + ' added to My Lecture</center>');
+    }
+  });
 }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Add book to basket
@@ -359,7 +427,7 @@ function addBookToInvoice(value){
 	var row = $('<tr>');
 	row.append($('<td>').addClass('hidden-column').text(BOOK + '|' + value.id)); // 0
 	row.append($('<td class="text-center"><i class="fa fa-book" title="book"></i></td>')); // item
-	row.append($('<td class="smaller-table-font">').text('[' + value.grade.toUpperCase() +'] ' + value.name)); // description
+	row.append($('<td class="smaller-table-font">').text(value.name)); // description
 	row.append($('<td class="smaller-table-font">').text(0)); // year
 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(0)); // start week
 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(0)); // end week
