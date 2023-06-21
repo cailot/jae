@@ -263,8 +263,6 @@
 		}
 		$("#formState").val(value['state']);
 		$("#formBranch").val(value['branch']);
-		// display same selected grade to Course Register section
-		//$("#registerGrade").val(value['grade']);
 		$("#formEndDate").val(value['endDate']);
 		
 		// Set date value
@@ -278,7 +276,11 @@
 		// clear search keyword
 		$("#formKeyword").val('');
 
-		// trigger 'retrieveEnrolment' in courseInfo.jsp
+		
+		// associate courseInfo.jsp 
+		// 1. display same selected grade to Course Register section in courseInfo.jsp
+		readyForCourseRegistration(value['grade']);
+		// 2. trigger 'retrieveEnrolment' in courseInfo.jsp
 		retrieveEnrolment(value['id']);
 	
 	}
@@ -290,6 +292,8 @@
 		clearEnrolmentBasket();
 		// clear invoice table
 		clearInvoiceTable();
+		// clear course register section
+		clearCourseRegisteration();
 	}
 
 	// date format for datepicker. it changes date format from yyyy-mm-dd to dd/mm/yyyy
@@ -302,6 +306,29 @@
 			return dateString; // Return the original string if it doesn't contain '-'
 		}
 	}
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 	Initialise Course Register section
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function readyForCourseRegistration(grade){
+		$("#registerGrade").val(grade);
+		listElearns(grade);
+		listCourses(grade);
+		listBooks(grade);
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// 	Clear Course Register section
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function clearCourseRegisteration(){
+		// reset course register section
+		document.getElementById("courseRegister").reset();	
+		$('#courseTable > tbody').empty();
+		$('#elearnTable > tbody').empty();
+		$('#bookTable > tbody').empty();			
+	}
+
 
 
 </script>

@@ -85,8 +85,8 @@ function listElearns(grade) {
 //		Search Course based on Grade	
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function listCourses(grade) {
-	// clear 'courseFeeTable' table body
-	$('#courseFeeTable tbody').empty();
+	// clear 'courseTable' table body
+	$('#courseTable tbody').empty();
 	$.ajax({
 		url : '${pageContext.request.contextPath}/class/coursesByGrade',
 		type : 'GET',
@@ -104,7 +104,7 @@ function listCourses(grade) {
 				row.append($('<td class="smaller-table-font col-4">').text(addSpace(JSON.stringify(value.subjects))));
 				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(Number(value.price).toFixed(2)));
 				row.append($("<td class='col-1' onclick='addClassToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Class"><i class="fa fa-plus-circle"></i></a>'));
-				$('#courseFeeTable > tbody').append(row);
+				$('#courseTable > tbody').append(row);
 			});
 		},
 		error : function(xhr, status, error) {
@@ -121,8 +121,8 @@ function listCourses(grade) {
 //		Search Book based on Grade	
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function listBooks(grade) {
-	// clear 'courseBookTable' table body
-	$('#courseBookTable tbody').empty();
+	// clear 'bookTable' table body
+	$('#bookTable tbody').empty();
 	$.ajax({
 		url : '${pageContext.request.contextPath}/book/listGrade',
 		type : 'GET',
@@ -141,7 +141,7 @@ function listBooks(grade) {
 				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(Number(value.price).toFixed(2)));
 				row.append($("<td class='col-1' onclick='addBookToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
 				//row.append($("<td class='col-1' onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
-				$('#courseBookTable > tbody').append(row);
+				$('#bookTable > tbody').append(row);
 			});
 		},
 		error : function(xhr, status, error) {
@@ -578,7 +578,7 @@ function showAlertMessage(elementId, message) {
 </script>
 
 <div class="modal-body">
-	<form id="">
+	<form id="courseRegister">
 		<div class="form-group">
 			<div class="form-row">
 				<div class="col-md-2">
@@ -667,7 +667,7 @@ function showAlertMessage(elementId, message) {
 						</div>
 						<!-- Course -->
 						<div class="tab-pane fade" id="nav-fee" role="tabpanel" aria-labelledby="nav-fee-tab">
-                              <table class="table" id="courseFeeTable" name="courseFeeTable">
+                              <table class="table" id="courseTable" name="courseTable">
                                   <thead>
                                       <tr class="d-flex">
 										  <th class="hidden-column"></th>
@@ -685,7 +685,7 @@ function showAlertMessage(elementId, message) {
                           </div>
 						  <!-- Book -->
                           <div class="tab-pane fade" id="nav-book" role="tabpanel" aria-labelledby="nav-book-tab">
-                              <table class="table" cellspacing="0" id="courseBookTable" name="courseBookTable">
+                              <table class="table" cellspacing="0" id="bookTable" name="bookTable">
                                   <thead>
                                       <tr class="d-flex">
 										  <th class="hidden-column"></th>

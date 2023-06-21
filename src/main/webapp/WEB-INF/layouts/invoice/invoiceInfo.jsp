@@ -139,8 +139,16 @@ function createInvoice(){
 		dataType : 'json',
 		data : JSON.stringify(enrols),
 		contentType : 'application/json',
-		success : function(student) {
+		success : function(invoice) {
 			// Display the success alert
+
+
+			$("#invoiceId").val(invoice.id);
+			$("#invoiceCredit").val(invoice.credit);
+			$("#invoiceDiscount").val(invoice.discount);
+			$("#invoicePaid").val(invoice.paidAmount);
+			$("#invoiceTotal").val(invoice.totalAmount);
+			$("#invoiceRegisterDate").val(invoice.registerDate);
             $('#invoiceModal').modal('toggle');		
 		},
 		error : function(xhr, status, error) {
@@ -313,11 +321,25 @@ function createInvoice(){
 				<header class="text-primary font-weight-bold">Tax Invoice</header>
 				<form id="showInvoice">
 					<div class="form-row mt-4">
-						<div class="col-md-6">
-							<label>Receivable Amount : </label> 
+						<div class="col-md-4">
+							<input type="text" class="form-control" id="invoiceId" name="invoiceId">
 						</div>
-						<div class="col-md-6">
-							<input type="text" class="form-control" id="invoiceInfo" name="invoiceInfo">
+						<div class="col-md-4">
+							<input type="text" class="form-control" id="invoiceCredit" name="invoiceCredit">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" id="invoiceDiscount" name="invoiceDiscount">
+						</div>						
+					</div>
+					<div class="form-row mt-4">
+						<div class="col-md-4">
+							<input type="text" class="form-control" id="invoicePaid" name="invoicePaid">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" id="invoiceTotal" name="invoiceTotal">
+						</div>
+						<div class="col-md-4">
+							<input type="text" class="form-control" id="invoiceRegisterDate" name="invoiceRegisterDate">
 						</div>						
 					</div>
 
