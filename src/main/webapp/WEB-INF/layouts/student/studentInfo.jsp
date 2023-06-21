@@ -52,6 +52,10 @@
 				// Set date value
 				var date = new Date(student.registerDate); // Replace with your date value
 				$("#formRegisterDate").datepicker('setDate', date);
+				// clear existing course registration
+				clearCourseRegisteration();
+				// ready for course registration
+				readyForCourseRegistration(student.grade);
 			},
 			error : function(xhr, status, error) {
 				console.log('Error : ' + error);
@@ -324,8 +328,9 @@
 	function clearCourseRegisteration(){
 		// reset course register section
 		document.getElementById("courseRegister").reset();	
+		$('#basketTable > tbody').empty();
+		$('#elearnTable > tbody').empty();		
 		$('#courseTable > tbody').empty();
-		$('#elearnTable > tbody').empty();
 		$('#bookTable > tbody').empty();			
 	}
 

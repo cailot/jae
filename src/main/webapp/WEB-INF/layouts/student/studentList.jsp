@@ -405,10 +405,8 @@ function retrieveStudentInfo(std) {
 			<div class="modal-body">
 				<section class="fieldset rounded border-primary">
 					<header class="text-primary font-weight-bold">Student Registration</header>
-			
-				<form id="studentRegister">
-					<div class="form-group">
-						<div class="form-row">
+					<form id="studentRegister">
+						<div class="form-row mt-2">
 							<div class="col-md-4">
 								<label for="addState" class="label-form">State</label> <select class="form-control" id="addState" name="addState">
 									<option value="vic">Victoria</option>
@@ -453,9 +451,7 @@ function retrieveStudentInfo(std) {
 								document.getElementById('addRegisterDate').value = formattedDate;
 							</script>
 						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
+						<div class="form-row mt-2">
 							<div class="col-md-5">
 								<label for="addFirstName" class="label-form">First Name:</label> <input type="text" class="form-control" id="addFirstName" name="addFirstName">
 							</div>
@@ -486,20 +482,18 @@ function retrieveStudentInfo(std) {
 								</select>
 							</div>
 						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-7">
+						<div class="form-row mt-2">
+							<div class="col-md-12">
 								<label for="addAddress" class="label-form">Address</label> <input type="text" class="form-control" id="addAddress" name="addAddress">
 							</div>
 						</div>
-					</div>
-					
-					<div class="form-group">
-						<div class="form-row admin-form-row">
-							<div class="col-md-6">
-								<section class="fieldset rounded border-secondary" style="padding: 10px;">
-									<header class="text-secondary" style="font-size: 1.1em;">Main Contact</header>
+
+
+
+						<div class="form-row">
+							<div class="col-md-12 mt-4">
+								<section class="fieldset rounded" style="padding: 10px;">
+									<header class="label-form" style="font-size: 0.9rem!important;">Main Contact</header>
 								<div class="row">
 									<div class="col-md-8">
 										<input type="text" class="form-control" id="addContact1" name="addContact1" placeholder="Contact No">
@@ -508,21 +502,23 @@ function retrieveStudentInfo(std) {
 										<select class="form-control" id="addRelation1" name="addRelation1">
 											<option value="mother">Mother</option>
 											<option value="father">Father</option>
+											<option value="sibling">Sibling</option>
 											<option value="other">Other</option>
 										</select>
 									</div>	
 								</div>
-								<div class="row">
+								<div class="row mt-2">
 									<div class="col-md-12">
 										<input type="text" class="form-control" id="addEmail1" name="addEmail1" placeholder="Email">
 									</div>
 								</div>
 								</section>
 							</div>
-							<div class="col-md-6">
-								<section class="fieldset rounded border-secondary" style="padding: 10px;">
-									<header class="text-secondary" style="font-size: 1.1em;">Sub Contact</header>
-								
+						</div>
+						<div class="form-row">
+							<div class="col-md-12 mt-4">
+								<section class="fieldset rounded" style="padding: 10px;">
+									<header class="label-form" style="font-size: 0.9rem!important;">Sub Contact</header>
 								<div class="row">
 									<div class="col-md-8">
 										<input type="text" class="form-control" id="addContact2" name="addContact2" placeholder="Contact No">
@@ -531,11 +527,12 @@ function retrieveStudentInfo(std) {
 										<select class="form-control" id="addRelation2" name="addRelation2">
 											<option value="mother">Mother</option>
 											<option value="father">Father</option>
+											<option value="sibling">Sibling</option>
 											<option value="other">Other</option>
 										</select>
 									</div>
 								</div>
-								<div class="row">
+								<div class="row mt-2">
 									<div class="col-md-12">
 										<input type="text" class="form-control" id="addEmail2" name="addEmail2" placeholder="Email">
 									</div>
@@ -543,21 +540,17 @@ function retrieveStudentInfo(std) {
 								</section>
 							</div>
 						</div>
-					</div>
-					
-					<div class="form-group">
-						<div class="form-row">
+						<div class="form-row mt-3">
 							<div class="col-md-12">
 								<label for="addMemo" class="label-form">Memo</label>
-								<textarea class="form-control" style="height: 150px;" id="addMemo" name="addMemo"></textarea>
+								<textarea class="form-control" style="height: 200px;" id="addMemo" name="addMemo"></textarea>
 							</div>
 						</div>
-					</div>
-				</form>
-				<div class="d-flex justify-content-end">
-    				<button type="submit" class="btn btn-primary" onclick="addStudent()">Register</button>&nbsp;&nbsp;
-    				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				</div>	
+					</form>
+					<div class="d-flex justify-content-end">
+						<button type="submit" class="btn btn-primary" onclick="addStudent()">Register</button>&nbsp;&nbsp;
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>	
 				</section>
 			</div>
 		</div>
@@ -571,9 +564,8 @@ function retrieveStudentInfo(std) {
 			<div class="modal-body">
 				<section class="fieldset rounded border-primary">
 					<header class="text-primary font-weight-bold">Student Edit</header>
-				<form id="studentEdit">
-					<div class="form-group">
-						<div class="form-row">
+						<form id="studentEdit">
+						<div class="form-row mt-2">
 							<div class="col-md-4">
 								<label for="editState" class="label-form">State</label> <select class="form-control" id="editState" name="editState">
 									<option value="vic">Victoria</option>
@@ -609,10 +601,8 @@ function retrieveStudentInfo(std) {
 								<label for="editRegister" class="label-form">Registration</label> 
 								<input type="text" class="form-control datepicker" id="editRegister" name="editRegister" placeholder="dd/mm/yyyy">
 							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
+						</div>	
+						<div class="form-row mt-2">
 							<div class="col-md-4">
 								<label for="editId" class="label-form">ID:</label> <input type="text" class="form-control" id="editId" name="editId" readonly>
 							</div>
@@ -623,17 +613,9 @@ function retrieveStudentInfo(std) {
 								<label for="editLastName" class="label-form">Last Name:</label> <input type="text" class="form-control" id="editLastName" name="editLastName">
 							</div>
 						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-7">
-								<label for="editAddress" class="label-form">Address</label> <input type="text" class="form-control" id="editAddress" name="editAddress">
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="form-row">
-							<div class="col-md-2">
+					
+						<div class="form-row mt-2">
+							<div class="col-md-3">
 								<label for="editGrade" class="label-form">Grade</label> <select class="form-control" id="editGrade" name="editGrade">
 									<option value="p2">P2</option>
 									<option value="p3">P3</option>
@@ -656,15 +638,15 @@ function retrieveStudentInfo(std) {
 									<option value="vce">VCE</option>
 								</select>
 							</div>
+							<div class="col-md-9">
+								<label for="editAddress" class="label-form">Address</label> <input type="text" class="form-control" id="editAddress" name="editAddress">
+							</div>
 						</div>
-					</div>
-
-
-					<div class="form-group">
-						<div class="form-row admin-form-row">
-							<div class="col-md-6">
-								<section class="fieldset rounded border-secondary" style="padding: 10px;">
-									<header class="text-secondary" style="font-size: 1.1em;">Main Contact</header>
+					
+						<div class="form-row">
+							<div class="col-md-12 mt-4">
+								<section class="fieldset rounded" style="padding: 10px;">
+									<header class="label-form" style="font-size: 0.9rem!important;">Main Contact</header>
 								<div class="row">
 									<div class="col-md-8">
 										<input type="text" class="form-control" id="editContact1" name="editContact1" placeholder="Contact No">
@@ -673,21 +655,23 @@ function retrieveStudentInfo(std) {
 										<select class="form-control" id="editRelation1" name="editRelation1">
 											<option value="mother">Mother</option>
 											<option value="father">Father</option>
+											<option value="sibling">Sibling</option>
 											<option value="other">Other</option>
 										</select>
 									</div>	
 								</div>
-								<div class="row">
+								<div class="row mt-2">
 									<div class="col-md-12">
 										<input type="text" class="form-control" id="editEmail1" name="editEmail1" placeholder="Email">
 									</div>
 								</div>
 								</section>
 							</div>
-							<div class="col-md-6">
-								<section class="fieldset rounded border-secondary" style="padding: 10px;">
-									<header class="text-secondary" style="font-size: 1.1em;">Sub Contact</header>
-								
+						</div>
+						<div class="form-row">
+							<div class="col-md-12 mt-4">
+								<section class="fieldset rounded" style="padding: 10px;">
+									<header class="label-form" style="font-size: 0.9rem!important;">Sub Contact</header>
 								<div class="row">
 									<div class="col-md-8">
 										<input type="text" class="form-control" id="editContact2" name="editContact2" placeholder="Contact No">
@@ -696,11 +680,12 @@ function retrieveStudentInfo(std) {
 										<select class="form-control" id="editRelation2" name="editRelation2">
 											<option value="mother">Mother</option>
 											<option value="father">Father</option>
+											<option value="sibling">Sibling</option>
 											<option value="other">Other</option>
 										</select>
-									</div>
+									</div>	
 								</div>
-								<div class="row">
+								<div class="row mt-2">
 									<div class="col-md-12">
 										<input type="text" class="form-control" id="editEmail2" name="editEmail2" placeholder="Email">
 									</div>
@@ -708,23 +693,17 @@ function retrieveStudentInfo(std) {
 								</section>
 							</div>
 						</div>
-					</div>	
-
-
-
-
-
-					<div class="form-group">
-						<div class="form-row">
-							<label for="editMemo" class="label-form">Memo</label>
-							<textarea class="form-control" id="editMemo" name="editMemo"></textarea>
+						<div class="form-row mt-3">
+							<div class="col-md-12">
+								<label for="editMemo" class="label-form">Memo</label>
+								<textarea class="form-control" style="height: 200px;" id="editMemo" name="editMemo"></textarea>
+							</div>
 						</div>
+					</form>					
+					<div class="d-flex justify-content-end">
+						<button type="submit" class="btn btn-primary" onclick="updateStudentInfo()">Save</button>&nbsp;&nbsp;
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 					</div>
-				</form>
-				<div class="d-flex justify-content-end">
-					<button type="submit" class="btn btn-primary" onclick="updateStudentInfo()">Save</button>&nbsp;&nbsp;
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				</div>
 				</section>
 			</div>
 		</div>
