@@ -18,68 +18,130 @@ $(document).ready(
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+// function retrieveInvoiceListTable(data) {
+//     var row = $('<tr>');
+//     row.append($('<td>').addClass('hidden-column').text(ENROLMENT + '|' + data.id)); // 0
+//     row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>')); // item
+//     row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name)); // description
+//     row.append($('<td class="smaller-table-font">').text(data.year)); // year
+//     row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek)); // start week
+//     row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek)); // end week
+//     row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1)); // weeks
+    
+//     row.append($('<td class="smaller-table-font">').addClass('price').text((data.price).toFixed(2)));// price
+//     row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('credit').text('0'));// credit   
+//     row.append($('<td class="smaller-table-font" contenteditable="true">').text('0'));// DC %
+//     row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('discount').text('0'));// DC $
+//     row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)));
+
+//     row.append($('<td class="smaller-table-font">').text('0'));// Date
+//     row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>')); // Action
+
+//     $('#invoiceListTable > tbody').append(row);
+
+//     // Calculate and update the weeks, start-week, end-week, and credit columns
+//     var startWeekCell = row.find('.start-week');
+//     var endWeekCell = row.find('.end-week');
+//     var weeksCell = row.find('.weeks');
+//     var creditCell = row.find('.credit');
+//     var amountCell = row.find('.amount');
+    
+//     function updateWeeks() {
+//         var startWeek = parseInt(startWeekCell.text());
+//         var endWeek = parseInt(endWeekCell.text());
+//         var weeks = parseInt(weeksCell.text());
+//         var credit = parseInt(creditCell.text());
+//         var price = parseFloat(row.find('.price').text());
+        
+//         if (!isNaN(startWeek) && !isNaN(endWeek)) {
+//             weeks = endWeek - startWeek + 1;
+//             weeksCell.text(weeks);
+//         } else if (!isNaN(weeks) && !isNaN(startWeek)) {
+//             endWeek = startWeek + weeks - 1;
+//             endWeekCell.text(endWeek);
+//         } else if (!isNaN(weeks)) {
+//             endWeek = startWeek + weeks - 1;
+//             endWeekCell.text(endWeek);
+//         }
+        
+//         if (!isNaN(weeks) && !isNaN(credit)) {
+//             weeks += credit;
+//             weeksCell.text(weeks);
+//             endWeek = startWeek + weeks - 1;
+//             endWeekCell.text(endWeek);
+//         }
+        
+//         var amount = price * (weeks-credit);
+//         amountCell.text(amount.toFixed(2));
+//     }
+    
+//     startWeekCell.on('input', updateWeeks);
+//     endWeekCell.on('input', updateWeeks);
+//     creditCell.on('input', updateWeeks);
+// }
+
 function retrieveInvoiceListTable(data) {
-    var row = $('<tr>');
-    row.append($('<td>').addClass('hidden-column').text(ENROLMENT + '|' + data.id)); // 0
-    row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>')); // item
-    row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name)); // description
-    row.append($('<td class="smaller-table-font">').text(data.year)); // year
-    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek)); // start week
-    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek)); // end week
-    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1)); // weeks
-    
-    row.append($('<td class="smaller-table-font">').addClass('price').text(data.price));// price
-    row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('credit').text('0'));// credit   
-    row.append($('<td class="smaller-table-font" contenteditable="true">').text('0'));// DC %
-    row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('discount').text('0'));// DC $
-    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)));
 
-    row.append($('<td class="smaller-table-font">').text('0'));// Date
-    row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>')); // Action
+	var row = $('<tr>');
+	row.append($('<td>').addClass('hidden-column').text(ENROLMENT + '|' + data.id));
+	row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>'));
+	row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name));
+	row.append($('<td class="smaller-table-font">').text(data.year));
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek));
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek));
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1));
+	row.append($('<td class="smaller-table-font">').addClass('price').text((data.price).toFixed(2)));
+	row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('credit').text('0'));
+	row.append($('<td class="smaller-table-font" contenteditable="true">').text('0'));
+	row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('discount').text('0'));
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)).attr("id", "amountCell"));
+	row.append($('<td class="smaller-table-font">').text('0'));
+	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 
-    $('#invoiceListTable > tbody').append(row);
+	$('#invoiceListTable > tbody').append(row);
 
-    // Calculate and update the weeks, start-week, end-week, and credit columns
-    var startWeekCell = row.find('.start-week');
-    var endWeekCell = row.find('.end-week');
-    var weeksCell = row.find('.weeks');
-    var creditCell = row.find('.credit');
-    var amountCell = row.find('.amount');
-    
-    function updateWeeks() {
-        var startWeek = parseInt(startWeekCell.text());
-        var endWeek = parseInt(endWeekCell.text());
-        var weeks = parseInt(weeksCell.text());
-        var credit = parseInt(creditCell.text());
-        var price = parseFloat(row.find('.price').text());
-        
-        if (!isNaN(startWeek) && !isNaN(endWeek)) {
-            weeks = endWeek - startWeek + 1;
-            weeksCell.text(weeks);
-        } else if (!isNaN(weeks) && !isNaN(startWeek)) {
-            endWeek = startWeek + weeks - 1;
-            endWeekCell.text(endWeek);
-        } else if (!isNaN(weeks)) {
-            endWeek = startWeek + weeks - 1;
-            endWeekCell.text(endWeek);
-        }
-        
-        if (!isNaN(weeks) && !isNaN(credit)) {
-            weeks += credit;
-            weeksCell.text(weeks);
-            endWeek = startWeek + weeks - 1;
-            endWeekCell.text(endWeek);
-        }
-        
-        var amount = price * (weeks-credit);
-        amountCell.text(amount.toFixed(2));
-    }
-    
-    startWeekCell.on('input', updateWeeks);
-    endWeekCell.on('input', updateWeeks);
-    creditCell.on('input', updateWeeks);
+	var startWeekCell = row.find('.start-week');
+	var endWeekCell = row.find('.end-week');
+	var weeksCell = row.find('.weeks');
+	var creditCell = row.find('.credit');
+	var amountCell = row.find('.amount');
+	var rxAmount = $("#rxAmount");
+	rxAmount.text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)); // initial receivable amount
+  
+  	function updateWeeks() {
+		var startWeek = parseInt(startWeekCell.text());
+		var endWeek = parseInt(endWeekCell.text());
+		var weeks = parseInt(weeksCell.text());
+		var credit = parseInt(creditCell.text());
+		var price = parseFloat(row.find('.price').text());
+		
+		if (!isNaN(startWeek) && !isNaN(endWeek)) {
+		weeks = endWeek - startWeek + 1;
+		weeksCell.text(weeks);
+		} else if (!isNaN(weeks) && !isNaN(startWeek)) {
+		endWeek = startWeek + weeks - 1;
+		endWeekCell.text(endWeek);
+		} else if (!isNaN(weeks)) {
+		endWeek = startWeek + weeks - 1;
+		endWeekCell.text(endWeek);
+		}
+		
+		if (!isNaN(weeks) && !isNaN(credit)) {
+		weeks += credit;
+		weeksCell.text(weeks);
+		endWeek = startWeek + weeks - 1;
+		endWeekCell.text(endWeek);
+		}
+		
+		var amount = price * (weeks-credit);
+		amountCell.text(amount.toFixed(2));
+		rxAmount.text(amountCell.text());
+  	}
+  
+	startWeekCell.on('input', updateWeeks);
+	endWeekCell.on('input', updateWeeks);
+	creditCell.on('input', updateWeeks);
 }
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,12 +151,31 @@ function clearInvoiceTable(){
 	$('#invoiceListTable > tbody').empty();
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Display Payment Modal
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function displayPayment(){
+    // display Receivable amount
+    var rxAmount = $("#rxAmount").text();
+    $("#payRxAmount").val(rxAmount);
+    // payAmount
+    $("#payAmount").on('input', function(){
+        var payAmount = parseFloat($("#payAmount").val()).toFixed(2);
+        var difference = parseFloat($("#payRxAmount").val()) - parseFloat($("#payAmount").val());
+		// console.log($("#payRxAmount").val() + '-' + $("#payAmount").val());
+		$("#payOutstanding").val(difference.toFixed(2));
+    });
+    $('#paymentModal').modal('toggle');
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Make Payment
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function makePayment(){
-	//console.log('makePayment');
+	console.log('ajax call to make payment.....');
+
+
 	document.getElementById('makePayment').reset();
 	$('#paymentModal').modal('toggle');					
 }
@@ -161,6 +242,7 @@ function createInvoice(){
 
 </script>
 
+<!-- Main Body -->
 <div class="modal-body" style="padding-top: 0.25rem; padding-left: 0rem; padding-right: 0rem;">
 	<form id="">
 		<div class="form-group">
@@ -171,7 +253,7 @@ function createInvoice(){
 							<p>Receivable Amt:</p>
 						</div>
 						<div class="col-md-2">
-							<p><mark><strong class="text-danger">740.00</strong></mark></p>
+							<p><mark><strong class="text-danger" id="rxAmount" name="rxAmount">0.00</strong></mark></p>
 						</div>
 						<div class="col-md-4">
 							<p>Outstanding: </p>
@@ -182,7 +264,8 @@ function createInvoice(){
 					</div>
 				</div>
 				<div class="col md-auto">
-					<button type="button" class="btn btn-block btn-primary btn-sm"  data-toggle="modal" data-target="#paymentModal">Payment</button>
+					<!-- <button type="button" class="btn btn-block btn-primary btn-sm"  data-toggle="modal" data-target="#paymentModal">Payment</button> -->
+					<button type="button" class="btn btn-block btn-primary btn-sm"  onclick="displayPayment()">Payment</button>
 				</div>
 				<div class="col md-auto">
 					<button type="button" class="btn btn-block btn-primary btn-sm" onclick="createInvoice()">Invoice</button>
@@ -243,7 +326,7 @@ function createInvoice(){
 							<label>Receivable Amount : </label> 
 						</div>
 						<div class="col-md-6">
-							<input type="text" class="form-control" id="payRxAmount" name="payRxAmount">
+							<input type="text" class="form-control" id="payRxAmount" name="payRxAmount" readonly>
 						</div>						
 					</div>
 					<div class="form-row mt-2">
@@ -259,7 +342,7 @@ function createInvoice(){
 							<label>Outstanding : </label> 
 						</div>
 						<div class="col-md-6">
-							<input type="text" class="form-control" id="payOutstanding" name="payOutstanding">
+							<input type="text" class="form-control" id="payOutstanding" name="payOutstanding" readonly>
 						</div>						
 					</div>
 					<div class="form-row mt-2">

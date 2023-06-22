@@ -188,23 +188,18 @@ public class JaeInvoiceController {
 		}
 	}
 
-
-	
-
-
-
-	// // search clazz by student Id
-	// @GetMapping("/getClazz/student/{id}")
-	// @ResponseBody
-	// List<ClazzDTO> searchClazzByStudent(@PathVariable Long id) {
-	// 	List<Long> clazzIds = enrolmentService.findClazzIdByStudentId(id);
-	// 	List<ClazzDTO> dtos = new ArrayList<ClazzDTO>();
-	// 	for (Long clazzId : clazzIds) {
-	// 		Clazz clazz = clazzService.getClazz(clazzId);
-	// 		ClazzDTO dto = new ClazzDTO(clazz);
-	// 		dtos.add(dto);
-	// 	}
-	// 	return dtos;
-	// }
+	// make payment
+	@GetMapping("/payment")
+	@ResponseBody
+	List<ClazzDTO> searchClazzByStudent(@PathVariable Long id) {
+		List<Long> clazzIds = enrolmentService.findClazzIdByStudentId(id);
+		List<ClazzDTO> dtos = new ArrayList<ClazzDTO>();
+		for (Long clazzId : clazzIds) {
+			Clazz clazz = clazzService.getClazz(clazzId);
+			ClazzDTO dto = new ClazzDTO(clazz);
+			dtos.add(dto);
+		}
+		return dtos;
+	}
 
 }
