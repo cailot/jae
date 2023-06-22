@@ -190,7 +190,7 @@ function retrieveStudentInfo(std) {
 		success : function(student) {
 			$('#editStudentModal').modal('show');
 			// Update display info
-			console.log(student);
+			// console.log(student);
 			$("#editId").val(student.id);
 			$("#editFirstName").val(student.firstName);
 			$("#editLastName").val(student.lastName);
@@ -313,13 +313,13 @@ function retrieveStudentInfo(std) {
 						</select>
 					</div>
 					<div class="col-md-1">
-						<label for="listYear" class="label-form">Year</label> 
+						<label for="listYear" class="label-form">Enrolment</label> 
 						<select class="form-control" id="listYear" name="listYear">
 							<option value="All">All</option>
-							<option value="2023">2023</option>
-							<option value="2022">2022</option>
-							<option value="2021">2021</option>
-							<option value="2020">2020</option>
+							<option value="2023">Academic Year 2023/2024</option>
+							<option value="2022">Academic Year 2022/2023</option>
+							<option value="2021">Academic Year 2021/2022</option>
+							<option value="2020">Academic Year 2020/2021</option>
 						</select>
 					</div>
 					<div class="col-md-2">
@@ -351,8 +351,7 @@ function retrieveStudentInfo(std) {
 										<th>First Name</th>
 										<th>Last Name</th>
 										<th>Grade</th>
-										<th>Start Date</th>
-										<!-- <th>Week</th> -->
+										<th>Register Date</th>
 										<th>End Date</th>
 										<th>Main Email</th>
 										<th>Main Contact</th>
@@ -366,19 +365,19 @@ function retrieveStudentInfo(std) {
 									<c:when test="${StudentList != null}">
 										<c:forEach items="${StudentList}" var="student">
 											<tr>
-												<td class="ellipsis" id="studentId" name="studentId"><span><c:out value="${student.id}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.firstName}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.lastName}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${fn:toUpperCase(student.grade)}" /></span></td>
-												<c:set var="regDate" value="${student.registerDate}" />
+												<td class="small ellipsis" id="studentId" name="studentId"><span><c:out value="${student.id}" /></span></td>
+												<td class="small ellipsis text-truncate" style="max-width: 0; overflow: hidden;"><span><c:out value="${student.firstName}" /></span></td>
+												<td class="small ellipsis text-truncate" style="max-width: 0; overflow: hidden;"><span><c:out value="${student.lastName}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${fn:toUpperCase(student.grade)}" /></span></td>
+												<!-- <c:set var="regDate" value="${student.registerDate}" />
 												<c:set var="starts" value="${fn:split(regDate, '|')}" />
-												<td class="ellipsis"><span><c:out value="${starts[0]}" /></span></td>
-												<!-- <td class="small ellipsis"><span><c:out value="${starts[1]}" /></span></td> -->
-												<td class="ellipsis"><span><c:out value="${student.endDate}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.email1}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.contactNo1}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.email2}" /></span></td>
-												<td class="ellipsis"><span><c:out value="${student.contactNo2}" /></span></td>
+												<td class="ellipsis"><span><c:out value="${starts[0]}" /></span></td> -->
+												<td class="small ellipsis"><span><c:out value="${student.registerDate}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${student.endDate}" /></span></td>
+												<td class="small ellipsis text-truncate" style="max-width: 0; overflow: hidden;"><span><c:out value="${student.email1}" /></span></td>
+												<td class="small ellipsis text-truncate" style="max-width: 0; overflow: hidden;"><span><c:out value="${student.contactNo1}" /></span></td>
+												<td class="small ellipsis text-truncate" style="max-width: 0; overflow: hidden;"><span><c:out value="${student.email2}" /></span></td>
+												<td class="small ellipsis text-truncate" style="max-width: 0; overflow: hidden;"><span><c:out value="${student.contactNo2}" /></span></td>
 												<td>
 													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retrieveStudentInfo('${student.id}')"></i>&nbsp;
 													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning fa-lg" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;

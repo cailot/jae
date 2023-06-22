@@ -116,8 +116,8 @@ public class JaeStudentController {
 		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
 		for (Student std : students) {
 			StudentDTO dto = new StudentDTO(std);
-			int startWeek = 10;//JaeUtils.academicWeeks(startDate);
-			dto.setRegisterDate(dto.getRegisterDate()+"|"+startWeek);
+			// int startWeek = 10;//JaeUtils.academicWeeks(startDate);
+			// dto.setRegisterDate(dto.getRegisterDate()+"|"+startWeek);
 			dtos.add(dto);
 		}
 		model.addAttribute(JaeConstants.STUDENT_LIST, dtos);
