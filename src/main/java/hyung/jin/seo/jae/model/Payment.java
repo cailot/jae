@@ -32,6 +32,9 @@ public class Payment {
     @Column(length = 10, nullable = false)
     private String method;
     
+    @Column(length = 100, nullable = false)
+    private String info;
+
     @Column(columnDefinition = "DECIMAL(10,2)")
     private double amount;
     

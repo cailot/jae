@@ -15,6 +15,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long>{
     InvoiceDTO findByStudentId(long studentId);
 
 	// return invoice id by student id
-	@Query("SELECT e.invoice.id FROM Enrolment e WHERE e.student.id = ?1 and e.old = false")
+	@Query("SELECT e.invoice.id FROM Enrolment e WHERE e.student.id = ?1 and e.old = false order by e.enrolmentDate desc")
 	List<Long> findInvoiceIdByStudentId(long studentId);
 }

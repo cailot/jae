@@ -81,7 +81,7 @@ $(document).ready(
 // }
 
 function retrieveInvoiceListTable(data) {
-
+	console.log(data);
 	var row = $('<tr>');
 	row.append($('<td>').addClass('hidden-column').text(ENROLMENT + '|' + data.id));
 	row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>'));
@@ -174,10 +174,39 @@ function displayPayment(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function makePayment(){
 	console.log('ajax call to make payment.....');
+	var studentId = $('#formId').val();
+	
+	var payment = {
+		amount: $('#payAmount').val(),
+		method: $('#payItem').val(),
+		registerDate: $('#payDate').val(),
+		info: $('#payInfo').val()
+	};
+	
 
+	// Send AJAX to server
+	$.ajax({
+		url : '${pageContext.request.contextPath}/invoice/payment/' + studentId,
+		type : 'POST',
+		dataType : 'json',
+		data : JSON.stringify(payment),
+		contentType : 'application/json',
+		success : function(data) {
+			// console.log('Success : ' + data);
+			// reset payment dialogue info
+			document.getElementById('makePayment').reset();
+			$('#paymentModal').modal('toggle');	
 
-	document.getElementById('makePayment').reset();
-	$('#paymentModal').modal('toggle');					
+			// Display success alert
+			$('#success-alert .modal-body').html('ID : <b>' + studentId + '</b> payment updated successfully.');
+			$('#success-alert').modal('toggle');	
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+
+						
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -351,10 +380,10 @@ function createInvoice(){
 						</div>
 						<div class="col-md-6">
 							<select class="form-control" id="payItem" name="payItem">
-								<option value="p2">Cash</option>
-								<option value="p3">Bank</option>
-								<option value="p4">Card</option>
-								<option value="p5">Cheque</option>
+								<option value="cash">Cash</option>
+								<option value="bank">Bank</option>
+								<option value="card">Card</option>
+								<option value="cheque">Cheque</option>
 							</select>	
 						</div>						
 					</div>

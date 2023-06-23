@@ -19,14 +19,17 @@ import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.dto.CourseDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
+import hyung.jin.seo.jae.dto.PaymentDTO;
 import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Course;
 import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Invoice;
+import hyung.jin.seo.jae.model.Payment;
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.service.EnrolmentService;
 import hyung.jin.seo.jae.service.InvoiceService;
+import hyung.jin.seo.jae.service.PaymentService;
 import hyung.jin.seo.jae.service.StudentService;
 
 @Controller
@@ -38,6 +41,9 @@ public class JaeInvoiceController {
 
 	@Autowired
 	private EnrolmentService enrolmentService;
+
+	@Autowired
+	private PaymentService paymentService;
 
 
 	// // search enrolment by student Id
@@ -189,17 +195,28 @@ public class JaeInvoiceController {
 	}
 
 	// make payment
-	@GetMapping("/payment")
+	@PostMapping("/payment/{studentId}")
 	@ResponseBody
-	List<ClazzDTO> searchClazzByStudent(@PathVariable Long id) {
-		List<Long> clazzIds = enrolmentService.findClazzIdByStudentId(id);
-		List<ClazzDTO> dtos = new ArrayList<ClazzDTO>();
-		for (Long clazzId : clazzIds) {
-			Clazz clazz = clazzService.getClazz(clazzId);
-			ClazzDTO dto = new ClazzDTO(clazz);
-			dtos.add(dto);
+	public ResponseEntity<String> makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData) {
+		
+		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
+		double paidAmount = formData.getAmount();
+		
+		for(Long invoiceId : invoiceIds){
+			// 1. get Invoice
+			Invoice invoice = invoiceService.findInvoiceById(invoiceId);
+			// 2. make payment
+			Payment payment = formData.convertToPayment();
+			Payment paid = paymentService.addPayment(payment);
+			// 3. update Invoice
+			invoice.setPaidAmount(paidAmount);
+			invoice.addPayment(paid);
+			// 4. save Invoice
+			invoiceService.updateInvoice(invoice, invoiceId);
 		}
-		return dtos;
+
+
+		return ResponseEntity.ok("\"Payment success\"");
 	}
 
 }

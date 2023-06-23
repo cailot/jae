@@ -25,6 +25,8 @@ public class PaymentDTO implements Serializable{
 
 	private String method;
 
+	private String info;
+
 
 
 	public PaymentDTO(Payment payment){
@@ -32,12 +34,14 @@ public class PaymentDTO implements Serializable{
 		this.registerDate = payment.getRegisterDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.amount = payment.getAmount();
 		this.method = payment.getMethod();
+		this.info = payment.getInfo();
 	}
 
-	public Payment convertToOnlyPayment() {
+	public Payment convertToPayment() {
     	Payment payment = new Payment();
 		if(StringUtils.isNotBlank(id)) payment.setId(Long.parseLong(id));
     	if(StringUtils.isNotBlank(registerDate)) payment.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
+		if(StringUtils.isNotBlank(info)) payment.setInfo(info);
 		payment.setAmount(amount);
 		payment.setMethod(method);
 		return payment;

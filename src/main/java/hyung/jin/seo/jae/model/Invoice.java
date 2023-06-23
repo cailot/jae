@@ -50,7 +50,12 @@ public class Invoice{
 		enrolments.add(enrolment);
 	}
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade = {
+		CascadeType.PERSIST,
+		CascadeType.MERGE,
+		CascadeType.REFRESH,
+		CascadeType.DETACH
+	})
 	@JoinColumn(name = "invoiceId")
 	private Set<Payment> payments = new LinkedHashSet<>();
 
