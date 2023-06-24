@@ -67,15 +67,4 @@ public class Enrolment{ // bridge table between Student & Class
 
 	@Column
 	private boolean old;
-
-	@Column
-	private double credit;
-
-	@Column
-	private double discount;
-
-	@Column
-	private double amount;
-
-
 }

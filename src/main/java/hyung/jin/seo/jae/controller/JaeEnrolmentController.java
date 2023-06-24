@@ -44,20 +44,20 @@ public class JaeEnrolmentController {
 	}
 
 	// search enrolment by clazz Id
-	@GetMapping("/search/class/{id}")
-	@ResponseBody
-	List<EnrolmentDTO> searchEnrolmentByClazz(@PathVariable Long id) {
-		List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByClazz(id);
-		return dtos;
-	}
+	// @GetMapping("/search/class/{id}")
+	// @ResponseBody
+	// List<EnrolmentDTO> searchEnrolmentByClazz(@PathVariable Long id) {
+	// 	List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByClazz(id);
+	// 	return dtos;
+	// }
 
 	// search enrolment by clazz Id & student Id
-	@GetMapping("/search/class/{classId}/student/{studentId}")
-	@ResponseBody
-	List<EnrolmentDTO> searchEnrolmentByClazzAndStudent(@PathVariable Long classId, @PathVariable Long studentId) {
-		List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByClazzAndStudent(classId, studentId);
-		return dtos;
-	}
+	// @GetMapping("/search/class/{classId}/student/{studentId}")
+	// @ResponseBody
+	// List<EnrolmentDTO> searchEnrolmentByClazzAndStudent(@PathVariable Long classId, @PathVariable Long studentId) {
+	// 	List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByClazzAndStudent(classId, studentId);
+	// 	return dtos;
+	// }
 
 
 	// count records number in database

@@ -45,8 +45,8 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public List<PaymentDTO> getPaymentByInvoiceId(Long invoiceId) {
-		return paymentRepository.findPaymentByInvoiceId(invoiceId);
+	public List<Payment> getPaymentByInvoiceId(Long invoiceId) {
+		return paymentRepository.findByInvoiceId(invoiceId);
 
 	}
 

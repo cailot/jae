@@ -33,36 +33,19 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 
 	@Override
 	public List<EnrolmentDTO> findEnrolmentByStudent(Long studentId) {
-		// List<Enrolment> enrols = enrolmentRepository.findAllByStudentId(studentId);
-		// List<EnrolmentDTO> dtos = new ArrayList<>();
-		// for(Enrolment enrol: enrols){
-		// 	EnrolmentDTO dto = new EnrolmentDTO(enrol);
-		// 	dtos.add(dto);
-		// }
 		List<EnrolmentDTO> dtos = enrolmentRepository.findEnrolmentByStudentId(studentId);
+		//List<EnrolmentDTO> dtos = enrolmentRepository.findMine(studentId);
 		return dtos;
 	}
 
 	@Override
 	public List<EnrolmentDTO> findEnrolmentByClazz(Long claszzId) {
-		// List<Enrolment> enrols = enrolmentRepository.findAllByClazzId(claszzId);
-		// List<EnrolmentDTO> dtos = new ArrayList<>();
-		// for(Enrolment enrol: enrols){
-		// 	EnrolmentDTO dto = new EnrolmentDTO(enrol);
-		// 	dtos.add(dto);
-		// }
 		List<EnrolmentDTO> dtos = enrolmentRepository.findEnrolmentByClazzId(claszzId);
 		return dtos;
 	}
 
 	@Override
 	public List<EnrolmentDTO> findEnrolmentByClazzAndStudent(Long clazzId, Long studentId) {
-		// List<Enrolment> enrols = enrolmentRepository.findAllByClazzIdAndStudentId(clazzId, studentId);
-		// List<EnrolmentDTO> dtos = new ArrayList<>();
-		// for(Enrolment enrol: enrols){
-		// 	EnrolmentDTO dto = new EnrolmentDTO(enrol);
-		// 	dtos.add(dto);
-		// }
 		List<EnrolmentDTO> dtos = enrolmentRepository.findEnrolmentByClazzIdAndStudentId(clazzId, studentId);
 		return dtos;
 	}

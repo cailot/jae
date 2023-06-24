@@ -81,7 +81,7 @@ $(document).ready(
 // }
 
 function retrieveInvoiceListTable(data) {
-	console.log(data);
+	// console.log(data);
 	var row = $('<tr>');
 	row.append($('<td>').addClass('hidden-column').text(ENROLMENT + '|' + data.id));
 	row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>'));
@@ -173,7 +173,9 @@ function displayPayment(){
 //		Make Payment
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function makePayment(){
-	console.log('ajax call to make payment.....');
+	var hidden = $('#hiddenId').val();
+	console.log('make payment hidden : ' + hidden);
+
 	var studentId = $('#formId').val();
 	
 	var payment = {
@@ -183,7 +185,6 @@ function makePayment(){
 		info: $('#payInfo').val()
 	};
 	
-
 	// Send AJAX to server
 	$.ajax({
 		url : '${pageContext.request.contextPath}/invoice/payment/' + studentId,
@@ -192,7 +193,7 @@ function makePayment(){
 		data : JSON.stringify(payment),
 		contentType : 'application/json',
 		success : function(data) {
-			// console.log('Success : ' + data);
+			console.log('Success : ' + data);
 			// reset payment dialogue info
 			document.getElementById('makePayment').reset();
 			$('#paymentModal').modal('toggle');	
@@ -213,6 +214,11 @@ function makePayment(){
 //		Create Invoice
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function createInvoice(){
+
+	var hidden = $('#hiddenId').val();
+	console.log('create invoice hidden : ' + hidden);
+
+
 
 	var enrols = [];
 	var studentId = $('#formId').val();
@@ -240,7 +246,7 @@ function createInvoice(){
 		enrols.push(enrol);	
 	});
 
-	console.log(enrols);
+	// console.log(enrols);
 
 	// Send AJAX to server
 	$.ajax({
@@ -250,9 +256,11 @@ function createInvoice(){
 		data : JSON.stringify(enrols),
 		contentType : 'application/json',
 		success : function(invoice) {
+
+			// update invoiceId to hiddenId
+			$("#hiddenId").val(invoice.id);
+			
 			// Display the success alert
-
-
 			$("#invoiceId").val(invoice.id);
 			$("#invoiceCredit").val(invoice.credit);
 			$("#invoiceDiscount").val(invoice.discount);
@@ -278,6 +286,7 @@ function createInvoice(){
 			<div class="form-row">
 				<div class="col-md-6">
 					<div class="row">
+						<input type="hidden" id="hiddenId" name="hiddenId" />
 						<div class="col-md-4">
 							<p>Receivable Amt:</p>
 						</div>

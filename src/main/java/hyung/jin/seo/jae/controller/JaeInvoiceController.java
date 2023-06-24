@@ -1,36 +1,26 @@
 package hyung.jin.seo.jae.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import hyung.jin.seo.jae.dto.ClazzDTO;
-import hyung.jin.seo.jae.dto.CourseDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
 import hyung.jin.seo.jae.dto.PaymentDTO;
-import hyung.jin.seo.jae.model.Clazz;
-import hyung.jin.seo.jae.model.Course;
 import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Invoice;
 import hyung.jin.seo.jae.model.Payment;
-import hyung.jin.seo.jae.model.Student;
-import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.service.EnrolmentService;
 import hyung.jin.seo.jae.service.InvoiceService;
 import hyung.jin.seo.jae.service.PaymentService;
-import hyung.jin.seo.jae.service.StudentService;
 
 @Controller
 @RequestMapping("invoice")
@@ -140,11 +130,11 @@ public class JaeInvoiceController {
 				enrolment.setStartWeek(data.getStartWeek());
 				enrolment.setEndWeek(data.getEndWeek());
 				double cred = data.getCredit();
-				enrolment.setCredit(cred);
+				// enrolment.setCredit(cred);
 				double disc = data.getDiscount();
-				enrolment.setDiscount(disc);
+				// enrolment.setDiscount(disc);
 				double amount = data.getAmount();
-				enrolment.setAmount(amount);
+				// enrolment.setAmount(amount);
 				// 6. sum total amount
 				credit += cred;
 				discount += disc;
@@ -171,11 +161,11 @@ public class JaeInvoiceController {
 				enrolment.setStartWeek(data.getStartWeek());
 				enrolment.setEndWeek(data.getEndWeek());
 				double cred = data.getCredit();
-				enrolment.setCredit(cred);
+				// enrolment.setCredit(cred);
 				double disc = data.getDiscount();
-				enrolment.setDiscount(disc);
+				// enrolment.setDiscount(disc);
 				double amount = data.getAmount();
-				enrolment.setAmount(amount);
+				// enrolment.setAmount(amount);
 				// 6. sum total amount
 				credit += cred;
 				discount += disc;

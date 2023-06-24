@@ -229,7 +229,7 @@ function associateOnline(){
     	return parseInt(id);
 	});
 
-	// Make the AJAX request for eLearning
+	// Make the AJAX enrolment for eLearning
 	// if(elearningData.length > 0){
 		$.ajax({
 			url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
@@ -247,7 +247,7 @@ function associateOnline(){
 		});
 	// }
 
-	// Make the AJAX request for class
+	// Make the AJAX enrolment for class
 	$.ajax({
 		url: '${pageContext.request.contextPath}/student/associateClazz/' + studentId,
 		method: 'POST',
@@ -264,6 +264,21 @@ function associateOnline(){
 			console.error(error);
 		}
 	});
+
+	// Make the AJAX invoice for class
+	// $.ajax({
+	// 	url : '${pageContext.request.contextPath}/invoice/create/' + studentId,
+	// 	type : 'POST',
+	// 	dataType : 'json',
+	// 	data : JSON.stringify(enrolData),
+	// 	contentType : 'application/json',
+	// 	success : function(invoice) {
+	// 		console.log(invoice);
+	// 	},
+	// 	error : function(xhr, status, error) {
+	// 		console.log('Error : ' + error);
+	// 	}
+	// });
 }
 
 
