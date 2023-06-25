@@ -1,5 +1,6 @@
 package hyung.jin.seo.jae.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,32 +35,6 @@ public class JaeInvoiceController {
 
 	@Autowired
 	private PaymentService paymentService;
-
-
-	// // search enrolment by student Id
-	// @GetMapping("/search/student/{id}")
-	// @ResponseBody
-	// List<EnrolmentDTO> searchEnrolmentByStudent(@PathVariable Long id) {
-	// 	List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByStudent(id);
-	// 	return dtos;
-	// }
-
-	// // search enrolment by clazz Id
-	// @GetMapping("/search/class/{id}")
-	// @ResponseBody
-	// List<EnrolmentDTO> searchEnrolmentByClazz(@PathVariable Long id) {
-	// 	List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByClazz(id);
-	// 	return dtos;
-	// }
-
-	// // search enrolment by clazz Id & student Id
-	// @GetMapping("/search/class/{classId}/student/{studentId}")
-	// @ResponseBody
-	// List<EnrolmentDTO> searchEnrolmentByClazzAndStudent(@PathVariable Long classId, @PathVariable Long studentId) {
-	// 	List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByClazzAndStudent(classId, studentId);
-	// 	return dtos;
-	// }
-
 
 	// count records number in database
 	@GetMapping("/count")
@@ -184,14 +159,14 @@ public class JaeInvoiceController {
 		}
 	}
 
-	// make payment
+	// make payment and return updated invoice
 	@PostMapping("/payment/{studentId}")
 	@ResponseBody
 	public ResponseEntity<String> makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData) {
 		
 		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
 		double paidAmount = formData.getAmount();
-		
+		boolean fullPaid = false;
 		for(Long invoiceId : invoiceIds){
 			// 1. get Invoice
 			Invoice invoice = invoiceService.findInvoiceById(invoiceId);
@@ -201,12 +176,23 @@ public class JaeInvoiceController {
 			// 3. update Invoice
 			invoice.setPaidAmount(paidAmount);
 			invoice.addPayment(paid);
-			// 4. save Invoice
+			// 4. check whether full paid or not
+			if(invoice.getTotalAmount() <= invoice.getPaidAmount()){
+				fullPaid = true;
+			}
+			if(fullPaid){
+				invoice.setPayCompleteDate(LocalDate.now());
+			}
+			// 5. save Invoice
 			invoiceService.updateInvoice(invoice, invoiceId);
+			// 5. bring to EnrolmentDTO
 		}
-
-
-		return ResponseEntity.ok("\"Payment success\"");
+		// 6. return
+		if(fullPaid){
+			return ResponseEntity.ok("\"Full\"");
+		}else{
+			return ResponseEntity.ok("\"Partially\"");
+		}
 	}
 
 }

@@ -33,8 +33,12 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 
 	@Override
 	public List<EnrolmentDTO> findEnrolmentByStudent(Long studentId) {
-		List<EnrolmentDTO> dtos = enrolmentRepository.findEnrolmentByStudentId(studentId);
-		//List<EnrolmentDTO> dtos = enrolmentRepository.findMine(studentId);
+		List<Object[]> objects = enrolmentRepository.findEnrolmentByStudentId(studentId);
+		List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
+		for(Object[] object : objects){
+			EnrolmentDTO dto = new EnrolmentDTO(object);
+			dtos.add(dto);
+		}
 		return dtos;
 	}
 

@@ -1,4 +1,8 @@
 <script>
+
+
+const FULL_PAID = 'Full';
+
 $(document).ready(
 	function() {
 		// remove records from basket when click on delete icon
@@ -18,129 +22,68 @@ $(document).ready(
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-// function retrieveInvoiceListTable(data) {
-//     var row = $('<tr>');
-//     row.append($('<td>').addClass('hidden-column').text(ENROLMENT + '|' + data.id)); // 0
-//     row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>')); // item
-//     row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name)); // description
-//     row.append($('<td class="smaller-table-font">').text(data.year)); // year
-//     row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek)); // start week
-//     row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek)); // end week
-//     row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1)); // weeks
-    
-//     row.append($('<td class="smaller-table-font">').addClass('price').text((data.price).toFixed(2)));// price
-//     row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('credit').text('0'));// credit   
-//     row.append($('<td class="smaller-table-font" contenteditable="true">').text('0'));// DC %
-//     row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('discount').text('0'));// DC $
-//     row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)));
-
-//     row.append($('<td class="smaller-table-font">').text('0'));// Date
-//     row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>')); // Action
-
-//     $('#invoiceListTable > tbody').append(row);
-
-//     // Calculate and update the weeks, start-week, end-week, and credit columns
-//     var startWeekCell = row.find('.start-week');
-//     var endWeekCell = row.find('.end-week');
-//     var weeksCell = row.find('.weeks');
-//     var creditCell = row.find('.credit');
-//     var amountCell = row.find('.amount');
-    
-//     function updateWeeks() {
-//         var startWeek = parseInt(startWeekCell.text());
-//         var endWeek = parseInt(endWeekCell.text());
-//         var weeks = parseInt(weeksCell.text());
-//         var credit = parseInt(creditCell.text());
-//         var price = parseFloat(row.find('.price').text());
-        
-//         if (!isNaN(startWeek) && !isNaN(endWeek)) {
-//             weeks = endWeek - startWeek + 1;
-//             weeksCell.text(weeks);
-//         } else if (!isNaN(weeks) && !isNaN(startWeek)) {
-//             endWeek = startWeek + weeks - 1;
-//             endWeekCell.text(endWeek);
-//         } else if (!isNaN(weeks)) {
-//             endWeek = startWeek + weeks - 1;
-//             endWeekCell.text(endWeek);
-//         }
-        
-//         if (!isNaN(weeks) && !isNaN(credit)) {
-//             weeks += credit;
-//             weeksCell.text(weeks);
-//             endWeek = startWeek + weeks - 1;
-//             endWeekCell.text(endWeek);
-//         }
-        
-//         var amount = price * (weeks-credit);
-//         amountCell.text(amount.toFixed(2));
-//     }
-    
-//     startWeekCell.on('input', updateWeeks);
-//     endWeekCell.on('input', updateWeeks);
-//     creditCell.on('input', updateWeeks);
-// }
-
 function retrieveInvoiceListTable(data) {
-	// console.log(data);
-	var row = $('<tr>');
-	row.append($('<td>').addClass('hidden-column').text(ENROLMENT + '|' + data.id));
-	row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>'));
-	row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name));
-	row.append($('<td class="smaller-table-font">').text(data.year));
-	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek));
-	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek));
-	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1));
-	row.append($('<td class="smaller-table-font">').addClass('price').text((data.price).toFixed(2)));
-	row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('credit').text('0'));
-	row.append($('<td class="smaller-table-font" contenteditable="true">').text('0'));
-	row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('discount').text('0'));
-	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)).attr("id", "amountCell"));
-	row.append($('<td class="smaller-table-font">').text('0'));
-	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+	// debugger;
+	
+    var row = $('<tr>');
+    row.append($('<td>').addClass('hidden-column').text(ENROLMENT + '|' + data.id));
+    row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>'));
+    row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name));
+    row.append($('<td class="smaller-table-font">').text(data.year));
+    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek));
+    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek));
+    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1));
+    row.append($('<td class="smaller-table-font">').addClass('price').text((data.price).toFixed(2)));
+    row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('credit').text(data.credit));
+    row.append($('<td class="smaller-table-font" contenteditable="true">').text('?%'));
+    row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('discount').text(data.discount));
+    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)).attr("id", "amountCell"));
+    row.append($('<td class="smaller-table-font paid-date">').text(data.payCompleteDate));
+    row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 
-	$('#invoiceListTable > tbody').append(row);
+    $('#invoiceListTable > tbody').append(row);
 
-	var startWeekCell = row.find('.start-week');
-	var endWeekCell = row.find('.end-week');
-	var weeksCell = row.find('.weeks');
-	var creditCell = row.find('.credit');
-	var amountCell = row.find('.amount');
-	var rxAmount = $("#rxAmount");
-	rxAmount.text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)); // initial receivable amount
-  
-  	function updateWeeks() {
-		var startWeek = parseInt(startWeekCell.text());
-		var endWeek = parseInt(endWeekCell.text());
-		var weeks = parseInt(weeksCell.text());
-		var credit = parseInt(creditCell.text());
-		var price = parseFloat(row.find('.price').text());
-		
-		if (!isNaN(startWeek) && !isNaN(endWeek)) {
-		weeks = endWeek - startWeek + 1;
-		weeksCell.text(weeks);
-		} else if (!isNaN(weeks) && !isNaN(startWeek)) {
-		endWeek = startWeek + weeks - 1;
-		endWeekCell.text(endWeek);
-		} else if (!isNaN(weeks)) {
-		endWeek = startWeek + weeks - 1;
-		endWeekCell.text(endWeek);
-		}
-		
-		if (!isNaN(weeks) && !isNaN(credit)) {
-		weeks += credit;
-		weeksCell.text(weeks);
-		endWeek = startWeek + weeks - 1;
-		endWeekCell.text(endWeek);
-		}
-		
-		var amount = price * (weeks-credit);
-		amountCell.text(amount.toFixed(2));
-		rxAmount.text(amountCell.text());
-  	}
-  
-	startWeekCell.on('input', updateWeeks);
-	endWeekCell.on('input', updateWeeks);
-	creditCell.on('input', updateWeeks);
+    var startWeekCell = row.find('.start-week');
+    var endWeekCell = row.find('.end-week');
+    var weeksCell = row.find('.weeks');
+    var creditCell = row.find('.credit');
+    var amountCell = row.find('.amount');
+    var rxAmount = $("#rxAmount");
+    rxAmount.text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)); // initial receivable amount
+
+    function updateWeeks() {
+        var startWeek = parseInt(startWeekCell.text());
+        var endWeek = parseInt(endWeekCell.text());
+        var weeks = parseInt(weeksCell.text());
+        var credit = parseInt(creditCell.text());
+        var price = parseFloat(row.find('.price').text());
+
+        if (!isNaN(startWeek) && !isNaN(endWeek)) {
+            weeks = endWeek - startWeek + 1;
+            weeksCell.text(weeks);
+        } else if (!isNaN(weeks) && !isNaN(startWeek)) {
+            endWeek = startWeek + weeks - 1;
+            endWeekCell.text(endWeek);
+        } else if (!isNaN(weeks)) {
+            endWeek = startWeek + weeks - 1;
+            endWeekCell.text(endWeek);
+        }
+
+        if (!isNaN(weeks) && !isNaN(credit)) {
+            weeks += credit;
+            weeksCell.text(weeks);
+            endWeek = startWeek + weeks - 1;
+            endWeekCell.text(endWeek);
+        }
+
+        var amount = price * (weeks-credit);
+        amountCell.text(amount.toFixed(2));
+        rxAmount.text(amountCell.text());
+    }
+
+    startWeekCell.on('input', updateWeeks);
+    endWeekCell.on('input', updateWeeks);
+    creditCell.on('input', updateWeeks);
 }
 
 
@@ -193,14 +136,29 @@ function makePayment(){
 		data : JSON.stringify(payment),
 		contentType : 'application/json',
 		success : function(data) {
-			console.log('Success : ' + data);
+			// update paid date column
+			
+			// if data is equals to 'Full' do something, else do something else
+			if(data == FULL_PAID){
+				// update date column with datestamp
+				// how to get first <tr> in $('#invoiceListTable > tbody')
+				$('#invoiceListTable > tbody > tr:first').find('.paid-date').text('Paid');
+
+				console.log('Full');
+			}else{
+				// $('#paidDate').text($('#payDate').val());
+				console.log('Not Full');
+			}	
+
+
 			// reset payment dialogue info
 			document.getElementById('makePayment').reset();
 			$('#paymentModal').modal('toggle');	
 
 			// Display success alert
 			$('#success-alert .modal-body').html('ID : <b>' + studentId + '</b> payment updated successfully.');
-			$('#success-alert').modal('toggle');	
+			$('#success-alert').modal('toggle');
+			
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);

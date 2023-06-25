@@ -22,6 +22,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.Column;
 import javax.persistence.CascadeType;
 
@@ -66,6 +68,9 @@ public class Invoice{
 	// auto update to current date
 	@CreationTimestamp
     private LocalDate registerDate;
+
+	@CreatedDate
+    private LocalDate payCompleteDate;
 
 	@Column
     private double credit;

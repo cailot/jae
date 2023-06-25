@@ -108,7 +108,9 @@ public interface JaeConstants {
 
 	String CHEQUE = "cheque";
 
+	String FULL_PAID = "Full";
 
+	String PARTIAL_PAID = "Partial";
 
 	
 }
