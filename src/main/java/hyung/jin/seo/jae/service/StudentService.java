@@ -2,6 +2,7 @@ package hyung.jin.seo.jae.service;
 
 import java.util.List;
 
+import hyung.jin.seo.jae.dto.StudentDTO;
 import hyung.jin.seo.jae.model.Student;
 
 public interface StudentService {
@@ -16,7 +17,7 @@ public interface StudentService {
 	List<Student> stoppedStudents();
 	
 	// bring student list base on the condition
-	List<Student> listStudents(String state, String branch, String grade, String year, String active);
+	List<StudentDTO> listStudents(String state, String branch, String grade, String year, String active);
 	
 	// search student list base on keyword where id, firstName or lastName
 	List<Student> searchStudents(String keyword);

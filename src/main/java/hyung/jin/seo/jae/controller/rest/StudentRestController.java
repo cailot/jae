@@ -28,12 +28,12 @@ public class StudentRestController {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(StudentRestController.class);
 	
-	@GetMapping("/students")
-	List<Student> allStudents(@RequestParam("state") String state, @RequestParam("branch") String branch, @RequestParam("grade") String grade, @RequestParam("year") String year, @RequestParam("active") String active) {
-        System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
-		List<Student> students = studentService.listStudents(state, branch, grade, year, active);
-        return students;
-	}
+	// @GetMapping("/students")
+	// List<Student> allStudents(@RequestParam("state") String state, @RequestParam("branch") String branch, @RequestParam("grade") String grade, @RequestParam("year") String year, @RequestParam("active") String active) {
+    //     System.out.println(state+"\t"+branch+"\t"+grade+"\t"+year+"\t"+active+"\t");
+	// 	List<Student> students = studentService.listStudents(state, branch, grade, year, active);
+    //     return students;
+	// }
 	
     @GetMapping("/student/{id}")
 	Student getStudent(@PathVariable Long id) {

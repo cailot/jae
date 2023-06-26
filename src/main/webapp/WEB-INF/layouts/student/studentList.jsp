@@ -312,14 +312,14 @@ function retrieveStudentInfo(std) {
 							<option value="vce">VCE</option>
 						</select>
 					</div>
-					<div class="col-md-1">
+					<div class="col-md-2">
 						<label for="listYear" class="label-form">Enrolment</label> 
 						<select class="form-control" id="listYear" name="listYear">
-							<option value="All">All</option>
-							<option value="2023">Academic Year 2023/2024</option>
-							<option value="2022">Academic Year 2022/2023</option>
-							<option value="2021">Academic Year 2021/2022</option>
-							<option value="2020">Academic Year 2020/2021</option>
+							<!-- <option value="All">All</option> -->
+							<option value="2023">Academic Year 23/24</option>
+							<option value="2022">Academic Year 22/23</option>
+							<option value="2021">Academic Year 21/22</option>
+							<option value="2020">Academic Year 20/21</option>
 						</select>
 					</div>
 					<div class="col-md-2">
@@ -352,7 +352,8 @@ function retrieveStudentInfo(std) {
 										<th>Last Name</th>
 										<th>Grade</th>
 										<th>Register Date</th>
-										<th>End Date</th>
+										<th>Start</th>
+										<th>End</th>
 										<th>Main Email</th>
 										<th>Main Contact</th>
 										<th>Sub Email</th>
@@ -373,7 +374,8 @@ function retrieveStudentInfo(std) {
 												<c:set var="starts" value="${fn:split(regDate, '|')}" />
 												<td class="ellipsis"><span><c:out value="${starts[0]}" /></span></td> -->
 												<td class="small ellipsis"><span><c:out value="${student.registerDate}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${student.endDate}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${student.startWeek}" /></span></td>
+												<td class="small ellipsis"><span><c:out value="${student.endWeek}" /></span></td>	
 												<td class="small ellipsis text-truncate" style="max-width: 0; overflow: hidden;"><span><c:out value="${student.email1}" /></span></td>
 												<td class="small ellipsis text-truncate" style="max-width: 0; overflow: hidden;"><span><c:out value="${student.contactNo1}" /></span></td>
 												<td class="small ellipsis text-truncate" style="max-width: 0; overflow: hidden;"><span><c:out value="${student.email2}" /></span></td>

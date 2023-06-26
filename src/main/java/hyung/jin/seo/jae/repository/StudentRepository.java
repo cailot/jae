@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import hyung.jin.seo.jae.dto.StudentDTO;
 import hyung.jin.seo.jae.model.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student>{  
@@ -25,4 +27,23 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 
 	@Query(value = "SELECT DISTINCT c.year FROM Cycle c WHERE c.id IN (SELECT l.cycleId FROM Class l WHERE l.id IN (SELECT e.clazzId FROM Enrolment e WHERE e.studentId = ?1))", nativeQuery = true)
     List<Integer> findYearsByStudentId(Long id);	
+
+	// retrieve active student by state, branch & grade called from studentList.jsp
+	@Query(value = "SELECT new hyung.jin.seo.jae.dto.StudentDTO(s.id, s.firstName, s.lastName, s.grade, s.contactNo1, s.contactNo2, s.email1, s.email2, s.state, s.branch, s.registerDate) FROM Student s WHERE s.state LIKE ?1 AND s.branch LIKE ?2 AND s.grade LIKE ?3 AND s.endDate IS NULL")
+	List<StudentDTO> listActiveStudent(String state, String branch, String grade);
+
+	// retrieve inactive student by state, branch & grade called from studentList.jsp
+	@Query(value = "SELECT new hyung.jin.seo.jae.dto.StudentDTO(s.id, s.firstName, s.lastName, s.grade, s.contactNo1, s.contactNo2, s.email1, s.email2, s.state, s.branch, s.registerDate) FROM Student s WHERE s.state LIKE ?1 AND s.branch LIKE ?2 AND s.grade LIKE ?3 AND s.endDate IS NOT NULL")
+	List<StudentDTO> listInactiveStudent(String state, String branch, String grade);
+
+	@Query("SELECT new hyung.jin.seo.jae.dto.StudentDTO" +
+            "(s.id, s.firstName, s.lastName, s.grade, s.contactNo1, s.contactNo2, s.email1, s.email2, s.state, s.branch, s.registerDate) " +
+            "FROM Student s " +
+            "WHERE s.endDate IS NULL " + 
+			"AND s.id IN (" +
+            	"SELECT enr.student.id FROM Enrolment enr WHERE enr.clazz.id IN (" +
+            		"SELECT cla.id FROM Clazz cla WHERE cla.cycle.id IN (" + 
+						"SELECT cyc.id FROM Cycle cyc WHERE cyc.year = :year)))") 
+    List<StudentDTO> listStudent(@Param("year") int year);
+
 }

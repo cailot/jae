@@ -112,14 +112,12 @@ public class JaeStudentController {
 	// search student list with state, branch, grade, start date or active
 	@GetMapping("/list")
 	public String listStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listGrade", required=false) String grade, @RequestParam(value="listYear", required=false) String year, @RequestParam(value="listActive", required=false) String active, Model model) {
-		List<Student> students = studentService.listStudents(state, branch, grade, year, active);
-		List<StudentDTO> dtos = new ArrayList<StudentDTO>();
-		for (Student std : students) {
-			StudentDTO dto = new StudentDTO(std);
-			// int startWeek = 10;//JaeUtils.academicWeeks(startDate);
-			// dto.setRegisterDate(dto.getRegisterDate()+"|"+startWeek);
-			dtos.add(dto);
-		}
+		List<StudentDTO> dtos = studentService.listStudents(state, branch, grade, year, active);
+		// List<StudentDTO> dtos = new ArrayList<StudentDTO>();
+		// for (Student std : students) {
+		// 	StudentDTO dto = new StudentDTO(std);
+		// 	dtos.add(dto);
+		// }
 		model.addAttribute(JaeConstants.STUDENT_LIST, dtos);
 		return "studentListPage";
 	}

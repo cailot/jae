@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import hyung.jin.seo.jae.dto.StudentDTO;
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.StudentRepository;
 import hyung.jin.seo.jae.service.StudentService;
@@ -47,55 +48,58 @@ public class StudentServiceImpl implements StudentService {
 
 
 	@Override
-	public List<Student> listStudents(String state, String branch, String grade, String year, String active) {
-		List<Student> students = null;// studentRepository.findAll();
-
-		Specification<Student> spec = Specification.where(null);
+	public List<StudentDTO> listStudents(String state, String branch, String grade, String year, String active) {
 		
-		if((StringUtils.isNotBlank(state))&&(!StringUtils.equals(state, JaeConstants.ALL))) {
-			spec = spec.and(StudentSpecification.stateEquals(state));
-		}
-		if(StringUtils.isNotBlank(branch)&&(!StringUtils.equals(branch, JaeConstants.ALL))) {
-			spec = spec.and(StudentSpecification.branchEquals(branch));
-		}
-		if(StringUtils.isNotBlank(grade)&&(!StringUtils.equals(grade, JaeConstants.ALL))) {
-			spec = spec.and(StudentSpecification.gradeEquals(grade));
-		}
-		switch ((active==null) ? JaeConstants.ALL : active) {
+		String stateParam = (state==JaeConstants.ALL) ? "%" : state;
+		String branchParam = (branch==JaeConstants.ALL) ? "%" : branch;
+		String gradeParam = (grade==JaeConstants.ALL) ? "%" : grade;
 
-		case JaeConstants.CURRENT:
-			spec = spec.and(StudentSpecification.hasNullVaule("endDate"));
-			students = studentRepository.findAll(spec);
-			break;
+		List<StudentDTO> dtos = studentRepository.listStudent(2023);
+		return dtos;
 
-		case JaeConstants.STOPPED:
-			spec = spec.and(StudentSpecification.hasNotNullVaule("endDate"));
-			students = studentRepository.findAll(spec);
-			break;
+		// List<Student> students = null;// studentRepository.findAll();
 
-		case JaeConstants.ALL:
-			students = studentRepository.findAll(spec);
-		}
-		// year filter using Enrolment, Class & Cycle
-		if(StringUtils.isNotBlank(year)&&(!StringUtils.equals(year, JaeConstants.ALL))) {
-			List<Student> stds = new ArrayList<>();
-			int enrolYear = Integer.parseInt(year);
-			for(Student student : students){
-				List<Integer> years = studentRepository.findYearsByStudentId(student.getId());
-				//years.forEach(System.out::println);
-				years.forEach(item -> System.out.println(student.getId() + " --> " + item));
-				for(Integer yr : years){
-					if((yr!=null)&&(yr.intValue()==enrolYear)){
-						stds.add(student);
-						break;
-					}
-				}
-			}
-			// assign group of filtered Student List
-			students = stds;
-		}
+		// Specification<Student> spec = Specification.where(null);
+		
+		// if((StringUtils.isNotBlank(state))&&(!StringUtils.equals(state, JaeConstants.ALL))) {
+		// 	spec = spec.and(StudentSpecification.stateEquals(state));
+		// }
+		// if(StringUtils.isNotBlank(branch)&&(!StringUtils.equals(branch, JaeConstants.ALL))) {
+		// 	spec = spec.and(StudentSpecification.branchEquals(branch));
+		// }
+		// if(StringUtils.isNotBlank(grade)&&(!StringUtils.equals(grade, JaeConstants.ALL))) {
+		// 	spec = spec.and(StudentSpecification.gradeEquals(grade));
+		// }
+		// switch ((active==null) ? JaeConstants.ALL : active) {
 
-		return students;
+		// 	case JaeConstants.CURRENT:
+		// 		spec = spec.and(StudentSpecification.hasNullVaule("endDate"));
+		// 		students = studentRepository.findAll(spec);
+		// 		break;
+
+		// 	case JaeConstants.STOPPED:
+		// 		spec = spec.and(StudentSpecification.hasNotNullVaule("endDate"));
+		// 		students = studentRepository.findAll(spec);
+		// }
+		// // year filter using Enrolment, Class & Cycle
+		// if(StringUtils.isNotBlank(year)&&(!StringUtils.equals(year, JaeConstants.ALL))) {
+		// 	List<Student> stds = new ArrayList<>();
+		// 	int enrolYear = Integer.parseInt(year);
+		// 	for(Student student : students){
+		// 		List<Integer> years = studentRepository.findYearsByStudentId(student.getId());
+		// 		// years.forEach(item -> System.out.println(student.getId() + " --> " + item));
+		// 		for(Integer yr : years){
+		// 			if((yr!=null)&&(yr.intValue()==enrolYear)){
+		// 				stds.add(student);
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
+		// 	// assign group of filtered Student List
+		// 	students = stds;
+		// }
+
+		// return students;
 	}
 	
 	@Override

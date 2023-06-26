@@ -16,7 +16,7 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Long>{
 	
 
 
-// bring latest EnrolmentDTO by student id, called from retrieveEnrolment() in courseInfo.jsp
+	// bring latest EnrolmentDTO by student id, called from retrieveEnrolment() in courseInfo.jsp
 	@Query(value = "SELECT en.id, en.enrolmentDate, en.cancelled, en.cancellationReason, en.startWeek, en.endWeek, " +
             "COALESCE(inv.credit, 0.0) AS credit, COALESCE(inv.discount, 0.0) AS discount, " +
             "COALESCE(inv.totalAmount, 0.0) AS totalAmount, COALESCE(inv.paidAmount, 0.0) AS paidAmount, " +
@@ -27,10 +27,12 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Long>{
             "JOIN Course co ON cl.courseId = co.id " +
             "JOIN Cycle cy ON cl.cycleId = cy.id " +
             "WHERE en.studentId = :studentId AND en.old = 0", nativeQuery = true)
-    List<Object[]> findEnrolmentByStudentId(@Param("studentId") Long studentId);
+    List<Object[]> findEnrolmentByStudentId(@Param("studentId") long studentId);
 
 
-
+	// get start and end week by student id and year in studentList.jsp
+	@Query(value = "SELECT en.startWeek, en.endWeek FROM Enrolment en LEFT JOIN Class cl ON en.clazzId = cl.id JOIN Cycle cy ON cl.cycleId = cy.id WHERE en.studentId = :studentId AND cy.year = :year", nativeQuery = true)
+	List<Object[]> findStartAndEndWeekByStudentIdAndYear(@Param("studentId") long studentId, @Param("year") int year);
 
 
 
