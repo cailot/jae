@@ -124,7 +124,6 @@ public class StudentDTO implements Serializable{
         this.endDate = (std.getEndDate()!=null) ? std.getEndDate().toString() : ""; 
     }
     
-	
 	public StudentDTO(long id, String firstName, String lastName, String grade, String contactNo1, String contactNo2, String email1, String email2, String state, String branch, LocalDate registerDate) {
     	this.id = String.valueOf(id);
         this.firstName = (firstName !=null ) ? firstName : "";
@@ -137,5 +136,20 @@ public class StudentDTO implements Serializable{
 		this.state = (state!=null) ? state : "";
         this.branch = (branch!=null) ? branch : "";
         this.registerDate = (registerDate!=null) ? registerDate.toString() : "";
+    }
+
+	public StudentDTO(long id, String firstName, String lastName, String grade, String contactNo1, String contactNo2, String email1, String email2, String state, String branch, LocalDate registerDate, int startWeek) {
+    	this.id = String.valueOf(id);
+        this.firstName = (firstName !=null ) ? firstName : "";
+        this.lastName = (lastName !=null ) ? lastName : "";
+        this.grade = (grade!=null) ? grade : "";
+        this.contactNo1 = (contactNo1 !=null ) ? contactNo1 : "";
+        this.contactNo2 = (contactNo2 !=null) ? contactNo2 : "";
+        this.email1 = (email1!=null) ? email1 : "";
+		this.email2 = (email2!=null) ? email2 : "";
+		this.state = (state!=null) ? state : "";
+        this.branch = (branch!=null) ? branch : "";
+        this.registerDate = (registerDate!=null) ? registerDate.toString() : "";
+		this.startWeek = startWeek;
     }
 }

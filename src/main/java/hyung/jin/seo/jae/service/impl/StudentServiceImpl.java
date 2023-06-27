@@ -50,11 +50,19 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public List<StudentDTO> listStudents(String state, String branch, String grade, String year, String active) {
 		
-		String stateParam = (state==JaeConstants.ALL) ? "%" : state;
-		String branchParam = (branch==JaeConstants.ALL) ? "%" : branch;
-		String gradeParam = (grade==JaeConstants.ALL) ? "%" : grade;
-
-		List<StudentDTO> dtos = studentRepository.listStudent(2023);
+		String stateParam = StringUtils.equalsIgnoreCase(state, JaeConstants.ALL) ? "%" : state;
+		String branchParam = StringUtils.equalsIgnoreCase(branch, JaeConstants.ALL) ? "%" : branch;
+		String gradeParam = StringUtils.equalsAnyIgnoreCase(grade, JaeConstants.ALL) ? "%" : grade;
+		int yearParam = StringUtils.equalsAnyIgnoreCase(year, JaeConstants.ALL) ? 0 : Integer.parseInt(year);
+		
+		List<StudentDTO> dtos = null;
+		switch(active){
+			case JaeConstants.CURRENT:
+				dtos = studentRepository.listActiveStudent(stateParam, branchParam, gradeParam, yearParam);
+				break;
+			case JaeConstants.STOPPED:
+				dtos = studentRepository.listInactiveStudent(stateParam, branchParam, gradeParam, yearParam);
+		}
 		return dtos;
 
 		// List<Student> students = null;// studentRepository.findAll();

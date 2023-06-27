@@ -381,9 +381,9 @@ function retrieveStudentInfo(std) {
 												<td class="small ellipsis text-truncate" style="max-width: 0; overflow: hidden;"><span><c:out value="${student.email2}" /></span></td>
 												<td class="small ellipsis text-truncate" style="max-width: 0; overflow: hidden;"><span><c:out value="${student.contactNo2}" /></span></td>
 												<td>
-													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retrieveStudentInfo('${student.id}')"></i>&nbsp;
-													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning fa-lg" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;
-				 									<i class="fas fa-stop-circle text-danger fa-lg" data-toggle="tooltip" title="Suspend" onclick="inactivateStudent('${student.id}')"></i>
+													<i class="fa fa-edit text-primary" data-toggle="tooltip" title="Edit" onclick="retrieveStudentInfo('${student.id}')"></i>&nbsp;
+													<a href="#passwordStudentModal" class="password" data-toggle="modal"><i class="fa fa-key text-warning" data-toggle="tooltip" title="Change Password"></i></a>&nbsp;
+				 									<i class="fas fa-stop-circle text-danger" data-toggle="tooltip" title="Suspend" onclick="inactivateStudent('${student.id}')"></i>
 												</td>
 											</tr>
 										</c:forEach>

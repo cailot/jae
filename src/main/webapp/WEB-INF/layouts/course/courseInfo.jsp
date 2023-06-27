@@ -139,8 +139,8 @@ function listBooks(grade) {
 				row.append($('<td class="smaller-table-font col-5">').text(value.name));
 				row.append($('<td class="smaller-table-font col-4">').text(addSpace(JSON.stringify(value.subjects))));
 				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(Number(value.price).toFixed(2)));
-				row.append($("<td class='col-1' onclick='addBookToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
-				//row.append($("<td class='col-1' onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
+				//row.append($("<td class='col-1' onclick='addBookToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
+				row.append($("<td class='col-1' onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
 				$('#bookTable > tbody').append(row);
 			});
 		},
@@ -523,7 +523,7 @@ function retrieveEnrolment(studentId){
 				$('#basketTable > tbody').append(row);	
 
 				// update the invoice table
-				retrieveInvoiceListTable(value);
+				//retrieveInvoiceListTable(value);
 
 
 			});

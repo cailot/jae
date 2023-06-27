@@ -295,7 +295,7 @@
 		// clear enrolment basket
 		clearEnrolmentBasket();
 		// clear invoice table
-		clearInvoiceTable();
+		//clearInvoiceTable();
 		// clear course register section
 		clearCourseRegisteration();
 	}
@@ -732,7 +732,7 @@
 		</div>
 		<div class="form-row mt-3">
 			<div class="col-md-12">
-				<textarea class="form-control" id="formMemo" name="formMemo" style="height: 200px;" placeholder="Memo"></textarea>
+				<textarea class="form-control" id="formMemo" name="formMemo" style="height: 185px;" placeholder="Memo"></textarea>
 			</div>
 		</div>
 		<input type="hidden" id="formEndDate" name="formEndDate" />

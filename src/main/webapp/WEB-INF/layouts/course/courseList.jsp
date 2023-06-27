@@ -224,7 +224,7 @@ function clearCourseForm(elementId) {
 												<td class="small ellipsis"><span><c:out value="${course.description}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${fn:toUpperCase(course.grade)}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${course.price}" /></span></td>
-												<td>
+												<td class="text-center">
 													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retrieveCourseInfo('${course.id}')"></i>&nbsp;
 												</td>
 											</tr>

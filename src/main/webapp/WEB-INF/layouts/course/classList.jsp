@@ -368,8 +368,8 @@ function editInitialiseCourseByGrade(grade, courseId) {
 									<c:when test="${ClassList != null}">
 										<c:forEach items="${ClassList}" var="clazz">
 											<tr>
-												<td class="small ellipsis"><span><c:out value="${clazz.state}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${clazz.branch}" /></span></td>
+												<td class="small ellipsis"><span style="text-transform: capitalize;"><c:out value="${clazz.state}" /></span></td>
+												<td class="small ellipsis"><span style="text-transform: capitalize;"><c:out value="${clazz.branch}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${fn:toUpperCase(clazz.grade)}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.name}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.description}" /></span></td>
@@ -504,6 +504,7 @@ function editInitialiseCourseByGrade(grade, courseId) {
 					<div class="form-group">
 						<div class="form-row">
 							<div class="col-md-5">
+								<label for="addName" class="label-form">Class Name</label>
 								<input type="text" class="form-control" id="addName" name="addName" placeholder="Name" title="Please enter Class name">
 							</div>
 							<div class="col-md-4">
