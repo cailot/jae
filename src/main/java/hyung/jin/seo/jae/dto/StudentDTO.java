@@ -138,7 +138,7 @@ public class StudentDTO implements Serializable{
         this.registerDate = (registerDate!=null) ? registerDate.toString() : "";
     }
 
-	public StudentDTO(long id, String firstName, String lastName, String grade, String contactNo1, String contactNo2, String email1, String email2, String state, String branch, LocalDate registerDate, int startWeek) {
+	public StudentDTO(long id, String firstName, String lastName, String grade, String contactNo1, String contactNo2, String email1, String email2, String state, String branch, LocalDate registerDate, int startWeek, int endWeek) {
     	this.id = String.valueOf(id);
         this.firstName = (firstName !=null ) ? firstName : "";
         this.lastName = (lastName !=null ) ? lastName : "";
@@ -151,5 +151,6 @@ public class StudentDTO implements Serializable{
         this.branch = (branch!=null) ? branch : "";
         this.registerDate = (registerDate!=null) ? registerDate.toString() : "";
 		this.startWeek = startWeek;
+		this.endWeek = endWeek;
     }
 }
