@@ -113,10 +113,6 @@ function listCourses(grade) {
 	});
 }
 
-
-
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Search Book based on Grade	
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -139,8 +135,8 @@ function listBooks(grade) {
 				row.append($('<td class="smaller-table-font col-5">').text(value.name));
 				row.append($('<td class="smaller-table-font col-4">').text(addSpace(JSON.stringify(value.subjects))));
 				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(Number(value.price).toFixed(2)));
-				//row.append($("<td class='col-1' onclick='addBookToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
-				row.append($("<td class='col-1' onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
+				row.append($("<td class='col-1' onclick='addBookToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
+				//row.append($("<td class='col-1' onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="fa fa-plus-circle"></i></a>'));
 				$('#bookTable > tbody').append(row);
 			});
 		},
@@ -149,36 +145,6 @@ function listBooks(grade) {
 		}
 	});
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Search Etc based on Grade	
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-// function listEtcs(grade) {
-// 	// clear 'courseEtcTable' table body
-// 	$('#courseEtcTable tbody').empty();
-// 	$.ajax({
-// 		url : '${pageContext.request.contextPath}/courseEtc/list',
-// 		type : 'GET',
-// 		data : {
-// 			grade : grade,
-// 		},
-// 		success : function(data) {
-// 			$.each(data, function(index, value) {
-// 				const cleaned = cleanUpJson(value);
-// 				var row = $('<tr class="d-flex">');
-// 				row.append($('<td>').addClass('hidden-column').text(value.id));
-// 				row.append($('<td class="col-1"><i class="fa fa-ellipsis-h" title="etc"></i></td>'));
-// 				row.append($('<td class="smaller-table-font col-8" style="padding-left: 20px;">').text(value.name));
-// 				row.append($('<td class="smaller-table-font col-2 text-right pr-4">').text(Number(value.price).toFixed(2)));
-// 				// row.append($("<td class='col-1' onclick='addEtcToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Etc"><i class="fa fa-plus-circle"></i></a>'));
-// 				row.append($("<td class='col-1' onclick='addEtcToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Etc"><i class="fa fa-plus-circle"></i></a>'));
-// 				$('#courseEtcTable > tbody').append(row);
-// 			});
-// 		},
-// 		error : function(xhr, status, error) {
-// 			console.log('Error : ' + error);
-// 		}
-// 	});
-// }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Associate eLearnings with Student	
@@ -230,22 +196,22 @@ function associateOnline(){
 	});
 
 	// Make the AJAX enrolment for eLearning
-	// if(elearningData.length > 0){
-		$.ajax({
-			url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
-			method: 'POST',
-			data: JSON.stringify(elearningData),
-			contentType: 'application/json',
-			success: function(response) {
-				// Handle the response
-				console.log(response);
-			},
-			error: function(xhr, status, error) {
-				// Handle the error
-				console.error(error);
-			}
-		});
-	// }
+	
+	$.ajax({
+		url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
+		method: 'POST',
+		data: JSON.stringify(elearningData),
+		contentType: 'application/json',
+		success: function(response) {
+			// Handle the response
+			console.log(response);
+		},
+		error: function(xhr, status, error) {
+			// Handle the error
+			console.error(error);
+		}
+	});
+
 
 	// Make the AJAX enrolment for class
 	$.ajax({
@@ -254,6 +220,15 @@ function associateOnline(){
 		data: JSON.stringify(enrolData),
 		contentType: 'application/json',
 		success: function(response) {
+
+			// display enrolment into invoice table
+			// $.each(response, function(index, value){
+			// 	console.log(value);
+			// 	// update the invoice table
+			// 	retrieveInvoiceListTable(value);
+			// });
+
+
 			// Handle the response
 			console.log(response);
 			$('#success-alert .modal-body').html('ID : <b>' + studentId + '</b> enrolment saved successfully');
@@ -265,20 +240,10 @@ function associateOnline(){
 		}
 	});
 
-	// Make the AJAX invoice for class
-	// $.ajax({
-	// 	url : '${pageContext.request.contextPath}/invoice/create/' + studentId,
-	// 	type : 'POST',
-	// 	dataType : 'json',
-	// 	data : JSON.stringify(enrolData),
-	// 	contentType : 'application/json',
-	// 	success : function(invoice) {
-	// 		console.log(invoice);
-	// 	},
-	// 	error : function(xhr, status, error) {
-	// 		console.log('Error : ' + error);
-	// 	}
-	// });
+	// update invoice table
+	
+
+
 }
 
 
@@ -301,55 +266,6 @@ function addElearningToBasket(value){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Add class to basket
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-// function addClassToBasket(value){
-// 	$.ajax({
-// 		url: '${pageContext.request.contextPath}/class/classesByCourse',
-// 		type: 'GET',
-// 		data: {
-// 			courseId: value.id,
-// 			year: value.year
-// 		},
-// 		success: function(data) {
-// 			if(value.year == academicYear){
-// 				// var start_week = academicWeek;
-// 				// var end_week = academicWeek + 10;
-// 				var start_week = parseInt(academicWeek);
-// 				var end_week = parseInt(academicWeek) + 9;
-
-// 				if(end_week >= 49){
-// 					end_week = 49;
-// 				}
-// 				var weeks = (end_week - start_week)+1;
-// 			}else{
-// 				var start_week = 1;
-// 				var end_week = 10;
-// 				var weeks = (end_week - start_week)+1;
-// 			}
-// 			var row = $('<tr class="d-flex">');
-// 			row.append($('<td class="col-1"><i class="fa fa-graduation-cap" title="class"></i></td>'));
-// 			row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() + '] '+ value.description));
-// 			// Create a dropdown list for value.day and id is option value
-// 			var dropdown = $('<select class="clazzChoice">');
-// 			$.each(data, function(index, clazz) {
-// 				dropdown.append($('<option>').text(clazz.day).val(clazz.id));
-// 			});
-// 			row.append($('<td class="smaller-table-font col-2">').append(dropdown));
-// 			row.append($('<td class="smaller-table-font col-1">').text(value.year));
-// 			row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('start-week').text(start_week));
-// 			row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('end-week').text(end_week));
-// 			row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('weeks').text(weeks));
-// 			row.append($('<td class="col-1">').html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
-// 			$('#basketTable > tbody').append(row);
-
-// 			// Automatically dismiss the alert after 2 seconds
-// 			showAlertMessage('addAlert', '<center><i class="fa fa-graduation-cap"></i> &nbsp;&nbsp' + value.description +' added to My Lecture</center>');
-
-// 		},
-// 		error: function(xhr, status, error) {
-// 			console.log('Error: ' + error);
-// 		}
-// 	});
-// }
 function addClassToBasket(value) {
   $.ajax({
     url: '${pageContext.request.contextPath}/class/classesByCourse',
@@ -459,46 +375,6 @@ function addBookToInvoice(value){
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Add etc to basket
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-// function addEtcToBasket(value){
-// 	var row = $('<tr class="d-flex">');
-// 	row.append($('<td>').addClass('hidden-column').text(ETC  + '|' + value.id));
-// 	row.append($('<td class="col-1">').text('Etc'));
-// 	row.append($('<td>').text(value.name));
-// 	row.append($('<td>').text(academicYear));
-// 	row.append($('<td>').text(academicWeek));
-// 	row.append($('<td>').text(0));
-// 	row.append($('<td>').text(value.price));
-// 	row.append($("<td>").html('<a href="javascript:void(0)" title="Delete Etc"><i class="fa fa-trash"></i></a>'));
-// 	$('#basketTable > tbody').append(row);
-// }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Add etc to Invoice
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-// function addEtcToInvoice(value){
-// 	var row = $('<tr>');
-// 	row.append($('<td>').addClass('hidden-column').text(ETC + '|' + value.id)); // 0
-// 	row.append($('<td class="text-center"><i class="fa fa-ellipsis-h" title="etc"></i></td>')); // item
-// 	row.append($('<td class="smaller-table-font">').text(value.name)); // description
-// 	row.append($('<td class="smaller-table-font">').text(0)); // year
-// 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(0)); // start week
-// 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(0)); // end week
-// 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(1)); // weeks
-// 	row.append($('<td class="smaller-table-font">').addClass('fee').text(Number(value.price).toFixed(2)));// price
-// 	row.append($('<td class="smaller-table-font">').text(0));// credit	
-// 	// row.append($('<td class="smaller-table-font">').text('0'));// credit date
-// 	row.append($('<td class="smaller-table-font">').text('0'));// DC %
-// 	row.append($('<td class="smaller-table-font">').text('0'));// DC $
-// 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text(Number(value.price).toFixed(2)));// Total
-// 	row.append($('<td class="smaller-table-font">').text('0'));// Date
-// 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>')); // Action
-// 	$('#invoiceListTable > tbody').append(row);
-
-// }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve Enroloment & Update Invoice Table
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function retrieveEnrolment(studentId){
@@ -523,9 +399,7 @@ function retrieveEnrolment(studentId){
 				$('#basketTable > tbody').append(row);	
 
 				// update the invoice table
-				//retrieveInvoiceListTable(value);
-
-
+				retrieveInvoiceListTable(value);
 			});
 		},
 		error: function(xhr, status, error) {
@@ -621,7 +495,7 @@ function showAlertMessage(elementId, message) {
 					</select>
 				</div>
 				<div class="col-md-8">
-					<p class="text-truncate text-center">To apply, please click on the Enrollment button</p>
+					<p class="text-truncate text-center">To apply, please click on the Enrolment button</p>
 				</div>
 				<div class="col-md-2">
 					<button type="button" class="btn btn-block btn-primary btn-sm" data-toggle="modal" onclick="associateOnline()">Enrolment</button>
@@ -715,24 +589,7 @@ function showAlertMessage(elementId, message) {
                                   </tbody>
                               </table>
                           </div>
-						  <!-- Etc -->
-                          <!-- <div class="tab-pane fade" id="nav-etc" role="tabpanel" aria-labelledby="nav-etc-tab">
-                              <table class="table" cellspacing="0" id="courseEtcTable" name="courseEtcTable">
-								<thead>
-                                      <tr class="d-flex">
-										  <th class="hidden-column"></th>
-										  <th class="smaller-table-font col-1">Item</th>
-										  <th class="smaller-table-font col-8" style="padding-left: 20px;">Description</th>
-                                          <th class="smaller-table-font col-2 text-right pr-4">Price</th>
-										  <th class="smaller-table-font col-1"></th>
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-                                  </tbody>                                  
-                              </table>
-                          </div> -->
                       </div>
-              
 				</div>
 			</div>
 		</div>

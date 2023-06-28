@@ -295,7 +295,7 @@
 		// clear enrolment basket
 		clearEnrolmentBasket();
 		// clear invoice table
-		//clearInvoiceTable();
+		clearInvoiceTable();
 		// clear course register section
 		clearCourseRegisteration();
 	}

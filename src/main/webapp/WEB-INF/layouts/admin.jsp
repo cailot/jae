@@ -104,35 +104,9 @@
 			</div>
     	</div>
       	<div class="row">
-      		<div class="col-lg-12 bg-secondary">
+      		<div class="col-lg-12">
       			<div class="card-body">
-      				<form>
-						<div class="form-group">
-							<div class="form-row">
-								<div class="col-md-6">
-									<p>Receivable Amt: 740.00 Outstanding: 0.00</p>
-								</div>
-								<div class="col md-auto">
-									<button type="button" class="btn btn-block btn-primary btn-sm">Payment</button>
-								</div>
-								<div class="col md-auto">
-									<button type="button" class="btn btn-block btn-primary btn-sm">Invoice</button>
-								</div>
-								<div class="col md-auto">
-									<button type="button" class="btn btn-block btn-primary btn-sm">Email</button>
-								</div>
-								<div class="col md-auto">
-									<button type="button" class="btn btn-block btn-primary btn-sm">Record</button>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="form-row">
-								<textarea class="form-control" rows="8"></textarea>
-							</div>
-						</div>
-					</form>
-					<%-- <jsp:include page="invoice/invoiceInfo.jsp"></jsp:include> --%>
+					<jsp:include page="invoice/invoiceInfo.jsp"></jsp:include>
       			</div>
       		</div>
       	</div>     		

@@ -67,15 +67,6 @@ public class Course{
 	)
 	private Set<Book> books = new LinkedHashSet<>();
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(
-		name = "Course_CourseEtc",
-		joinColumns = { @JoinColumn(name = "courseId")},
-		inverseJoinColumns = { @JoinColumn(name = "etcId")}
-	)
-	private Set<CourseEtc> etcs = new LinkedHashSet<>();
-
-
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private Set<Clazz> classes = new LinkedHashSet<>();
 

@@ -35,7 +35,6 @@ public class SqlScriptRunner {
 			ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/cycle.sql")); // Cycle
 	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/course_subject.sql")); // Course_Subject
 	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/book.sql")); // Course Book
-	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/courseEtc.sql")); // CourseEtc
 	        ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/class.sql")); // Class
 	    	ScriptUtils.executeSqlScript(connection, resourceLoader.getResource("classpath:sql/braybrook_student.sql")); // Student
     	}

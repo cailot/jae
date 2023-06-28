@@ -144,12 +144,13 @@ public class JaeStudentController {
 
 	@PostMapping("/associateClazz/{id}")
 	@ResponseBody
-	public ResponseEntity<String> associateClazz(@PathVariable Long id, @RequestBody EnrolmentDTO[] formData) {
+	public List<EnrolmentDTO> associateClazz(@PathVariable Long id, @RequestBody EnrolmentDTO[] formData) {
 		// 1. get student
 		Student std = studentService.getStudent(id);
 		// 2. get enrolmentIds by studentId
 		List<Long> enrolmentIds = enrolmentService.findEnrolmentIdByStudentId(id);
 		// 3. create or update Enrolment
+		List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
 		for(EnrolmentDTO data : formData) {
 			try{
 				// New Enrolment if no id comes in
@@ -164,17 +165,20 @@ public class JaeStudentController {
 				enrolment.setStartWeek(data.getStartWeek());
 				enrolment.setEndWeek(data.getEndWeek());
 				// 7-A. save enrolment
-				enrolmentService.addEnrolment(enrolment);
+				EnrolmentDTO dto = enrolmentService.addEnrolment(enrolment);
+				dtos.add(dto);
 				}else {	// Update Enrolment if id comes in
 					// 4-B. get Enrolment
 					Enrolment enrolment = data.convertToEnrolment();
 					// 5-B. update Enrolment
 					enrolment = enrolmentService.updateEnrolment(enrolment, enrolment.getId());
+					EnrolmentDTO dto = new EnrolmentDTO(enrolment);
+					dtos.add(dto);
 					// 6-B remove enrolmentId from enrolmentIds
 					enrolmentIds.remove(enrolment.getId());
 				}
 			}catch(NoSuchElementException e){
-				return ResponseEntity.ok("No such Clazz");
+				return dtos;
 			}				
 		}
 		// 7. archive enrolments not in formData
@@ -182,6 +186,6 @@ public class JaeStudentController {
 			enrolmentService.archiveEnrolment(enrolmentId);
 		}
 		// 8. return success
-		return ResponseEntity.ok("Enrolment Success");	
+		return dtos;
 	}
 }
