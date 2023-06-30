@@ -13,32 +13,38 @@ $(document).ready(
 	}
 );
 
-
-
-
-
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function retrieveInvoiceListTable(data) {
-	// debugger;
 	
+	// set invoiceId into hiddenId
+	$('#hiddenId').val(data.invoiceId);
+
     var row = $('<tr>');
+	
+	if (data.amount - data.paid > 0) {
+		row.addClass('text-danger');
+	} 
+
     row.append($('<td>').addClass('hidden-column').text(ENROLMENT + '|' + data.id));
     row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>'));
     row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name));
+	
     row.append($('<td class="smaller-table-font">').text(data.year));
     row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek));
     row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek));
     row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1));
-    row.append($('<td class="smaller-table-font">').addClass('price').text((data.price).toFixed(2)));
-    row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('credit').text(data.credit));
-    row.append($('<td class="smaller-table-font" contenteditable="true">').text('?%'));
-    row.append($('<td class="smaller-table-font" contenteditable="true">').addClass('discount').text(data.discount));
-    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)).attr("id", "amountCell"));
-    row.append($('<td class="smaller-table-font paid-date">').text(data.payCompleteDate));
+    row.append($('<td class="smaller-table-font text-center">').addClass('price').text((data.price).toFixed(2)));
+	//row.append($('<td class="smaller-table-font text-center">').addClass('price').text(data.price ? (data.price).toFixed(2) : ''));
+
+    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('credit').text(data.credit));
+    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text('0 %'));
+	
+    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('discount').text(data.discount));
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.amount-data.paid).toFixed(2)).attr("id", "amountCell"));
+	//row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text(data.amount ? (data.amount).toFixed(2) : '').attr("id", "amountCell"));
+	row.append($('<td class="smaller-table-font paid-date">').text(data.payCompleteDate));
     row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 
     $('#invoiceListTable > tbody').append(row);
@@ -113,6 +119,15 @@ function displayPayment(){
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Display Receipt in another tab
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function displayReceiptInNewTab(){
+	var win = window.open('', '_blank');
+	win.focus();
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Make Payment
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function makePayment(){
@@ -135,29 +150,19 @@ function makePayment(){
 		dataType : 'json',
 		data : JSON.stringify(payment),
 		contentType : 'application/json',
-		success : function(data) {
-			// update paid date column
-			
-			// if data is equals to 'Full' do something, else do something else
-			if(data == FULL_PAID){
-				// update date column with datestamp
-				// how to get first <tr> in $('#invoiceListTable > tbody')
-				$('#invoiceListTable > tbody > tr:first').find('.paid-date').text('Paid');
+		success : function(response) {
 
-				console.log('Full');
-			}else{
-				// $('#paidDate').text($('#payDate').val());
-				console.log('Not Full');
-			}	
-
+			$.each(response, function(index, value){
+				// update the invoice table
+				retrieveInvoiceListTable(value);
+			});
 
 			// reset payment dialogue info
 			document.getElementById('makePayment').reset();
 			$('#paymentModal').modal('toggle');	
 
-			// Display success alert
-			$('#success-alert .modal-body').html('ID : <b>' + studentId + '</b> payment updated successfully.');
-			$('#success-alert').modal('toggle');
+			// display receipt
+			displayReceiptInNewTab();
 			
 		},
 		error : function(xhr, status, error) {

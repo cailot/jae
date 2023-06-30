@@ -221,14 +221,12 @@ function associateOnline(){
 		contentType: 'application/json',
 		success: function(response) {
 
-			// display enrolment into invoice table
-			// $.each(response, function(index, value){
-			// 	console.log(value);
-			// 	// update the invoice table
-			// 	retrieveInvoiceListTable(value);
-			// });
-
-
+			$.each(response, function(index, value){
+				// update the invoice table
+				// console.log(value);
+				retrieveInvoiceListTable(value);
+			});
+	
 			// Handle the response
 			console.log(response);
 			$('#success-alert .modal-body').html('ID : <b>' + studentId + '</b> enrolment saved successfully');

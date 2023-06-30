@@ -81,6 +81,7 @@ public class EnrolmentDTO implements Serializable{
 		// enrolement.setCredit(credit);
 		// enrolement.setDiscount(discount);
 		// enrolement.setAmount(amount);
+		if(StringUtils.isNotBlank(payCompleteDate)) enrolement.setEnrolmentDate(LocalDate.parse(payCompleteDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		if(StringUtils.isNotBlank(cancellationReason)) enrolement.setCancellationReason(cancellationReason);		
     	return enrolement;
     }
@@ -108,7 +109,7 @@ public class EnrolmentDTO implements Serializable{
 		this.day = day;
 	}
 
-		public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, long studentId, long clazzId, String name, double price, int year, String grade, String day){
+	public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, long studentId, long clazzId, String name, double price, int year, String grade, String day){
 		this.id = String.valueOf(id);
 		this.enrolmentDate = enrolmentDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.cancelled = cancelled;

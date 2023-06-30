@@ -1,6 +1,7 @@
 package hyung.jin.seo.jae.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,11 +160,13 @@ public class JaeInvoiceController {
 		}
 	}
 
+	
 	// make payment and return updated invoice
 	@PostMapping("/payment/{studentId}")
 	@ResponseBody
-	public ResponseEntity<String> makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData) {
+	public List<EnrolmentDTO> makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData) {
 		
+		List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
 		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
 		double paidAmount = formData.getAmount();
 		boolean fullPaid = false;
@@ -174,7 +177,7 @@ public class JaeInvoiceController {
 			Payment payment = formData.convertToPayment();
 			Payment paid = paymentService.addPayment(payment);
 			// 3. update Invoice
-			invoice.setPaidAmount(paidAmount);
+			invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
 			invoice.addPayment(paid);
 			// 4. check whether full paid or not
 			if(invoice.getTotalAmount() <= invoice.getPaidAmount()){
@@ -185,14 +188,17 @@ public class JaeInvoiceController {
 			}
 			// 5. save Invoice
 			invoiceService.updateInvoice(invoice, invoiceId);
-			// 5. bring to EnrolmentDTO
+			// 6. bring to EnrolmentDTO
+			List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoiceId);
+			for(EnrolmentDTO enrol : enrols){
+				enrol.setInvoiceId(String.valueOf(invoiceId));
+				// 7. add to dtos
+				dtos.add(enrol);
+			}
+			
 		}
-		// 6. return
-		if(fullPaid){
-			return ResponseEntity.ok("\"Full\"");
-		}else{
-			return ResponseEntity.ok("\"Partially\"");
-		}
+		// 8. return
+		return dtos;
 	}
 
 }
