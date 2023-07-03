@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +26,7 @@ import hyung.jin.seo.jae.model.Payment;
 import hyung.jin.seo.jae.service.EnrolmentService;
 import hyung.jin.seo.jae.service.InvoiceService;
 import hyung.jin.seo.jae.service.PaymentService;
+import hyung.jin.seo.jae.utils.JaeConstants;
 
 @Controller
 @RequestMapping("invoice")
@@ -37,6 +41,15 @@ public class JaeInvoiceController {
 	@Autowired
 	private PaymentService paymentService;
 
+	// how to access receipt page by http://localhost:8080/invoice/my.
+	// please create controller method for this.
+	@GetMapping("/my")
+	public String my() {
+		return "receipt";
+	}	
+
+
+	
 	// count records number in database
 	@GetMapping("/count")
 	@ResponseBody
@@ -164,8 +177,9 @@ public class JaeInvoiceController {
 	// make payment and return updated invoice
 	@PostMapping("/payment/{studentId}")
 	@ResponseBody
-	public List<EnrolmentDTO> makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData) {
+	public List<EnrolmentDTO> makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
 		
+
 		List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
 		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
 		double paidAmount = formData.getAmount();
@@ -178,7 +192,7 @@ public class JaeInvoiceController {
 			Payment paid = paymentService.addPayment(payment);
 			// 3. update Invoice
 			invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
-			invoice.addPayment(paid);
+			invoice.setPayment(paid);
 			// 4. check whether full paid or not
 			if(invoice.getTotalAmount() <= invoice.getPaidAmount()){
 				fullPaid = true;
@@ -194,9 +208,12 @@ public class JaeInvoiceController {
 				enrol.setInvoiceId(String.valueOf(invoiceId));
 				// 7. add to dtos
 				dtos.add(enrol);
-			}
-			
+			}	
 		}
+
+		// 8. set EnrolmentDTO objects into session for payment receipt
+		session.setAttribute(JaeConstants.PAYMENTS, dtos);
+		
 		// 8. return
 		return dtos;
 	}

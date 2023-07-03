@@ -2,14 +2,9 @@ package hyung.jin.seo.jae.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
-
-import hyung.jin.seo.jae.dto.StudentDTO;
 
 public class JaeUtils {
 
@@ -205,7 +200,6 @@ public class JaeUtils {
 		return " [" + date + "]";
 	}
 	
-
 	// check wether Today is between from and to
     public static boolean checkIfTodayBelongTo(String from, String to) throws ParseException {
         Date fromDate = displayFormat.parse(from);

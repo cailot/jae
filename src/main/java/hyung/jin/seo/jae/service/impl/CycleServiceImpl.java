@@ -94,13 +94,6 @@ public class CycleServiceImpl implements CycleService {
 		return year;
 	}
 
-
-
-	// public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-	// public static SimpleDateFormat displayFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-
-
 	// return weeks number based on academic year
 	@Override
 	public int academicWeeks(){

@@ -17,36 +17,41 @@ $(document).ready(
 //		Retrieve invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function retrieveInvoiceListTable(data) {
-	
+	//debugger;
 	// set invoiceId into hiddenId
 	$('#hiddenId').val(data.invoiceId);
 
     var row = $('<tr>');
 	
-	if (data.amount - data.paid > 0) {
-		row.addClass('text-danger');
-	} 
+	// display the row in red if the amount is not fully paid 
+	var needPay = (data.amount - data.paid > 0) ? true : false;
+	(needPay) ? row.addClass('text-danger') : row.addClass('');
 
     row.append($('<td>').addClass('hidden-column').text(ENROLMENT + '|' + data.id));
     row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>'));
     row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name));
-	
     row.append($('<td class="smaller-table-font">').text(data.year));
-    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek));
-    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek));
-    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1));
+    
+	// set editable attribute to true if the amount is not fully paid	
+	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek)) : row.append($('<td class="smaller-table-font text-center">').addClass('start-week').text(data.startWeek));
+	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek)) : row.append($('<td class="smaller-table-font text-center">').addClass('end-week').text(data.endWeek));
+	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1)) : row.append($('<td class="smaller-table-font text-center" >').addClass('weeks').text(data.endWeek - data.startWeek + 1));
     row.append($('<td class="smaller-table-font text-center">').addClass('price').text((data.price).toFixed(2)));
-	//row.append($('<td class="smaller-table-font text-center">').addClass('price').text(data.price ? (data.price).toFixed(2) : ''));
-
-    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('credit').text(data.credit));
-    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text('0 %'));
-	
-    row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('discount').text(data.discount));
-	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.amount-data.paid).toFixed(2)).attr("id", "amountCell"));
-	//row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text(data.amount ? (data.amount).toFixed(2) : '').attr("id", "amountCell"));
+	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('credit').text(data.credit)) : row.append($('<td class="smaller-table-font text-center">').addClass('credit').text(data.credit));
+	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text('0 %')) : row.append($('<td class="smaller-table-font text-center">').text('0 %'));
+	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('discount').text(data.discount)) : row.append($('<td class="smaller-table-font text-center">').addClass('discount').text(data.discount));
+	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell"));
 	row.append($('<td class="smaller-table-font paid-date">').text(data.payCompleteDate));
     row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
 
+	// if any existing row's hidden-column value is same as the new row's hidden-column value, then remove the existing row
+	$('#invoiceListTable > tbody > tr').each(function() {
+		if ($(this).find('.hidden-column').text() === row.find('.hidden-column').text()) {
+			$(this).remove();
+		}
+	});
+	
+	// add new row
     $('#invoiceListTable > tbody').append(row);
 
     var startWeekCell = row.find('.start-week');
@@ -54,8 +59,8 @@ function retrieveInvoiceListTable(data) {
     var weeksCell = row.find('.weeks');
     var creditCell = row.find('.credit');
     var amountCell = row.find('.amount');
-    var rxAmount = $("#rxAmount");
-    rxAmount.text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)); // initial receivable amount
+    // var rxAmount = $("#rxAmount");
+    // rxAmount.text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)); // initial receivable amount
 
     function updateWeeks() {
         var startWeek = parseInt(startWeekCell.text());
@@ -83,13 +88,30 @@ function retrieveInvoiceListTable(data) {
         }
 
         var amount = price * (weeks-credit);
-        amountCell.text(amount.toFixed(2));
-        rxAmount.text(amountCell.text());
+        amountCell.text(rxAmount.toFixed(2));
     }
 
     startWeekCell.on('input', updateWeeks);
     endWeekCell.on('input', updateWeeks);
     creditCell.on('input', updateWeeks);
+	// update Receivable Amount
+	updateReceivableAmount();
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Update Receivable Amount
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function updateReceivableAmount(){
+	var rxAmount = 0;
+	// find the value of all amount cells
+	$('#invoiceListTable > tbody > tr').each(function() {
+		var amount = parseFloat($(this).find('.amount').text());
+		// if payCompleteDate is not empty, then amount is 0
+		if ($(this).find('.paid-date').text() !== '') {
+			amount = 0;
+		}
+		rxAmount += amount;
+	});
+	$("#rxAmount").text(rxAmount.toFixed(2));
 }
 
 
@@ -98,6 +120,11 @@ function retrieveInvoiceListTable(data) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function clearInvoiceTable(){
 	$('#invoiceListTable > tbody').empty();
+	// clear rxAmount in invoice section
+	$('#rxAmount').text('0.00');
+	// clear stored invoice id
+	$('#hiddenId').val('');
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,8 +149,14 @@ function displayPayment(){
 //		Display Receipt in another tab
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function displayReceiptInNewTab(){
-	var win = window.open('', '_blank');
-	win.focus();
+  var invoiceId = $('#hiddenId').val();
+  var studentId = $('#formId').val();
+  var grade = $('#formGrade').val();
+  var firstName = $('#formFirstName').val();
+  var lastName = $('#formLastName').val();
+  var url = '/receipt?invoiceId=' + invoiceId + '&studentId=' + studentId + '&grade=' + grade + '&firstName=' + firstName + '&lastName=' + lastName;
+  var win = window.open(url, '_blank');
+  win.focus();
 }
 
 
@@ -153,6 +186,9 @@ function makePayment(){
 		success : function(response) {
 
 			$.each(response, function(index, value){
+				// how to set value object into request for next jsp page
+				
+				
 				// update the invoice table
 				retrieveInvoiceListTable(value);
 			});

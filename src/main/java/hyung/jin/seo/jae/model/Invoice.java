@@ -52,18 +52,26 @@ public class Invoice{
 		enrolments.add(enrolment);
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = {
+	@OneToOne(fetch = FetchType.LAZY, cascade = {
 		CascadeType.PERSIST,
 		CascadeType.MERGE,
 		CascadeType.REFRESH,
 		CascadeType.DETACH
 	})
-	@JoinColumn(name = "invoiceId")
-	private Set<Payment> payments = new LinkedHashSet<>();
+	private Payment payment;
+	
+	// @OneToMany(fetch = FetchType.LAZY, cascade = {
+	// 	CascadeType.PERSIST,
+	// 	CascadeType.MERGE,
+	// 	CascadeType.REFRESH,
+	// 	CascadeType.DETACH
+	// })
+	// @JoinColumn(name = "invoiceId")
+	// private Set<Payment> payments = new LinkedHashSet<>();
 
-	public void addPayment(Payment payment){
-		payments.add(payment);
-	}
+	// public void addPayment(Payment payment){
+	// 	payments.add(payment);
+	// }
 
 	// auto update to current date
 	@CreationTimestamp

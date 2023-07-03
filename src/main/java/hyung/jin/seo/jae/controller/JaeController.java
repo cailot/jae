@@ -38,5 +38,10 @@ public class JaeController {
 	public String setting(HttpSession session) {
 		return "settingPage";
 	}
+
+	@GetMapping("/receipt")
+	public String openReceipt(HttpSession session) {
+		return "receiptPage";
+	}
 	
 }

@@ -14,7 +14,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long>{
 	// List<PaymentDTO> findPaymentByInvoiceId(long invoiceId);
 
 	@Query(value = "SELECT p.id, p.amount, p.method, p.register_date, p.invoiceId, p.info FROM Payment p WHERE p.invoiceId = ?1", nativeQuery = true)
-	List<Payment> findByInvoiceId(Long invoiceId);
+	Payment findByInvoiceId(Long invoiceId);
 
 
 }

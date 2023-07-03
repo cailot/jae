@@ -2,11 +2,13 @@ package hyung.jin.seo.jae.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.lang3.StringUtils;
 
 import hyung.jin.seo.jae.model.Enrolment;
+import hyung.jin.seo.jae.utils.JaeUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -139,10 +141,10 @@ public class EnrolmentDTO implements Serializable{
 		this.startWeek = (obj[4]!=null) ? (int)obj[4] : 0;
 		this.endWeek = (obj[5]!=null) ? (int)obj[5] : 0;		
 		this.credit = (obj[6]!=null) ? Double.parseDouble(String.valueOf(obj[6])) : 0;
-		this.amount = (obj[7]!=null) ? Double.parseDouble(String.valueOf(obj[7])) : 0;
-		this.paid = (obj[8]!=null) ? Double.parseDouble(String.valueOf(obj[8])) : 0;
-		this.discount = (obj[9]!=null) ? Double.parseDouble(String.valueOf(obj[9])) : 0;
-		this.payCompleteDate =  (obj[10]!=null) ? String.valueOf(obj[10]) : null;
+		this.discount = (obj[7]!=null) ? Double.parseDouble(String.valueOf(obj[7])) : 0;
+		this.amount = (obj[8]!=null) ? Double.parseDouble(String.valueOf(obj[8])) : 0;
+		this.paid = (obj[9]!=null) ? Double.parseDouble(String.valueOf(obj[9])) : 0;
+		this.payCompleteDate = (obj[10] != null) ? JaeUtils.dateFormat.format(obj[10]) : null;
 		this.studentId = (obj[11]!=null) ? String.valueOf(obj[11]) : null;
 		this.clazzId = (obj[12]!=null) ? String.valueOf(obj[12]) : null;
 		this.name = (obj[13]!=null) ? (String)obj[13] : null;
@@ -151,5 +153,4 @@ public class EnrolmentDTO implements Serializable{
 		this.grade = (obj[16]!=null) ? (String)obj[16] : null;
 		this.day = (obj[17]!=null) ? (String)obj[17] : null;
 	}
-
 }

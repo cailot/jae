@@ -112,5 +112,6 @@ public interface JaeConstants {
 
 	String PARTIAL_PAID = "Partial";
 
+	String PAYMENTS = "payments";
 	
 }

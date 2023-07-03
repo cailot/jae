@@ -21,24 +21,12 @@
 <!-- Glyphicons -->
 <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">		 -->
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">	
-	
 </head>
 <body>
 	<div class="container-fluid d-flex h-100 flex-column">
-		<div class="row">
-			<tiles:insertAttribute name="menu" />
-		</div>
 		<div class="row justify-content-center align-items-center">
 			<tiles:insertAttribute name="body" />
 		</div>
-		<footer class="mt-auto">
-			<div class="row dhhs-color" style="padding: 15px 20px;">
-				2018 -
-				<%=new java.util.Date().getYear() + 1900%>
-				&copy;&nbsp; All rights reserved.&nbsp;&nbsp;
-				<div class="copyright-font-color">James An College</div>
-			</div>
-		</footer>
 	</div>
 </body>
 </html>

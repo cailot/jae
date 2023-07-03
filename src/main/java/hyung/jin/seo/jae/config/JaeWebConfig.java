@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -15,6 +16,14 @@ public class JaeWebConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/**")
 		.addResourceLocations("classpath:static/assets/")
 		.setCacheControl(CacheControl.maxAge(2, TimeUnit.HOURS).cachePublic());
+	}
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		 registry.addMapping("/**")
+                .allowedOrigins("http://localhost:8080") // Add the allowed origin here
+                .allowedMethods("GET", "POST", "PUT", "DELETE") // Add the allowed HTTP methods here
+                .allowedHeaders("*"); // Add the allowed headers here
 	}
 
 }
