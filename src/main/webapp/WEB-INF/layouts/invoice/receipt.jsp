@@ -263,7 +263,7 @@
                     <p style="margin-top: 8px; font-size: 13px;font-weight:600;line-height:1.5">
                         0393610051
                         <br />16c 77-79 Ashley St
-                        <br /><span style="font-weight:900;font-size:14px;">ABN ABN 123123123</span>
+                        <br /><span style="font-weight:900;font-size:14px;">ABN 123123123</span>
                     </p>
                 </td>
             </tr>
@@ -313,27 +313,32 @@
                 </tr>
             </thead>
             <tbody>
-               
+                <c:set var="finalTotal" value="0" />
+                <c:set var="paidTotal" value="0" />
                 <%-- Check if payments attribute exists in session --%>
                 <c:if test="${not empty sessionScope.payments}">
                     <%-- Retrieve the payments from session --%>
                     <c:set var="payments" value="${sessionScope.payments}" />
                     <c:forEach items="${payments}" var="payment">
                         <tr>
-                            <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'>[ <c:out value="${fn:toUpperCase(payment.grade)}" /> ] <c:out value="${payment.name}" /></td>
-                            <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'><c:out value="${payment.grade}" /></td>
+                            <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'>[<c:out value="${fn:toUpperCase(payment.grade)}" />] <c:out value="${payment.name}" /></td>
+                            <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'><c:out value="${payment.extra}" /></td>
                             <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${payment.endWeek-payment.startWeek}" /></td>
                             <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${payment.price}" /></td>
                             <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${payment.discount}" /></td>
                             <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${payment.amount}" /></td>
+                            <%-- Add the amount to the finalTotal variable --%>
+                            <c:set var="finalTotal" value="${finalTotal + payment.amount}" />
+                            <%-- Add the paid to the paidTotal variable --%>
+                            <c:set var="paidTotal" value="${paidTotal + payment.paid}" />
+    
                         </tr>
                     </c:forEach>
                 </c:if>
 
-                <tr><td colspan='5' style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: left;'>OS(692.00)</td><td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'>692.00</td></tr>
-                <tr>
+                <!-- <tr>
                     <td colspan='6' style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: left;'><b>Other Information</b>, Paid Date :  02/07/2023</td>
-                </tr>
+                </tr> -->
                 <tr>
                     <td colspan='6' style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: left;'></td>
                 </tr>
@@ -345,7 +350,7 @@
             <tr>
                 <td style="height: 32px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: right; font-weight: bold; font-family: 'arial', sans-serif; border: 0;font-weight: 600 !important;">FINAL TOTAL</td>
                 <td style="height: 32px; width: 100px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: center; color: #bdbdbd; font-style: normal; font-family: 'arial', sans-serif; border: 0;">$</td>
-                <td style="height: 32px; width: 130px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: right; font-family: 'arial', sans-serif; border: 0;"><strong>692.00</strong></td>
+                <td style="height: 32px; width: 130px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: right; font-family: 'arial', sans-serif; border: 0;"><strong><c:out value="${finalTotal}" /></strong></td>
             </tr>
             <!--<tr>
                 <td style="height: 32px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: right; font-weight: bold; font-family: 'arial', sans-serif; border: 0;font-style: italic;">D.S Count</td>
@@ -355,12 +360,22 @@
             <tr>
                 <td style="height: 32px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: right; font-weight: bold; font-family: 'arial', sans-serif; border: 0;font-weight: 600 !important;">FEE PAID</td>
                 <td style="height: 32px; width: 100px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: center; color: #bdbdbd; font-style: normal; font-family: 'arial', sans-serif; border: 0;">$</td>
-                <td style="height: 32px; width: 130px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: right; font-family: 'arial', sans-serif; border: 0;">9.00</td>
+                <td style="height: 32px; width: 130px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: right; font-family: 'arial', sans-serif; border: 0;"><c:out value="${paidTotal}" /></td>
             </tr>
             <tr>
                 <td style="height: 32px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: right; font-weight: bold; font-family: 'arial', sans-serif; border: 0;font-weight: 600 !important;">BALANCE</td>
                 <td style="height: 32px; width: 100px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: center; color: #bdbdbd; font-style: normal; font-family: 'arial', sans-serif; border: 0;">$</td>
-                <td style="height: 32px; width: 130px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: right; font-family: 'arial', sans-serif; border: 0;">683.00</td>
+                <td style="height: 32px; width: 130px; font-size: 15px; line-height: 1.5; vertical-align: top; text-align: right; font-family: 'arial', sans-serif; border: 0;">
+                    <%-- Check if the balance is full paid --%>
+                    <c:choose>
+                        <c:when test="${finalTotal - paidTotal <= 0}">
+                            PAID IN FULL
+                        </c:when>
+                        <c:otherwise>
+                            ${finalTotal - paidTotal}
+                        </c:otherwise>
+                    </c:choose>
+                </td>
             </tr>
         </table>
 
@@ -376,10 +391,12 @@
             <tr>
                 <td style=" padding: 10px 10px 0; border: 0;"><strong style="font-size: 16px;font-style: italic;">Note : </strong></td>
             </tr>
-
             <tr>
                 <td style="font-size: 15px; line-height: 1.6; border: 0; padding: 0 10px 10px;">
-                    <p style="margin: 0; padding: 0; line-height: 1.8;">1.5% surcharge on credit card payment<br />0.5% surcharge on EFTPOS payment<br /><br />Test test test<br />Bank transfer<br />123-456<br />1234 5678</p>
+                    <!-- <p style="margin: 0; padding: 0; line-height: 1.8;">1.5% surcharge on credit card payment<br />0.5% surcharge on EFTPOS payment<br /><br />Test test test<br />Bank transfer<br />123-456<br />1234 5678</p> -->
+                    <p style="margin: 0; padding: 0; line-height: 1.8;">
+                        1.5% surcharge on credit card payment<br />0.5% surcharge on EFTPOS payment<br /><br />Test test test<br />Bank transfer<br />123-456<br />1234 5678
+                    </p>
                 </td>
             </tr>
         </table>

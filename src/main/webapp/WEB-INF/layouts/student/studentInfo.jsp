@@ -364,7 +364,7 @@
 	<div class="modal-dialog modal-xl modal-dialog-centered">
 	  <div class="modal-content">
 		<div class="modal-header bg-primary text-white">
-		  <h5 class="modal-title">&nbsp;<i class="fas fa-list"></i>&nbsp;&nbsp; Student List</h5>
+		  <h5 class="modal-title">&nbsp;<i class="fa fa-list"></i>&nbsp;&nbsp; Student List</h5>
 		  <button type="button" class="close" data-dismiss="modal">
 			<span>&times;</span>
 		  </button>

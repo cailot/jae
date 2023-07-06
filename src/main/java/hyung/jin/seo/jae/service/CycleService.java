@@ -25,6 +25,12 @@ public interface CycleService {
 	// get academic week by date
 	int academicWeeks(String date);
 
+	// get academic start Sunday
+	String academicStartSunday(int year, int week);
+
+	// get academic end Saturday
+	String academicEndSaturday(int year, int week);
+
 	// get Cycle by Id
     Cycle findById(String cycleId);
 

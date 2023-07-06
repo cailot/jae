@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
 import hyung.jin.seo.jae.dto.PaymentDTO;
+import hyung.jin.seo.jae.model.Cycle;
 import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Invoice;
 import hyung.jin.seo.jae.model.Payment;
+import hyung.jin.seo.jae.service.CycleService;
 import hyung.jin.seo.jae.service.EnrolmentService;
 import hyung.jin.seo.jae.service.InvoiceService;
 import hyung.jin.seo.jae.service.PaymentService;
@@ -41,14 +43,8 @@ public class JaeInvoiceController {
 	@Autowired
 	private PaymentService paymentService;
 
-	// how to access receipt page by http://localhost:8080/invoice/my.
-	// please create controller method for this.
-	@GetMapping("/my")
-	public String my() {
-		return "receipt";
-	}	
-
-
+	@Autowired
+	private CycleService cycleService;
 	
 	// count records number in database
 	@GetMapping("/count")
@@ -194,28 +190,61 @@ public class JaeInvoiceController {
 			invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
 			invoice.setPayment(paid);
 			// 4. check whether full paid or not
-			if(invoice.getTotalAmount() <= invoice.getPaidAmount()){
-				fullPaid = true;
-			}
-			if(fullPaid){
+			// if(invoice.getTotalAmount() <= invoice.getPaidAmount()){
+			// 	fullPaid = true;
+			// }
+			// if(fullPaid){
 				invoice.setPayCompleteDate(LocalDate.now());
-			}
+			// }
 			// 5. save Invoice
 			invoiceService.updateInvoice(invoice, invoiceId);
 			// 6. bring to EnrolmentDTO
 			List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoiceId);
 			for(EnrolmentDTO enrol : enrols){
 				enrol.setInvoiceId(String.valueOf(invoiceId));
-				// 7. add to dtos
+				// 7. set period of enrolment to extra field
+				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+				enrol.setExtra(start + " ~ " + end);
+				// 8. add to dtos
 				dtos.add(enrol);
 			}	
 		}
 
-		// 8. set EnrolmentDTO objects into session for payment receipt
+		// 9. set EnrolmentDTO objects into session for payment receipt
 		session.setAttribute(JaeConstants.PAYMENTS, dtos);
 		
-		// 8. return
+		// 10. return
 		return dtos;
 	}
+
+
+
+	// register new invoice
+	@PostMapping("/issue/{studentId}")
+	@ResponseBody
+	public InvoiceDTO issueInvoice(@PathVariable("studentId") Long studentId) {
+		// 1. get latest invoice by student id
+		InvoiceDTO dto = invoiceService.getInvoiceByStudentId(studentId);
+		return dto;
+	}
+		
+	// // get start date of the week
+	// @GetMapping("/startSunday/{year}/{week}")
+	// @ResponseBody
+	// String getStartDateofWeek(@PathVariable("year") int year, @PathVariable("week") int week) {
+	// 	String date = cycleService.academicStartSunday(year, week);
+	// 	return date;
+	// }
+
+	// // get end date of the week
+	// @GetMapping("/endSaturday/{year}/{week}")
+	// @ResponseBody
+	// String getEndDateofWeek(@PathVariable("year") int year, @PathVariable("week") int week) {
+	// 	String date = cycleService.academicEndSaturday(year, week);
+	// 	return date;
+	// }
+
+
 
 }

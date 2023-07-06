@@ -24,14 +24,18 @@ import hyung.jin.seo.jae.utils.JaeUtils;
 @Service
 public class CycleServiceImpl implements CycleService {
 	
+
+	private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    
+	private List<CycleDTO> cycles;
+
 	@Autowired
 	private CycleRepository cycleRepository;
 
 	@Autowired
 	private ConfigurableApplicationContext applicationContext;
 
-	private List<CycleDTO> cycles;
-   
+	
 	@Override
 	public long checkCount() {
 		long count = cycleRepository.count();
@@ -228,7 +232,50 @@ public class CycleServiceImpl implements CycleService {
 		return cycle;
 	}
 
+	@Override
+	public String academicStartSunday(int year, int week) {
+		String startDate = getStartDate(year);
+		LocalDate academicYearStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		LocalDate weekStartDay = academicYearStartDate.plusWeeks(week - 1);
+        // LocalDate weekEndDay = weekStartDay.plusDays(6);
 
+        String formattedWeekStartDay = weekStartDay.format(dateFormatter);
+        // String formattedWeekEndDay = weekEndDay.format(dateFormatter);
+
+        // System.out.println("Week " + week + " Start Day: " + formattedWeekStartDay);
+        // System.out.println("Week " + week + " End Day: " + formattedWeekEndDay);
+		return formattedWeekStartDay;
+	}
+
+	@Override
+	public String academicEndSaturday(int year, int week) {
+		String startDate = getStartDate(year);
+		LocalDate academicYearStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		LocalDate weekStartDay = academicYearStartDate.plusWeeks(week - 1);
+        LocalDate weekEndDay = weekStartDay.plusDays(6);
+
+        // String formattedWeekStartDay = weekStartDay.format(dateFormatter);
+        String formattedWeekEndDay = weekEndDay.format(dateFormatter);
+
+        // System.out.println("Week " + week + " Start Day: " + formattedWeekStartDay);
+        // System.out.println("Week " + week + " End Day: " + formattedWeekEndDay);
+		return formattedWeekEndDay;
+	}
+
+	// get start date of academic year
+	private String getStartDate(int year){
+		String startDate = "";
+		if(cycles==null) {
+			cycles = (List<CycleDTO>) applicationContext.getBean(JaeConstants.ACADEMIC_CYCLES);
+		}
+		for(CycleDTO dto : cycles){
+			if(dto.getYear().equals(Integer.toString(year))){
+				startDate = dto.getStartDate();
+				break;
+			}
+		}
+		return startDate;
+	}
 
 
 

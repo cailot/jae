@@ -58,6 +58,8 @@ public class EnrolmentDTO implements Serializable{
 
 	private String day;
 
+	private String extra;
+
 	public EnrolmentDTO(Enrolment enrol){
 		this.id = String.valueOf(enrol.getId());
 		this.enrolmentDate = enrol.getEnrolmentDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
