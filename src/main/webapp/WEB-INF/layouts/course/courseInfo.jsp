@@ -370,6 +370,8 @@ function addBookToInvoice(value){
 	row.append($('<td class="smaller-table-font">').text('0'));// Date
 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>')); // Action
 	$('#invoiceListTable > tbody').append(row);
+	// Automatically dismiss the alert after 2 seconds
+	showAlertMessage('addAlert', '<center><i class="fa fa-book"></i> &nbsp;&nbsp' + value.name +' added to My Lecture</center>');
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////

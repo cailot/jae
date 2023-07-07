@@ -17,87 +17,6 @@ $(document).ready(
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-// function retrieveInvoiceListTable(data) {
-// 	// set invoiceId into hiddenId
-// 	$('#hiddenId').val(data.invoiceId);
-
-//     var row = $('<tr>');
-	
-// 	// display the row in red if the amount is not fully paid 
-// 	var needPay = (data.amount - data.paid > 0) ? true : false;
-// 	(needPay) ? row.addClass('text-danger') : row.addClass('');
-
-//     row.append($('<td>').addClass('hidden-column').text(ENROLMENT + '|' + data.id));
-//     row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>'));
-//     row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name));
-//     row.append($('<td class="smaller-table-font">').text(data.year));
-    
-// 	// set editable attribute to true if the amount is not fully paid	
-// 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek)) : row.append($('<td class="smaller-table-font text-center">').addClass('start-week').text(data.startWeek));
-// 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek)) : row.append($('<td class="smaller-table-font text-center">').addClass('end-week').text(data.endWeek));
-// 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1)) : row.append($('<td class="smaller-table-font text-center" >').addClass('weeks').text(data.endWeek - data.startWeek + 1));
-//     row.append($('<td class="smaller-table-font text-center">').addClass('price').text((data.price).toFixed(2)));
-// 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('credit').text(data.credit)) : row.append($('<td class="smaller-table-font text-center">').addClass('credit').text(data.credit));
-// 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text('0 %')) : row.append($('<td class="smaller-table-font text-center">').text('0 %'));
-// 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('discount').text(data.discount)) : row.append($('<td class="smaller-table-font text-center">').addClass('discount').text(data.discount));
-// 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell"));
-// 	row.append($('<td class="smaller-table-font paid-date">').text(data.payCompleteDate));
-// 	row.append($('<td>').addClass('hidden-column paid').text(data.paid));
-//     row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
-
-// 	// if any existing row's hidden-column value is same as the new row's hidden-column value, then remove the existing row
-// 	$('#invoiceListTable > tbody > tr').each(function() {
-// 		if ($(this).find('.hidden-column').text() === row.find('.hidden-column').text()) {
-// 			$(this).remove();
-// 		}
-// 	});
-	
-// 	// add new row
-//     $('#invoiceListTable > tbody').append(row);
-
-//     var startWeekCell = row.find('.start-week');
-//     var endWeekCell = row.find('.end-week');
-//     var weeksCell = row.find('.weeks');
-//     var creditCell = row.find('.credit');
-//     var amountCell = row.find('.amount');
-//     // var rxAmount = $("#rxAmount");
-//     // rxAmount.text((data.price*(data.endWeek-data.startWeek+1)).toFixed(2)); // initial receivable amount
-
-//     function updateWeeks() {
-//         var startWeek = parseInt(startWeekCell.text());
-//         var endWeek = parseInt(endWeekCell.text());
-//         var weeks = parseInt(weeksCell.text());
-//         var credit = parseInt(creditCell.text());
-//         var price = parseFloat(row.find('.price').text());
-
-//         if (!isNaN(startWeek) && !isNaN(endWeek)) {
-//             weeks = endWeek - startWeek + 1;
-//             weeksCell.text(weeks);
-//         } else if (!isNaN(weeks) && !isNaN(startWeek)) {
-//             endWeek = startWeek + weeks - 1;
-//             endWeekCell.text(endWeek);
-//         } else if (!isNaN(weeks)) {
-//             endWeek = startWeek + weeks - 1;
-//             endWeekCell.text(endWeek);
-//         }
-
-//         if (!isNaN(weeks) && !isNaN(credit)) {
-//             weeks += credit;
-//             weeksCell.text(weeks);
-//             endWeek = startWeek + weeks - 1;
-//             endWeekCell.text(endWeek);
-//         }
-
-//         var amount = price * (weeks-credit);
-//         amountCell.text(rxAmount.toFixed(2));
-//     }
-
-//     startWeekCell.on('input', updateWeeks);
-//     endWeekCell.on('input', updateWeeks);
-//     creditCell.on('input', updateWeeks);
-// 	// update Receivable Amount
-// 	updateReceivableAmount();
-// }
 function retrieveInvoiceListTable(data) {
 	// set invoiceId into hiddenId
 	$('#hiddenId').val(data.invoiceId);
@@ -179,6 +98,29 @@ function retrieveInvoiceListTable(data) {
 	// update Receivable Amount
 	updateReceivableAmount();
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Add Outstanding to invoiceListTable
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function addOutstandingToInvoiceListTable(data) {
+	// set invoiceId into hiddenId
+	$('#hiddenId').val(data.invoiceId);
+
+	var newOS = $('<tr>');
+	newOS.append($('<td>').addClass('hidden-column').text(OUTSTANDING + '|' + 0));
+	newOS.append($('<td class="text-center"><i class="fa fa-exclamation-circle" title="class"></i></td>'));
+	newOS.append($('<td colspan="9" class="smaller-table-font">').text('Outstanding'));
+	// set editable attribute to true if the amount is not fully paid	
+	newOS.append($('<td class="smaller-table-font text-center">').addClass('amount').text((rxAmount).toFixed(2)));
+	newOS.append($('<td class="smaller-table-font paid-date">').text('Today'));
+	newOS.append($('<td>').addClass('hidden-column paid').text(0));
+	newOS.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+	$('#invoiceListTable > tbody').prepend(newOS);
+
+	// update Receivable Amount
+	updateReceivableAmount();
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Update Receivable Amount
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -268,7 +210,7 @@ function displayReceiptInNewTab(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function makePayment(){
 	var hidden = $('#hiddenId').val();
-	console.log('make payment hidden : ' + hidden);
+	// console.log('make payment hidden : ' + hidden);
 
 	var studentId = $('#formId').val();
 	
@@ -279,9 +221,11 @@ function makePayment(){
 		info: $('#payInfo').val()
 	};
 	
-	// Send AJAX to server
+	// payment - full or partial
+	var fullPayment = ($('#payRxAmount').val() - $('#payAmount').val()) <= 0; 
+	console.log('full payment : ' + fullPayment);
 	$.ajax({
-		url : '${pageContext.request.contextPath}/invoice/payment/' + studentId,
+		url : fullPayment ? '${pageContext.request.contextPath}/invoice/paymentFull/' + studentId : '${pageContext.request.contextPath}/invoice/paymentPartial/' + studentId,
 		type : 'POST',
 		dataType : 'json',
 		data : JSON.stringify(payment),
@@ -290,10 +234,8 @@ function makePayment(){
 
 			$.each(response, function(index, value){
 				// how to set value object into request for next jsp page
-
-				
 				// update the invoice table
-				retrieveInvoiceListTable(value);
+				fullPayment? retrieveInvoiceListTable(value) : addOutstandingToInvoiceListTable(value);
 			});
 
 			// reset payment dialogue info

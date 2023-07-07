@@ -375,7 +375,10 @@ function editInitialiseCourseByGrade(grade, courseId) {
 												<td class="small ellipsis"><span><c:out value="${clazz.description}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.startDate}" /></span></td>
 												<td class="small ellipsis"><span><c:out value="${clazz.day}" /></span></td>
-												<td class="small ellipsis"><span><c:out value="${clazz.year}" /></span></td>
+												<!-- <td class="small ellipsis"><span><c:out value="${clazz.year}" /></span></td> -->
+												<td class="small ellipsis"><span>Academic Year <c:out value="${clazz.year%100}/${clazz.year%100+1}" /></span></td>
+
+
 												<c:set var="active" value="${clazz.active}" />
 												<c:choose>
 													<c:when test="${active == true}">

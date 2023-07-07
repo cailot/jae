@@ -19,14 +19,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
+import hyung.jin.seo.jae.dto.OutstandingDTO;
 import hyung.jin.seo.jae.dto.PaymentDTO;
 import hyung.jin.seo.jae.model.Cycle;
 import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Invoice;
+import hyung.jin.seo.jae.model.Outstanding;
 import hyung.jin.seo.jae.model.Payment;
 import hyung.jin.seo.jae.service.CycleService;
 import hyung.jin.seo.jae.service.EnrolmentService;
 import hyung.jin.seo.jae.service.InvoiceService;
+import hyung.jin.seo.jae.service.OutstandingService;
 import hyung.jin.seo.jae.service.PaymentService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 
@@ -42,6 +45,9 @@ public class JaeInvoiceController {
 
 	@Autowired
 	private PaymentService paymentService;
+
+	@Autowired
+	private OutstandingService outstandingService;
 
 	@Autowired
 	private CycleService cycleService;
@@ -171,15 +177,14 @@ public class JaeInvoiceController {
 
 	
 	// make payment and return updated invoice
-	@PostMapping("/payment/{studentId}")
+	@PostMapping("/paymentFull/{studentId}")
 	@ResponseBody
-	public List<EnrolmentDTO> makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
-		
-
+	public List<EnrolmentDTO> makeFullPayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
+	
 		List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
 		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
 		double paidAmount = formData.getAmount();
-		boolean fullPaid = false;
+		// boolean partialPaid = false;
 		for(Long invoiceId : invoiceIds){
 			// 1. get Invoice
 			Invoice invoice = invoiceService.findInvoiceById(invoiceId);
@@ -190,34 +195,92 @@ public class JaeInvoiceController {
 			invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
 			invoice.setPayment(paid);
 			// 4. check whether full paid or not
-			// if(invoice.getTotalAmount() <= invoice.getPaidAmount()){
-			// 	fullPaid = true;
+			// if(invoice.getTotalAmount() > invoice.getPaidAmount()){
+			// 	partialPaid = true;
 			// }
-			// if(fullPaid){
-				invoice.setPayCompleteDate(LocalDate.now());
+			// // 5. if partial paid, add Outstanding
+			// if(partialPaid){
+			// 	Outstanding outstanding = new Outstanding();
+			// 	outstanding.setPaid(paidAmount);
+			// 	outstanding.setRemaining(invoice.getTotalAmount()-invoice.getPaidAmount());
+			// 	outstanding.setTotal(invoice.getTotalAmount());
+			// 	// add Outstanding to Invoice
+			// 	invoice.addOutstanding(outstanding);
 			// }
-			// 5. save Invoice
+			invoice.setPayCompleteDate(LocalDate.now());
+			// 6. save Invoice
 			invoiceService.updateInvoice(invoice, invoiceId);
-			// 6. bring to EnrolmentDTO
+			// 7. bring to EnrolmentDTO
 			List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoiceId);
 			for(EnrolmentDTO enrol : enrols){
 				enrol.setInvoiceId(String.valueOf(invoiceId));
-				// 7. set period of enrolment to extra field
+				// 8. set period of enrolment to extra field
 				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
 				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
 				enrol.setExtra(start + " ~ " + end);
-				// 8. add to dtos
+				// 9. add to dtos
 				dtos.add(enrol);
 			}	
 		}
-
-		// 9. set EnrolmentDTO objects into session for payment receipt
+		// 10. set EnrolmentDTO objects into session for payment receipt
 		session.setAttribute(JaeConstants.PAYMENTS, dtos);
-		
-		// 10. return
+		// 11. return
 		return dtos;
 	}
 
+// make payment and return updated invoice
+	@PostMapping("/paymentPartial/{studentId}")
+	@ResponseBody
+	public List<OutstandingDTO> makePartialPayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
+	
+		List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
+		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
+		double paidAmount = formData.getAmount();
+		// boolean partialPaid = false;
+		for(Long invoiceId : invoiceIds){
+			// 1. get Invoice
+			Invoice invoice = invoiceService.findInvoiceById(invoiceId);
+			// 2. make payment
+			Payment payment = formData.convertToPayment();
+			Payment paid = paymentService.addPayment(payment);
+			// 3. update Invoice
+			invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
+			invoice.setPayment(paid);
+			// // 4. check whether full paid or not
+			// if(invoice.getTotalAmount() > invoice.getPaidAmount()){
+			// 	partialPaid = true;
+			// }
+			// // 5. if partial paid, add Outstanding
+			// if(partialPaid){
+			Outstanding outstanding = new Outstanding();
+			outstanding.setPaid(paidAmount);
+			outstanding.setRemaining(invoice.getTotalAmount()-invoice.getPaidAmount());
+			outstanding.setTotal(invoice.getTotalAmount());
+			// add Outstanding to Invoice
+			invoice.addOutstanding(outstanding);
+			// }
+			invoice.setPayCompleteDate(LocalDate.now());
+			// 6. save Invoice
+			invoiceService.updateInvoice(invoice, invoiceId);
+			// 7. bring to EnrolmentDTO
+			List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoiceId);
+			for(EnrolmentDTO enrol : enrols){
+				enrol.setInvoiceId(String.valueOf(invoiceId));
+				// 8. set period of enrolment to extra field
+				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+				enrol.setExtra(start + " ~ " + end);
+				// 9. add to dtos
+				dtos.add(enrol);
+			}	
+		}
+		// 10. set EnrolmentDTO objects into session for payment receipt
+		session.setAttribute(JaeConstants.PAYMENTS, dtos);
+		// get outstanding
+		List<OutstandingDTO> outstandingDTOs = outstandingService.getOutstandingtByInvoiceId(studentId);
+		// 11. return
+		return outstandingDTOs;
+	}
 
 
 	// register new invoice
