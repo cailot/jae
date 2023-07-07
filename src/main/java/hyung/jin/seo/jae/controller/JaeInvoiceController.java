@@ -4,12 +4,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +19,6 @@ import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
 import hyung.jin.seo.jae.dto.OutstandingDTO;
 import hyung.jin.seo.jae.dto.PaymentDTO;
-import hyung.jin.seo.jae.model.Cycle;
 import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Invoice;
 import hyung.jin.seo.jae.model.Outstanding;
@@ -73,14 +70,14 @@ public class JaeInvoiceController {
 	@ResponseBody
 	public InvoiceDTO createInvoice(@PathVariable("studentId") Long studentId, @RequestBody EnrolmentDTO[] formData) {
 		
-		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
+		Long invoId = invoiceService.getInvoiceIdByStudentId(studentId);
 		
 		///////////////////////////////////////////////////////
 		// if no data comes, it means no enrolment in invoice
 		///////////////////////////////////////////////////////
 		if((formData==null) || (formData.length==0)) {
 			// 1. get Enrolment by invoice Id
-			for(Long invoId : invoiceIds){
+			// for(Long invoId : invoId){
 				if(invoId!=null){
 					// 2. get enrolment Id by invoice Id
 					List<Long> enrolmentIds = enrolmentService.findEnrolmentIdByInvoiceId(invoId);
@@ -89,7 +86,7 @@ public class JaeInvoiceController {
 						enrolmentService.archiveEnrolment(data);
 					}
 				}
-			}
+			// }
 			return null;
 		}
 
@@ -101,14 +98,14 @@ public class JaeInvoiceController {
 		boolean alreadyInvoiced = false;
 		long invoiceId = 0;
 		// any null included, it should re-issue invoice
-		alreadyInvoiced = invoiceIds.contains(null) ? false : true;
+		alreadyInvoiced = (invoId==null) ? false : true;
 		if(alreadyInvoiced){ // if already invoiced, get first invoice id
-			for(Long invoId : invoiceIds){
+			// for(Long invoId : invoId){
 				if(invoId!=null){
 					invoiceId = invoId;
-					break;
+					// break;
 				}
-			}
+			// }
 			// 2. find Invoice if Enrolment is invoiced
 			Invoice invoice = invoiceService.findInvoiceById(invoiceId);
 
@@ -176,112 +173,169 @@ public class JaeInvoiceController {
 	}
 
 	
-	// make payment and return updated invoice
-	@PostMapping("/paymentFull/{studentId}")
-	@ResponseBody
-	public List<EnrolmentDTO> makeFullPayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
+	// // make payment and return updated invoice
+	// @PostMapping("/paymentFull/{studentId}")
+	// @ResponseBody
+	// public Object makeFullPayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
 	
-		List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
-		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
-		double paidAmount = formData.getAmount();
-		// boolean partialPaid = false;
-		for(Long invoiceId : invoiceIds){
-			// 1. get Invoice
-			Invoice invoice = invoiceService.findInvoiceById(invoiceId);
-			// 2. make payment
-			Payment payment = formData.convertToPayment();
-			Payment paid = paymentService.addPayment(payment);
-			// 3. update Invoice
-			invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
-			invoice.setPayment(paid);
-			// 4. check whether full paid or not
-			// if(invoice.getTotalAmount() > invoice.getPaidAmount()){
-			// 	partialPaid = true;
-			// }
-			// // 5. if partial paid, add Outstanding
-			// if(partialPaid){
-			// 	Outstanding outstanding = new Outstanding();
-			// 	outstanding.setPaid(paidAmount);
-			// 	outstanding.setRemaining(invoice.getTotalAmount()-invoice.getPaidAmount());
-			// 	outstanding.setTotal(invoice.getTotalAmount());
-			// 	// add Outstanding to Invoice
-			// 	invoice.addOutstanding(outstanding);
-			// }
-			invoice.setPayCompleteDate(LocalDate.now());
-			// 6. save Invoice
-			invoiceService.updateInvoice(invoice, invoiceId);
-			// 7. bring to EnrolmentDTO
-			List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoiceId);
-			for(EnrolmentDTO enrol : enrols){
-				enrol.setInvoiceId(String.valueOf(invoiceId));
-				// 8. set period of enrolment to extra field
-				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
-				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
-				enrol.setExtra(start + " ~ " + end);
-				// 9. add to dtos
-				dtos.add(enrol);
-			}	
-		}
-		// 10. set EnrolmentDTO objects into session for payment receipt
-		session.setAttribute(JaeConstants.PAYMENTS, dtos);
-		// 11. return
-		return dtos;
-	}
+	// 	List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
+	// 	Long invoId = invoiceService.getInvoiceIdByStudentId(studentId);
+	// 	double paidAmount = formData.getAmount();
+	// 	// boolean partialPaid = false;
+	// 	// for(Long invoiceId : invoId){
+	// 		// 1. get Invoice
+	// 		Invoice invoice = invoiceService.findInvoiceById(invoId);
+	// 		// 2. make payment
+	// 		Payment payment = formData.convertToPayment();
+	// 		Payment paid = paymentService.addPayment(payment);
+	// 		// 3. update Invoice
+	// 		invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
+	// 		invoice.setPayment(paid);
+	// 		// 4. check whether full paid or not
+	// 		// if(invoice.getTotalAmount() > invoice.getPaidAmount()){
+	// 		// 	partialPaid = true;
+	// 		// }
+	// 		// // 5. if partial paid, add Outstanding
+	// 		// if(partialPaid){
+	// 		// 	Outstanding outstanding = new Outstanding();
+	// 		// 	outstanding.setPaid(paidAmount);
+	// 		// 	outstanding.setRemaining(invoice.getTotalAmount()-invoice.getPaidAmount());
+	// 		// 	outstanding.setTotal(invoice.getTotalAmount());
+	// 		// 	// add Outstanding to Invoice
+	// 		// 	invoice.addOutstanding(outstanding);
+	// 		// }
+	// 		invoice.setPayCompleteDate(LocalDate.now());
+	// 		// 6. save Invoice
+	// 		invoiceService.updateInvoice(invoice, invoId);
+	// 		// 7. bring to EnrolmentDTO
+	// 		List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoId);
+	// 		for(EnrolmentDTO enrol : enrols){
+	// 			enrol.setInvoiceId(String.valueOf(invoId));
+	// 			// 8. set period of enrolment to extra field
+	// 			String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+	// 			String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+	// 			enrol.setExtra(start + " ~ " + end);
+	// 			// 9. add to dtos
+	// 			dtos.add(enrol);
+	// 		}	
+	// 	// }
+	// 	// 10. set EnrolmentDTO objects into session for payment receipt
+	// 	session.setAttribute(JaeConstants.PAYMENTS, dtos);
+	// 	// 11. return
+	// 	return dtos;
+	// }
 
-// make payment and return updated invoice
-	@PostMapping("/paymentPartial/{studentId}")
-	@ResponseBody
-	public List<OutstandingDTO> makePartialPayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
+	// // make payment and return updated invoice
+	// @PostMapping("/paymentPartial/{studentId}")
+	// @ResponseBody
+	// // public List<OutstandingDTO> makePartialPayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
+	// public Object makePartialPayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
 	
+	// 	List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
+	// 	// 1. get latest Invoice
+	// 	Long invoiceId = invoiceService.getInvoiceIdByStudentId(studentId);
+	// 	double paidAmount = formData.getAmount();
+	// 	// boolean partialPaid = false;
+	// 	// for(Long invoiceId : invoiceIds){
+	// 		// 1. get Invoice
+	// 		Invoice invoice = invoiceService.findInvoiceById(invoiceId);
+	// 		// 2. make payment
+	// 		Payment payment = formData.convertToPayment();
+	// 		Payment paid = paymentService.addPayment(payment);
+	// 		// 3. update Invoice
+	// 		invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
+	// 		invoice.setPayment(paid);
+	// 		// // 4. check whether full paid or not
+	// 		// if(invoice.getTotalAmount() > invoice.getPaidAmount()){
+	// 		// 	partialPaid = true;
+	// 		// }
+	// 		// // 5. if partial paid, add Outstanding
+	// 		// if(partialPaid){
+	// 		Outstanding outstanding = new Outstanding();
+	// 		outstanding.setPaid(paidAmount);
+	// 		outstanding.setRemaining(invoice.getTotalAmount()-invoice.getPaidAmount());
+	// 		outstanding.setTotal(invoice.getTotalAmount());
+	// 		// add Outstanding to Invoice
+	// 		invoice.addOutstanding(outstanding);
+	// 		// }
+	// 		invoice.setPayCompleteDate(LocalDate.now());
+	// 		// 6. save Invoice
+	// 		invoiceService.updateInvoice(invoice, invoiceId);
+	// 		// 7. bring to EnrolmentDTO
+	// 		List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoiceId);
+	// 		for(EnrolmentDTO enrol : enrols){
+	// 			enrol.setInvoiceId(String.valueOf(invoiceId));
+	// 			// 8. set period of enrolment to extra field
+	// 			String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+	// 			String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+	// 			enrol.setExtra(start + " ~ " + end);
+	// 			// 9. add to dtos
+	// 			dtos.add(enrol);
+	// 		}	
+	// 	// }
+	// 	// 10. set EnrolmentDTO objects into session for payment receipt
+	// 	session.setAttribute(JaeConstants.PAYMENTS, dtos);
+	// 	// get outstanding
+	// 	List<OutstandingDTO> outstandingDTOs = outstandingService.getOutstandingtByInvoiceId(invoiceId);
+	// 	// 11. return
+	// 	return outstandingDTOs;
+	// }
+
+	// make payment and return updated invoice
+	@PostMapping("/payment/{studentId}")
+	@ResponseBody
+	public Object makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
 		List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
-		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
+		Long invoId = invoiceService.getInvoiceIdByStudentId(studentId);
 		double paidAmount = formData.getAmount();
-		// boolean partialPaid = false;
-		for(Long invoiceId : invoiceIds){
-			// 1. get Invoice
-			Invoice invoice = invoiceService.findInvoiceById(invoiceId);
-			// 2. make payment
-			Payment payment = formData.convertToPayment();
-			Payment paid = paymentService.addPayment(payment);
-			// 3. update Invoice
-			invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
-			invoice.setPayment(paid);
-			// // 4. check whether full paid or not
-			// if(invoice.getTotalAmount() > invoice.getPaidAmount()){
-			// 	partialPaid = true;
-			// }
-			// // 5. if partial paid, add Outstanding
-			// if(partialPaid){
+		// 1. get Invoice
+		Invoice invoice = invoiceService.findInvoiceById(invoId);
+		// 2. check if full paid or not
+		double totalAmount = invoice.getTotalAmount();
+		boolean fullPaid =  (totalAmount - paidAmount) <= 0;
+		// 3. make payment
+		Payment payment = formData.convertToPayment();
+		Payment paid = paymentService.addPayment(payment);
+		// 3. update Invoice
+		invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
+		invoice.setPayment(paid);
+		invoice.setPayCompleteDate(LocalDate.now());
+
+		// 5-1. bring to EnrolmentDTO
+		List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoId);
+		for(EnrolmentDTO enrol : enrols){
+			enrol.setInvoiceId(String.valueOf(invoId));
+			// 6-1. set period of enrolment to extra field
+			String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+			String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+			enrol.setExtra(start + " ~ " + end);
+			// 7-1. add to dtos
+			dtos.add(enrol);
+		}	
+		// 8-1. set EnrolmentDTO objects into session for payment receipt
+		session.setAttribute(JaeConstants.PAYMENTS, dtos);
+			
+		// 4-1 if full paid, return EnrolmentDTO list
+		if(fullPaid){
+			invoiceService.updateInvoice(invoice, invoId);
+			// 9-1. return
+			return dtos;
+			// 4-2. if not full paid, return OutstandingDTO list
+		}else{
+			// 5-2. create Outstanding
 			Outstanding outstanding = new Outstanding();
 			outstanding.setPaid(paidAmount);
 			outstanding.setRemaining(invoice.getTotalAmount()-invoice.getPaidAmount());
 			outstanding.setTotal(invoice.getTotalAmount());
-			// add Outstanding to Invoice
+			// 6-2. add Outstanding to Invoice
 			invoice.addOutstanding(outstanding);
-			// }
-			invoice.setPayCompleteDate(LocalDate.now());
-			// 6. save Invoice
-			invoiceService.updateInvoice(invoice, invoiceId);
-			// 7. bring to EnrolmentDTO
-			List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoiceId);
-			for(EnrolmentDTO enrol : enrols){
-				enrol.setInvoiceId(String.valueOf(invoiceId));
-				// 8. set period of enrolment to extra field
-				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
-				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
-				enrol.setExtra(start + " ~ " + end);
-				// 9. add to dtos
-				dtos.add(enrol);
-			}	
+			invoiceService.updateInvoice(invoice, invoId);
+			// 10-2. get outstanding
+			List<OutstandingDTO> outstandingDTOs = outstandingService.getOutstandingtByInvoiceId(invoId);
+			// 11-2. return
+			return outstandingDTOs;
 		}
-		// 10. set EnrolmentDTO objects into session for payment receipt
-		session.setAttribute(JaeConstants.PAYMENTS, dtos);
-		// get outstanding
-		List<OutstandingDTO> outstandingDTOs = outstandingService.getOutstandingtByInvoiceId(studentId);
-		// 11. return
-		return outstandingDTOs;
 	}
-
 
 	// register new invoice
 	@PostMapping("/issue/{studentId}")

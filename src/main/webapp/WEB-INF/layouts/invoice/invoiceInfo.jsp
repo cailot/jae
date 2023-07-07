@@ -1,3 +1,6 @@
+<%@ page import="hyung.jin.seo.jae.dto.EnrolmentDTO" %>
+<%@ page import="hyung.jin.seo.jae.dto.OutstandingDTO" %>
+
 <script>
 
 const FULL_PAID = 'Full';
@@ -27,7 +30,7 @@ function retrieveInvoiceListTable(data) {
 	var needPay = (data.amount - data.paid > 0) ? true : false;
 	// (needPay) ? row.addClass('text-danger') : row.addClass('');
 
-    row.append($('<td>').addClass('hidden-column').addClass('inovice-match').text(ENROLMENT + '|' + data.id));
+    row.append($('<td>').addClass('hidden-column').addClass('enrolment-match').text(ENROLMENT + '|' + data.id));
     row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>'));
     row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name));
     row.append($('<td class="smaller-table-font">').text(data.year));
@@ -47,7 +50,7 @@ function retrieveInvoiceListTable(data) {
 
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
-		if ($(this).find('.invoice-match').text() === row.find('.invoice-match').text()) {
+		if ($(this).find('.enrolment-match').text() === row.find('.enrolment-match').text()) {
 			$(this).remove();
 		}
 	});
@@ -103,23 +106,58 @@ function retrieveInvoiceListTable(data) {
 //		Add Outstanding to invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function addOutstandingToInvoiceListTable(data) {
+	console.log('addOutstandingToInvoiceListTable - ' + JSON.stringify(data));
 	// set invoiceId into hiddenId
 	$('#hiddenId').val(data.invoiceId);
-
+	// debugger;
 	var newOS = $('<tr>');
-	newOS.append($('<td>').addClass('hidden-column').text(OUTSTANDING + '|' + 0));
-	newOS.append($('<td class="text-center"><i class="fa fa-exclamation-circle" title="class"></i></td>'));
-	newOS.append($('<td colspan="9" class="smaller-table-font">').text('Outstanding'));
+	newOS.append($('<td>').addClass('hidden-column').addClass('outstanding-match').text(OUTSTANDING + '|' + data.id));
+	newOS.append($('<td class="text-center"><i class="fa fa-exclamation-circle" title="outstanding"></i></td>'));
+	newOS.append($('<td colspan="9" class="smaller-table-font">').text('Outstanding' + ' - ' + data.paid + ' Paid'));
 	// set editable attribute to true if the amount is not fully paid	
-	newOS.append($('<td class="smaller-table-font text-center">').addClass('amount').text((rxAmount).toFixed(2)));
-	newOS.append($('<td class="smaller-table-font paid-date">').text('Today'));
-	newOS.append($('<td>').addClass('hidden-column paid').text(0));
+	newOS.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.remaining).toFixed(2)));
+	newOS.append($('<td class="smaller-table-font paid-date">').text(data.registerDate));
+	newOS.append($('<td>').addClass('hidden-column paid').text(data.paid));
 	newOS.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+
+
+	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
+	$('#invoiceListTable > tbody > tr').each(function() {
+		if ($(this).find('.outstanding-match').text() === newOS.find('.outstanding-match').text()) {
+			$(this).remove();
+		}
+	});
+
+
 	$('#invoiceListTable > tbody').prepend(newOS);
 
-	// update Receivable Amount
-	updateReceivableAmount();
+	// update Outstanding Amount
+	updateOutstandingAmount();
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Update Outstanding Amount
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function updateOutstandingAmount(){
+	// reset rxAmount
+	$("#rxAmount").text('0.00');
+
+	var outstandingAmount = 0;
+	// find the value of amount in the first row
+	var amountValue = $('#invoiceListTable > tbody > tr:first').find('.amount').text();
+	// set the value of outstanding amount
+	$("#outstandingAmount").text(parseFloat(amountValue).toFixed(2));
+	
+
+	// if rxAmount & outstandingAmount is 0, then disable payment button
+	if ((rxAmount == 0) && (outstandingAmount == 0)){
+		$('#paymentBtn').prop('disabled', true);
+	}else{
+		$('#paymentBtn').prop('disabled', false);
+	}
+
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Update Receivable Amount
@@ -139,17 +177,6 @@ function updateReceivableAmount(){
 		}
 	});
 	$("#rxAmount").text((rxAmount).toFixed(2));
-	// if rxAmount still remains more than 0, insert OS record at the top of the table
-	// var newOS = $('<tr>');
-	// newOS.append($('<td>').addClass('hidden-column').text(OUTSTANDING + '|' + 0));
-	// newOS.append($('<td class="text-center"><i class="fa fa-exclamation-circle" title="class"></i></td>'));
-	// newOS.append($('<td colspan="9" class="smaller-table-font">').text('Outstanding'));
-	// // set editable attribute to true if the amount is not fully paid	
-	// newOS.append($('<td class="smaller-table-font text-center">').addClass('amount').text((rxAmount).toFixed(2)));
-	// newOS.append($('<td class="smaller-table-font paid-date">').text('Today'));
-	// newOS.append($('<td>').addClass('hidden-column paid').text(0));
-	// newOS.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
-	// $('#invoiceListTable > tbody').prepend(newOS);
 
 	// if rxAmount is 0, then disable payment button
 	if (rxAmount == 0){
@@ -167,9 +194,10 @@ function clearInvoiceTable(){
 	$('#invoiceListTable > tbody').empty();
 	// clear rxAmount in invoice section
 	$('#rxAmount').text('0.00');
+	// clear outstandingAmount in invoice section
+	$('#outstandingAmount').text('0.00');
 	// clear stored invoice id
 	$('#hiddenId').val('');
-
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +207,8 @@ function clearInvoiceTable(){
 function displayPayment(){
     // display Receivable amount
     var rxAmount = $("#rxAmount").text();
-    $("#payRxAmount").val(rxAmount);
+	var outstandingAmount = $("#outstandingAmount").text();
+    $("#payRxAmount").val(parseFloat(rxAmount) + parseFloat(outstandingAmount));
     // payAmount
     $("#payAmount").on('input', function(){
         var payAmount = parseFloat($("#payAmount").val()).toFixed(2);
@@ -209,9 +238,6 @@ function displayReceiptInNewTab(){
 //		Make Payment
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function makePayment(){
-	var hidden = $('#hiddenId').val();
-	// console.log('make payment hidden : ' + hidden);
-
 	var studentId = $('#formId').val();
 	
 	var payment = {
@@ -221,30 +247,34 @@ function makePayment(){
 		info: $('#payInfo').val()
 	};
 	
-	// payment - full or partial
-	var fullPayment = ($('#payRxAmount').val() - $('#payAmount').val()) <= 0; 
-	console.log('full payment : ' + fullPayment);
 	$.ajax({
-		url : fullPayment ? '${pageContext.request.contextPath}/invoice/paymentFull/' + studentId : '${pageContext.request.contextPath}/invoice/paymentPartial/' + studentId,
+		url : '${pageContext.request.contextPath}/invoice/payment/' + studentId,
 		type : 'POST',
 		dataType : 'json',
 		data : JSON.stringify(payment),
 		contentType : 'application/json',
 		success : function(response) {
-
 			$.each(response, function(index, value){
-				// how to set value object into request for next jsp page
-				// update the invoice table
-				fullPayment? retrieveInvoiceListTable(value) : addOutstandingToInvoiceListTable(value);
+				// how to know if value is EnrolmentDTO or OutstandingDTO
+				// if(value instanceof EnrolmentDTO){
+				// 	retrieveInvoiceListTable(value);
+				// }else if(value instanceof OutstandingDTO){
+				// 	addOutstandingToInvoiceListTable(value);
+				// }
+				//debugger;
+				if (value.hasOwnProperty('enrolmentDate')) {
+                // It is an EnrolmentDTO object
+                retrieveInvoiceListTable(value);
+				} else if (value.hasOwnProperty('remaining')) {
+					// It is an OutstandingDTO object
+					addOutstandingToInvoiceListTable(value);
+				}
 			});
-
 			// reset payment dialogue info
 			document.getElementById('makePayment').reset();
 			$('#paymentModal').modal('toggle');	
-
 			// display receipt
 			displayReceiptInNewTab();
-			
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
@@ -368,7 +398,7 @@ $.ajax({
 							<p>Outstanding: </p>
 						</div>
 						<div class="col-md-2">
-							<p><strong class="text-primary">0.00</strong></p>
+							<p><strong class="text-primary" id="outstandingAmount" name="outstandingAmount">0.00</strong></p>
 						</div>
 					</div>
 				</div>

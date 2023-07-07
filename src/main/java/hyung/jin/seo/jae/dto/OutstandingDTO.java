@@ -28,7 +28,7 @@ public class OutstandingDTO implements Serializable{
 
 	private double total;
 
-
+	private String invoiceId;
 
 	public OutstandingDTO(Outstanding stand){
 		this.id = String.valueOf(stand.getId());
@@ -38,14 +38,14 @@ public class OutstandingDTO implements Serializable{
 		this.total = stand.getTotal();
 	}
 
-	public OutstandingDTO(long id, double paid, double remaining, double total, LocalDate registerDate){
+	public OutstandingDTO(long id, double paid, double remaining, double total, LocalDate registerDate, long invoiceId){
 		this.id = String.valueOf(id);
 		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.paid = paid;
 		this.remaining = remaining;
 		this.total = total;
+		this.invoiceId = String.valueOf(invoiceId);
 	}
-
 
 	public Outstanding convertToOutstanding() {
     	Outstanding stand = new Outstanding();

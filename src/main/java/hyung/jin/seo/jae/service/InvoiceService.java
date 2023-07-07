@@ -20,7 +20,7 @@ public interface InvoiceService {
 	InvoiceDTO getInvoiceByStudentId(Long studentId);
 
 	// get Invoice Id by student Id
-	List<Long> getInvoiceIdByStudentId(Long studentId);
+	Long getInvoiceIdByStudentId(Long studentId);
 
 	// add Invoice
 	InvoiceDTO addInvoice(Invoice invoice);

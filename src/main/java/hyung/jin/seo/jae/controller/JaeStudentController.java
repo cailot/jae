@@ -256,13 +256,13 @@ public class JaeStudentController {
 	// copy from InvoiceController
 	public InvoiceDTO checkInvoice(Long studentId, List<EnrolmentDTO> formData){
 
-		List<Long> invoiceIds = invoiceService.getInvoiceIdByStudentId(studentId);
+		Long invoId = invoiceService.getInvoiceIdByStudentId(studentId);
 		///////////////////////////////////////////////////////
 		// if no data comes, it means no enrolment in invoice
 		///////////////////////////////////////////////////////
 		if((formData==null) || (formData.size()==0)) {
 			// 1. get Enrolment by invoice Id
-			for(Long invoId : invoiceIds){
+			// for(Long invoId : invoiceIds){
 				if(invoId!=null){
 					// 2. get enrolment Id by invoice Id
 					List<Long> enrolmentIds = enrolmentService.findEnrolmentIdByInvoiceId(invoId);
@@ -271,7 +271,7 @@ public class JaeStudentController {
 						enrolmentService.archiveEnrolment(data);
 					}
 				}
-			}
+			// }
 			return null;
 		}
 
@@ -282,14 +282,14 @@ public class JaeStudentController {
 		boolean alreadyInvoiced = false;
 		long invoiceId = 0;
 		// any null included, it should re-issue invoice
-		alreadyInvoiced = invoiceIds.contains(null) ? false : true;
+		alreadyInvoiced = (invoId==null) ? false : true;
 		if(alreadyInvoiced){ // if already invoiced, get first invoice id
-			for(Long invoId : invoiceIds){
-				if(invoId!=null){
-					invoiceId = invoId;
-					break;
-				}
-			}
+			// for(Long invoId : invoiceIds){
+			// 	if(invoId!=null){
+			 		invoiceId = invoId;
+			// 		break;
+			// 	}
+			// }
 			// 2. find Invoice if Enrolment is invoiced
 			Invoice invoice = invoiceService.findInvoiceById(invoiceId);
 
