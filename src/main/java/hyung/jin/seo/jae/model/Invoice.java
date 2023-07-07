@@ -60,18 +60,18 @@ public class Invoice{
 	})
 	private Payment payment;
 	
-	// @OneToMany(fetch = FetchType.LAZY, cascade = {
-	// 	CascadeType.PERSIST,
-	// 	CascadeType.MERGE,
-	// 	CascadeType.REFRESH,
-	// 	CascadeType.DETACH
-	// })
-	// @JoinColumn(name = "invoiceId")
-	// private Set<Payment> payments = new LinkedHashSet<>();
+	@OneToMany(fetch = FetchType.LAZY, cascade = {
+		CascadeType.PERSIST,
+		CascadeType.MERGE,
+		CascadeType.REFRESH,
+		CascadeType.DETACH
+	})
+	@JoinColumn(name = "invoiceId")
+	private Set<Outstanding> outstandings = new LinkedHashSet<>();
 
-	// public void addPayment(Payment payment){
-	// 	payments.add(payment);
-	// }
+	public void addOutstanding(Outstanding stand){
+		outstandings.add(stand);
+	}
 
 	// auto update to current date
 	@CreationTimestamp
