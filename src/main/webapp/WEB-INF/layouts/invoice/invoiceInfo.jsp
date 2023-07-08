@@ -141,14 +141,12 @@ function addOutstandingToInvoiceListTable(data) {
 function updateOutstandingAmount(){
 	// reset rxAmount
 	$("#rxAmount").text('0.00');
-
-	var outstandingAmount = 0;
 	// find the value of amount in the first row
 	var amountValue = $('#invoiceListTable > tbody > tr:first').find('.amount').text();
 	// set the value of outstanding amount
 	$("#outstandingAmount").text(parseFloat(amountValue).toFixed(2));
-	
-
+	var rxAmount = parseFloat($("#rxAmount").text());
+	var outstandingAmount = parseFloat($("#outstandingAmount").text());
 	// if rxAmount & outstandingAmount is 0, then disable payment button
 	if ((rxAmount == 0) && (outstandingAmount == 0)){
 		$('#paymentBtn').prop('disabled', true);
@@ -163,7 +161,7 @@ function updateOutstandingAmount(){
 //		Update Receivable Amount
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function updateReceivableAmount(){
-	var rxAmount = 0;
+	var totalAmount = 0;
 	// find the value of all amount cells
 	$('#invoiceListTable > tbody > tr').each(function() {
 		var amount = parseFloat($(this).find('.amount').text());
@@ -173,13 +171,14 @@ function updateReceivableAmount(){
 		if (difference <= 0) {	
 			// full paid so nothing to add
 		}else{
-			rxAmount += parseFloat(difference);
+			totalAmount += parseFloat(difference);
 		}
 	});
-	$("#rxAmount").text((rxAmount).toFixed(2));
-
+	$("#rxAmount").text((totalAmount).toFixed(2));
+	var rxAmount = parseFloat($("#rxAmount").text());
+	var outstandingAmount = parseFloat($("#outstandingAmount").text());
 	// if rxAmount is 0, then disable payment button
-	if (rxAmount == 0){
+	if ((totalAmount == 0) && (outstandingAmount == 0)){
 		$('#paymentBtn').prop('disabled', true);
 	}else{
 		$('#paymentBtn').prop('disabled', false);

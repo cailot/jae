@@ -300,39 +300,40 @@ public class JaeInvoiceController {
 		invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
 		invoice.setPayment(paid);
 		invoice.setPayCompleteDate(LocalDate.now());
-
-		// 5-1. bring to EnrolmentDTO
+		// 4. bring to EnrolmentDTO
 		List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoId);
 		for(EnrolmentDTO enrol : enrols){
 			enrol.setInvoiceId(String.valueOf(invoId));
-			// 6-1. set period of enrolment to extra field
+			// 5. set period of enrolment to extra field
 			String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
 			String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
 			enrol.setExtra(start + " ~ " + end);
-			// 7-1. add to dtos
+			// 6. add to dtos
 			dtos.add(enrol);
 		}	
-		// 8-1. set EnrolmentDTO objects into session for payment receipt
-		session.setAttribute(JaeConstants.PAYMENTS, dtos);
+		// 7. set EnrolmentDTO objects into session for payment receipt
+		session.setAttribute(JaeConstants.PAYMENT_ENROLMENTS, dtos);
 			
-		// 4-1 if full paid, return EnrolmentDTO list
+		// 8-1 if full paid, return EnrolmentDTO list
 		if(fullPaid){
 			invoiceService.updateInvoice(invoice, invoId);
 			// 9-1. return
 			return dtos;
-			// 4-2. if not full paid, return OutstandingDTO list
+		// 8-2. if not full paid, return OutstandingDTO list
 		}else{
-			// 5-2. create Outstanding
+			// 9-2. create Outstanding
 			Outstanding outstanding = new Outstanding();
 			outstanding.setPaid(paidAmount);
 			outstanding.setRemaining(invoice.getTotalAmount()-invoice.getPaidAmount());
 			outstanding.setTotal(invoice.getTotalAmount());
-			// 6-2. add Outstanding to Invoice
+			// 10-2. add Outstanding to Invoice
 			invoice.addOutstanding(outstanding);
 			invoiceService.updateInvoice(invoice, invoId);
-			// 10-2. get outstanding
+			// 11-2. get outstanding
 			List<OutstandingDTO> outstandingDTOs = outstandingService.getOutstandingtByInvoiceId(invoId);
-			// 11-2. return
+			// 12-2. set OutstandingDTO objects into session for payment receipt
+			session.setAttribute(JaeConstants.PAYMENT_OUTSTANDINGS, outstandingDTOs);
+			// 13-2. return
 			return outstandingDTOs;
 		}
 	}
