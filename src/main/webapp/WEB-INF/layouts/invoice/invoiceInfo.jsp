@@ -113,7 +113,8 @@ function addOutstandingToInvoiceListTable(data) {
 	var newOS = $('<tr>');
 	newOS.append($('<td>').addClass('hidden-column').addClass('outstanding-match').text(OUTSTANDING + '|' + data.id));
 	newOS.append($('<td class="text-center"><i class="fa fa-exclamation-circle" title="outstanding"></i></td>'));
-	newOS.append($('<td colspan="9" class="smaller-table-font">').text('Outstanding' + ' - ' + data.paid + ' Paid'));
+	newOS.append($('<td colspan="5" class="smaller-table-font">').text('Outstanding'));
+	newOS.append($('<td colspan="4" class="smaller-table-font">').text(data.paid + ' Paid'));
 	// set editable attribute to true if the amount is not fully paid	
 	newOS.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.remaining).toFixed(2)));
 	newOS.append($('<td class="smaller-table-font paid-date">').text(data.registerDate));
@@ -254,16 +255,10 @@ function makePayment(){
 		contentType : 'application/json',
 		success : function(response) {
 			$.each(response, function(index, value){
-				// how to know if value is EnrolmentDTO or OutstandingDTO
-				// if(value instanceof EnrolmentDTO){
-				// 	retrieveInvoiceListTable(value);
-				// }else if(value instanceof OutstandingDTO){
-				// 	addOutstandingToInvoiceListTable(value);
-				// }
 				//debugger;
-				if (value.hasOwnProperty('enrolmentDate')) {
-                // It is an EnrolmentDTO object
-                retrieveInvoiceListTable(value);
+				if (value.hasOwnProperty('extra')) {
+					// It is an EnrolmentDTO object
+					retrieveInvoiceListTable(value);
 				} else if (value.hasOwnProperty('remaining')) {
 					// It is an OutstandingDTO object
 					addOutstandingToInvoiceListTable(value);
@@ -336,7 +331,7 @@ function createInvoice(){
 			$("#invoiceCredit").val(invoice.credit);
 			$("#invoiceDiscount").val(invoice.discount);
 			$("#invoicePaid").val(invoice.paidAmount);
-			$("#invoiceTotal").val(invoice.totalAmount);
+			$("#invoiceTotal").val(invoice.amount);
 			$("#invoiceRegisterDate").val(invoice.registerDate);
             $('#invoiceModal').modal('toggle');		
 		},
@@ -366,7 +361,7 @@ $.ajax({
 		$("#invoiceCredit").val(invoice.credit);
 		$("#invoiceDiscount").val(invoice.discount);
 		$("#invoicePaid").val(invoice.paidAmount);
-		$("#invoiceTotal").val(invoice.totalAmount);
+		$("#invoiceTotal").val(invoice.amount);
 		$("#invoiceRegisterDate").val(invoice.registerDate);
 		$('#invoiceModal').modal('toggle');		
 	},

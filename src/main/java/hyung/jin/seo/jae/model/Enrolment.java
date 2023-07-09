@@ -48,10 +48,9 @@ public class Enrolment{ // bridge table between Student & Class
 	@JoinColumn(name = "invoiceId")
 	private Invoice invoice;
 	
-	// @CreatedDate
 	// auto update to current date
 	@CreationTimestamp
-    private LocalDate enrolmentDate;
+    private LocalDate registerDate;
 
 	@Column
 	private boolean cancelled;

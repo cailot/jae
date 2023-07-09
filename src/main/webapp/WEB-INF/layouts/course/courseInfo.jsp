@@ -385,21 +385,28 @@ function retrieveEnrolment(studentId){
 		success: function(response) {
 			// Handle the response
 			$.each(response, function(index, value){
-				// console.log('--- ' + value);	
-				var row = $('<tr class="d-flex">');
-				row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
-				row.append($('<td class="col-1"><i class="fa fa-graduation-cap" title="class"></i></td>'));
-				row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
-				row.append($('<td class="smaller-table-font col-2">').text(value.day));
-				row.append($('<td class="smaller-table-font col-1">').text(value.year));
-				row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('start-week').text(value.startWeek));
-				row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('end-week').text(value.endWeek));
-				row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').text(value.endWeek - value.startWeek + 1));
-				row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
-				$('#basketTable > tbody').append(row);	
-
-				// update the invoice table
-				retrieveInvoiceListTable(value);
+				
+				//debugger;
+				// It is an EnrolmentDTO object		
+				if (value.hasOwnProperty('extra')) {
+					// update my lecture table
+					var row = $('<tr class="d-flex">');
+					row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
+					row.append($('<td class="col-1"><i class="fa fa-graduation-cap" title="class"></i></td>'));
+					row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
+					row.append($('<td class="smaller-table-font col-2">').text(value.day));
+					row.append($('<td class="smaller-table-font col-1">').text(value.year));
+					row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('start-week').text(value.startWeek));
+					row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('end-week').text(value.endWeek));
+					row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').text(value.endWeek - value.startWeek + 1));
+					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+					$('#basketTable > tbody').append(row);	
+					// update invoice table
+					retrieveInvoiceListTable(value);
+				} else if (value.hasOwnProperty('remaining')) { // It is an OutstandingDTO object
+					// update invoice table
+					addOutstandingToInvoiceListTable(value);
+				}
 			});
 		},
 		error: function(xhr, status, error) {

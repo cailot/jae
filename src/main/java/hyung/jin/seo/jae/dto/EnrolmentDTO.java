@@ -1,8 +1,5 @@
 package hyung.jin.seo.jae.dto;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.lang3.StringUtils;
@@ -18,11 +15,11 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class EnrolmentDTO implements Serializable{
+public class EnrolmentDTO extends MoneyDTO{
     
-	private String id;
+	// private String id;
 
-	private String enrolmentDate;
+	// private String registerDate;
 
 	private boolean cancelled;
 
@@ -36,7 +33,7 @@ public class EnrolmentDTO implements Serializable{
 
 	private double discount;
 
-	private double amount;
+	// private double amount;
 
 	private double paid;
 
@@ -62,7 +59,7 @@ public class EnrolmentDTO implements Serializable{
 
 	public EnrolmentDTO(Enrolment enrol){
 		this.id = String.valueOf(enrol.getId());
-		this.enrolmentDate = enrol.getEnrolmentDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		this.registerDate = enrol.getRegisterDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.cancelled = enrol.isCancelled();
 		this.cancellationReason = enrol.getCancellationReason();
 		this.startWeek = enrol.getStartWeek();
@@ -78,23 +75,23 @@ public class EnrolmentDTO implements Serializable{
 	public Enrolment convertToEnrolment() {
     	Enrolment enrolement = new Enrolment();
 		if(StringUtils.isNotBlank(id)) enrolement.setId(Long.parseLong(id));
-    	if(StringUtils.isNotBlank(enrolmentDate)) enrolement.setEnrolmentDate(LocalDate.parse(enrolmentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
+    	if(StringUtils.isNotBlank(registerDate)) enrolement.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		enrolement.setCancelled(cancelled);
 		enrolement.setStartWeek(startWeek);
 		enrolement.setEndWeek(endWeek);
 		// enrolement.setCredit(credit);
 		// enrolement.setDiscount(discount);
 		// enrolement.setAmount(amount);
-		if(StringUtils.isNotBlank(payCompleteDate)) enrolement.setEnrolmentDate(LocalDate.parse(payCompleteDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
+		if(StringUtils.isNotBlank(payCompleteDate)) enrolement.setRegisterDate(LocalDate.parse(payCompleteDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		if(StringUtils.isNotBlank(cancellationReason)) enrolement.setCancellationReason(cancellationReason);		
     	return enrolement;
     }
 
-	public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, 
+	public EnrolmentDTO(long id, LocalDate registerDate, boolean cancelled, String cancellationReason, int startWeek, 
 	int endWeek, double credit, double discount, double amount, double paid, LocalDate payDate, long studentId, 
 	long clazzId, String name, double price, int year, String grade, String day){
 		this.id = String.valueOf(id);
-		this.enrolmentDate = enrolmentDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.cancelled = cancelled;
 		this.cancellationReason = cancellationReason;
 		this.startWeek = startWeek;
@@ -113,9 +110,9 @@ public class EnrolmentDTO implements Serializable{
 		this.day = day;
 	}
 
-	public EnrolmentDTO(long id, LocalDate enrolmentDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, long studentId, long clazzId, String name, double price, int year, String grade, String day){
+	public EnrolmentDTO(long id, LocalDate registerDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, long studentId, long clazzId, String name, double price, int year, String grade, String day){
 		this.id = String.valueOf(id);
-		this.enrolmentDate = enrolmentDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.cancelled = cancelled;
 		this.cancellationReason = cancellationReason;
 		this.startWeek = startWeek;
@@ -137,22 +134,23 @@ public class EnrolmentDTO implements Serializable{
 
 	public EnrolmentDTO(Object[] obj){
 		this.id = (obj[0]!=null) ? String.valueOf(obj[0]) : null;
-		this.enrolmentDate = (obj[1]!=null) ? String.valueOf(obj[1]) : null;
+		this.registerDate = (obj[1]!=null) ? String.valueOf(obj[1]) : null;
 		this.cancelled = (obj[2]!=null) ? (boolean)obj[2] : false;
 		this.cancellationReason = (obj[3]!=null) ? (String)obj[3] : null;
 		this.startWeek = (obj[4]!=null) ? (int)obj[4] : 0;
 		this.endWeek = (obj[5]!=null) ? (int)obj[5] : 0;		
-		this.credit = (obj[6]!=null) ? Double.parseDouble(String.valueOf(obj[6])) : 0;
-		this.discount = (obj[7]!=null) ? Double.parseDouble(String.valueOf(obj[7])) : 0;
-		this.amount = (obj[8]!=null) ? Double.parseDouble(String.valueOf(obj[8])) : 0;
-		this.paid = (obj[9]!=null) ? Double.parseDouble(String.valueOf(obj[9])) : 0;
-		this.payCompleteDate = (obj[10] != null) ? JaeUtils.dateFormat.format(obj[10]) : null;
-		this.studentId = (obj[11]!=null) ? String.valueOf(obj[11]) : null;
-		this.clazzId = (obj[12]!=null) ? String.valueOf(obj[12]) : null;
-		this.name = (obj[13]!=null) ? (String)obj[13] : null;
-		this.price = (obj[14]!=null) ? Double.parseDouble(String.valueOf(obj[14])) : 0;
-		this.year = (obj[15]!=null) ? String.valueOf(obj[15]) : null;
-		this.grade = (obj[16]!=null) ? (String)obj[16] : null;
-		this.day = (obj[17]!=null) ? (String)obj[17] : null;
+		this.invoiceId = (obj[6]!=null) ? String.valueOf(obj[6]) : "0";
+		this.credit = (obj[7]!=null) ? Double.parseDouble(String.valueOf(obj[7])) : 0;
+		this.discount = (obj[8]!=null) ? Double.parseDouble(String.valueOf(obj[8])) : 0;
+		this.amount = (obj[9]!=null) ? Double.parseDouble(String.valueOf(obj[9])) : 0;
+		this.paid = (obj[10]!=null) ? Double.parseDouble(String.valueOf(obj[10])) : 0;
+		this.payCompleteDate = (obj[11] != null) ? JaeUtils.dateFormat.format(obj[11]) : null;
+		this.studentId = (obj[12]!=null) ? String.valueOf(obj[12]) : "0";
+		this.clazzId = (obj[13]!=null) ? String.valueOf(obj[13]) : "0";
+		this.name = (obj[14]!=null) ? (String)obj[14] : null;
+		this.price = (obj[15]!=null) ? Double.parseDouble(String.valueOf(obj[15])) : 0;
+		this.year = (obj[16]!=null) ? String.valueOf(obj[16]) : null;
+		this.grade = (obj[17]!=null) ? (String)obj[17] : null;
+		this.day = (obj[18]!=null) ? (String)obj[18] : null;
 	}
 }

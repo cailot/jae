@@ -16,17 +16,17 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class OutstandingDTO implements Serializable{
+public class OutstandingDTO extends MoneyDTO{
     
-	private String id;
+	// private String id;
 
-	private String registerDate;
+	// private String registerDate;
 
 	private double paid;
 
 	private double remaining;
 
-	private double total;
+	// private double amount;
 
 	private String invoiceId;
 
@@ -35,15 +35,15 @@ public class OutstandingDTO implements Serializable{
 		this.registerDate = stand.getRegisterDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.paid = stand.getPaid();
 		this.remaining = stand.getRemaining();
-		this.total = stand.getTotal();
+		this.amount = stand.getAmount();
 	}
 
-	public OutstandingDTO(long id, double paid, double remaining, double total, LocalDate registerDate, long invoiceId){
+	public OutstandingDTO(long id, double paid, double remaining, double amount, LocalDate registerDate, long invoiceId){
 		this.id = String.valueOf(id);
 		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.paid = paid;
 		this.remaining = remaining;
-		this.total = total;
+		this.amount = amount;
 		this.invoiceId = String.valueOf(invoiceId);
 	}
 
@@ -53,7 +53,7 @@ public class OutstandingDTO implements Serializable{
     	if(StringUtils.isNotBlank(registerDate)) stand.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		stand.setPaid(paid);
 		stand.setRemaining(remaining);
-		stand.setTotal(total);
+		stand.setAmount(amount);
 		return stand;
     }
 

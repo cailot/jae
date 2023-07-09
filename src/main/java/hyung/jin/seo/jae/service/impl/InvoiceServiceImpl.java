@@ -72,9 +72,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 		if(invoice.getPaidAmount()!=existing.getPaidAmount()){
 			existing.setPaidAmount(invoice.getPaidAmount());
 		}
-		// totalAmount
-		if(invoice.getTotalAmount()!=existing.getTotalAmount()){
-			existing.setTotalAmount(invoice.getTotalAmount());
+		// amount
+		if(invoice.getAmount()!=existing.getAmount()){
+			existing.setAmount(invoice.getAmount());
 		}
 		// update the existing record
 		Invoice updated = invoiceRepository.save(existing);

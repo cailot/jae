@@ -39,7 +39,7 @@ public class Outstanding {
     private double remaining;
     
     @Column(columnDefinition = "DECIMAL(10,2)")
-    private double total;
+    private double amount;
     
     @CreationTimestamp
     private LocalDate registerDate;

@@ -3,6 +3,7 @@ package hyung.jin.seo.jae.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.jasper.tagplugins.jstl.core.Out;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
+import hyung.jin.seo.jae.dto.OutstandingDTO;
 import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.service.EnrolmentService;
+import hyung.jin.seo.jae.service.OutstandingService;
 import hyung.jin.seo.jae.service.StudentService;
 
 @Controller
@@ -35,30 +38,39 @@ public class JaeEnrolmentController {
 	@Autowired
 	private StudentService studentService;
 
+	@Autowired
+	private OutstandingService outstandingService;
+
 	// search enrolment by student Id
 	@GetMapping("/search/student/{id}")
 	@ResponseBody
-	List<EnrolmentDTO> searchEnrolmentByStudent(@PathVariable Long id) {
-		List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByStudent(id);
+	List searchEnrolmentByStudent(@PathVariable Long id) {
+		List dtos = new ArrayList();
+		List<String> invoiceIds = new ArrayList();
+		// 1. get enrolments
+		List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByStudent(id);
+		// 2. get invoice id and add to list dtos
+		for(EnrolmentDTO enrol : enrols){
+			invoiceIds.add(enrol.getInvoiceId());
+			dtos.add(enrol);
+		}
+		// 2. get outstanding by invoice id and add to list dtos
+		for(String invoiceId : invoiceIds){
+			List<OutstandingDTO> stands = outstandingService.getOutstandingtByInvoiceId(Long.parseLong(invoiceId));
+			for(OutstandingDTO stand : stands){
+				dtos.add(stand);
+			}
+		}
+		// 3. return dtos mixed by enrolments and outstandings
 		return dtos;
 	}
 
-	// search enrolment by clazz Id
-	// @GetMapping("/search/class/{id}")
+	// @GetMapping("/search/student/{id}")
 	// @ResponseBody
-	// List<EnrolmentDTO> searchEnrolmentByClazz(@PathVariable Long id) {
-	// 	List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByClazz(id);
+	// List<EnrolmentDTO> searchEnrolmentByStudent(@PathVariable Long id) {
+	// 	List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByStudent(id);
 	// 	return dtos;
 	// }
-
-	// search enrolment by clazz Id & student Id
-	// @GetMapping("/search/class/{classId}/student/{studentId}")
-	// @ResponseBody
-	// List<EnrolmentDTO> searchEnrolmentByClazzAndStudent(@PathVariable Long classId, @PathVariable Long studentId) {
-	// 	List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByClazzAndStudent(classId, studentId);
-	// 	return dtos;
-	// }
-
 
 	// count records number in database
 	@GetMapping("/count")

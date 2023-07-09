@@ -1,6 +1,5 @@
 package hyung.jin.seo.jae.dto;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -15,13 +14,13 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class PaymentDTO implements Serializable{
+public class PaymentDTO extends MoneyDTO{
     
-	private String id;
+	// private String id;
 
-	private String registerDate;
+	// private String registerDate;
 
-	private double amount;
+	// private double amount;
 
 	private String method;
 

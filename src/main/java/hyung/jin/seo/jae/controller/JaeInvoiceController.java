@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
+import hyung.jin.seo.jae.dto.MoneyDTO;
 import hyung.jin.seo.jae.dto.OutstandingDTO;
 import hyung.jin.seo.jae.dto.PaymentDTO;
 import hyung.jin.seo.jae.model.Enrolment;
@@ -133,7 +134,7 @@ public class JaeInvoiceController {
 			// 8. update total
 			invoice.setCredit(credit);
 			invoice.setDiscount(discount);
-			invoice.setTotalAmount(total);
+			invoice.setAmount(total);
 			// 9. update Invoice
 			InvoiceDTO dto = invoiceService.updateInvoice(invoice, invoiceId);
 			// return dto
@@ -164,7 +165,7 @@ public class JaeInvoiceController {
 			// 8. update total
 			invoice.setCredit(credit);
 			invoice.setDiscount(discount);
-			invoice.setTotalAmount(total);
+			invoice.setAmount(total);
 			// 9. create Invoice
 			InvoiceDTO dto = invoiceService.addInvoice(invoice);
 			// 10. return flag;
@@ -172,127 +173,19 @@ public class JaeInvoiceController {
 		}
 	}
 
-	
-	// // make payment and return updated invoice
-	// @PostMapping("/paymentFull/{studentId}")
-	// @ResponseBody
-	// public Object makeFullPayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
-	
-	// 	List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
-	// 	Long invoId = invoiceService.getInvoiceIdByStudentId(studentId);
-	// 	double paidAmount = formData.getAmount();
-	// 	// boolean partialPaid = false;
-	// 	// for(Long invoiceId : invoId){
-	// 		// 1. get Invoice
-	// 		Invoice invoice = invoiceService.findInvoiceById(invoId);
-	// 		// 2. make payment
-	// 		Payment payment = formData.convertToPayment();
-	// 		Payment paid = paymentService.addPayment(payment);
-	// 		// 3. update Invoice
-	// 		invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
-	// 		invoice.setPayment(paid);
-	// 		// 4. check whether full paid or not
-	// 		// if(invoice.getTotalAmount() > invoice.getPaidAmount()){
-	// 		// 	partialPaid = true;
-	// 		// }
-	// 		// // 5. if partial paid, add Outstanding
-	// 		// if(partialPaid){
-	// 		// 	Outstanding outstanding = new Outstanding();
-	// 		// 	outstanding.setPaid(paidAmount);
-	// 		// 	outstanding.setRemaining(invoice.getTotalAmount()-invoice.getPaidAmount());
-	// 		// 	outstanding.setTotal(invoice.getTotalAmount());
-	// 		// 	// add Outstanding to Invoice
-	// 		// 	invoice.addOutstanding(outstanding);
-	// 		// }
-	// 		invoice.setPayCompleteDate(LocalDate.now());
-	// 		// 6. save Invoice
-	// 		invoiceService.updateInvoice(invoice, invoId);
-	// 		// 7. bring to EnrolmentDTO
-	// 		List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoId);
-	// 		for(EnrolmentDTO enrol : enrols){
-	// 			enrol.setInvoiceId(String.valueOf(invoId));
-	// 			// 8. set period of enrolment to extra field
-	// 			String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
-	// 			String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
-	// 			enrol.setExtra(start + " ~ " + end);
-	// 			// 9. add to dtos
-	// 			dtos.add(enrol);
-	// 		}	
-	// 	// }
-	// 	// 10. set EnrolmentDTO objects into session for payment receipt
-	// 	session.setAttribute(JaeConstants.PAYMENTS, dtos);
-	// 	// 11. return
-	// 	return dtos;
-	// }
-
-	// // make payment and return updated invoice
-	// @PostMapping("/paymentPartial/{studentId}")
-	// @ResponseBody
-	// // public List<OutstandingDTO> makePartialPayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
-	// public Object makePartialPayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
-	
-	// 	List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
-	// 	// 1. get latest Invoice
-	// 	Long invoiceId = invoiceService.getInvoiceIdByStudentId(studentId);
-	// 	double paidAmount = formData.getAmount();
-	// 	// boolean partialPaid = false;
-	// 	// for(Long invoiceId : invoiceIds){
-	// 		// 1. get Invoice
-	// 		Invoice invoice = invoiceService.findInvoiceById(invoiceId);
-	// 		// 2. make payment
-	// 		Payment payment = formData.convertToPayment();
-	// 		Payment paid = paymentService.addPayment(payment);
-	// 		// 3. update Invoice
-	// 		invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
-	// 		invoice.setPayment(paid);
-	// 		// // 4. check whether full paid or not
-	// 		// if(invoice.getTotalAmount() > invoice.getPaidAmount()){
-	// 		// 	partialPaid = true;
-	// 		// }
-	// 		// // 5. if partial paid, add Outstanding
-	// 		// if(partialPaid){
-	// 		Outstanding outstanding = new Outstanding();
-	// 		outstanding.setPaid(paidAmount);
-	// 		outstanding.setRemaining(invoice.getTotalAmount()-invoice.getPaidAmount());
-	// 		outstanding.setTotal(invoice.getTotalAmount());
-	// 		// add Outstanding to Invoice
-	// 		invoice.addOutstanding(outstanding);
-	// 		// }
-	// 		invoice.setPayCompleteDate(LocalDate.now());
-	// 		// 6. save Invoice
-	// 		invoiceService.updateInvoice(invoice, invoiceId);
-	// 		// 7. bring to EnrolmentDTO
-	// 		List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoiceId);
-	// 		for(EnrolmentDTO enrol : enrols){
-	// 			enrol.setInvoiceId(String.valueOf(invoiceId));
-	// 			// 8. set period of enrolment to extra field
-	// 			String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
-	// 			String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
-	// 			enrol.setExtra(start + " ~ " + end);
-	// 			// 9. add to dtos
-	// 			dtos.add(enrol);
-	// 		}	
-	// 	// }
-	// 	// 10. set EnrolmentDTO objects into session for payment receipt
-	// 	session.setAttribute(JaeConstants.PAYMENTS, dtos);
-	// 	// get outstanding
-	// 	List<OutstandingDTO> outstandingDTOs = outstandingService.getOutstandingtByInvoiceId(invoiceId);
-	// 	// 11. return
-	// 	return outstandingDTOs;
-	// }
-
 	// make payment and return updated invoice
 	@PostMapping("/payment/{studentId}")
 	@ResponseBody
-	public Object makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
+	public List makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
 		List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
+		//List<MoneyDTO> dtos = new ArrayList<MoneyDTO>();
 		Long invoId = invoiceService.getInvoiceIdByStudentId(studentId);
 		double paidAmount = formData.getAmount();
 		// 1. get Invoice
 		Invoice invoice = invoiceService.findInvoiceById(invoId);
 		// 2. check if full paid or not
-		double totalAmount = invoice.getTotalAmount();
-		boolean fullPaid =  (totalAmount - paidAmount) <= 0;
+		double amount = invoice.getAmount();
+		boolean fullPaid =  (amount - paidAmount) <= 0;
 		// 3. make payment
 		Payment payment = formData.convertToPayment();
 		Payment paid = paymentService.addPayment(payment);
@@ -324,8 +217,8 @@ public class JaeInvoiceController {
 			// 9-2. create Outstanding
 			Outstanding outstanding = new Outstanding();
 			outstanding.setPaid(paidAmount);
-			outstanding.setRemaining(invoice.getTotalAmount()-invoice.getPaidAmount());
-			outstanding.setTotal(invoice.getTotalAmount());
+			outstanding.setRemaining(invoice.getAmount()-invoice.getPaidAmount());
+			outstanding.setAmount(invoice.getAmount());
 			// 10-2. add Outstanding to Invoice
 			invoice.addOutstanding(outstanding);
 			invoiceService.updateInvoice(invoice, invoId);
@@ -346,23 +239,5 @@ public class JaeInvoiceController {
 		InvoiceDTO dto = invoiceService.getInvoiceByStudentId(studentId);
 		return dto;
 	}
-		
-	// // get start date of the week
-	// @GetMapping("/startSunday/{year}/{week}")
-	// @ResponseBody
-	// String getStartDateofWeek(@PathVariable("year") int year, @PathVariable("week") int week) {
-	// 	String date = cycleService.academicStartSunday(year, week);
-	// 	return date;
-	// }
-
-	// // get end date of the week
-	// @GetMapping("/endSaturday/{year}/{week}")
-	// @ResponseBody
-	// String getEndDateofWeek(@PathVariable("year") int year, @PathVariable("week") int week) {
-	// 	String date = cycleService.academicEndSaturday(year, week);
-	// 	return date;
-	// }
-
-
 
 }

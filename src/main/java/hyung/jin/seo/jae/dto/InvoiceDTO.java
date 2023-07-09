@@ -1,6 +1,5 @@
 package hyung.jin.seo.jae.dto;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.lang3.StringUtils;
@@ -15,11 +14,11 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class InvoiceDTO implements Serializable{
+public class InvoiceDTO extends MoneyDTO{
     
-	private String id;
+	// private String id;
 
-	private String registerDate;
+	// private String registerDate;
 
 	private String payCompleteDate;
 
@@ -27,7 +26,7 @@ public class InvoiceDTO implements Serializable{
 
 	private double discount;
 
-	private double totalAmount;
+	// private double amount;
 
 	private double paidAmount;
 
@@ -42,7 +41,7 @@ public class InvoiceDTO implements Serializable{
 		}
 		this.credit = invoice.getCredit();
 		this.discount = invoice.getDiscount();
-		this.totalAmount = invoice.getTotalAmount();
+		this.amount = invoice.getAmount();
 		this.paidAmount = invoice.getPaidAmount();
 	}
 
@@ -53,17 +52,17 @@ public class InvoiceDTO implements Serializable{
 		if(StringUtils.isNotBlank(payCompleteDate)) invoice.setPayCompleteDate(LocalDate.parse(payCompleteDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		invoice.setCredit(credit);
 		invoice.setDiscount(discount);
-		invoice.setTotalAmount(totalAmount);
+		invoice.setAmount(amount);
 		invoice.setPaidAmount(paidAmount);
 		return invoice;
     }
 
-	public InvoiceDTO(long id, double credit, double discount, double paidAmount, double totalAmount, LocalDate registerDate, LocalDate payCompleteDate){
+	public InvoiceDTO(long id, double credit, double discount, double paidAmount, double amount, LocalDate registerDate, LocalDate payCompleteDate){
 		this.id = String.valueOf(id);
 		this.credit = credit;
 		this.discount = discount;
 		this.paidAmount = paidAmount;
-		this.totalAmount = totalAmount;
+		this.amount = amount;
 		this.registerDate = (registerDate!=null) ? registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null;
 		this.payCompleteDate = (payCompleteDate!=null) ? payCompleteDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null;
 	}

@@ -247,7 +247,7 @@ public class JaeStudentController {
 		// 3. assign invoice id to enrolment
 		for(EnrolmentDTO data : dtos){
 			data.setInvoiceId(invoiceDTO.getId());
-			data.setAmount(invoiceDTO.getTotalAmount());
+			data.setAmount(invoiceDTO.getAmount());
 		}
 		return dtos;
 	}
@@ -317,7 +317,7 @@ public class JaeStudentController {
 			// 8. update total
 			invoice.setCredit(credit);
 			invoice.setDiscount(discount);
-			invoice.setTotalAmount(total);
+			invoice.setAmount(total);
 			// 9. update Invoice
 			InvoiceDTO dto = invoiceService.updateInvoice(invoice, invoiceId);
 			// return dto
@@ -349,7 +349,7 @@ public class JaeStudentController {
 			// 8. update total
 			invoice.setCredit(credit);
 			invoice.setDiscount(discount);
-			invoice.setTotalAmount(total);
+			invoice.setAmount(total);
 			// 9. create Invoice
 			InvoiceDTO dto = invoiceService.addInvoice(invoice);
 			// 10. return flag;

@@ -316,7 +316,7 @@
             <tbody>
                 <c:set var="finalTotal" value="0" />
                 <c:set var="paidTotal" value="0" />
-                <%-- Check if payments attribute exists in session --%>
+                <%-- Check if enrolments attribute exists in session --%>
                 <c:if test="${not empty sessionScope.enrolments}">
                     <%-- Retrieve the payments from session --%>
                     <c:set var="enrolments" value="${sessionScope.enrolments}" />
@@ -333,6 +333,27 @@
                             <%-- Add the paid to the paidTotal variable --%>
                             <c:set var="paidTotal" value="${paidTotal + enrolment.paid}" />
     
+                        </tr>
+                    </c:forEach>
+                </c:if>
+
+                <%-- Check if outstandings attribute exists in session --%>
+                <c:if test="${not empty sessionScope.outstandings}">
+                    <%-- Retrieve the outstandings from session --%>
+                    <c:set var="outstandings" value="${sessionScope.outstandings}" />
+                    <c:forEach items="${outstandings}" var="outstanding">
+                        <tr>
+                            <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'>[<c:out value="${fn:toUpperCase(outstanding.invoiceId)}" />] <c:out value="${outstanding.id}" /></td>
+                            <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'><c:out value="${outstanding.registerDate}" /></td>
+                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${outstanding.paid}" /></td>
+                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${outstanding.remaining}" /></td>
+                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${outstanding.amount}" /></td>
+                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${outstanding.amount}" /></td>
+                            <!-- <%-- Add the amount to the finalTotal variable --%>
+                            <c:set var="finalTotal" value="${finalTotal + enrolment.amount}" />
+                            <%-- Add the paid to the paidTotal variable --%>
+                            <c:set var="paidTotal" value="${paidTotal + enrolment.paid}" />
+     -->
                         </tr>
                     </c:forEach>
                 </c:if>

@@ -16,7 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -39,11 +38,6 @@ public class Invoice{
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
-	// @OneToOne
-	// @JoinColumn(name = "enrolmentId")
-	// private Enrolment enrolment;
-	
-	
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "invoiceId")
 	private Set<Enrolment> enrolments = new LinkedHashSet<>();
@@ -87,7 +81,7 @@ public class Invoice{
     private double discount;
 
 	@Column
-    private double totalAmount;
+    private double amount;
 
 	@Column
 	private double paidAmount;
