@@ -210,6 +210,8 @@ public class JaeInvoiceController {
 		// 8-1 if full paid, return EnrolmentDTO list
 		if(fullPaid){
 			invoiceService.updateInvoice(invoice, invoId);
+			// remove Outstandings from session
+			session.removeAttribute(JaeConstants.PAYMENT_OUTSTANDINGS);
 			// 9-1. return
 			return dtos;
 		// 8-2. if not full paid, return OutstandingDTO list

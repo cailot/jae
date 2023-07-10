@@ -57,6 +57,8 @@ public class EnrolmentDTO extends MoneyDTO{
 
 	private String extra;
 
+	// private String info;
+
 	public EnrolmentDTO(Enrolment enrol){
 		this.id = String.valueOf(enrol.getId());
 		this.registerDate = enrol.getRegisterDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
@@ -70,6 +72,7 @@ public class EnrolmentDTO extends MoneyDTO{
 		this.studentId = (enrol.getStudent()!=null) ? String.valueOf(enrol.getStudent().getId()) : "";
 		this.clazzId = (enrol.getClazz()!=null) ? String.valueOf(enrol.getClazz().getId()) : "";
 		this.invoiceId = (enrol.getInvoice()!=null) ? String.valueOf(enrol.getInvoice().getId()) : "";
+		this.info = (enrol.getInfo()!=null) ? enrol.getInfo() : "";
 	}
 
 	public Enrolment convertToEnrolment() {
@@ -83,19 +86,19 @@ public class EnrolmentDTO extends MoneyDTO{
 		// enrolement.setDiscount(discount);
 		// enrolement.setAmount(amount);
 		if(StringUtils.isNotBlank(payCompleteDate)) enrolement.setRegisterDate(LocalDate.parse(payCompleteDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
-		if(StringUtils.isNotBlank(cancellationReason)) enrolement.setCancellationReason(cancellationReason);		
+		if(StringUtils.isNotBlank(cancellationReason)) enrolement.setCancellationReason(cancellationReason);
+		enrolement.setInfo(info);		
     	return enrolement;
     }
 
-	public EnrolmentDTO(long id, LocalDate registerDate, boolean cancelled, String cancellationReason, int startWeek, 
-	int endWeek, double credit, double discount, double amount, double paid, LocalDate payDate, long studentId, 
-	long clazzId, String name, double price, int year, String grade, String day){
+	public EnrolmentDTO(long id, LocalDate registerDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, String info, double credit, double discount, double amount, double paid, LocalDate payDate, long studentId, long clazzId, String name, double price, int year, String grade, String day){
 		this.id = String.valueOf(id);
 		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.cancelled = cancelled;
 		this.cancellationReason = cancellationReason;
 		this.startWeek = startWeek;
 		this.endWeek = endWeek;
+		this.info = info;
 		this.credit = credit;
 		this.amount	= amount;
 		this.paid = paid;
@@ -110,13 +113,14 @@ public class EnrolmentDTO extends MoneyDTO{
 		this.day = day;
 	}
 
-	public EnrolmentDTO(long id, LocalDate registerDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, long studentId, long clazzId, String name, double price, int year, String grade, String day){
+	public EnrolmentDTO(long id, LocalDate registerDate, boolean cancelled, String cancellationReason, int startWeek, int endWeek, String info, long studentId, long clazzId, String name, double price, int year, String grade, String day){
 		this.id = String.valueOf(id);
 		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.cancelled = cancelled;
 		this.cancellationReason = cancellationReason;
 		this.startWeek = startWeek;
 		this.endWeek = endWeek;
+		this.info = info;
 		// this.credit = credit;
 		// this.amount	= amount;
 		// this.paid = paid;
@@ -138,19 +142,20 @@ public class EnrolmentDTO extends MoneyDTO{
 		this.cancelled = (obj[2]!=null) ? (boolean)obj[2] : false;
 		this.cancellationReason = (obj[3]!=null) ? (String)obj[3] : null;
 		this.startWeek = (obj[4]!=null) ? (int)obj[4] : 0;
-		this.endWeek = (obj[5]!=null) ? (int)obj[5] : 0;		
-		this.invoiceId = (obj[6]!=null) ? String.valueOf(obj[6]) : "0";
-		this.credit = (obj[7]!=null) ? Double.parseDouble(String.valueOf(obj[7])) : 0;
-		this.discount = (obj[8]!=null) ? Double.parseDouble(String.valueOf(obj[8])) : 0;
-		this.amount = (obj[9]!=null) ? Double.parseDouble(String.valueOf(obj[9])) : 0;
-		this.paid = (obj[10]!=null) ? Double.parseDouble(String.valueOf(obj[10])) : 0;
-		this.payCompleteDate = (obj[11] != null) ? JaeUtils.dateFormat.format(obj[11]) : null;
-		this.studentId = (obj[12]!=null) ? String.valueOf(obj[12]) : "0";
-		this.clazzId = (obj[13]!=null) ? String.valueOf(obj[13]) : "0";
-		this.name = (obj[14]!=null) ? (String)obj[14] : null;
-		this.price = (obj[15]!=null) ? Double.parseDouble(String.valueOf(obj[15])) : 0;
-		this.year = (obj[16]!=null) ? String.valueOf(obj[16]) : null;
-		this.grade = (obj[17]!=null) ? (String)obj[17] : null;
-		this.day = (obj[18]!=null) ? (String)obj[18] : null;
+		this.endWeek = (obj[5]!=null) ? (int)obj[5] : 0;
+		this.info = (obj[6]!=null) ? String.valueOf(obj[6]) : "";				
+		this.invoiceId = (obj[7]!=null) ? String.valueOf(obj[7]) : "0";
+		this.credit = (obj[8]!=null) ? Double.parseDouble(String.valueOf(obj[8])) : 0;
+		this.discount = (obj[9]!=null) ? Double.parseDouble(String.valueOf(obj[9])) : 0;
+		this.amount = (obj[10]!=null) ? Double.parseDouble(String.valueOf(obj[10])) : 0;
+		this.paid = (obj[11]!=null) ? Double.parseDouble(String.valueOf(obj[11])) : 0;
+		this.payCompleteDate = (obj[12] != null) ? JaeUtils.dateFormat.format(obj[12]) : null;
+		this.studentId = (obj[13]!=null) ? String.valueOf(obj[13]) : "0";
+		this.clazzId = (obj[14]!=null) ? String.valueOf(obj[14]) : "0";
+		this.name = (obj[15]!=null) ? (String)obj[15] : null;
+		this.price = (obj[16]!=null) ? Double.parseDouble(String.valueOf(obj[16])) : 0;
+		this.year = (obj[17]!=null) ? String.valueOf(obj[17]) : null;
+		this.grade = (obj[18]!=null) ? (String)obj[18] : null;
+		this.day = (obj[19]!=null) ? (String)obj[19] : null;
 	}
 }

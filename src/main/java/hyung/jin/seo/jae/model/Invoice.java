@@ -86,4 +86,7 @@ public class Invoice{
 	@Column
 	private double paidAmount;
 
+	@Column(length = 100)
+    private String info;
+
 }

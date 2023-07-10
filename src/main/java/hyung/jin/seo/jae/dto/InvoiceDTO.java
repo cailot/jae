@@ -32,6 +32,8 @@ public class InvoiceDTO extends MoneyDTO{
 
 	private String enrolmentId;
 
+	// private String info;
+
 
 	public InvoiceDTO(Invoice invoice){
 		this.id = String.valueOf(invoice.getId());
@@ -43,6 +45,7 @@ public class InvoiceDTO extends MoneyDTO{
 		this.discount = invoice.getDiscount();
 		this.amount = invoice.getAmount();
 		this.paidAmount = invoice.getPaidAmount();
+		this.info = invoice.getInfo();
 	}
 
 	public Invoice convertToOnlyInvoice() {
@@ -54,10 +57,11 @@ public class InvoiceDTO extends MoneyDTO{
 		invoice.setDiscount(discount);
 		invoice.setAmount(amount);
 		invoice.setPaidAmount(paidAmount);
+		invoice.setInfo(info);
 		return invoice;
     }
 
-	public InvoiceDTO(long id, double credit, double discount, double paidAmount, double amount, LocalDate registerDate, LocalDate payCompleteDate){
+	public InvoiceDTO(long id, double credit, double discount, double paidAmount, double amount, LocalDate registerDate, LocalDate payCompleteDate, String info){
 		this.id = String.valueOf(id);
 		this.credit = credit;
 		this.discount = discount;
@@ -65,6 +69,7 @@ public class InvoiceDTO extends MoneyDTO{
 		this.amount = amount;
 		this.registerDate = (registerDate!=null) ? registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null;
 		this.payCompleteDate = (payCompleteDate!=null) ? payCompleteDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null;
+		this.info = info;
 	}
 
 }

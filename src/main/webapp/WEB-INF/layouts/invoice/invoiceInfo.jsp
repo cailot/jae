@@ -472,7 +472,7 @@ $.ajax({
 					</div>
 					<div class="form-row mt-2">
 						<div class="col-md-6">
-							<label>Outstanding : </label> 
+							<label>Outing : </label> 
 						</div>
 						<div class="col-md-6">
 							<input type="text" class="form-control" id="payOutstanding" name="payOutstanding" readonly>

@@ -66,4 +66,8 @@ public class Enrolment{ // bridge table between Student & Class
 
 	@Column
 	private boolean old;
+
+	@Column(length = 100)
+    private String info;
+
 }

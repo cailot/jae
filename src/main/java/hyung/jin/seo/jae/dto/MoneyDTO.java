@@ -18,4 +18,6 @@ public class MoneyDTO implements Serializable{
 
 	public double amount;
 
+	public String info;
+
 }

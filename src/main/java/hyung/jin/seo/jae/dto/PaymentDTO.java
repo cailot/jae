@@ -24,9 +24,7 @@ public class PaymentDTO extends MoneyDTO{
 
 	private String method;
 
-	private String info;
-
-
+	// private String info;
 
 	public PaymentDTO(Payment payment){
 		this.id = String.valueOf(payment.getId());

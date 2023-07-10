@@ -3,9 +3,7 @@ package hyung.jin.seo.jae.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.jasper.tagplugins.jstl.core.Out;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +42,7 @@ public class JaeEnrolmentController {
 	// search enrolment by student Id
 	@GetMapping("/search/student/{id}")
 	@ResponseBody
-	List searchEnrolmentByStudent(@PathVariable Long id) {
+	public List searchEnrolmentByStudent(@PathVariable Long id) {
 		List dtos = new ArrayList();
 		List<String> invoiceIds = new ArrayList();
 		// 1. get enrolments
@@ -65,17 +63,10 @@ public class JaeEnrolmentController {
 		return dtos;
 	}
 
-	// @GetMapping("/search/student/{id}")
-	// @ResponseBody
-	// List<EnrolmentDTO> searchEnrolmentByStudent(@PathVariable Long id) {
-	// 	List<EnrolmentDTO> dtos = enrolmentService.findEnrolmentByStudent(id);
-	// 	return dtos;
-	// }
-
 	// count records number in database
 	@GetMapping("/count")
 	@ResponseBody
-	long count() {
+	public long count() {
 		long count = enrolmentService.checkCount();
 		return count;
 	}

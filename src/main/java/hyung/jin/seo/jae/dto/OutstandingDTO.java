@@ -30,7 +30,7 @@ public class OutstandingDTO extends MoneyDTO{
 
 	private String invoiceId;
 
-	private String info;
+	// private String info;
 
 	public OutstandingDTO(Outstanding stand){
 		this.id = String.valueOf(stand.getId());

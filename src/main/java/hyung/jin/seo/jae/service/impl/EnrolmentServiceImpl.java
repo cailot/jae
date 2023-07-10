@@ -106,6 +106,10 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 		if(!StringUtils.equalsIgnoreCase(StringUtils.defaultString(enrolment.getCancellationReason()), StringUtils.defaultString(existing.getCancellationReason()))){
 			existing.setCancellationReason(StringUtils.defaultString(enrolment.getCancellationReason()));
 		}
+		// info
+		if(!StringUtils.equalsIgnoreCase(StringUtils.defaultString(enrolment.getInfo()), StringUtils.defaultString(existing.getInfo()))){
+			existing.setInfo(StringUtils.defaultString(enrolment.getInfo()));
+		}
 		// update the existing record
 		Enrolment updated = enrolmentRepository.save(existing);
 		return updated;
