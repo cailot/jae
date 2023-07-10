@@ -46,7 +46,7 @@ function retrieveInvoiceListTable(data) {
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell"));
 	row.append($('<td class="smaller-table-font paid-date">').text(data.payCompleteDate));
 	row.append($('<td>').addClass('hidden-column paid').text(data.paid));
-    row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+    row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-check-circle-o"></i></a> <i class="fa fa-check-circle"></i>'));
 
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
@@ -119,7 +119,7 @@ function addOutstandingToInvoiceListTable(data) {
 	newOS.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.remaining).toFixed(2)));
 	newOS.append($('<td class="smaller-table-font paid-date">').text(data.registerDate));
 	newOS.append($('<td>').addClass('hidden-column paid').text(data.paid));
-	newOS.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-trash"></i></a>'));
+	newOS.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-check-circle-o"></i></a>'));
 
 
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row

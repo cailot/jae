@@ -348,7 +348,7 @@
                             <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${outstanding.paid}" /></td>
                             <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${outstanding.remaining}" /></td>
                             <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${outstanding.amount}" /></td>
-                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${outstanding.amount}" /></td>
+                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${outstanding.info}" /></td>
                             <!-- <%-- Add the amount to the finalTotal variable --%>
                             <c:set var="finalTotal" value="${finalTotal + enrolment.amount}" />
                             <%-- Add the paid to the paidTotal variable --%>

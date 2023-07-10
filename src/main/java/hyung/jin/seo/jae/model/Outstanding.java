@@ -44,6 +44,9 @@ public class Outstanding {
     @CreationTimestamp
     private LocalDate registerDate;
 
+    @Column(length = 100)
+    private String info;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoiceId")
     private Invoice invoice;

@@ -30,21 +30,25 @@ public class OutstandingDTO extends MoneyDTO{
 
 	private String invoiceId;
 
+	private String info;
+
 	public OutstandingDTO(Outstanding stand){
 		this.id = String.valueOf(stand.getId());
 		this.registerDate = stand.getRegisterDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.paid = stand.getPaid();
 		this.remaining = stand.getRemaining();
 		this.amount = stand.getAmount();
+		this.info = stand.getInfo();
 	}
 
-	public OutstandingDTO(long id, double paid, double remaining, double amount, LocalDate registerDate, long invoiceId){
+	public OutstandingDTO(long id, double paid, double remaining, double amount, LocalDate registerDate, long invoiceId, String info){
 		this.id = String.valueOf(id);
 		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.paid = paid;
 		this.remaining = remaining;
 		this.amount = amount;
 		this.invoiceId = String.valueOf(invoiceId);
+		this.info = info;
 	}
 
 	public Outstanding convertToOutstanding() {
@@ -54,6 +58,7 @@ public class OutstandingDTO extends MoneyDTO{
 		stand.setPaid(paid);
 		stand.setRemaining(remaining);
 		stand.setAmount(amount);
+		stand.setInfo(info);
 		return stand;
     }
 

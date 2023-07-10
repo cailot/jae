@@ -28,5 +28,6 @@
             "password": "J@va1973M"
         }
     ],
-    "liveServer.settings.port": 5501
+    "liveServer.settings.port": 5501,
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
