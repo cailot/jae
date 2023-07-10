@@ -302,8 +302,8 @@
             </colgroup>
             <thead>
                 <tr>
-                    <th rowspan="2" style="width:25%; height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: normal; border: 1px solid #444; border-bottom-style:double;border: 1px solid #444;">Course and book</th>
-                    <th rowspan="2" style="width: auto; height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: normal; border: 1px solid #444;border-bottom-style:double;">Period</th>
+                    <th rowspan="2" style="width:25%; height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: normal; border: 1px solid #444; border-bottom-style:double;border: 1px solid #444;">Title</th>
+                    <th rowspan="2" style="width: auto; height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: normal; border: 1px solid #444;border-bottom-style:double;">Period / Date</th>
                     <th colspan="2" style="height: 40px; width:25%; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: normal; border: 1px solid #444;">Fee (Incl.GST)</th>
                     <th rowspan="2" style="width:10%; height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: normal; border: 1px solid #444;border-bottom-style:double;">Discount</th>
                     <th rowspan="2" style="width:15%; height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: normal; border: 1px solid #444;border-bottom-style:double;">Subtotal<br />(Incl.GST)</th>
@@ -346,10 +346,10 @@
                         <tr>
                             <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'>
                                 <%-- [<c:out value="${fn:toUpperCase(outstanding.invoiceId)}" />] <c:out value="${outstanding.id}" /> --%>
-                                Outstanding
+                                Payment
                             </td>
                             <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'>
-                                Paid at <c:out value="${outstanding.registerDate}" />
+                                <c:out value="${outstanding.registerDate}" />
                             </td>
                             <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'>
                                 <%-- <c:out value="${outstanding.paid}" /> --%>

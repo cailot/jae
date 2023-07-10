@@ -569,25 +569,7 @@ $.ajax({
 	</div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- Bootstrap Editable Table JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.21.4/bootstrap-table.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap-table.min.js"></script>
     
 		
