@@ -193,23 +193,37 @@ public class JaeInvoiceController {
 		invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
 		invoice.setPayment(paid);
 		invoice.setPayCompleteDate(LocalDate.now());
-		// 4. bring to EnrolmentDTO
-		List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoId);
-		for(EnrolmentDTO enrol : enrols){
-			enrol.setInvoiceId(String.valueOf(invoId));
-			// 5. set period of enrolment to extra field
-			String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
-			String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
-			enrol.setExtra(start + " ~ " + end);
-			// 6. add to dtos
-			dtos.add(enrol);
-		}	
-		// 7. set EnrolmentDTO objects into session for payment receipt
-		session.setAttribute(JaeConstants.PAYMENT_ENROLMENTS, dtos);
+		// // 4. bring to EnrolmentDTO
+		// List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoId);
+		// for(EnrolmentDTO enrol : enrols){
+		// 	enrol.setInvoiceId(String.valueOf(invoId));
+		// 	// 5. set period of enrolment to extra field
+		// 	String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+		// 	String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+		// 	enrol.setExtra(start + " ~ " + end);
+		// 	// 6. add to dtos
+		// 	dtos.add(enrol);
+		// }	
+		// // 7. set EnrolmentDTO objects into session for payment receipt
+		// session.setAttribute(JaeConstants.PAYMENT_ENROLMENTS, dtos);
 			
 		// 8-1 if full paid, return EnrolmentDTO list
 		if(fullPaid){
 			invoiceService.updateInvoice(invoice, invoId);
+			// 4. bring to EnrolmentDTO
+			List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoId);
+			for(EnrolmentDTO enrol : enrols){
+				enrol.setInvoiceId(String.valueOf(invoId));
+				// 5. set period of enrolment to extra field
+				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+				enrol.setExtra(start + " ~ " + end);
+				// 6. add to dtos
+				dtos.add(enrol);
+			}	
+			// 7. set EnrolmentDTO objects into session for payment receipt
+			session.setAttribute(JaeConstants.PAYMENT_ENROLMENTS, dtos);
+		
 			// remove Outstandings from session
 			session.removeAttribute(JaeConstants.PAYMENT_OUTSTANDINGS);
 			// 9-1. return
@@ -224,6 +238,21 @@ public class JaeInvoiceController {
 			// 10-2. add Outstanding to Invoice
 			invoice.addOutstanding(outstanding);
 			invoiceService.updateInvoice(invoice, invoId);
+
+			// 4. bring to EnrolmentDTO
+			List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoId);
+			for(EnrolmentDTO enrol : enrols){
+				enrol.setInvoiceId(String.valueOf(invoId));
+				// 5. set period of enrolment to extra field
+				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+				enrol.setExtra(start + " ~ " + end);
+				// 6. add to dtos
+				dtos.add(enrol);
+			}	
+			// 7. set EnrolmentDTO objects into session for payment receipt
+			session.setAttribute(JaeConstants.PAYMENT_ENROLMENTS, dtos);
+		
 			// 11-2. get outstanding
 			List<OutstandingDTO> outstandingDTOs = outstandingService.getOutstandingtByInvoiceId(invoId);
 			// 12-2. set OutstandingDTO objects into session for payment receipt

@@ -209,7 +209,9 @@ function displayPayment(){
     var rxAmount = $("#rxAmount").text();
 	var outstandingAmount = $("#outstandingAmount").text();
     $("#payRxAmount").val(parseFloat(rxAmount) + parseFloat(outstandingAmount));
-    // payAmount
+	$("#payAmount").val($("#payRxAmount").val());
+  
+	// payAmount
     $("#payAmount").on('input', function(){
         var payAmount = parseFloat($("#payAmount").val()).toFixed(2);
         var difference = parseFloat($("#payRxAmount").val()) - parseFloat($("#payAmount").val());

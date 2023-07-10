@@ -335,6 +335,7 @@
                                 <c:set var="paidTotal" value="${paidTotal + enrolment.paid}" />
                             </c:if>
                         </tr>
+                        <%--<c:out value="${enrolment}" />--%>
                     </c:forEach>
                 </c:if>
 
