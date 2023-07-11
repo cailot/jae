@@ -275,21 +275,29 @@ public class JaeInvoiceController {
 	}
 
 
-	// update Info for Enrolment or Outstanding
+	// update additional memo for Enrolment or Outstanding
 	@PostMapping("/updateInfo/{dataType}/{dataId}")
 	@ResponseBody
 	public ResponseEntity<String> updateInformation(@PathVariable("dataType") String dataType, @PathVariable("dataId") Long dataId, @RequestBody(required = false) String info){
 		// 1. check dataType
-		if(dataType.equals("enrolment")){
-			// 2. get Enrolment
+		if(JaeConstants.ENROLMENT.equalsIgnoreCase(dataType)){
+			// 2-1. get Enrolment
 			Enrolment enrolment = enrolmentService.getEnrolment(dataId);
 			enrolment.setInfo(info);
-			// 3. update Enrolment
+			// 3-1. update Enrolment
 			enrolmentService.updateEnrolment(enrolment, dataId);
-			// 4. return flag
+			// 4-1. return flag
 			return ResponseEntity.ok("Enrolment Success");
-		}else {
-			return ResponseEntity.ok("Enrolment fail");
+		}else if(JaeConstants.OUTSTANDING.equalsIgnoreCase(dataType)){
+			// 2-2. get Outstanding
+			Outstanding outstanding = outstandingService.getOutstanding(dataId);
+			// 3-2. update Outstanding
+			outstanding.setInfo(info);
+			outstandingService.updateOutstanding(outstanding, dataId);
+			// 4-2. return flag
+			return ResponseEntity.ok("Outstanding Success");
+		}else{
+			return ResponseEntity.ok("Error");
 		}
 	}
 }

@@ -14,12 +14,15 @@ public interface OutstandingService {
  	long checkCount();
 
 	// get Outstanding by Id
-    OutstandingDTO getOutstanding(Long id);
+    Outstanding getOutstanding(Long id);
 
 	// get Outstanding by invoice Id
 	List<OutstandingDTO> getOutstandingtByInvoiceId(Long invoiceId);
 
 	// add Oustanding
 	Outstanding addOutstanding(Outstanding stand);
+
+	// update Outstanding
+	Outstanding updateOutstanding(Outstanding stand, Long id);
 
 }

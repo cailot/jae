@@ -47,9 +47,8 @@ function retrieveInvoiceListTable(data) {
 	row.append($('<td class="smaller-table-font paid-date">').text(data.payCompleteDate));
 	row.append($('<td>').addClass('hidden-column paid').text(data.paid));
 	
-	// if data.info is not empty, then display icon as blue
-	isNotBlank(data.info) ? row.append($("<td class='col-1'>").html('<i class="bi bi-sticky-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : 	row.append($("<td class='col-1'>").html('<i class="bi bi-sticky text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'\')"></i>'));
-// row.append($("<td class='col-1'>").html('<i class="bi bi-sticky-fill" onclick="displayAddInfo(\'ENROLMENT\', ' + data.id + ', \'' + data.info + '\')"></i>'))
+	// if data.info is not empty, then display filled icon, otherwise display empty icon
+	isNotBlank(data.info) ? row.append($("<td class='col-1 memo'>").html('<i class="bi bi-sticky-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : 	row.append($("<td class='col-1'>").html('<i class="bi bi-sticky text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'\')"></i>'));
 
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
@@ -393,6 +392,7 @@ function addInformation(){
 	var dataType = $('#infoDataType').val();
 	var dataId = $('#infoDataId').val();
 	var info = $('#information').val();
+	
 	$.ajax({
 		url : '${pageContext.request.contextPath}/invoice/updateInfo/' + dataType + '/' + dataId,
 		type : 'POST',
@@ -400,11 +400,19 @@ function addInformation(){
 		data : info,
 		contentType : 'application/json',
 		success : function(response) {
-			console.log('addInformation response : ' + response);
-			// disappear information dialogue
-			$('#infoModal').modal('toggle');
+			// console.log('addInformation response : ' + response);
 			// flush old data in the dialogue
 			document.getElementById('showInformation').reset();
+			// disappear information dialogue
+			$('#infoModal').modal('toggle');
+			//debugger;
+			// update memo <td> in invoiceListTable 
+			$('#invoiceListTable > tbody > tr').each(function() {
+					if ($(this).find('.enrolment-match').text() === (dataType + '|' + dataId)) {
+						isNotBlank(info) ? $(this).find('.memo').html('<i class="bi bi-sticky-fill text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'' + info + '\')"></i>')  : $(this).find('.memo').html('<i class="bi bi-sticky text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'\')"></i>');
+					}
+				}
+			);
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
@@ -413,9 +421,9 @@ function addInformation(){
 }
 
 // StringUtils.isNotBlank()
-function isNotBlank(value) {
-	return typeof value === 'string' && value.trim().length > 0;
-}
+// function isNotBlank(value) {
+// 	return typeof value === 'string' && value.trim().length > 0;
+// }
   
 </script>
 

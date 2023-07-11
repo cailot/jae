@@ -112,6 +112,10 @@ public interface JaeConstants {
 
 	String PARTIAL_PAID = "Partial";
 
+	String ENROLMENT = "Enrolment";
+
+	String OUTSTANDING = "Outstanding";
+
 	String PAYMENT_ENROLMENTS = "enrolments";
 
 	String PAYMENT_OUTSTANDINGS = "outstandings";

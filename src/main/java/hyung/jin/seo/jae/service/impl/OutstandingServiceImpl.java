@@ -5,11 +5,13 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.dto.OutstandingDTO;
+import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Outstanding;
 import hyung.jin.seo.jae.repository.OutstandingRepository;
 import hyung.jin.seo.jae.service.OutstandingService;
@@ -26,11 +28,16 @@ public class OutstandingServiceImpl implements OutstandingService {
 		return count;
 	}
 
+	// @Override
+	// public OutstandingDTO getOutstanding(Long id) {
+	// 	Outstanding stand = outstandingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Outstanding not found"));
+	// 	OutstandingDTO dto = new OutstandingDTO(stand);
+	// 	return dto;
+	// }
 	@Override
-	public OutstandingDTO getOutstanding(Long id) {
+	public Outstanding getOutstanding(Long id) {
 		Outstanding stand = outstandingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Outstanding not found"));
-		OutstandingDTO dto = new OutstandingDTO(stand);
-		return dto;
+		return stand;
 	}
 
 	@Override
@@ -54,6 +61,33 @@ public class OutstandingServiceImpl implements OutstandingService {
 			dtos.add(dto);
 		}
 		return dtos;
+	}
+
+	@Override
+	@Transactional
+	public Outstanding updateOutstanding(Outstanding stand, Long id) {
+		// search by getId
+		Outstanding existing = outstandingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Outstanding not found"));
+		// Update info
+		// paid
+		if(stand.getPaid()!=existing.getPaid()){
+			existing.setPaid(stand.getPaid());
+		}
+		// remaining
+		if(stand.getRemaining()!=existing.getRemaining()){
+			existing.setRemaining(stand.getRemaining());
+		}
+		// amount
+		if(stand.getAmount()!=existing.getAmount()){
+			existing..setAmount(stand.getAmount());
+		}
+		// info
+		if(!StringUtils.equalsIgnoreCase(StringUtils.defaultString(stand.getInfo()), StringUtils.defaultString(existing.getInfo()))){
+			existing.setInfo(StringUtils.defaultString(stand.getInfo()));
+		}
+		// update the existing record
+		Outstanding updated = outstandingRepository.save(existing);
+		return updated;
 	}
 
 }
