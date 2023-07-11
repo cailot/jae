@@ -31,7 +31,7 @@ function retrieveInvoiceListTable(data) {
 	// (needPay) ? row.addClass('text-danger') : row.addClass('');
 
     row.append($('<td>').addClass('hidden-column').addClass('enrolment-match').text(ENROLMENT + '|' + data.id));
-    row.append($('<td class="text-center"><i class="fa fa-graduation-cap" title="class"></i></td>'));
+    row.append($('<td class="text-center"><i class="bi bi-mortarboard" title="class"></i></td>'));
     row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name));
     row.append($('<td class="smaller-table-font">').text(data.year));
     
@@ -46,7 +46,7 @@ function retrieveInvoiceListTable(data) {
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell"));
 	row.append($('<td class="smaller-table-font paid-date">').text(data.payCompleteDate));
 	row.append($('<td>').addClass('hidden-column paid').text(data.paid));
-    row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-check-circle-o"></i></a> <i class="fa fa-check-circle"></i>'));
+    row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-sticky"></i></a> <i class="bi bi-sticky"></i>'));
 
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
@@ -112,14 +112,14 @@ function addOutstandingToInvoiceListTable(data) {
 	// debugger;
 	var newOS = $('<tr>');
 	newOS.append($('<td>').addClass('hidden-column').addClass('outstanding-match').text(OUTSTANDING + '|' + data.id));
-	newOS.append($('<td class="text-center"><i class="fa fa-exclamation-circle" title="outstanding"></i></td>'));
+	newOS.append($('<td class="text-center"><i class="bi bi-exclamation-circle" title="outstanding"></i></td>'));
 	newOS.append($('<td colspan="5" class="smaller-table-font">').text('Outstanding'));
 	newOS.append($('<td colspan="4" class="smaller-table-font">').text(data.paid + ' Paid'));
 	// set editable attribute to true if the amount is not fully paid	
 	newOS.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.remaining).toFixed(2)));
 	newOS.append($('<td class="smaller-table-font paid-date">').text(data.registerDate));
 	newOS.append($('<td>').addClass('hidden-column paid').text(data.paid));
-	newOS.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="fa fa-check-circle-o"></i></a>'));
+	newOS.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-sticky"></i></a>'));
 
 
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row

@@ -344,15 +344,15 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header btn-danger">
-               <h4 class="modal-title text-white" id="myModalLabel"><i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;Student Suspend</h4>
+               <h4 class="modal-title text-white" id="myModalLabel"><i class="bi bi-exclamation-circle"></i>&nbsp;&nbsp;Student Suspend</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
             <div class="modal-body">
                 <p> Do you want to suspend this student?</p>	
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-danger" onclick="inactivateStudent()"><i class="fa fa-times"></i> Suspend</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-check"></i> Close</button>
+                <button type="submit" class="btn btn-danger" onclick="inactivateStudent()"><i class="bi bi-x"></i> Suspend</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="bi bi-check-circle"></i> Close</button>
             </div>
     	</div>
 	</div>
@@ -364,7 +364,7 @@
 	<div class="modal-dialog modal-xl modal-dialog-centered">
 	  <div class="modal-content">
 		<div class="modal-header bg-primary text-white">
-		  <h5 class="modal-title">&nbsp;<i class="fa fa-list"></i>&nbsp;&nbsp; Student List</h5>
+		  <h5 class="modal-title">&nbsp;<i class="bi bi-card-list"></i>&nbsp;&nbsp; Student List</h5>
 		  <button type="button" class="close" data-dismiss="modal">
 			<span>&times;</span>
 		  </button>

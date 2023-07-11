@@ -334,10 +334,10 @@ function editInitialiseCourseByGrade(grade, courseId) {
 						</select>
 					</div>
 					<div class="col mx-auto">
-						<button type="submit" class="btn btn-primary btn-block"> <i class="fa fa-search"></i>&nbsp;Search</button>
+						<button type="submit" class="btn btn-primary btn-block"> <i class="bi bi-search"></i>&nbsp;Search</button>
 					</div>
 					<div class="col mx-auto">
-						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerClassModal" onclick="getCoursesByGrade('p2', '#addCourse')"><i class="fa fa-plus"></i>&nbsp;New</button>
+						<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerClassModal" onclick="getCoursesByGrade('p2', '#addCourse')"><i class="bi bi-plus"></i>&nbsp;New</button>
 					</div>
 				</div>
 			</div>
@@ -379,17 +379,17 @@ function editInitialiseCourseByGrade(grade, courseId) {
 												<c:choose>
 													<c:when test="${active == true}">
 														<td class="text-center">
-															<i class="fa fa-check-circle text-success"></i>
+															<i class="bi bi-check-circle text-success"></i>
 														</td>
 													</c:when>
 													<c:otherwise>
 														<td class="text-center">
-															<i class="fa fa-check-circle text-secondary"></i>
+															<i class="bi bi-check-circle text-secondary"></i>
 														</td>
 													</c:otherwise>
 												</c:choose>		
 												<td class="text-center">
-													<i class="fa fa-edit text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retrieveClassInfo('${clazz.id}')"></i>&nbsp;
+													<i class="bi bi-pencil-square text-primary fa-lg" data-toggle="tooltip" title="Edit" onclick="retrieveClassInfo('${clazz.id}')"></i>&nbsp;
 												</td>
 											</tr>
 										</c:forEach>
@@ -681,7 +681,7 @@ function editInitialiseCourseByGrade(grade, courseId) {
 <div id="success-alert" class="modal fade">
 	<div class="modal-dialog">
 		<div class="alert alert-block alert-success alert-dialog-display">
-			<i class="fa fa-check-circle fa-2x"></i>&nbsp;&nbsp;<div class="modal-body"></div>
+			<i class="bi bi-check-circle fa-2x"></i>&nbsp;&nbsp;<div class="modal-body"></div>
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 		</div>
 	</div>
