@@ -24,11 +24,7 @@
 <!-- Link to Bootstrap Datepicker JavaScript -->
 <!-- <script	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script> -->
 <script	src="${pageContext.request.contextPath}/js/bootstrap-datepicker.min.js"></script>
-<!-- Glyphicons -->
-<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">		 -->
-<!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">	 -->
-<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/font-awesome.min.css">		 -->
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"> -->
+<!-- Bootstrap Icons -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap-icons.min.css">
 
 </head>

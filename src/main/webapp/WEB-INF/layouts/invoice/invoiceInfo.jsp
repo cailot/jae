@@ -46,7 +46,10 @@ function retrieveInvoiceListTable(data) {
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell"));
 	row.append($('<td class="smaller-table-font paid-date">').text(data.payCompleteDate));
 	row.append($('<td>').addClass('hidden-column paid').text(data.paid));
-    row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-sticky"></i></a> <i class="bi bi-sticky"></i>'));
+	
+	// if data.info is not empty, then display icon as blue
+	isNotBlank(data.info) ? row.append($("<td class='col-1'>").html('<i class="bi bi-sticky-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : 	row.append($("<td class='col-1'>").html('<i class="bi bi-sticky text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'\')"></i>'));
+// row.append($("<td class='col-1'>").html('<i class="bi bi-sticky-fill" onclick="displayAddInfo(\'ENROLMENT\', ' + data.id + ', \'' + data.info + '\')"></i>'))
 
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
@@ -91,8 +94,8 @@ function retrieveInvoiceListTable(data) {
             endWeekCell.text(endWeek);
         }
 
-        var amount = price * (weeks-credit);
-        amountCell.text(rxAmount.toFixed(2));
+        // var amount = price * (weeks-credit);
+        // amountCell.text(rxAmount.toFixed(2));
     }
 
     startWeekCell.on('input', updateWeeks);
@@ -203,7 +206,6 @@ function clearInvoiceTable(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Display Payment Modal
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
 function displayPayment(){
     // display Receivable amount
     var rxAmount = $("#rxAmount").text();
@@ -275,9 +277,7 @@ function makePayment(){
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
 		}
-	});
-
-						
+	});						
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -373,7 +373,50 @@ $.ajax({
 });	
 				
 }
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Display Add Modal
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function displayAddInfo(dataType, dataId, dataInfo){
+    console.log('displayAddInfo dataType : ' + dataType + ', dataId : ' + dataId);
+	document.getElementById("infoDataType").value = dataType;
+	document.getElementById("infoDataId").value = dataId;
+	document.getElementById("information").value = dataInfo;
+	// display Receivable amount
+    $('#infoModal').modal('toggle');
+}
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Add Information
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function addInformation(){
+	var dataType = $('#infoDataType').val();
+	var dataId = $('#infoDataId').val();
+	var info = $('#information').val();
+	$.ajax({
+		url : '${pageContext.request.contextPath}/invoice/updateInfo/' + dataType + '/' + dataId,
+		type : 'POST',
+		//dataType : 'json',
+		data : info,
+		contentType : 'application/json',
+		success : function(response) {
+			console.log('addInformation response : ' + response);
+			// disappear information dialogue
+			$('#infoModal').modal('toggle');
+			// flush old data in the dialogue
+			document.getElementById('showInformation').reset();
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});						
+}
+
+// StringUtils.isNotBlank()
+function isNotBlank(value) {
+	return typeof value === 'string' && value.trim().length > 0;
+}
+  
 </script>
 
 <!-- Main Body -->
@@ -528,8 +571,6 @@ $.ajax({
 	</div>
 </div>
 
-
-
 <!-- Invoice Dialogue -->
 <div class="modal fade" id="invoiceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -560,7 +601,7 @@ $.ajax({
 							<input type="text" class="form-control" id="invoiceRegisterDate" name="invoiceRegisterDate">
 						</div>						
 					</div>
-
+				</form>		
 				<div class="d-flex justify-content-end">
     				<!-- <button type="submit" class="btn btn-primary" onclick="updatePayment()">Save</button>&nbsp;&nbsp; -->
     				<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('showInvoice').reset();">Cancel</button>
@@ -571,7 +612,36 @@ $.ajax({
 	</div>
 </div>
 
+<!-- Info Dialogue -->
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<section class="fieldset rounded border-primary">
+				<header class="text-primary font-weight-bold">Information</header>
+				<br>
+				Please Add Internal Information
+				<form id="showInformation">
+					<div class="form-row mt-4">
+						<div class="col-md-12">
+							<textarea class="form-control" id="information" name="information"></textarea>
+						</div>
+					</div>
+					<input type="hidden" id="infoDataType" name="infoDataType"></input>
+					<input type="hidden" id="infoDataId" name="infoDataId"></input>
+					<div class="d-flex justify-content-end mt-4">
+						<button type="button" class="btn btn-primary" onclick="addInformation()">Save</button>&nbsp;&nbsp;
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('showInformation').reset();">Cancel</button>
+					</div>
+				</form>	
+				</section>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
 <!-- Bootstrap Editable Table JavaScript -->
 <script src="${pageContext.request.contextPath}/js/bootstrap-table.min.js"></script>
-    
 		

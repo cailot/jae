@@ -7,6 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +32,7 @@ import hyung.jin.seo.jae.service.InvoiceService;
 import hyung.jin.seo.jae.service.OutstandingService;
 import hyung.jin.seo.jae.service.PaymentService;
 import hyung.jin.seo.jae.utils.JaeConstants;
+import io.micrometer.core.instrument.util.StringUtils;
 
 @Controller
 @RequestMapping("invoice")
@@ -267,8 +270,26 @@ public class JaeInvoiceController {
 	@ResponseBody
 	public InvoiceDTO issueInvoice(@PathVariable("studentId") Long studentId) {
 		// 1. get latest invoice by student id
-		InvoiceDTO dto = invoiceService.getInvoiceByStudentId(studentId);
+		InvoiceDTO dto = invoiceService.getInvoiceByStudentId(studentId); 
 		return dto;
 	}
 
+
+	// update Info for Enrolment or Outstanding
+	@PostMapping("/updateInfo/{dataType}/{dataId}")
+	@ResponseBody
+	public ResponseEntity<String> updateInformation(@PathVariable("dataType") String dataType, @PathVariable("dataId") Long dataId, @RequestBody(required = false) String info){
+		// 1. check dataType
+		if(dataType.equals("enrolment")){
+			// 2. get Enrolment
+			Enrolment enrolment = enrolmentService.getEnrolment(dataId);
+			enrolment.setInfo(info);
+			// 3. update Enrolment
+			enrolmentService.updateEnrolment(enrolment, dataId);
+			// 4. return flag
+			return ResponseEntity.ok("Enrolment Success");
+		}else {
+			return ResponseEntity.ok("Enrolment fail");
+		}
+	}
 }

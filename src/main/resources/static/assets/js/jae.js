@@ -9,3 +9,9 @@ function cleanUpJson(obj){
 	});
 	return jsonString;
 }
+
+// StringUtils.isNotBlank()
+function isNotBlank(value) {
+	return typeof value === 'string' && value.trim().length > 0;
+}
+  
