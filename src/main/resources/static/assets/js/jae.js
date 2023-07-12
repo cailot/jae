@@ -14,4 +14,23 @@ function cleanUpJson(obj){
 function isNotBlank(value) {
 	return typeof value === 'string' && value.trim().length > 0;
 }
+ 
+// String escape characters : single/double quotes, linefeed
+function encodeDecodeString(str) {
+	// Encoding
+	let encodedStr = str
+	  .replace(/\\/g, '\\\\')    // Backslash
+	  .replace(/'/g, "\\'")       // Single quote
+	//   .replace(/"/g, '\\"')       // Double quote
+	  .replace(/"/g, "\\'")       // Double quote to single quote
+	  .replace(/\n/g, '\\n');     // Line feed
   
+	// Decoding
+	let decodedStr = encodedStr
+	  .replace(/\\n/g, '\n')      // Line feed
+	  .replace(/\\"/g, '"')       // Double quote
+	  .replace(/\\'/g, "'")       // Single quote
+	  .replace(/\\\\/g, '\\');    // Backslash
+  
+	return { encoded: encodedStr, decoded: decodedStr };
+  }

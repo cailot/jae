@@ -48,7 +48,7 @@ function retrieveInvoiceListTable(data) {
 	row.append($('<td>').addClass('hidden-column paid').text(data.paid));
 	
 	// if data.info is not empty, then display filled icon, otherwise display empty icon
-	isNotBlank(data.info) ? row.append($("<td class='col-1 memo'>").html('<i class="bi bi-sticky-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : 	row.append($("<td class='col-1'>").html('<i class="bi bi-sticky text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'\')"></i>'));
+	isNotBlank(data.info) ? row.append($("<td class='col-1 memo'>").html('<i class="bi bi-sticky-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : row.append($("<td class='col-1 memo'>").html('<i class="bi bi-sticky text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'\')"></i>'));
 
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
@@ -393,11 +393,14 @@ function addInformation(){
 	var dataId = $('#infoDataId').val();
 	var info = $('#information').val();
 	
+	let encodeInfo = encodeDecodeString(info).encoded;
+	//console.log('addInformation check : ' + encodeInfo);
+
 	$.ajax({
 		url : '${pageContext.request.contextPath}/invoice/updateInfo/' + dataType + '/' + dataId,
 		type : 'POST',
 		//dataType : 'json',
-		data : info,
+		data : encodeInfo,
 		contentType : 'application/json',
 		success : function(response) {
 			// console.log('addInformation response : ' + response);
@@ -409,8 +412,13 @@ function addInformation(){
 			// update memo <td> in invoiceListTable 
 			$('#invoiceListTable > tbody > tr').each(function() {
 					if ($(this).find('.enrolment-match').text() === (dataType + '|' + dataId)) {
-						isNotBlank(info) ? $(this).find('.memo').html('<i class="bi bi-sticky-fill text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'' + info + '\')"></i>')  : $(this).find('.memo').html('<i class="bi bi-sticky text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'\')"></i>');
-					}
+						debugger;
+						if(isNotBlank(info)){
+							$(this).find('.memo').html('<i class="bi bi-sticky-fill text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'' + encodeInfo + '\')"></i>');
+						}else{
+							$(this).find('.memo').html('<i class="bi bi-sticky text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'\')"></i>');
+						} 
+					}   
 				}
 			);
 		},

@@ -79,7 +79,7 @@ public class OutstandingServiceImpl implements OutstandingService {
 		}
 		// amount
 		if(stand.getAmount()!=existing.getAmount()){
-			existing..setAmount(stand.getAmount());
+			existing.setAmount(stand.getAmount());
 		}
 		// info
 		if(!StringUtils.equalsIgnoreCase(StringUtils.defaultString(stand.getInfo()), StringUtils.defaultString(existing.getInfo()))){
