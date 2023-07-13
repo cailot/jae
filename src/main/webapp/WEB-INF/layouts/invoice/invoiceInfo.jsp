@@ -48,7 +48,7 @@ function retrieveInvoiceListTable(data) {
 	row.append($('<td>').addClass('hidden-column paid').text(data.paid));
 	
 	// if data.info is not empty, then display filled icon, otherwise display empty icon
-	isNotBlank(data.info) ? row.append($("<td class='col-1 memo'>").html('<i class="bi bi-sticky-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : row.append($("<td class='col-1 memo'>").html('<i class="bi bi-sticky text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'\')"></i>'));
+	isNotBlank(data.info) ? row.append($("<td class='col-1 memo'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : row.append($("<td class='col-1 memo'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'\')"></i>'));
 
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
@@ -108,7 +108,7 @@ function retrieveInvoiceListTable(data) {
 //		Add Outstanding to invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function addOutstandingToInvoiceListTable(data) {
-	console.log('addOutstandingToInvoiceListTable - ' + JSON.stringify(data));
+	// console.log('addOutstandingToInvoiceListTable - ' + JSON.stringify(data));
 	// set invoiceId into hiddenId
 	$('#hiddenId').val(data.invoiceId);
 	// debugger;
@@ -121,16 +121,16 @@ function addOutstandingToInvoiceListTable(data) {
 	newOS.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.remaining).toFixed(2)));
 	newOS.append($('<td class="smaller-table-font paid-date">').text(data.registerDate));
 	newOS.append($('<td>').addClass('hidden-column paid').text(data.paid));
-	newOS.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-sticky"></i></a>'));
-
-
+	// newOS.append($("<td class='col-1 memo'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-chat-square-text"></i></a>'));
+	// if data.info is not empty, then display filled icon, otherwise display empty icon
+	isNotBlank(data.info) ? newOS.append($("<td class='col-1 memo'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : newOS.append($("<td class='col-1 memo'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'\')"></i>'));
+		
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
 		if ($(this).find('.outstanding-match').text() === newOS.find('.outstanding-match').text()) {
 			$(this).remove();
 		}
 	});
-
 
 	$('#invoiceListTable > tbody').prepend(newOS);
 
@@ -285,7 +285,7 @@ function makePayment(){
 function createInvoice(){
 
 	var hidden = $('#hiddenId').val();
-	console.log('create invoice hidden : ' + hidden);
+	// console.log('create invoice hidden : ' + hidden);
 
 	var enrols = [];
 	var studentId = $('#formId').val();
@@ -376,7 +376,7 @@ $.ajax({
 //		Display Add Modal
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function displayAddInfo(dataType, dataId, dataInfo){
-    console.log('displayAddInfo dataType : ' + dataType + ', dataId : ' + dataId);
+    // console.log('displayAddInfo dataType : ' + dataType + ', dataId : ' + dataId);
 	document.getElementById("infoDataType").value = dataType;
 	document.getElementById("infoDataId").value = dataId;
 	document.getElementById("information").value = dataInfo;
@@ -411,14 +411,26 @@ function addInformation(){
 			//debugger;
 			// update memo <td> in invoiceListTable 
 			$('#invoiceListTable > tbody > tr').each(function() {
-					if ($(this).find('.enrolment-match').text() === (dataType + '|' + dataId)) {
-						debugger;
-						if(isNotBlank(info)){
-							$(this).find('.memo').html('<i class="bi bi-sticky-fill text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'' + encodeInfo + '\')"></i>');
-						}else{
-							$(this).find('.memo').html('<i class="bi bi-sticky text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'\')"></i>');
-						} 
-					}   
+					if(dataType === ENROLMENT){
+						if ($(this).find('.enrolment-match').text() === (dataType + '|' + dataId)) {
+						// debugger;
+							if(isNotBlank(info)){
+								$(this).find('.memo').html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'' + encodeInfo + '\')"></i>');
+							}else{
+								$(this).find('.memo').html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'\')"></i>');
+							} 
+						}
+					}else if(dataType === OUTSTANDING){
+						if ($(this).find('.outstanding-match').text() === (dataType + '|' + dataId)) {
+							// debugger;
+							// if(isNotBlank(info)){
+							// 	$(this).find('.memo').html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(OUTSTANDING, ' + dataId + ', \'' + encodeInfo + '\')"></i>');
+							// }else{
+							// 	$(this).find('.memo').html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(OUTSTANDING, ' + dataId + ', \'\')"></i>');
+							// }
+							(isNotBlank(info)) ? $(this).find('.memo').html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(OUTSTANDING, ' + dataId + ', \'' + encodeInfo + '\')"></i>') : $(this).find('.memo').html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(OUTSTANDING, ' + dataId + ', \'\')"></i>');
+						}
+					}
 				}
 			);
 		},
@@ -640,7 +652,7 @@ function addInformation(){
 				<form id="showInformation">
 					<div class="form-row mt-4">
 						<div class="col-md-12">
-							<textarea class="form-control" id="information" name="information"></textarea>
+							<textarea class="form-control" id="information" name="information" style="height: 8rem;"></textarea>
 						</div>
 					</div>
 					<input type="hidden" id="infoDataType" name="infoDataType"></input>

@@ -255,7 +255,8 @@ function addElearningToBasket(value){
 	row.append($('<td class="col-1"><i class="bi bi-laptop" title="e-learning"></i></td>'));
 	row.append($('<td class="smaller-table-font col-10" colspan="6">').text('[' + value.grade.toUpperCase() + '] ' + value.name));
 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete eLearning"><i class="bi bi-trash"></i></a>'));
-	$('#basketTable > tbody').append(row);
+	// $('#basketTable > tbody').append(row);
+	$('#basketTable > tbody').prepend(row);
 
 	// Automatically dismiss the alert after 2 seconds
 	showAlertMessage('addAlert', '<center><i class="bi bi-laptop"></i> &nbsp;&nbsp' + value.name +' added to My Lecture</center>');
@@ -326,7 +327,8 @@ function addClassToBasket(value) {
 		endWeekCell.on('input', function() {updateWeeks();});
 		weeksCell.on('input', function() {updateEndWeek();});
 		
-		$('#basketTable > tbody').append(row);
+		// $('#basketTable > tbody').append(row);
+		$('#basketTable > tbody').prepend(row);
 		
 		showAlertMessage('addAlert', '<center><i class="bi bi-mortarboard"></i> &nbsp;&nbsp' + value.description + ' added to My Lecture</center>');
     }
@@ -369,7 +371,9 @@ function addBookToInvoice(value){
 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text(Number(value.price).toFixed(2)));// Total
 	row.append($('<td class="smaller-table-font">').text('0'));// Date
 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
-	$('#invoiceListTable > tbody').append(row);
+	//$('#invoiceListTable > tbody').append(row);
+	$('#invoiceListTable > tbody').prepend(row);
+
 	// Automatically dismiss the alert after 2 seconds
 	showAlertMessage('addAlert', '<center><i class="bi bi-book"></i> &nbsp;&nbsp' + value.name +' added to My Lecture</center>');
 }
