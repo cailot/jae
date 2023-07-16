@@ -135,8 +135,8 @@ function listBooks(grade) {
 				row.append($('<td class="smaller-table-font col-5">').text(value.name));
 				row.append($('<td class="smaller-table-font col-4">').text(addSpace(JSON.stringify(value.subjects))));
 				row.append($('<td class="smaller-table-font col-1 text-right pr-1">').text(Number(value.price).toFixed(2)));
-				row.append($("<td class='col-1' onclick='addBookToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="bi bi-plus-circle"></i></a>'));
-				//row.append($("<td class='col-1' onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="bi bi-plus-circle"></i></a>'));
+				//row.append($("<td class='col-1' onclick='addBookToInvoice(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="bi bi-plus-circle"></i></a>'));
+				row.append($("<td class='col-1' onclick='addBookToBasket(" + cleaned + ")''>").html('<a href="javascript:void(0)" title="Add Book"><i class="bi bi-plus-circle"></i></a>'));
 				$('#bookTable > tbody').append(row);
 			});
 		},
@@ -196,7 +196,6 @@ function associateOnline(){
 	});
 
 	// Make the AJAX enrolment for eLearning
-	
 	$.ajax({
 		url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
 		method: 'POST',
@@ -211,7 +210,6 @@ function associateOnline(){
 			console.error(error);
 		}
 	});
-
 
 	// Make the AJAX enrolment for class
 	$.ajax({
@@ -345,7 +343,8 @@ function addBookToBasket(value){
 	row.append($('<td class="col-1"><i class="bi bi-book" title="book"></i></td>')); // item
 	row.append($('<td class="smaller-table-font col-10" colspan="6">').text(value.name)); // description
 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
-	$('#basketTable > tbody').append(row);
+	//$('#basketTable > tbody').append(row);
+	$('#basketTable > tbody').prepend(row);
 	// Automatically dismiss the alert after 2 seconds
 	showAlertMessage('addAlert', '<center><i class="bi bi-book"></i> &nbsp;&nbsp' + value.name +' added to My Lecture</center>');
 }
@@ -358,16 +357,15 @@ function addBookToInvoice(value){
 	var row = $('<tr>');
 	row.append($('<td>').addClass('hidden-column').text(BOOK + '|' + value.id)); // 0
 	row.append($('<td class="text-center"><i class="bi bi-book" title="book"></i></td>')); // item
-	row.append($('<td class="smaller-table-font">').text(value.name)); // description
-	row.append($('<td class="smaller-table-font">').text(0)); // year
-	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(0)); // start week
-	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(0)); // end week
-	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(1)); // weeks
-	row.append($('<td class="smaller-table-font">').addClass('fee').text(Number(value.price).toFixed(2)));// price
-	row.append($('<td class="smaller-table-font">').text(0));// credit	
-	// row.append($('<td class="smaller-table-font">').text('0'));// credit date
-	row.append($('<td class="smaller-table-font">').text('0'));// DC %
-	row.append($('<td class="smaller-table-font">').text('0'));// DC $
+	row.append($('<td class="smaller-table-font" colspan="5">').text(value.name)); // description
+	// row.append($('<td class="smaller-table-font">').text(0)); // year
+	// row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(0)); // start week
+	// row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(0)); // end week
+	// row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(1)); // weeks
+	row.append($('<td class="smaller-table-font" colspan="4">').addClass('fee').text(Number(value.price).toFixed(2)));// price
+	// row.append($('<td class="smaller-table-font">').text(0));// credit	
+	// row.append($('<td class="smaller-table-font">').text('0'));// DC %
+	// row.append($('<td class="smaller-table-font">').text('0'));// DC $
 	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text(Number(value.price).toFixed(2)));// Total
 	row.append($('<td class="smaller-table-font">').text('0'));// Date
 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action

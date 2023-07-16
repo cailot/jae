@@ -44,11 +44,10 @@ function retrieveInvoiceListTable(data) {
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text('0 %')) : row.append($('<td class="smaller-table-font text-center">').text('0 %'));
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('discount').text(data.discount)) : row.append($('<td class="smaller-table-font text-center">').addClass('discount').text(data.discount));
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell"));
-	row.append($('<td class="smaller-table-font paid-date">').text(data.payCompleteDate));
+	row.append($('<td class="smaller-table-font paid-date">').text(data.paymentDate));
 	row.append($('<td>').addClass('hidden-column paid').text(data.paid));
-	
 	// if data.info is not empty, then display filled icon, otherwise display empty icon
-	isNotBlank(data.info) ? row.append($("<td class='col-1 memo'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : row.append($("<td class='col-1 memo'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'\')"></i>'));
+	isNotBlank(data.info) ? row.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : row.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'\')"></i>'));
 
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
@@ -121,9 +120,8 @@ function addOutstandingToInvoiceListTable(data) {
 	newOS.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.remaining).toFixed(2)));
 	newOS.append($('<td class="smaller-table-font paid-date">').text(data.registerDate));
 	newOS.append($('<td>').addClass('hidden-column paid').text(data.paid));
-	// newOS.append($("<td class='col-1 memo'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-chat-square-text"></i></a>'));
 	// if data.info is not empty, then display filled icon, otherwise display empty icon
-	isNotBlank(data.info) ? newOS.append($("<td class='col-1 memo'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : newOS.append($("<td class='col-1 memo'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'\')"></i>'));
+	isNotBlank(data.info) ? newOS.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : newOS.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'\')"></i>'));
 		
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
@@ -228,10 +226,9 @@ function displayPayment(){
 function displayReceiptInNewTab(){
   var invoiceId = $('#hiddenId').val();
   var studentId = $('#formId').val();
-  var grade = $('#formGrade').val();
   var firstName = $('#formFirstName').val();
   var lastName = $('#formLastName').val();
-  var url = '/receipt?invoiceId=' + invoiceId + '&studentId=' + studentId + '&grade=' + grade + '&firstName=' + firstName + '&lastName=' + lastName;
+  var url = '/receipt?invoiceId=' + invoiceId + '&studentId=' + studentId + '&firstName=' + firstName + '&lastName=' + lastName;
   var win = window.open(url, '_blank');
   win.focus();
 }

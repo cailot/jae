@@ -11,7 +11,7 @@ import hyung.jin.seo.jae.model.Invoice;
 public interface InvoiceRepository extends JpaRepository<Invoice, Long>{  
 	
 	// bring latest InvoiceDTO by student id
-    @Query("SELECT new hyung.jin.seo.jae.dto.InvoiceDTO(i.id, i.credit, i.discount, i.paidAmount, i.amount, i.registerDate, i.payCompleteDate, i.info) FROM Invoice i WHERE i.id = (SELECT MAX(en.invoice.id) FROM Enrolment en WHERE en.student.id = ?1 AND en.old = false)")
+    @Query("SELECT new hyung.jin.seo.jae.dto.InvoiceDTO(i.id, i.credit, i.discount, i.paidAmount, i.amount, i.registerDate, i.paymentDate, i.info) FROM Invoice i WHERE i.id = (SELECT MAX(en.invoice.id) FROM Enrolment en WHERE en.student.id = ?1 AND en.old = false)")
 	InvoiceDTO findByStudentId(long studentId);
 
 	// return invoice id by student id

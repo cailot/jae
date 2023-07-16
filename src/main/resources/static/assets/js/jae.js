@@ -34,3 +34,22 @@ function encodeDecodeString(str) {
   
 	return { encoded: encodedStr, decoded: decodedStr };
   }
+
+// format date - ex> 15/07/2023
+  function getFormattedToday() {
+	var date = new Date();
+	var day = date.getDate();
+	var month = date.getMonth() + 1; // Months are zero-based
+	var year = date.getFullYear();
+  
+	// Add leading zeros if necessary
+	if (day < 10) {
+	  day = '0' + day;
+	}
+	if (month < 10) {
+	  month = '0' + month;
+	}
+  
+	var formattedDate = day + '/' + month + '/' + year;
+	return formattedDate;
+  }

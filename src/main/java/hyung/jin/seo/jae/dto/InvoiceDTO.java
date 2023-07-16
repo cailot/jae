@@ -20,7 +20,7 @@ public class InvoiceDTO extends MoneyDTO{
 
 	// private String registerDate;
 
-	private String payCompleteDate;
+	private String paymentDate;
 
 	private double credit;
 
@@ -38,8 +38,8 @@ public class InvoiceDTO extends MoneyDTO{
 	public InvoiceDTO(Invoice invoice){
 		this.id = String.valueOf(invoice.getId());
 		this.registerDate = invoice.getRegisterDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		if(invoice.getPayCompleteDate() != null) {
-			this.payCompleteDate = invoice.getPayCompleteDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		if(invoice.getPaymentDate() != null) {
+			this.paymentDate = invoice.getPaymentDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		}
 		this.credit = invoice.getCredit();
 		this.discount = invoice.getDiscount();
@@ -52,7 +52,7 @@ public class InvoiceDTO extends MoneyDTO{
     	Invoice invoice = new Invoice();
 		if(StringUtils.isNotBlank(id)) invoice.setId(Long.parseLong(id));
     	if(StringUtils.isNotBlank(registerDate)) invoice.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
-		if(StringUtils.isNotBlank(payCompleteDate)) invoice.setPayCompleteDate(LocalDate.parse(payCompleteDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
+		if(StringUtils.isNotBlank(paymentDate)) invoice.setPaymentDate(LocalDate.parse(paymentDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		invoice.setCredit(credit);
 		invoice.setDiscount(discount);
 		invoice.setAmount(amount);
@@ -68,7 +68,7 @@ public class InvoiceDTO extends MoneyDTO{
 		this.paidAmount = paidAmount;
 		this.amount = amount;
 		this.registerDate = (registerDate!=null) ? registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null;
-		this.payCompleteDate = (payCompleteDate!=null) ? payCompleteDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null;
+		this.paymentDate = (payCompleteDate!=null) ? payCompleteDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : null;
 		this.info = info;
 	}
 

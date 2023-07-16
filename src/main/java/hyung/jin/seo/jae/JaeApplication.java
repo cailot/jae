@@ -56,6 +56,19 @@ public class JaeApplication extends SpringBootServletInitializer implements Comm
 		// System.out.println("********************** " + week);
 
 		// cycleService.academicStartSunday(2023, 33);
+// 		String d1 = "15/07/2023";
+// 		String d2 = "16/07/2023";
+// 		String d3 = "17/07/2023";
+
+// 		System.out.println(JaeUtils.isEarlier(d2, d3));
+// 		System.out.println(JaeUtils.isEarlier(d1, d2));
+// 		System.out.println(JaeUtils.isEarlier(d1, d3));
+
+// System.out.println(JaeUtils.isEarlier(d3, d1));
+		
+
+
+
 		
 		
 		

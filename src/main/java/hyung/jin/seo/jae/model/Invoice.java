@@ -72,7 +72,7 @@ public class Invoice{
     private LocalDate registerDate;
 
 	@CreatedDate
-    private LocalDate payCompleteDate;
+    private LocalDate paymentDate;
 
 	@Column
     private double credit;

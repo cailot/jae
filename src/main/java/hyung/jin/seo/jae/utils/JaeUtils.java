@@ -192,6 +192,14 @@ public class JaeUtils {
 		}
 	}
 
+	// return date as dd/MM/yyyy
+	public static String getToday(){
+		String pattern = "dd/MM/yyyy";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String date = simpleDateFormat.format(new Date());
+		return date;
+	}
+
 	// return date info for Student Memo
 	public static String getTodayForMemo(){
 		String pattern = "dd/MM/yyyy";
@@ -231,5 +239,14 @@ public class JaeUtils {
 		Date checkDate = calendar.getTime();
 		return (checkDate.compareTo(fromDate) >= 0 && checkDate.compareTo(toDate) <= 0);
 	}
+
+	// check wether 1st date is earlier than 2nd date.
+	public static boolean isEarlier(String date1String, String date2String) throws ParseException {
+        Date date1 = dateFormat.parse(date1String);
+        Date date2 = dateFormat.parse(date2String);
+        int comparisonResult = date1.compareTo(date2);
+
+        return (comparisonResult < 0);
+    }
 	
 }

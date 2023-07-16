@@ -1797,5 +1797,5 @@ INSERT INTO jae.Student (id,registerDate,address,branch,contactNo1,contactNo2,em
 Anthony 0401 945 806','vic');
 INSERT INTO jae.Student (id,registerDate,address,branch,contactNo1,contactNo2,email1,firstName,grade,lastName,memo,state) VALUES (134769,'2023-09-09','29 Nillahcootie Cresent, Kialla VIC 3631','braybrook','','','inukshi_peiris@yahoo.com.au','Jaiden','tt6','Cooray','Inukshi (mom) 0432 313 942
 Dimantha Cooray (dad) 0432 313 943','vic');
-INSERT INTO jae.Student (id,registerDate,address,branch,contactNo1,contactNo2,email1,firstName,grade,lastName,memo,state) VALUES (134771,'2023-09-09','29 Nillahcootie Cresent, Kialla VIC 3631','braybrook','','','inukshi_peiris@yahoo.com.au','Jaiden','tt6','Cooray','Inukshi (mom) 0432 313 942
+INSERT INTO jae.Student (id,registerDate,address,branch,contactNo1,contactNo2,email1,firstName,grade,lastName,memo,state) VALUES (134774,'2023-09-09','29 Nillahcootie Cresent, Kialla VIC 3631','braybrook','','','inukshi_peiris@yahoo.com.au','Jaiden','tt6','Cooray','Inukshi (mom) 0432 313 942
 Dimantha Cooray (dad) 0432 313 943','vic');

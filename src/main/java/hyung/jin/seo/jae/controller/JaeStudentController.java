@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hyung.jin.seo.jae.dto.BookDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
 import hyung.jin.seo.jae.dto.StudentDTO;
@@ -223,6 +224,52 @@ public class JaeStudentController {
 				}
 			}catch(NoSuchElementException e){
 				String message = "Error registering Course: " + e.getMessage();
+				return null;
+			}				
+		}
+		// 7. archive enrolments not in formData
+		for(Long enrolmentId : enrolmentIds) {
+			enrolmentService.archiveEnrolment(enrolmentId);
+		}
+		// 8. trigger Invoice
+		List<EnrolmentDTO> dtos = triggerInvoice(id);
+		// 9. return success
+		return dtos;
+	}
+
+	@PostMapping("/associateBook/{id}")
+	@ResponseBody
+	public List<BookDTO> associateBook(@PathVariable Long id, @RequestBody BookDTO[] formData) {
+		// 1. get student
+		Student std = studentService.getStudent(id);
+		// 2. get enrolmentIds by studentId
+		List<Long> enrolmentIds = enrolmentService.findEnrolmentIdByStudentId(id);
+		// 3. create or update Enrolment
+		for(EnrolmentDTO data : formData) {
+			try{
+				// New Enrolment if no id comes in
+				if(data.getId()==null) {
+				// 4-A. associate clazz with student
+				Clazz clazz = clazzService.getClazz(Long.parseLong(data.getClazzId()));
+				// 5-A. create Enrolment
+				Enrolment enrolment = new Enrolment();
+				// 6-A. associate enrolment with clazz and student
+				enrolment.setClazz(clazz);
+				enrolment.setStudent(std);
+				enrolment.setStartWeek(data.getStartWeek());
+				enrolment.setEndWeek(data.getEndWeek());
+				// 7-A. save enrolment
+				enrolmentService.addEnrolment(enrolment);
+				}else {	// Update Enrolment if id comes in
+					// 4-B. get Enrolment
+					Enrolment enrolment = data.convertToEnrolment();
+					// 5-B. update Enrolment
+					enrolment = enrolmentService.updateEnrolment(enrolment, enrolment.getId());
+					// 6-B remove enrolmentId from enrolmentIds
+					enrolmentIds.remove(enrolment.getId());
+				}
+			}catch(NoSuchElementException e){
+				String message = "Error associating Book: " + e.getMessage();
 				return null;
 			}				
 		}

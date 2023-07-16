@@ -2,6 +2,9 @@
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+
 <%@ page import="hyung.jin.seo.jae.dto.EnrolmentDTO" %>
 <%@ page import="hyung.jin.seo.jae.dto.OutstandingDTO" %>
 <%@ page import="hyung.jin.seo.jae.utils.JaeConstants" %>
@@ -9,9 +12,13 @@
 <%
    String invoiceId = request.getParameter("invoiceId");
    String studentId = request.getParameter("studentId");
-   String grade = request.getParameter("grade");
    String firstName = request.getParameter("firstName");
    String lastName = request.getParameter("lastName");
+
+   Date date = new Date();
+   SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+   String today = dateFormat.format(date);
+
 %>
 
 
@@ -271,17 +278,19 @@
         </table>
 
         <table style="width: 90%; margin: 0 auto 10px; border-collapse: collapse; table-layout: fixed; border: 0; color: #444;">
+            <c:set var="paymentMeta" value="${sessionScope.receiptHeader}" />
+            <!-- <c:out value="${paymentMeta}" /> -->
             <tr>
                 <td style="width: 100px; font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; font-weight: bold; background: none; border: 0;">Date : </td>
-                <td style="font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; background: none; border: 0;font-weight: 600 !important;">03/07/2023</td>
+                <td style="font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; background: none; border: 0;font-weight: 600 !important;"><%= today %></td>
                 <td style="width: 100px; font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; font-weight: bold; background: none; border: 0;">Due Date : </td>
-                <td style="font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; background: none; border: 0;font-weight: 600 !important;">03/07/2023</td>
+                <td style="font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; background: none; border: 0;font-weight: 600 !important;"><c:out value="${paymentMeta.registerDate}" /></td>
             </tr>
             <tr>
                 <td style="width: 100px; font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; font-weight: bold; background: none; border: 0;">Name : </td>
                 <td style="font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; background: none; border: 0;font-weight: 600 !important;"><strong><%= firstName %> <%= lastName %></strong></td>
                 <td style="width: 100px; font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; font-weight: bold; background: none; border: 0;">Grade : </td>
-                <td style="font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; background: none; border: 0;font-weight: 600 !important;"><%= grade.toUpperCase() %></td>
+                <td style="font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; background: none; border: 0;font-weight: 600 !important;"><c:out value="${paymentMeta.info}" /></td>
             </tr>
             <tr>
                 <td style="width: 100px; font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; font-weight: bold; background: none; border: 0;">Student ID : </td>
@@ -335,7 +344,7 @@
                                 <c:set var="paidTotal" value="${paidTotal + enrolment.paid}" />
                             </c:if>
                         </tr>
-                        <%--<c:out value="${enrolment}" />--%>
+                        <!-- <c:out value="${enrolment}" /> -->
                     </c:forEach>
                 </c:if>
 
