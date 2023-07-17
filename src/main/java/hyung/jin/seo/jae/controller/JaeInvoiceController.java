@@ -197,7 +197,7 @@ public class JaeInvoiceController {
 		Payment paid = paymentService.addPayment(payment);
 		// 3. update Invoice
 		invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
-		invoice.setPayment(paid);
+		invoice.addPayment(paid);
 		invoice.setPaymentDate(LocalDate.now());
 		// 4. Create MoneyDTO for header
 		MoneyDTO header = new MoneyDTO();
