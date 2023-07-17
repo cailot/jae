@@ -23,11 +23,13 @@ import hyung.jin.seo.jae.dto.BookDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
 import hyung.jin.seo.jae.dto.StudentDTO;
+import hyung.jin.seo.jae.model.Book;
 import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Elearning;
 import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Invoice;
 import hyung.jin.seo.jae.model.Student;
+import hyung.jin.seo.jae.service.BookService;
 import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.service.ElearningService;
 import hyung.jin.seo.jae.service.EnrolmentService;
@@ -53,6 +55,9 @@ public class JaeStudentController {
 
 	@Autowired
 	private InvoiceService invoiceService;
+
+	@Autowired
+	private BookService bookService;
 	
 	// register new student
 	@PostMapping("/register")
@@ -237,51 +242,52 @@ public class JaeStudentController {
 		return dtos;
 	}
 
-	// @PostMapping("/associateBook/{id}")
-	// @ResponseBody
-	// public List<BookDTO> associateBook(@PathVariable Long id, @RequestBody BookDTO[] formData) {
-	// 	// 1. get student
-	// 	Student std = studentService.getStudent(id);
-	// 	// 2. get enrolmentIds by studentId
-	// 	List<Long> enrolmentIds = enrolmentService.findEnrolmentIdByStudentId(id);
-	// 	// 3. create or update Enrolment
-	// 	for(EnrolmentDTO data : formData) {
-	// 		try{
-	// 			// New Enrolment if no id comes in
-	// 			if(data.getId()==null) {
-	// 			// 4-A. associate clazz with student
-	// 			Clazz clazz = clazzService.getClazz(Long.parseLong(data.getClazzId()));
-	// 			// 5-A. create Enrolment
-	// 			Enrolment enrolment = new Enrolment();
-	// 			// 6-A. associate enrolment with clazz and student
-	// 			enrolment.setClazz(clazz);
-	// 			enrolment.setStudent(std);
-	// 			enrolment.setStartWeek(data.getStartWeek());
-	// 			enrolment.setEndWeek(data.getEndWeek());
-	// 			// 7-A. save enrolment
-	// 			enrolmentService.addEnrolment(enrolment);
-	// 			}else {	// Update Enrolment if id comes in
-	// 				// 4-B. get Enrolment
-	// 				Enrolment enrolment = data.convertToEnrolment();
-	// 				// 5-B. update Enrolment
-	// 				enrolment = enrolmentService.updateEnrolment(enrolment, enrolment.getId());
-	// 				// 6-B remove enrolmentId from enrolmentIds
-	// 				enrolmentIds.remove(enrolment.getId());
-	// 			}
-	// 		}catch(NoSuchElementException e){
-	// 			String message = "Error associating Book: " + e.getMessage();
-	// 			return null;
-	// 		}				
-	// 	}
-	// 	// 7. archive enrolments not in formData
-	// 	for(Long enrolmentId : enrolmentIds) {
-	// 		enrolmentService.archiveEnrolment(enrolmentId);
-	// 	}
-	// 	// 8. trigger Invoice
-	// 	List<EnrolmentDTO> dtos = triggerInvoice(id);
-	// 	// 9. return success
-	// 	return dtos;
-	// }
+	@PostMapping("/associateBook/{id}")
+	@ResponseBody
+	public List<BookDTO> associateBook(@PathVariable Long id, @RequestBody BookDTO[] formData) {
+		// 1. get Invoice
+		// Student std = studentService.getStudent(id);
+		// 2. get enrolmentIds by studentId
+		// List<Long> enrolmentIds = enrolmentService.findEnrolmentIdByStudentId(id);
+		// 3. create or update Enrolment
+		for(BookDTO data : formData) {
+			System.out.println(data);
+		}
+			// try{
+		// 		// 4. get Book
+		// 		BookDTO book = bookService.getBook(Long.parseLong(data.getId()));
+		// 		// 5-A. create Enrolment
+		// 		Enrolment enrolment = new Enrolment();
+		// 		// 6-A. associate enrolment with clazz and student
+		// 		enrolment.setClazz(clazz);
+		// 		enrolment.setStudent(std);
+		// 		enrolment.setStartWeek(data.getStartWeek());
+		// 		enrolment.setEndWeek(data.getEndWeek());
+		// 		// 7-A. save enrolment
+		// 		enrolmentService.addEnrolment(enrolment);
+		// 		}else {	// Update Enrolment if id comes in
+		// 			// 4-B. get Enrolment
+		// 			Enrolment enrolment = data.convertToEnrolment();
+		// 			// 5-B. update Enrolment
+		// 			enrolment = enrolmentService.updateEnrolment(enrolment, enrolment.getId());
+		// 			// 6-B remove enrolmentId from enrolmentIds
+		// 			enrolmentIds.remove(enrolment.getId());
+		// 		}
+		// 	}catch(NoSuchElementException e){
+		// 		String message = "Error associating Book: " + e.getMessage();
+		// 		return null;
+		// 	}				
+		// }
+		// // 7. archive enrolments not in formData
+		// for(Long enrolmentId : enrolmentIds) {
+		// 	enrolmentService.archiveEnrolment(enrolmentId);
+		// }
+		// // 8. trigger Invoice
+		// List<EnrolmentDTO> dtos = triggerInvoice(id);
+		// // 9. return success
+		// return dtos;
+		return null;
+	}
 
 	// as soon as Enrolment created or updated, it will trigger invoice
 	private List<EnrolmentDTO> triggerInvoice(Long studentId){

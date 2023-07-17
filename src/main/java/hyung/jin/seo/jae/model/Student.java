@@ -2,8 +2,6 @@ package hyung.jin.seo.jae.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +21,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -80,10 +77,6 @@ public class Student {
     
     @CreationTimestamp
     private LocalDate registerDate;
-    
-    //@UpdateTimestamp
-    // @DateTimeFormat
-    // private LocalDate enrolmentDate;
     
     @CreatedDate
     private LocalDate endDate;

@@ -59,13 +59,13 @@ public class Course{
 	)
 	private Set<Subject> subjects = new LinkedHashSet<>();
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(
-		name = "Course_Book",
-		joinColumns = { @JoinColumn(name = "courseId")},
-		inverseJoinColumns = { @JoinColumn(name = "bookId")}
-	)
-	private Set<Book> books = new LinkedHashSet<>();
+	// @ManyToMany(cascade = CascadeType.ALL)
+	// @JoinTable(
+	// 	name = "Course_Book",
+	// 	joinColumns = { @JoinColumn(name = "courseId")},
+	// 	inverseJoinColumns = { @JoinColumn(name = "bookId")}
+	// )
+	// private Set<Book> books = new LinkedHashSet<>();
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
 	private Set<Clazz> classes = new LinkedHashSet<>();

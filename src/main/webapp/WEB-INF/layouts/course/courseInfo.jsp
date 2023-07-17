@@ -162,11 +162,14 @@ function associateOnline(){
 
 	var elearnings = [];
 	var enrolData = [];
+	var bookData = [];
 
 	$('#basketTable tbody tr').each(function() {
 		// in case of update, enrolId is not null
+		debugger;
 		var enrolId = null;
-		var hiddens = $(this).find('.hidden-column').text();
+		var bookId = null;
+		var hiddens = $(this).find('.data-type').text();
 		if(hiddens.indexOf('|') !== -1){
 			var hiddenValues = hiddens.split('|');
 			// if hiddenValues[0] is ELEARNING, push hiddenValues[1] to elearnings array
@@ -176,8 +179,19 @@ function associateOnline(){
 				return true;
 			}else if(hiddenValues[0] === CLASS){
 				enrolId = hiddenValues[1];
+			}else if(hiddenValues[0] === BOOK){
+				bookId = hiddenValues[1];
 			}
 		}
+		if(bookId != null){ // book
+			var book = {
+				"id" : bookId,
+				"price" : $(this).find('.fee').text(),
+				"name" : $(this).find('.name').text()
+			};
+			bookData.push(book);
+			return true;
+		}else{ // enrolment
 		enrolData.clazzId =  $(this).find('.clazzChoice').val();
 		// find value of next td whose class is 'start-year'
 		enrolData.startWeek = $(this).find('.start-week').text();
@@ -188,8 +202,15 @@ function associateOnline(){
 			"endWeek" : enrolData.endWeek,
 			"clazzId" : enrolData.clazzId
 		};
-		enrolData.push(clazz);	
+		enrolData.push(clazz);
+		// how to jump to next <tr>				
+		return true;	
+		}
 	});
+
+
+
+	console.log('--> ' + enrolData);
 
 	var elearningData = elearnings.map(function(id) {
     	return parseInt(id);
@@ -236,8 +257,21 @@ function associateOnline(){
 		}
 	});
 
-	// update invoice table
-	
+	// Make the AJAX enrolment for class
+	$.ajax({
+		url: '${pageContext.request.contextPath}/student/associateBook/' + studentId,
+		method: 'POST',
+		data: JSON.stringify(bookData),
+		contentType: 'application/json',
+		success: function(response) {
+			// Handle the response
+			console.log(response);
+		},
+		error: function(xhr, status, error) {
+			// Handle the error
+			console.error(error);
+		}
+	});
 
 
 }
@@ -249,7 +283,7 @@ function associateOnline(){
 function addElearningToBasket(value){
 	// console.log(value);
 	var row = $("<tr class='d-flex'>");
-	row.append($('<td>').addClass('hidden-column').text(ELEARNING + '|' + value.id));
+	row.append($('<td>').addClass('hidden-column').addClass('data-type').text(ELEARNING + '|' + value.id));
 	row.append($('<td class="col-1"><i class="bi bi-laptop" title="e-learning"></i></td>'));
 	row.append($('<td class="smaller-table-font col-10" colspan="6">').text('[' + value.grade.toUpperCase() + '] ' + value.name));
 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete eLearning"><i class="bi bi-trash"></i></a>'));
@@ -339,9 +373,10 @@ function addClassToBasket(value) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function addBookToBasket(value){
 	var row = $('<tr class="d-flex">');
-	row.append($('<td>').addClass('hidden-column').text(BOOK + '|' + value.id)); // 0
+	row.append($('<td>').addClass('hidden-column').addClass('data-type').text(BOOK + '|' + value.id)); // 0
 	row.append($('<td class="col-1"><i class="bi bi-book" title="book"></i></td>')); // item
-	row.append($('<td class="smaller-table-font col-10" colspan="6">').text(value.name)); // description
+	row.append($('<td class="smaller-table-font col-10 name" colspan="6">').text(value.name)); // description
+	row.append($('<td class="smaller-table-font">').addClass('hidden-column').addClass('fee').text(value.price)); // price
 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
 	//$('#basketTable > tbody').append(row);
 	$('#basketTable > tbody').prepend(row);
@@ -355,7 +390,7 @@ function addBookToBasket(value){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function addBookToInvoice(value){
 	var row = $('<tr>');
-	row.append($('<td>').addClass('hidden-column').text(BOOK + '|' + value.id)); // 0
+	row.append($('<td>').addClass('hidden-column').addClass('data-type').text(BOOK + '|' + value.id)); // 0
 	row.append($('<td class="text-center"><i class="bi bi-book" title="book"></i></td>')); // item
 	row.append($('<td class="smaller-table-font" colspan="5">').text(value.name)); // description
 	// row.append($('<td class="smaller-table-font">').text(0)); // year
@@ -393,7 +428,7 @@ function retrieveEnrolment(studentId){
 				if (value.hasOwnProperty('extra')) {
 					// update my lecture table
 					var row = $('<tr class="d-flex">');
-					row.append($('<td>').addClass('hidden-column').text(CLASS + '|' + value.id));
+					row.append($('<td>').addClass('hidden-column').addClass('data-type').text(CLASS + '|' + value.id));
 					row.append($('<td class="col-1"><i class="bi bi-mortarboard" title="class"></i></td>'));
 					row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
 					row.append($('<td class="smaller-table-font col-2">').text(value.day));
@@ -425,7 +460,7 @@ function retrieveEnrolment(studentId){
 			$.each(response, function(index, value){
 				// console.log(value);	
 				var row = $("<tr class='d-flex'>");
-				row.append($('<td>').addClass('hidden-column').text(ELEARNING + '|' + value.id));
+				row.append($('<td>').addClass('hidden-column').addClass('data-type').text(ELEARNING + '|' + value.id));
 				row.append($('<td class="col-1"><i class="bi bi-laptop" title="e-learning"></i></td>'));
 				row.append($('<td class="smaller-table-font col-10" colspan="6">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
 				// row.append($('<td class="smaller-table-font">').text(''));

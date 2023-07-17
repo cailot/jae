@@ -16,8 +16,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -71,6 +72,19 @@ public class Invoice{
 	public void addOutstanding(Outstanding stand){
 		outstandings.add(stand);
 	}
+
+	// Unidirectional ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+		CascadeType.PERSIST,
+		CascadeType.MERGE,
+		CascadeType.REFRESH,
+		CascadeType.DETACH
+	})
+    @JoinTable(name="Invoice_Book",
+    	joinColumns = @JoinColumn(name="invoiceId"),
+    	inverseJoinColumns = @JoinColumn(name="bookId")
+    )
+    private Set<Book> books = new LinkedHashSet<>();
 
 	// auto update to current date
 	@CreationTimestamp

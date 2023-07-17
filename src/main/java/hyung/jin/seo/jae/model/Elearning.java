@@ -1,7 +1,6 @@
 package hyung.jin.seo.jae.model;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,8 +36,5 @@ public class Elearning {
     
     @CreationTimestamp
     private LocalDate registerDate;
-    
-    // @CreatedDate
-    // private LocalDate endDate;
     
 }
