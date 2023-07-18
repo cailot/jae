@@ -215,7 +215,7 @@ function associateOnline(){
 		contentType: 'application/json',
 		success: function(response) {
 			// Handle the response
-			console.log(response);
+			// console.log(response);
 		},
 		error: function(xhr, status, error) {
 			// Handle the error
@@ -256,7 +256,7 @@ function associateOnline(){
 			});
 
 			// Handle the response
-			console.log(response);
+			// console.log(response);
 			$('#success-alert .modal-body').html('ID : <b>' + studentId + '</b> enrolment saved successfully');
 			$('#success-alert').modal('toggle');
 		},
