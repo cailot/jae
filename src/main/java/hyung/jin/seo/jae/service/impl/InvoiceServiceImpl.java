@@ -83,8 +83,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public InvoiceDTO getInvoiceByStudentId(Long studentId) {
-		return invoiceRepository.findByStudentId(studentId);
+	public InvoiceDTO getInvoiceDTOByStudentId(Long studentId) {
+		return invoiceRepository.findInvoiceDTOByStudentId(studentId);
 	}
 
 	@Override
@@ -95,6 +95,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 	@Override
 	public Invoice findInvoiceById(Long id) {
 		return invoiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Enrolment not found"));
+	}
+
+	@Override
+	public Invoice getInvoiceByStudentId(Long studentId) {
+		return invoiceRepository.findInvoiceByStudentId(studentId);
 	}
 
 

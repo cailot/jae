@@ -162,11 +162,11 @@ function associateOnline(){
 
 	var elearnings = [];
 	var enrolData = [];
-	var bookData = [];
+	var books = [];
 
 	$('#basketTable tbody tr').each(function() {
 		// in case of update, enrolId is not null
-		debugger;
+		//debugger;
 		var enrolId = null;
 		var bookId = null;
 		var hiddens = $(this).find('.data-type').text();
@@ -177,21 +177,13 @@ function associateOnline(){
 				elearnings.push(hiddenValues[1]);
 				// how to jump to next <tr>
 				return true;
+			}else if(hiddenValues[0] === BOOK){
+				books.push(hiddenValues[1]);
+				return true;
 			}else if(hiddenValues[0] === CLASS){
 				enrolId = hiddenValues[1];
-			}else if(hiddenValues[0] === BOOK){
-				bookId = hiddenValues[1];
 			}
 		}
-		if(bookId != null){ // book
-			var book = {
-				"id" : bookId,
-				"price" : $(this).find('.fee').text(),
-				"name" : $(this).find('.name').text()
-			};
-			bookData.push(book);
-			return true;
-		}else{ // enrolment
 		enrolData.clazzId =  $(this).find('.clazzChoice').val();
 		// find value of next td whose class is 'start-year'
 		enrolData.startWeek = $(this).find('.start-week').text();
@@ -205,16 +197,15 @@ function associateOnline(){
 		enrolData.push(clazz);
 		// how to jump to next <tr>				
 		return true;	
-		}
 	});
-
-
-
-	console.log('--> ' + enrolData);
 
 	var elearningData = elearnings.map(function(id) {
     	return parseInt(id);
 	});
+	var bookData = books.map(function(id){
+		return parseInt(id);
+	});
+
 
 	// Make the AJAX enrolment for eLearning
 	$.ajax({
@@ -246,6 +237,24 @@ function associateOnline(){
 				retrieveInvoiceListTable(value);
 			});
 	
+
+			// nested ajax for book after creating or updating invoice
+			// Make the AJAX enrolment for book
+			$.ajax({
+				url: '${pageContext.request.contextPath}/student/associateBook/' + studentId,
+				method: 'POST',
+				data: JSON.stringify(bookData),
+				contentType: 'application/json',
+				success: function(response) {
+					// Handle the response
+					console.log(response);
+				},
+				error: function(xhr, status, error) {
+					// Handle the error
+					console.error(error);
+				}
+			});
+
 			// Handle the response
 			console.log(response);
 			$('#success-alert .modal-body').html('ID : <b>' + studentId + '</b> enrolment saved successfully');
@@ -257,21 +266,22 @@ function associateOnline(){
 		}
 	});
 
-	// Make the AJAX enrolment for class
-	$.ajax({
-		url: '${pageContext.request.contextPath}/student/associateBook/' + studentId,
-		method: 'POST',
-		data: JSON.stringify(bookData),
-		contentType: 'application/json',
-		success: function(response) {
-			// Handle the response
-			console.log(response);
-		},
-		error: function(xhr, status, error) {
-			// Handle the error
-			console.error(error);
-		}
-	});
+	
+	// // Make the AJAX enrolment for book
+	// $.ajax({
+	// 	url: '${pageContext.request.contextPath}/student/associateBook/' + studentId,
+	// 	method: 'POST',
+	// 	data: JSON.stringify(bookData),
+	// 	contentType: 'application/json',
+	// 	success: function(response) {
+	// 		// Handle the response
+	// 		console.log(response);
+	// 	},
+	// 	error: function(xhr, status, error) {
+	// 		// Handle the error
+	// 		console.error(error);
+	// 	}
+	// });
 
 
 }

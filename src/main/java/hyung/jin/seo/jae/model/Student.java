@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -82,7 +83,13 @@ public class Student {
     private LocalDate endDate;
 
     // Unidirectional ManyToMany
-    @ManyToMany(cascade=CascadeType.ALL)
+    // @ManyToMany(cascade=CascadeType.ALL)
+     @ManyToMany(fetch = FetchType.LAZY, cascade = {
+		CascadeType.PERSIST,
+		CascadeType.MERGE,
+		CascadeType.REFRESH,
+		CascadeType.DETACH
+	})
     @JoinTable(name="Student_Elearning",
     	joinColumns = @JoinColumn(name="studentId"),
     	inverseJoinColumns = @JoinColumn(name="elearningId")

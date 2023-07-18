@@ -86,6 +86,10 @@ public class Invoice{
     )
     private Set<Book> books = new LinkedHashSet<>();
 
+	public void addBook(Book book){
+		books.add(book);
+	}
+
 	// auto update to current date
 	@CreationTimestamp
     private LocalDate registerDate;

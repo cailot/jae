@@ -3,6 +3,7 @@ package hyung.jin.seo.jae.service;
 import java.util.List;
 
 import hyung.jin.seo.jae.dto.BookDTO;
+import hyung.jin.seo.jae.model.Book;
 
 public interface BookService {
 	// list all Course Books
@@ -12,7 +13,7 @@ public interface BookService {
 	List<BookDTO> booksByGrade(String grade);
 
 	// get Book by Id
-	BookDTO getBook(Long id);
+	Book getBook(Long id);
 
 	// return total count
 	long checkCount();

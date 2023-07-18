@@ -36,14 +36,9 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public BookDTO getBook(Long id){
-		Optional<Book> book = bookRepository.findById(id);
-		if(book.isPresent()){
-			BookDTO dto = new BookDTO(book.get());
-			return dto;
-		}else{ // return empty DTO to avoid Runtime error
-			return new BookDTO();
-		}
+	public Book getBook(Long id){
+		Book book = bookRepository.findById(id).get();
+		return book;
 	}
 
 	@Override

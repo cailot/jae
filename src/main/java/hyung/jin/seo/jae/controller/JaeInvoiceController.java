@@ -299,7 +299,7 @@ public class JaeInvoiceController {
 	@ResponseBody
 	public InvoiceDTO issueInvoice(@PathVariable("studentId") Long studentId) {
 		// 1. get latest invoice by student id
-		InvoiceDTO dto = invoiceService.getInvoiceByStudentId(studentId); 
+		InvoiceDTO dto = invoiceService.getInvoiceDTOByStudentId(studentId); 
 		return dto;
 	}
 

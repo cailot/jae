@@ -101,7 +101,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	//@Transactional
+	@Transactional
 	public Student updateStudent(Student newStudent, Long id) {
 		// search by getId
 		Student existing = studentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Student not found"));

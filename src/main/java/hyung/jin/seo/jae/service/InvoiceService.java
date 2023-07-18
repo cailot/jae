@@ -16,8 +16,11 @@ public interface InvoiceService {
 	// get Invoice by Id
     InvoiceDTO getInvoice(Long id);
 
+	// get InvoiceDTO by student Id
+	InvoiceDTO getInvoiceDTOByStudentId(Long studentId);
+
 	// get Invoice by student Id
-	InvoiceDTO getInvoiceByStudentId(Long studentId);
+	Invoice getInvoiceByStudentId(Long studentId);
 
 	// get Invoice Id by student Id
 	Long getInvoiceIdByStudentId(Long studentId);

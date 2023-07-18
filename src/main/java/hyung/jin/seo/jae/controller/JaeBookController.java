@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hyung.jin.seo.jae.dto.BookDTO;
+import hyung.jin.seo.jae.model.Book;
 import hyung.jin.seo.jae.service.BookService;
 
 @Controller
@@ -44,9 +45,9 @@ public class JaeBookController {
 	// get book by Id
 	@GetMapping("/get/{id}")
 	@ResponseBody
-	BookDTO getBook(@PathVariable("id") Long id) {
-		BookDTO dto = bookService.getBook(id);	
-		return dto;
+	Book getBook(@PathVariable("id") Long id) {
+		Book book = bookService.getBook(id);	
+		return book;
 	}
 
 	// count records number in database
