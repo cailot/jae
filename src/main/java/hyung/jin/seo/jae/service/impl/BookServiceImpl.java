@@ -75,5 +75,10 @@ public class BookServiceImpl implements BookService {
 		long count = bookRepository.count();
 		return count;
 	}
+
+	@Override
+	public List<Book> findBookByInvoiceId(Long id) {
+		return bookRepository.findBookByInvoiceId(id);	
+	}
 	
 }

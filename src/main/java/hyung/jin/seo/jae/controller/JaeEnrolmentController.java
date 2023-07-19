@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hyung.jin.seo.jae.dto.BookDTO;
 import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.OutstandingDTO;
+import hyung.jin.seo.jae.model.Book;
 import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Student;
+import hyung.jin.seo.jae.service.BookService;
 import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.service.EnrolmentService;
 import hyung.jin.seo.jae.service.OutstandingService;
@@ -39,6 +42,9 @@ public class JaeEnrolmentController {
 	@Autowired
 	private OutstandingService outstandingService;
 
+	@Autowired
+	private BookService bookService;
+
 	// search enrolment by student Id
 	@GetMapping("/search/student/{id}")
 	@ResponseBody
@@ -59,7 +65,15 @@ public class JaeEnrolmentController {
 				dtos.add(stand);
 			}
 		}
-		// 3. return dtos mixed by enrolments and outstandings
+		// 3. get books by invoice id and add to list dtos
+		for(String invoiceId : invoiceIds){
+			List<Book> books = bookService.findBookByInvoiceId(Long.parseLong(invoiceId));
+			for(Book book : books){
+				BookDTO dto = new BookDTO(book);
+				dtos.add(dto);
+			}
+		}
+		// 4. return dtos mixed by enrolments and outstandings
 		return dtos;
 	}
 

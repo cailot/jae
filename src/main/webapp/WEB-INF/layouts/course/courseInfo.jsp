@@ -247,7 +247,9 @@ function associateOnline(){
 				contentType: 'application/json',
 				success: function(response) {
 					// Handle the response
-					console.log(response);
+					$.each(response, function(index, value){
+						addBookToInvoice(value);
+					});
 				},
 				error: function(xhr, status, error) {
 					// Handle the error
@@ -448,11 +450,21 @@ function retrieveEnrolment(studentId){
 					row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').text(value.endWeek - value.startWeek + 1));
 					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>'));
 					$('#basketTable > tbody').append(row);	
-					// update invoice table
+					// update invoice table with Enrolment
 					retrieveInvoiceListTable(value);
 				} else if (value.hasOwnProperty('remaining')) { // It is an OutstandingDTO object
-					// update invoice table
+					// update invoice table with Outstanding
 					addOutstandingToInvoiceListTable(value);
+				}else{  // Book
+					// update my lecture table
+					var row = $('<tr class="d-flex">');
+					row.append($('<td>').addClass('hidden-column').addClass('data-type').text(BOOK + '|' + value.id)); // 0
+					row.append($('<td class="col-1"><i class="bi bi-book" title="book"></i></td>')); // item
+					row.append($('<td class="smaller-table-font col-10">').text(value.name)); // description
+					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
+					$('#basketTable > tbody').append(row);
+					// update invoice table with Book
+					addBookToInvoiceListTable(value);
 				}
 			});
 		},

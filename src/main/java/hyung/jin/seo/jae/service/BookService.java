@@ -12,6 +12,9 @@ public interface BookService {
 	// list available books based on grade
 	List<BookDTO> booksByGrade(String grade);
 
+	// list books based on invoice Id
+	List<Book> findBookByInvoiceId(Long id);
+
 	// get Book by Id
 	Book getBook(Long id);
 

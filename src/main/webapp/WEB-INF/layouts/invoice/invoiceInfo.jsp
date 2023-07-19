@@ -137,6 +137,41 @@ function addOutstandingToInvoiceListTable(data) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Add Book to invoiceListTable
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function addBookToInvoiceListTable(data) {
+	$('#hiddenId').val(data.invoiceId);
+	// debugger;
+	
+	
+	var row = $('<tr>');
+	row.append($('<td>').addClass('hidden-column').addClass('book-match').text(BOOK + '|' + data.id)); // 0
+	row.append($('<td class="text-center"><i class="bi bi-book" title="book"></i></td>')); // item
+	row.append($('<td class="smaller-table-font" colspan="5">').text(data.name)); // description
+	row.append($('<td class="smaller-table-font" colspan="4">').addClass('fee').text(Number(data.price).toFixed(2)));// price
+	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text(Number(data.price).toFixed(2)));// Total
+	row.append($('<td class="smaller-table-font">'));
+	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
+	
+	
+	// // if data.info is not empty, then display filled icon, otherwise display empty icon
+	// isNotBlank(data.info) ? newOS.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : newOS.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'\')"></i>'));
+	
+		
+	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
+	$('#invoiceListTable > tbody > tr').each(function() {
+		if ($(this).find('.bok-match').text() === row.find('.book-match').text()) {
+			$(this).remove();
+		}
+	});
+
+	$('#invoiceListTable > tbody').prepend(row);
+
+	// update Outstanding Amount
+	//updateOutstandingAmount();
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Update Outstanding Amount
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function updateOutstandingAmount(){
