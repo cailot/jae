@@ -248,7 +248,8 @@ function associateOnline(){
 				success: function(response) {
 					// Handle the response
 					$.each(response, function(index, value){
-						addBookToInvoice(value);
+						//addBookToInvoice(value);
+						addBookToInvoiceListTable(value);
 					});
 				},
 				error: function(xhr, status, error) {
@@ -400,28 +401,21 @@ function addBookToBasket(value){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Add book to invoice
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function addBookToInvoice(value){
-	var row = $('<tr>');
-	row.append($('<td>').addClass('hidden-column').addClass('data-type').text(BOOK + '|' + value.id)); // 0
-	row.append($('<td class="text-center"><i class="bi bi-book" title="book"></i></td>')); // item
-	row.append($('<td class="smaller-table-font" colspan="5">').text(value.name)); // description
-	// row.append($('<td class="smaller-table-font">').text(0)); // year
-	// row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(0)); // start week
-	// row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(0)); // end week
-	// row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(1)); // weeks
-	row.append($('<td class="smaller-table-font" colspan="4">').addClass('fee').text(Number(value.price).toFixed(2)));// price
-	// row.append($('<td class="smaller-table-font">').text(0));// credit	
-	// row.append($('<td class="smaller-table-font">').text('0'));// DC %
-	// row.append($('<td class="smaller-table-font">').text('0'));// DC $
-	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text(Number(value.price).toFixed(2)));// Total
-	row.append($('<td class="smaller-table-font">').text('0'));// Date
-	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
-	//$('#invoiceListTable > tbody').append(row);
-	$('#invoiceListTable > tbody').prepend(row);
+// function addBookToInvoice(value){
+// 	var row = $('<tr>');
+// 	row.append($('<td>').addClass('hidden-column').addClass('data-type').text(BOOK + '|' + value.id)); // 0
+// 	row.append($('<td class="text-center"><i class="bi bi-book" title="book"></i></td>')); // item
+// 	row.append($('<td class="smaller-table-font" colspan="5">').text(value.name)); // description
+// 	row.append($('<td class="smaller-table-font" colspan="4">').addClass('fee').text(Number(value.price).toFixed(2)));// price
+// 	row.append($('<td class="smaller-table-font text-center">').addClass('amount').text(Number(value.price).toFixed(2)));// Total
+// 	row.append($('<td class="smaller-table-font">').text('0'));// Date
+// 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
+// 	//$('#invoiceListTable > tbody').append(row);
+// 	$('#invoiceListTable > tbody').prepend(row);
 
-	// Automatically dismiss the alert after 2 seconds
-	showAlertMessage('addAlert', '<center><i class="bi bi-book"></i> &nbsp;&nbsp' + value.name +' added to My Lecture</center>');
-}
+// 	// Automatically dismiss the alert after 2 seconds
+// 	showAlertMessage('addAlert', '<center><i class="bi bi-book"></i> &nbsp;&nbsp' + value.name +' added to My Lecture</center>');
+// }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve Enroloment & Update Invoice Table

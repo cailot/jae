@@ -141,22 +141,19 @@ function addOutstandingToInvoiceListTable(data) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function addBookToInvoiceListTable(data) {
 	$('#hiddenId').val(data.invoiceId);
-	// debugger;
-	
-	
 	var row = $('<tr>');
 	row.append($('<td>').addClass('hidden-column').addClass('book-match').text(BOOK + '|' + data.id)); // 0
 	row.append($('<td class="text-center"><i class="bi bi-book" title="book"></i></td>')); // item
 	row.append($('<td class="smaller-table-font" colspan="5">').text(data.name)); // description
-	row.append($('<td class="smaller-table-font" colspan="4">').addClass('fee').text(Number(data.price).toFixed(2)));// price
-	row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text(Number(data.price).toFixed(2)));// Total
-	row.append($('<td class="smaller-table-font">'));
+	row.append($('<td class="smaller-table-font">').addClass('fee').text(Number(data.price).toFixed(2)));// price
+	row.append($('<td class="smaller-table-font" colspan="3">'));
+	row.append($('<td class="smaller-table-font text-center">').addClass('amount').text(Number(data.price).toFixed(2)));// Total	
+	row.append($('<td>').addClass('hidden-column paid').text(0)); // 0	
+	row.append($('<td>'));
 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
-	
 	
 	// // if data.info is not empty, then display filled icon, otherwise display empty icon
 	// isNotBlank(data.info) ? newOS.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : newOS.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'\')"></i>'));
-	
 		
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
@@ -167,14 +164,15 @@ function addBookToInvoiceListTable(data) {
 
 	$('#invoiceListTable > tbody').prepend(row);
 
-	// update Outstanding Amount
-	//updateOutstandingAmount();
+	// update Receivable Amount
+	updateReceivableAmount();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Update Outstanding Amount
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function updateOutstandingAmount(){
+	debugger;
 	// reset rxAmount
 	$("#rxAmount").text('0.00');
 	// find the value of amount in the first row
@@ -197,20 +195,24 @@ function updateOutstandingAmount(){
 //		Update Receivable Amount
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function updateReceivableAmount(){
+	// debugger;
 	var totalAmount = 0;
+	var totalPaid = 0;
 	// find the value of all amount cells
 	$('#invoiceListTable > tbody > tr').each(function() {
 		var amount = parseFloat($(this).find('.amount').text());
 		var paid = parseFloat($(this).find('.paid').text());
-		var difference = (amount - paid).toFixed(2);	
-		// if amount - paid < 0, then amount is 0
-		if (difference <= 0) {	
-			// full paid so nothing to add
-		}else{
-			totalAmount += parseFloat(difference);
-		}
+		totalAmount += amount;
+		totalPaid += paid;
 	});
-	$("#rxAmount").text((totalAmount).toFixed(2));
+	var difference = (totalAmount - totalPaid).toFixed(2);	
+	// if amount - paid < 0, then amount is 0
+	if (difference <= 0) {	
+		// full paid so nothing to add
+	}else{
+		totalAmount = parseFloat(difference);
+	}
+	$("#rxAmount").text(difference);
 	var rxAmount = parseFloat($("#rxAmount").text());
 	var outstandingAmount = parseFloat($("#outstandingAmount").text());
 	// if rxAmount is 0, then disable payment button
