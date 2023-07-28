@@ -234,7 +234,7 @@ function associateOnline(){
 			$.each(response, function(index, value){
 				// update the invoice table
 				// console.log(value);
-				retrieveInvoiceListTable(value);
+				addEnrolmentToInvoiceListTable(value);
 			});
 	
 
@@ -445,7 +445,7 @@ function retrieveEnrolment(studentId){
 					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>'));
 					$('#basketTable > tbody').append(row);	
 					// update invoice table with Enrolment
-					retrieveInvoiceListTable(value);
+					addEnrolmentToInvoiceListTable(value);
 				} else if (value.hasOwnProperty('remaining')) { // It is an OutstandingDTO object
 					// update invoice table with Outstanding
 					addOutstandingToInvoiceListTable(value);

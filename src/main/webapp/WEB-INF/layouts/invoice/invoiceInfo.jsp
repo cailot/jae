@@ -20,7 +20,8 @@ $(document).ready(
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function retrieveInvoiceListTable(data) {
+function addEnrolmentToInvoiceListTable(data) {
+	// console.log(data);
 	// set invoiceId into hiddenId
 	$('#hiddenId').val(data.invoiceId);
 
@@ -43,7 +44,10 @@ function retrieveInvoiceListTable(data) {
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('credit').text(data.credit)) : row.append($('<td class="smaller-table-font text-center">').addClass('credit').text(data.credit));
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text('0 %')) : row.append($('<td class="smaller-table-font text-center">').text('0 %'));
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('discount').text(data.discount)) : row.append($('<td class="smaller-table-font text-center">').addClass('discount').text(data.discount));
-	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell"));
+	//(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell"));
+	var amount = (data.endWeek - data.startWeek + 1) * data.price;
+	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text(amount.toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-center">').addClass('amount').text(amount.toFixed(2)).attr("id", "amountCell"));
+
 	row.append($('<td class="smaller-table-font paid-date">').text(data.paymentDate));
 	row.append($('<td>').addClass('hidden-column paid').text(data.paid));
 	// if data.info is not empty, then display filled icon, otherwise display empty icon
@@ -56,8 +60,9 @@ function retrieveInvoiceListTable(data) {
 		}
 	});
 	
-	// add new row
-    $('#invoiceListTable > tbody').append(row);
+	// add new row at first row
+	$('#invoiceListTable > tbody').prepend(row);
+    // $('#invoiceListTable > tbody').append(row);
 
     var startWeekCell = row.find('.start-week');
     var endWeekCell = row.find('.end-week');
@@ -140,6 +145,7 @@ function addOutstandingToInvoiceListTable(data) {
 //		Add Book to invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function addBookToInvoiceListTable(data) {
+	console.log(data);
 	$('#hiddenId').val(data.invoiceId);
 	var row = $('<tr>');
 	row.append($('<td>').addClass('hidden-column').addClass('book-match').text(BOOK + '|' + data.id)); // 0
@@ -150,10 +156,9 @@ function addBookToInvoiceListTable(data) {
 	row.append($('<td class="smaller-table-font text-center">').addClass('amount').text(Number(data.price).toFixed(2)));// Total	
 	row.append($('<td>').addClass('hidden-column paid').text(0)); // 0	
 	row.append($('<td>'));
-	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
-	
-	// // if data.info is not empty, then display filled icon, otherwise display empty icon
-	// isNotBlank(data.info) ? newOS.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : newOS.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'\')"></i>'));
+
+	// if data.info is not empty, then display filled icon, otherwise display empty icon	
+	row.append($("<td class='col-1'>").html('<i class="bi bi-trash"></i>')); // Action
 		
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
@@ -172,17 +177,15 @@ function addBookToInvoiceListTable(data) {
 //		Update Outstanding Amount
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function updateOutstandingAmount(){
-	debugger;
+	//debugger;
 	// reset rxAmount
 	$("#rxAmount").text('0.00');
 	// find the value of amount in the first row
 	var amountValue = $('#invoiceListTable > tbody > tr:first').find('.amount').text();
 	// set the value of outstanding amount
-	$("#outstandingAmount").text(parseFloat(amountValue).toFixed(2));
+	$("#rxAmount").text(parseFloat(amountValue).toFixed(2));
 	var rxAmount = parseFloat($("#rxAmount").text());
-	var outstandingAmount = parseFloat($("#outstandingAmount").text());
-	// if rxAmount & outstandingAmount is 0, then disable payment button
-	if ((rxAmount == 0) && (outstandingAmount == 0)){
+	if (rxAmount <= 0) {
 		$('#paymentBtn').prop('disabled', true);
 	}else{
 		$('#paymentBtn').prop('disabled', false);
@@ -195,7 +198,7 @@ function updateOutstandingAmount(){
 //		Update Receivable Amount
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function updateReceivableAmount(){
-	// debugger;
+	//debugger;
 	var totalAmount = 0;
 	var totalPaid = 0;
 	// find the value of all amount cells
@@ -209,19 +212,12 @@ function updateReceivableAmount(){
 	// if amount - paid < 0, then amount is 0
 	if (difference <= 0) {	
 		// full paid so nothing to add
-	}else{
-		totalAmount = parseFloat(difference);
-	}
-	$("#rxAmount").text(difference);
-	var rxAmount = parseFloat($("#rxAmount").text());
-	var outstandingAmount = parseFloat($("#outstandingAmount").text());
-	// if rxAmount is 0, then disable payment button
-	if ((totalAmount == 0) && (outstandingAmount == 0)){
 		$('#paymentBtn').prop('disabled', true);
 	}else{
+		totalAmount = parseFloat(difference);
 		$('#paymentBtn').prop('disabled', false);
 	}
-
+	$("#rxAmount").text(difference);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,8 +227,6 @@ function clearInvoiceTable(){
 	$('#invoiceListTable > tbody').empty();
 	// clear rxAmount in invoice section
 	$('#rxAmount').text('0.00');
-	// clear outstandingAmount in invoice section
-	$('#outstandingAmount').text('0.00');
 	// clear stored invoice id
 	$('#hiddenId').val('');
 }
@@ -243,8 +237,7 @@ function clearInvoiceTable(){
 function displayPayment(){
     // display Receivable amount
     var rxAmount = $("#rxAmount").text();
-	var outstandingAmount = $("#outstandingAmount").text();
-    $("#payRxAmount").val(parseFloat(rxAmount) + parseFloat(outstandingAmount));
+	$("#payRxAmount").val(parseFloat(rxAmount));
 	$("#payAmount").val($("#payRxAmount").val());
   
 	// payAmount
@@ -295,7 +288,7 @@ function makePayment(){
 				//debugger;
 				if (value.hasOwnProperty('extra')) {
 					// It is an EnrolmentDTO object
-					retrieveInvoiceListTable(value);
+					addEnrolmentToInvoiceListTable(value);
 				} else if (value.hasOwnProperty('remaining')) {
 					// It is an OutstandingDTO object
 					addOutstandingToInvoiceListTable(value);
@@ -473,11 +466,6 @@ function addInformation(){
 		}
 	});						
 }
-
-// StringUtils.isNotBlank()
-// function isNotBlank(value) {
-// 	return typeof value === 'string' && value.trim().length > 0;
-// }
   
 </script>
 
@@ -490,17 +478,17 @@ function addInformation(){
 					<div class="row">
 						<input type="hidden" id="hiddenId" name="hiddenId" />
 						<div class="col-md-4">
-							<p>Receivable Amt:</p>
+							<p>Balance :</p>
 						</div>
 						<div class="col-md-2">
 							<p><mark><strong class="text-danger" id="rxAmount" name="rxAmount">0.00</strong></mark></p>
 						</div>
-						<div class="col-md-4">
+						<!-- <div class="col-md-4">
 							<p>Outstanding: </p>
 						</div>
 						<div class="col-md-2">
 							<p><strong class="text-primary" id="outstandingAmount" name="outstandingAmount">0.00</strong></p>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div class="col md-auto">
@@ -579,7 +567,7 @@ function addInformation(){
 					</div>
 					<div class="form-row mt-2">
 						<div class="col-md-6">
-							<label>Outing : </label> 
+							<label>Outstanding : </label> 
 						</div>
 						<div class="col-md-6">
 							<input type="text" class="form-control" id="payOutstanding" name="payOutstanding" readonly>

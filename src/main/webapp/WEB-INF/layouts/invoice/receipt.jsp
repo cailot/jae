@@ -20,247 +20,84 @@
    String today = dateFormat.format(date);
 
 %>
+<!-- <style>
+#background{
+    position:absolute;
+    z-index:0;
+    background:white;
+    display:block;
+    min-height:50%; 
+    min-width:50%;
+    color:yellow;
+}
+#bg-text
+{
+    color:lightgrey;
+    font-size:120px;
+    transform:rotate(300deg);
+    -webkit-transform:rotate(300deg);
+}
+#invoice1{
+    position:absolute;
+    z-index:1;
+}
+</style> -->
 
-
-
-<style type="text/css" media="print">
-    * {
-        -webkit-print-color-adjust: exact !important; /* Chrome, Safari */
-        color-adjust: exact !important; /*Firefox*/
+<!-- Add the watermark styles -->
+<style>
+    .watermark-container {
+        position: absolute;
+        top: 100;
+        left: 50;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+        z-index: 9999; /* Ensure it appears on top of other content */
+        visibility: visible; /* Show the watermark by default */
+        opacity: 1; /* Make the watermark fully opaque by default */
     }
 
-    @page {
-        /* 크롬등 인쇄시 페이지번호, 주소 숨김*/
-        size: auto;
-        margin: 0mm;
-    }
-
-    @media print {
-
-        .no-print, .no-print * {
-            display: none !important;
-        }
-
-        body {
-            padding-top: 30mm;
-        }
-
-        table {
-            page-break-after: auto
-        }
-
-        tr {
-            page-break-inside: avoid;
-            page-break-after: auto
-        }
-
-        td {
-            page-break-inside: avoid;
-            page-break-after: auto
-        }
-
-        thead {
-            display: table-header-group
-        }
-
-        tfoot {
-            display: table-footer-group
-        }
+    .watermark {
+        font-size: 150px;
+        font-weight: bold;
+        color: rgba(250, 2, 2, 0.2);
+        transform: rotate(330deg);
     }
 </style>
-<!-- <link href="/Content/assets/james/spinner.css" rel="stylesheet" /> -->
+
+
+<!-- <div id="background">
+    <p id="bg-text">Received</p>
+</div> -->
+
 <div class="toolbar no-print">
     <div class="text-right pt-3">
-
-<form action="/ADM/InvoicePdfV2" id="InvoiceForm" method="post" name="InvoiceForm"><input id="InvoiceType" name="InvoiceType" type="hidden" value="D" /><input id="StudentNo" name="StudentNo" type="hidden" value="990088" /><input id="FromDate" name="FromDate" type="hidden" value="" /><input id="ToDate" name="ToDate" type="hidden" value="" /><input id="Grade" name="Grade" type="hidden" value="" /><input id="Head" name="Head" type="hidden" value="Victoria" /><input id="BranchCode" name="BranchCode" type="hidden" value="99" /><input data-val="true" data-val-number="The field JobIdx must be a number." data-val-required="The JobIdx field is required." id="JobIdx" name="JobIdx" type="hidden" value="0" /><input id="InvoiceNumber" name="InvoiceNumber" type="hidden" value="98994" /><input id="Desc" name="Desc" type="hidden" value="" />                
+        <form action="/ADM/InvoicePdfV2" id="InvoiceForm" method="post" name="InvoiceForm">
+            <input id="InvoiceType" name="InvoiceType" type="hidden" value="D" />
+            <input id="StudentNo" name="StudentNo" type="hidden" value="990088" />
+            <input id="FromDate" name="FromDate" type="hidden" value="" />
+            <input id="ToDate" name="ToDate" type="hidden" value="" />
+            <input id="Grade" name="Grade" type="hidden" value="" />
+            <input id="Head" name="Head" type="hidden" value="Victoria" />
+            <input id="BranchCode" name="BranchCode" type="hidden" value="99" />
+            <input data-val="true" data-val-number="The field JobIdx must be a number." data-val-required="The JobIdx field is required." id="JobIdx" name="JobIdx" type="hidden" value="0" />
+            <input id="InvoiceNumber" name="InvoiceNumber" type="hidden" value="98994" />
+            <input id="Desc" name="Desc" type="hidden" value="" />                
             <button id="emailInvoice" class="btn btn-primary" type="button"><i class="fa fa-envelope"></i> Email</button>
             <button id="printInvoice" class="btn btn-success" type="button"><i class="fa fa-print"></i> Print</button>
             <button class="btn btn-warning" type="button" id="btnPdf"><i class="fa fa-file-pdf-o"></i> Export as PDF</button>
-            <button class="btn btn-info" type="button" id="btnDocx"><i class="fa fa-file-word-o"></i> Export as DOCX</button>
-</form>    </div>
- 
+        </form>
+    </div>
 </div>
-<div class="loading" id="lySpinner" style="display:none;">Loading&#8230;</div>
 
 <div id="invoice">
-    <style>
-        /* Style Definitions */
-        p.MsoNormal, li.MsoNormal, div.MsoNormal {
-            margin: 0cm;
-            margin-bottom: .0001pt;
-            font-size: 10.0pt;
-            font-family: "Times New Roman",serif;
-        }
-
-        h1 {
-            margin-top: 0cm;
-            margin-right: -37.95pt;
-            margin-bottom: 0cm;
-            margin-left: 0cm;
-            margin-bottom: .0001pt;
-            text-align: center;
-            page-break-after: avoid;
-            background: black;
-            font-size: 18.0pt;
-            font-family: "Times New Roman",serif;
-        }
-
-        h2 {
-            margin: 0cm;
-            margin-bottom: .0001pt;
-            page-break-after: avoid;
-            border: none;
-            padding: 0cm;
-            font-size: 16.0pt;
-            font-family: "Arial Rounded MT Bold",sans-serif;
-            font-weight: normal;
-        }
-
-        h3 {
-            margin-top: 0cm;
-            margin-right: 4.2pt;
-            margin-bottom: 0cm;
-            margin-left: 0cm;
-            margin-bottom: .0001pt;
-            text-align: center;
-            page-break-after: avoid;
-            font-size: 18.0pt;
-            font-family: "Times New Roman",serif;
-        }
-
-        h4 {
-            margin-top: 4.0pt;
-            margin-right: 4.25pt;
-            margin-bottom: 4.0pt;
-            margin-left: -2.85pt;
-            text-align: center;
-            line-height: 13.0pt;
-            page-break-after: avoid;
-            font-size: 12.0pt;
-            font-family: "Arial",sans-serif;
-        }
-
-        h5 {
-            margin-top: 2.0pt;
-            margin-right: 4.25pt;
-            margin-bottom: 2.0pt;
-            margin-left: 0cm;
-            text-align: justify;
-            text-justify: inter-ideograph;
-            line-height: 13.0pt;
-            page-break-after: avoid;
-            font-size: 10.0pt;
-            font-family: "Arial",sans-serif;
-        }
-
-        h6 {
-            margin-top: 0cm;
-            margin-right: -37.95pt;
-            margin-bottom: 0cm;
-            margin-left: 0cm;
-            margin-bottom: .0001pt;
-            text-align: justify;
-            text-justify: inter-ideograph;
-            page-break-after: avoid;
-            font-size: 11.0pt;
-            font-family: "Times New Roman",serif;
-        }
-
-        p.MsoHeading7, li.MsoHeading7, div.MsoHeading7 {
-            margin-top: 0cm;
-            margin-right: 14.2pt;
-            margin-bottom: 10.0pt;
-            margin-left: 0cm;
-            text-align: justify;
-            text-justify: inter-ideograph;
-            page-break-after: avoid;
-            font-size: 14.0pt;
-            font-family: "Arial",sans-serif;
-            font-weight: bold;
-        }
-
-        p.MsoHeading8, li.MsoHeading8, div.MsoHeading8 {
-            margin-top: 0cm;
-            margin-right: 14.2pt;
-            margin-bottom: 10.0pt;
-            margin-left: 0cm;
-            text-align: justify;
-            text-justify: inter-ideograph;
-            page-break-after: avoid;
-            font-size: 12.0pt;
-            font-family: "Arial",sans-serif;
-        }
-
-        p.MsoHeading9, li.MsoHeading9, div.MsoHeading9 {
-            margin-top: 0cm;
-            margin-right: 2.15pt;
-            margin-bottom: 10.0pt;
-            margin-left: 0cm;
-            text-align: right;
-            page-break-after: avoid;
-            font-size: 12.0pt;
-            font-family: "Arial",sans-serif;
-        }
-
-        p.MsoNormalIndent, li.MsoNormalIndent, div.MsoNormalIndent {
-            margin-top: 0cm;
-            margin-right: 0cm;
-            margin-bottom: 0cm;
-            margin-left: 42.55pt;
-            margin-bottom: .0001pt;
-            font-size: 10.0pt;
-            font-family: "Times New Roman",serif;
-        }
-
-        p.MsoCaption, li.MsoCaption, div.MsoCaption {
-            margin: 0cm;
-            margin-bottom: .0001pt;
-            text-align: center;
-            font-size: 14.0pt;
-            font-family: "Book Antiqua",serif;
-            font-weight: bold;
-        }
-
-        p.MsoDocumentMap, li.MsoDocumentMap, div.MsoDocumentMap {
-            margin: 0cm;
-            margin-bottom: .0001pt;
-            background: navy;
-            font-size: 10.0pt;
-            font-family: "Tahoma",sans-serif;
-        }
-
-        div.WordSection1 {
-            page: WordSection1;
-        }
-
-        ol {
-            margin-bottom: 0cm;
-        }
-
-        ul {
-            margin-bottom: 0cm;
-        }
-
-        td {
-            font-family: "Arial",sans-serif;
-            font-size: 13px;
-        }
-
-        body {
-            overflow-x: hidden;
-        }
-
-        table {
-            width: 100%;
-            border: 0.5px solid #444444;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            border: 0.5px solid #444444;
-        }
-    </style>
-
+    <!-- Watermark Container -->
+    <div class="watermark-container">
+        <div class="watermark">RECEIVED</div>
+    </div>
 
     <div class="invoice WordSection1" style="min-width: 1080px; padding-top: 35px; padding-bottom: 35px; font-family: 'arial',sans-serif;">
         <table style="width: 90%; margin: 0 auto; border-collapse: collapse; table-layout: fixed; border: 0; color: #444;">
@@ -294,7 +131,7 @@
             </tr>
             <tr>
                 <td style="width: 100px; font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; font-weight: bold; background: none; border: 0;">Student ID : </td>
-                <td style="font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; background: none; color:#a1a5b7;border: 0;font-weight: 600 !important;"><%= studentId %></td>
+                <td style="font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; background: none; border: 0;font-weight: 600 !important;"><%= studentId %></td>
                 <td style="width: 100px; font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; font-weight: bold; background: none; border: 0;">Invoice No : </td>
                 <td style="font-size: 16px; line-height: 2; vertical-align: middle; text-align: left; font-family: 'arial', sans-serif; background: none; border: 0;font-weight: 600 !important;"><%= invoiceId %></td>
             </tr>

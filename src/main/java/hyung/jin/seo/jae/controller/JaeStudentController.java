@@ -209,6 +209,8 @@ public class JaeStudentController {
 		for(Long bookId : bookIds) {
 			// 3. get Book
 			Book book = bookService.getBook(bookId);
+			// 4. update invoice amount
+			invo.setAmount(invo.getAmount() + book.getPrice());
 			// 4. add Book to Invoice
 			invo.addBook(book);
 			// 5. convert Book to BookDTO

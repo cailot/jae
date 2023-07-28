@@ -56,21 +56,25 @@ public class JaeEnrolmentController {
 		// 2. get invoice id and add to list dtos
 		for(EnrolmentDTO enrol : enrols){
 			invoiceIds.add(enrol.getInvoiceId());
-			dtos.add(enrol);
 		}
-		// 2. get outstanding by invoice id and add to list dtos
-		for(String invoiceId : invoiceIds){
-			List<OutstandingDTO> stands = outstandingService.getOutstandingtByInvoiceId(Long.parseLong(invoiceId));
-			for(OutstandingDTO stand : stands){
-				dtos.add(stand);
-			}
-		}
-		// 3. get books by invoice id and add to list dtos
+		// 3. when returns, dtos keep order of books, enrolments, outstandings
+		// 3-A. get books by invoice id and add to list dtos
 		for(String invoiceId : invoiceIds){
 			List<Book> books = bookService.findBookByInvoiceId(Long.parseLong(invoiceId));
 			for(Book book : books){
 				BookDTO dto = new BookDTO(book);
 				dtos.add(dto);
+			}
+		}
+		// 3-B. add enrolments to list dtos
+		for(EnrolmentDTO enrol : enrols){
+			dtos.add(enrol);
+		}
+		// 3-C. add outstandings to list dtos
+		for(String invoiceId : invoiceIds){
+			List<OutstandingDTO> stands = outstandingService.getOutstandingtByInvoiceId(Long.parseLong(invoiceId));
+			for(OutstandingDTO stand : stands){
+				dtos.add(stand);
 			}
 		}
 		// 4. return dtos mixed by enrolments and outstandings
