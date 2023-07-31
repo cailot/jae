@@ -120,6 +120,8 @@ public interface JaeConstants {
 
 	String PAYMENT_OUTSTANDINGS = "outstandings";
 
+	String PAYMENT_BOOKS = "books";
+
 	String PAYMENT_HEADER = "receiptHeader";
 
 }

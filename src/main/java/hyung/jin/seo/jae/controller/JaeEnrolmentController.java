@@ -60,11 +60,14 @@ public class JaeEnrolmentController {
 		// 3. when returns, dtos keep order of books, enrolments, outstandings
 		// 3-A. get books by invoice id and add to list dtos
 		for(String invoiceId : invoiceIds){
-			List<Book> books = bookService.findBookByInvoiceId(Long.parseLong(invoiceId));
-			for(Book book : books){
-				BookDTO dto = new BookDTO(book);
-				dtos.add(dto);
+			List<BookDTO> books = bookService.findBookByInvoiceId(Long.parseLong(invoiceId));
+			for(BookDTO book : books){
+				dtos.add(book);
 			}
+			// for(Book book : books){
+			// 	BookDTO dto = new BookDTO(book);
+			// 	dtos.add(dto);
+			// }
 		}
 		// 3-B. add enrolments to list dtos
 		for(EnrolmentDTO enrol : enrols){

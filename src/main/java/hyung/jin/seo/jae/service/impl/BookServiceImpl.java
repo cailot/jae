@@ -77,8 +77,14 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<Book> findBookByInvoiceId(Long id) {
-		return bookRepository.findBookByInvoiceId(id);	
+	public List<BookDTO> findBookByInvoiceId(Long id) {
+		List<Book> books = bookRepository.findBookByInvoiceId(id);
+		List<BookDTO> dtos = new ArrayList<>();
+		for(Book book: books){
+			BookDTO dto = new BookDTO(book);
+			dtos.add(dto);
+		}
+		return dtos;
 	}
 	
 }

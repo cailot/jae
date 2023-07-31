@@ -47,7 +47,7 @@
 <style>
     .watermark-container {
         position: absolute;
-        top: 100;
+        top: 150;
         left: 50;
         width: 100%;
         height: 100%;
@@ -168,20 +168,44 @@
                     <c:set var="enrolments" value="${sessionScope.enrolments}" />
                     <c:forEach items="${enrolments}" var="enrolment">
                         <tr>
-                            <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'>[<c:out value="${fn:toUpperCase(enrolment.grade)}" />] <c:out value="${enrolment.name}" /></td>
+                            <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'>Class [<c:out value="${fn:toUpperCase(enrolment.grade)}" />] <c:out value="${enrolment.name}" /></td>
                             <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'><c:out value="${enrolment.extra}" /></td>
                             <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${enrolment.endWeek-enrolment.startWeek+1}" /></td>
                             <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${enrolment.price}" /></td>
                             <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${enrolment.discount}" /></td>
-                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${enrolment.amount}" /></td>
+                            <c:set var="totalPrice" value="${((enrolment.endWeek - enrolment.startWeek + 1) * (enrolment.price)) - enrolment.discount}" />
+                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${totalPrice}" /></td>
                             <%-- Add the amount to the finalTotal variable --%>
-                            <c:set var="finalTotal" value="${finalTotal + enrolment.amount}" />
+                            <c:set var="finalTotal" value="${finalTotal + totalPrice}" />
                             <%-- Add the paid to the paidTotal variable. if full paid made, consider paidTotal; otherwise skip now for Outstandings --%>
                             <c:if test="${empty sessionScope.outstandings}">
                                 <c:set var="paidTotal" value="${paidTotal + enrolment.paid}" />
                             </c:if>
                         </tr>
                         <!-- <c:out value="${enrolment}" /> -->
+                    </c:forEach>
+                </c:if>
+
+                <%-- Check if books attribute exists in session --%>
+                <c:if test="${not empty sessionScope.books}">
+                    <%-- Retrieve the payments from session --%>
+                    <c:set var="books" value="${sessionScope.books}" />
+                    <c:forEach items="${books}" var="book">
+                        <tr>
+                            <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'>Book <c:out value="${book.name}" /></td>
+                            <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'></td>
+                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'></td>
+                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'></td>
+                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'></td>
+                            <td style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: right;'><c:out value="${book.price}" /></td>
+                            <%-- Add the amount to the finalTotal variable --%>
+                            <c:set var="finalTotal" value="${finalTotal + book.price}" />
+                            <%-- Add the paid to the paidTotal variable. if full paid made, consider paidTotal; otherwise skip now for Outstandings --%>
+                            <c:if test="${empty sessionScope.books}">
+                                <c:set var="paidTotal" value="${paidTotal + book.price}" />
+                            </c:if>
+                        </tr>
+                        <%-- <c:out value="${book}" /> --%>
                     </c:forEach>
                 </c:if>
 

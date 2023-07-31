@@ -3,6 +3,7 @@ package hyung.jin.seo.jae.controller;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hyung.jin.seo.jae.dto.BookDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
 import hyung.jin.seo.jae.dto.MoneyDTO;
@@ -26,6 +28,7 @@ import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Invoice;
 import hyung.jin.seo.jae.model.Outstanding;
 import hyung.jin.seo.jae.model.Payment;
+import hyung.jin.seo.jae.service.BookService;
 import hyung.jin.seo.jae.service.CycleService;
 import hyung.jin.seo.jae.service.EnrolmentService;
 import hyung.jin.seo.jae.service.InvoiceService;
@@ -43,6 +46,9 @@ public class JaeInvoiceController {
 
 	@Autowired
 	private EnrolmentService enrolmentService;
+
+	@Autowired
+	private BookService bookService;
 
 	@Autowired
 	private PaymentService paymentService;
@@ -180,45 +186,46 @@ public class JaeInvoiceController {
 	@PostMapping("/payment/{studentId}")
 	@ResponseBody
 	public List makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
-		List<EnrolmentDTO> dtos = new ArrayList<EnrolmentDTO>();
-		//List<MoneyDTO> dtos = new ArrayList<MoneyDTO>();
+		// 1. flush session from previous payment
+		clearSession(session);
+		List<EnrolmentDTO> enrolments = new ArrayList<EnrolmentDTO>();
+		List<BookDTO> books = new ArrayList<BookDTO>();
 		Long invoId = invoiceService.getInvoiceIdByStudentId(studentId);
 		double paidAmount = formData.getAmount();
-		// 1. get Invoice
+		// 2. get Invoice
 		Invoice invoice = invoiceService.findInvoiceById(invoId);
-		// 2. check if full paid or not
+		// 3. check if full paid or not
 		double amount = invoice.getAmount();
 		boolean fullPaid =  (amount - paidAmount) <= 0;
-		// 3. make payment
+		// 4. make payment
 		Payment payment = formData.convertToPayment();
 		Payment paid = paymentService.addPayment(payment);
-		// 3. update Invoice
+		// 5. update Invoice
 		invoice.setPaidAmount(paidAmount + invoice.getPaidAmount());
 		invoice.addPayment(paid);
 		invoice.setPaymentDate(LocalDate.now());
-		// 4. Create MoneyDTO for header
+		// 6. Create MoneyDTO for header
 		MoneyDTO header = new MoneyDTO();
 		List<String> headerGrade = new ArrayList<String>();
 		String headerDueDate = JaeUtils.getToday();
-		// 8-1 if full paid, return EnrolmentDTO list
-
+		// 7-1 if full paid, return EnrolmentDTO list
 		if(fullPaid){
 			invoiceService.updateInvoice(invoice, invoId);
-			// 4. bring to EnrolmentDTO
+			// 8-1. bring to EnrolmentDTO
 			List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoId);
 			for(EnrolmentDTO enrol : enrols){
 				enrol.setInvoiceId(String.valueOf(invoId));
 				
-				// 5. set period of enrolment to extra field
+				// 9-1. set period of enrolment to extra field
 				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
 				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
 				enrol.setExtra(start + " ~ " + end);
 
-				// 5. set headerGrade
+				// 10-1. set headerGrade
 				if(!headerGrade.contains(enrol.getGrade())){
 					headerGrade.add(enrol.getGrade().toUpperCase());
 				}
-				// 6. set earliest start date to headerDueDate
+				// 11-1. set earliest start date to headerDueDate
 				try {
 					if(JaeUtils.isEarlier(start, headerDueDate)){
 						headerDueDate = start;
@@ -227,44 +234,47 @@ public class JaeInvoiceController {
 					e.printStackTrace();
 				}
 
-				// 6. add to dtos
-				dtos.add(enrol);
+				// 12-1. add to dtos
+				enrolments.add(enrol);
 			}	
-			// 7. set EnrolmentDTO objects into session for payment receipt
-			session.setAttribute(JaeConstants.PAYMENT_ENROLMENTS, dtos);		
-			// remove Outstandings from session
-			session.removeAttribute(JaeConstants.PAYMENT_OUTSTANDINGS);
-			// 13-2. Header Info - Due Date & Grade
+			// 13-1. set EnrolmentDTO objects into session for payment receipt
+			session.setAttribute(JaeConstants.PAYMENT_ENROLMENTS, enrolments);
+			
+			// 14-1. bring to BookDTO - bring books by invoice id from Book_Invoice table
+			books = bookService.findBookByInvoiceId(invoId);
+
+			// 15-1. set BookDTO objects into session for payment receipt
+			session.setAttribute(JaeConstants.PAYMENT_BOOKS, books);
+			// 16-1. Header Info - Due Date & Grade
 			header.setRegisterDate(headerDueDate);
 			header.setInfo(String.join(", ", headerGrade));
 			session.setAttribute(JaeConstants.PAYMENT_HEADER, header);
-			// 9-1. return
-			return dtos;
-		// 8-2. if not full paid, return OutstandingDTO list
+			// 17-1. return
+			return enrolments;
+		// 7-2. if not full paid, return OutstandingDTO list
 		}else{
-			// 9-2. create Outstanding
+			// 8-2. create Outstanding
 			Outstanding outstanding = new Outstanding();
 			outstanding.setPaid(paidAmount);
 			outstanding.setRemaining(invoice.getAmount()-invoice.getPaidAmount());
 			outstanding.setAmount(invoice.getAmount());
-			// 10-2. add Outstanding to Invoice
+			// 9-2. add Outstanding to Invoice
 			invoice.addOutstanding(outstanding);
 			invoiceService.updateInvoice(invoice, invoId);
-
-			// 4. bring to EnrolmentDTO
+			// 10-2. bring to EnrolmentDTO
 			List<EnrolmentDTO> enrols = enrolmentService.findEnrolmentByInvoice(invoId);
 			for(EnrolmentDTO enrol : enrols){
 				enrol.setInvoiceId(String.valueOf(invoId));
-				// 5. set period of enrolment to extra field
+				// 11-2. set period of enrolment to extra field
 				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
 				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
 				enrol.setExtra(start + " ~ " + end);
 
-				// 5. set headerGrade
+				// 12-2. set headerGrade
 				if(!headerGrade.contains(enrol.getGrade())){
 					headerGrade.add(enrol.getGrade().toUpperCase());
 				}
-				// 6. set earliest start date to headerDueDate
+				// 13-2. set earliest start date to headerDueDate
 				try {
 					if(JaeUtils.isEarlier(start, headerDueDate)){
 						headerDueDate = start;
@@ -273,20 +283,27 @@ public class JaeInvoiceController {
 					e.printStackTrace();
 				}
 
-				// 6. add to dtos
-				dtos.add(enrol);
+				// 14-2. add to dtos
+				enrolments.add(enrol);
 			}	
-			// 7. set EnrolmentDTO objects into session for payment receipt
-			session.setAttribute(JaeConstants.PAYMENT_ENROLMENTS, dtos);
-			// 11-2. get outstanding
+			// 15-2. set EnrolmentDTO objects into session for payment receipt
+			session.setAttribute(JaeConstants.PAYMENT_ENROLMENTS, enrolments);
+			// 16-2. get outstanding
 			List<OutstandingDTO> outstandingDTOs = outstandingService.getOutstandingtByInvoiceId(invoId);
-			// 12-2. set OutstandingDTO objects into session for payment receipt
+			// 17-2. set OutstandingDTO objects into session for payment receipt
 			session.setAttribute(JaeConstants.PAYMENT_OUTSTANDINGS, outstandingDTOs);
-			// 13-2. Header Info - Due Date & Grade
+
+			// 18-2. bring to BookDTO - bring books by invoice id from Book_Invoice table
+			books = bookService.findBookByInvoiceId(invoId);
+
+			// 19-2. set BookDTO objects into session for payment receipt
+			session.setAttribute(JaeConstants.PAYMENT_BOOKS, books);
+
+			// 20-2. Header Info - Due Date & Grade
 			header.setRegisterDate(headerDueDate);
 			header.setInfo(String.join(", ", headerGrade));
 			session.setAttribute(JaeConstants.PAYMENT_HEADER, header);
-			// 13-2. return
+			// 21-2. return
 			return outstandingDTOs;
 		}
 	}
@@ -324,6 +341,15 @@ public class JaeInvoiceController {
 			return ResponseEntity.ok("Outstanding Success");
 		}else{
 			return ResponseEntity.ok("Error");
+		}
+	}
+
+
+	private void clearSession(HttpSession session){
+		Enumeration<String> names = session.getAttributeNames();
+		while(names.hasMoreElements()){
+			String name = names.nextElement();
+			session.removeAttribute(name);
 		}
 	}
 }
