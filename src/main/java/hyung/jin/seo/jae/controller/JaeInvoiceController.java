@@ -188,6 +188,7 @@ public class JaeInvoiceController {
 	public List makePayment(@PathVariable("studentId") Long studentId, @RequestBody PaymentDTO formData, HttpSession session) {
 		// 1. flush session from previous payment
 		clearSession(session);
+		List dtos = new ArrayList();
 		List<EnrolmentDTO> enrolments = new ArrayList<EnrolmentDTO>();
 		List<BookDTO> books = new ArrayList<BookDTO>();
 		Long invoId = invoiceService.getInvoiceIdByStudentId(studentId);
@@ -242,15 +243,21 @@ public class JaeInvoiceController {
 			
 			// 14-1. bring to BookDTO - bring books by invoice id from Book_Invoice table
 			books = bookService.findBookByInvoiceId(invoId);
-
-			// 15-1. set BookDTO objects into session for payment receipt
+			// 15-1. set BookDTO payment date
+			for(BookDTO book : books){
+				book.setPaymentDate(JaeUtils.getToday());
+				//dtos.add(book);
+			}
+			// 16-1. set BookDTO objects into session for payment receipt
 			session.setAttribute(JaeConstants.PAYMENT_BOOKS, books);
-			// 16-1. Header Info - Due Date & Grade
+			// 17-1. Header Info - Due Date & Grade
 			header.setRegisterDate(headerDueDate);
 			header.setInfo(String.join(", ", headerGrade));
 			session.setAttribute(JaeConstants.PAYMENT_HEADER, header);
-			// 17-1. return
-			return enrolments;
+			// 18-1. return
+			dtos.addAll(enrolments);
+			dtos.addAll(books);
+			return dtos;
 		// 7-2. if not full paid, return OutstandingDTO list
 		}else{
 			// 8-2. create Outstanding
@@ -295,16 +302,23 @@ public class JaeInvoiceController {
 
 			// 18-2. bring to BookDTO - bring books by invoice id from Book_Invoice table
 			books = bookService.findBookByInvoiceId(invoId);
-
-			// 19-2. set BookDTO objects into session for payment receipt
+			// 19-2. set BookDTO payment date
+			for(BookDTO book : books){
+				book.setPaymentDate(JaeUtils.getToday());
+				//dtos.add(book);
+			}
+			// 20-2. set BookDTO objects into session for payment receipt
 			session.setAttribute(JaeConstants.PAYMENT_BOOKS, books);
 
-			// 20-2. Header Info - Due Date & Grade
+			// 21-2. Header Info - Due Date & Grade
 			header.setRegisterDate(headerDueDate);
 			header.setInfo(String.join(", ", headerGrade));
 			session.setAttribute(JaeConstants.PAYMENT_HEADER, header);
-			// 21-2. return
-			return outstandingDTOs;
+			// 22-2. return
+			dtos.addAll(enrolments);
+			dtos.addAll(books);
+			dtos.addAll(outstandingDTOs);
+			return dtos;
 		}
 	}
 

@@ -45,7 +45,7 @@ public class JaeEnrolmentController {
 	@Autowired
 	private BookService bookService;
 
-	// search enrolment by student Id
+	// search enrolment by student Id and return mixed list of books, enrolments, outstandings
 	@GetMapping("/search/student/{id}")
 	@ResponseBody
 	public List searchEnrolmentByStudent(@PathVariable Long id) {

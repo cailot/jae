@@ -31,6 +31,8 @@ public class BookDTO implements Serializable{
     private String price;
     
     private String registerDate;
+
+    private String paymentDate;
     
 	private List<String> subjects = new ArrayList<>();
 

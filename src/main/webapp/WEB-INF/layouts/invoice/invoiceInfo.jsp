@@ -145,7 +145,7 @@ function addOutstandingToInvoiceListTable(data) {
 //		Add Book to invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function addBookToInvoiceListTable(data) {
-	console.log(data);
+	// console.log(data);
 	$('#hiddenId').val(data.invoiceId);
 	var row = $('<tr>');
 	row.append($('<td>').addClass('hidden-column').addClass('book-match').text(BOOK + '|' + data.id)); // 0
@@ -155,14 +155,14 @@ function addBookToInvoiceListTable(data) {
 	row.append($('<td class="smaller-table-font" colspan="3">'));
 	row.append($('<td class="smaller-table-font text-center">').addClass('amount').text(Number(data.price).toFixed(2)));// Total	
 	row.append($('<td>').addClass('hidden-column paid').text(0)); // 0	
-	row.append($('<td>'));
+	row.append($('<td class="smaller-table-font">').text(data.paymentDate));// payment date
 
 	// if data.info is not empty, then display filled icon, otherwise display empty icon	
 	row.append($("<td class='col-1'>").html('<i class="bi bi-trash"></i>')); // Action
 		
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
-		if ($(this).find('.bok-match').text() === row.find('.book-match').text()) {
+		if ($(this).find('.book-match').text() === row.find('.book-match').text()) {
 			$(this).remove();
 		}
 	});
@@ -285,13 +285,16 @@ function makePayment(){
 		contentType : 'application/json',
 		success : function(response) {
 			$.each(response, function(index, value){
-				//debugger;
+				// debugger;
 				if (value.hasOwnProperty('extra')) {
 					// It is an EnrolmentDTO object
 					addEnrolmentToInvoiceListTable(value);
-				} else if (value.hasOwnProperty('remaining')) {
+				}else if (value.hasOwnProperty('remaining')) {
 					// It is an OutstandingDTO object
 					addOutstandingToInvoiceListTable(value);
+				}else{
+					// It is a BookDTO object
+					addBookToInvoiceListTable(value);
 				}
 			});
 			// reset payment dialogue info
