@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import hyung.jin.seo.jae.dto.BookDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
+import hyung.jin.seo.jae.dto.MaterialDTO;
 import hyung.jin.seo.jae.dto.MoneyDTO;
 import hyung.jin.seo.jae.dto.OutstandingDTO;
 import hyung.jin.seo.jae.dto.PaymentDTO;
@@ -32,6 +33,7 @@ import hyung.jin.seo.jae.service.BookService;
 import hyung.jin.seo.jae.service.CycleService;
 import hyung.jin.seo.jae.service.EnrolmentService;
 import hyung.jin.seo.jae.service.InvoiceService;
+import hyung.jin.seo.jae.service.MaterialService;
 import hyung.jin.seo.jae.service.OutstandingService;
 import hyung.jin.seo.jae.service.PaymentService;
 import hyung.jin.seo.jae.utils.JaeConstants;
@@ -49,6 +51,9 @@ public class JaeInvoiceController {
 
 	@Autowired
 	private BookService bookService;
+
+	@Autowired
+	private MaterialService materialService;
 
 	@Autowired
 	private PaymentService paymentService;
@@ -190,7 +195,7 @@ public class JaeInvoiceController {
 		clearSession(session);
 		List dtos = new ArrayList();
 		List<EnrolmentDTO> enrolments = new ArrayList<EnrolmentDTO>();
-		List<BookDTO> books = new ArrayList<BookDTO>();
+		List<MaterialDTO> materials = new ArrayList<MaterialDTO>();
 		Long invoId = invoiceService.getInvoiceIdByStudentId(studentId);
 		double paidAmount = formData.getAmount();
 		// 2. get Invoice
@@ -241,22 +246,22 @@ public class JaeInvoiceController {
 			// 13-1. set EnrolmentDTO objects into session for payment receipt
 			session.setAttribute(JaeConstants.PAYMENT_ENROLMENTS, enrolments);
 			
-			// 14-1. bring to BookDTO - bring books by invoice id from Book_Invoice table
-			books = bookService.findBookByInvoiceId(invoId);
-			// 15-1. set BookDTO payment date
-			for(BookDTO book : books){
-				book.setPaymentDate(JaeUtils.getToday());
+			// 14-1. bring to MaterialDTO - bring materials by invoice id from Book_Invoice table
+			materials = materialService.findMaterialByInvoiceId(invoId);
+			// 15-1. set MaterialDTO payment date
+			for(MaterialDTO material : materials){
+				material.setPaymentDate(JaeUtils.getToday());
 				//dtos.add(book);
 			}
-			// 16-1. set BookDTO objects into session for payment receipt
-			session.setAttribute(JaeConstants.PAYMENT_BOOKS, books);
+			// 16-1. set MaterialDTO objects into session for payment receipt
+			session.setAttribute(JaeConstants.PAYMENT_MATERIALS, materials);
 			// 17-1. Header Info - Due Date & Grade
 			header.setRegisterDate(headerDueDate);
 			header.setInfo(String.join(", ", headerGrade));
 			session.setAttribute(JaeConstants.PAYMENT_HEADER, header);
 			// 18-1. return
 			dtos.addAll(enrolments);
-			dtos.addAll(books);
+			dtos.addAll(materials);
 			return dtos;
 		// 7-2. if not full paid, return OutstandingDTO list
 		}else{
@@ -300,15 +305,15 @@ public class JaeInvoiceController {
 			// 17-2. set OutstandingDTO objects into session for payment receipt
 			session.setAttribute(JaeConstants.PAYMENT_OUTSTANDINGS, outstandingDTOs);
 
-			// 18-2. bring to BookDTO - bring books by invoice id from Book_Invoice table
-			books = bookService.findBookByInvoiceId(invoId);
+			// 18-2. bring to MaterialDTO - bring materials by invoice id
+			materials = materialService.findMaterialByInvoiceId(invoId);
 			// 19-2. set BookDTO payment date
-			for(BookDTO book : books){
-				book.setPaymentDate(JaeUtils.getToday());
+			for(MaterialDTO material : materials){
+				material.setPaymentDate(JaeUtils.getToday());
 				//dtos.add(book);
 			}
 			// 20-2. set BookDTO objects into session for payment receipt
-			session.setAttribute(JaeConstants.PAYMENT_BOOKS, books);
+			session.setAttribute(JaeConstants.PAYMENT_MATERIALS, materials);
 
 			// 21-2. Header Info - Due Date & Grade
 			header.setRegisterDate(headerDueDate);
@@ -316,7 +321,7 @@ public class JaeInvoiceController {
 			session.setAttribute(JaeConstants.PAYMENT_HEADER, header);
 			// 22-2. return
 			dtos.addAll(enrolments);
-			dtos.addAll(books);
+			dtos.addAll(materials);
 			dtos.addAll(outstandingDTOs);
 			return dtos;
 		}

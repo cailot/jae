@@ -11,10 +11,14 @@ import lombok.ToString;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -40,6 +44,19 @@ public class Book {
     
     @CreationTimestamp
     private LocalDate registerDate;
+
+    @OneToMany(mappedBy = "book", cascade = {
+	    CascadeType.PERSIST,
+	    CascadeType.MERGE,
+	    CascadeType.REFRESH,
+	    CascadeType.DETACH
+   	})
+    private Set<Material> materials = new HashSet<>();
+
+    public void addMaterial(Material material){
+    	materials.add(material);
+    }
+
 
 	
 }

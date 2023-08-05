@@ -22,18 +22,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import hyung.jin.seo.jae.dto.BookDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
+import hyung.jin.seo.jae.dto.MaterialDTO;
 import hyung.jin.seo.jae.dto.StudentDTO;
 import hyung.jin.seo.jae.model.Book;
 import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Elearning;
 import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Invoice;
+import hyung.jin.seo.jae.model.Material;
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.service.BookService;
 import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.service.ElearningService;
 import hyung.jin.seo.jae.service.EnrolmentService;
 import hyung.jin.seo.jae.service.InvoiceService;
+import hyung.jin.seo.jae.service.MaterialService;
 import hyung.jin.seo.jae.service.StudentService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 
@@ -58,6 +61,9 @@ public class JaeStudentController {
 
 	@Autowired
 	private BookService bookService;
+
+	@Autowired
+	private MaterialService materialService;
 	
 	// register new student
 	@PostMapping("/register")
@@ -199,8 +205,8 @@ public class JaeStudentController {
 	// associate book with Invoice
 	@PostMapping("/associateBook/{id}")
 	@ResponseBody
-	public List<BookDTO> associateBook(@PathVariable Long id, @RequestBody Long[] bookIds) {
-		List<BookDTO> dtos = new ArrayList<>();
+	public List<MaterialDTO> associateBook(@PathVariable Long id, @RequestBody Long[] bookIds) {
+		List<MaterialDTO> dtos = new ArrayList<>();
 		// 1. get Invoice
 		Invoice invo = invoiceService.getInvoiceByStudentId(id);
 		// if no invoice or no book, return empty list
@@ -211,15 +217,17 @@ public class JaeStudentController {
 			Book book = bookService.getBook(bookId);
 			// 4. update invoice amount
 			invo.setAmount(invo.getAmount() + book.getPrice());
-			// 4. add Book to Invoice
-			invo.addBook(book);
-			// 5. convert Book to BookDTO
-			BookDTO dto = new BookDTO(book);
-			// 6. add dto to List
-			dtos.add(dto);
+			// 5. create Material
+			Material material = new Material();
+			material.setBook(book);
+			material.setInvoice(invo);
+			// 6. save Material
+			material = materialService.addMaterial(material);
 		}
-		// 7. update invoice with associated book
-		invoiceService.updateInvoice(invo, invo.getId());		
+		// 7. add MaterialDTO to return list
+		invo.getMaterials().forEach(material -> {
+			dtos.add(new MaterialDTO(material));
+		});	
 		return dtos;
 	}
 

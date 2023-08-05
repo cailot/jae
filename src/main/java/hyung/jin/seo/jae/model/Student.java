@@ -96,7 +96,13 @@ public class Student {
     )
     private Set<Elearning> elearnings = new HashSet<>();
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    //@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = {
+     	CascadeType.PERSIST,
+		CascadeType.MERGE,
+		CascadeType.REFRESH,
+		CascadeType.DETACH
+	})
     private Set<Enrolment> enrolments = new HashSet<>();
 
 }

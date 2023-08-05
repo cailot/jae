@@ -186,11 +186,11 @@
                     </c:forEach>
                 </c:if>
 
-                <%-- Check if books attribute exists in session --%>
-                <c:if test="${not empty sessionScope.books}">
+                <%-- Check if materials attribute exists in session --%>
+                <c:if test="${not empty sessionScope.materials}">
                     <%-- Retrieve the payments from session --%>
-                    <c:set var="books" value="${sessionScope.books}" />
-                    <c:forEach items="${books}" var="book">
+                    <c:set var="materials" value="${sessionScope.materials}" />
+                    <c:forEach items="${materials}" var="book">
                         <tr>
                             <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'>Book <c:out value="${book.name}" /></td>
                             <td style='height: 40px; padding: 10px 5px; text-align: center; font-size: 14px; font-weight: bold; border: 1px solid #444;'></td>
@@ -201,11 +201,11 @@
                             <%-- Add the amount to the finalTotal variable --%>
                             <c:set var="finalTotal" value="${finalTotal + book.price}" />
                             <%-- Add the paid to the paidTotal variable. if full paid made, consider paidTotal; otherwise skip now for Outstandings --%>
-                            <c:if test="${empty sessionScope.books}">
+                            <c:if test="${empty sessionScope.materials}">
                                 <c:set var="paidTotal" value="${paidTotal + book.price}" />
                             </c:if>
                         </tr>
-                        <%-- <c:out value="${book}" /> --%>
+                         <%--<c:out value="${book}" />--%>
                     </c:forEach>
                 </c:if>
 

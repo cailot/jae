@@ -12,17 +12,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import hyung.jin.seo.jae.dto.BookDTO;
 import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
+import hyung.jin.seo.jae.dto.MaterialDTO;
 import hyung.jin.seo.jae.dto.OutstandingDTO;
-import hyung.jin.seo.jae.model.Book;
 import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Student;
-import hyung.jin.seo.jae.service.BookService;
 import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.service.EnrolmentService;
+import hyung.jin.seo.jae.service.MaterialService;
 import hyung.jin.seo.jae.service.OutstandingService;
 import hyung.jin.seo.jae.service.StudentService;
 
@@ -43,9 +42,9 @@ public class JaeEnrolmentController {
 	private OutstandingService outstandingService;
 
 	@Autowired
-	private BookService bookService;
+	private MaterialService materialService;
 
-	// search enrolment by student Id and return mixed list of books, enrolments, outstandings
+	// search enrolment by student Id and return mixed list of materials, enrolments, outstandings
 	@GetMapping("/search/student/{id}")
 	@ResponseBody
 	public List searchEnrolmentByStudent(@PathVariable Long id) {
@@ -56,23 +55,20 @@ public class JaeEnrolmentController {
 		// 2. get invoice id and add to list dtos
 		for(EnrolmentDTO enrol : enrols){
 			invoiceIds.add(enrol.getInvoiceId());
-		}
-		// 3. when returns, dtos keep order of books, enrolments, outstandings
-		// 3-A. get books by invoice id and add to list dtos
-		for(String invoiceId : invoiceIds){
-			List<BookDTO> books = bookService.findBookByInvoiceId(Long.parseLong(invoiceId));
-			for(BookDTO book : books){
-				dtos.add(book);
-			}
-			// for(Book book : books){
-			// 	BookDTO dto = new BookDTO(book);
-			// 	dtos.add(dto);
-			// }
-		}
-		// 3-B. add enrolments to list dtos
-		for(EnrolmentDTO enrol : enrols){
 			dtos.add(enrol);
 		}
+		// 3. when returns, dtos keep order of materials, enrolments, outstandings
+		// 3-A. get materials by invoice id and add to list dtos
+		for(String invoiceId : invoiceIds){
+			List<MaterialDTO> materials = materialService.findMaterialByInvoiceId(Long.parseLong(invoiceId));
+			for(MaterialDTO material : materials){
+				dtos.add(material);
+			}
+		}
+		// 3-B. add enrolments to list dtos
+		// for(EnrolmentDTO enrol : enrols){
+		// 	dtos.add(enrol);
+		// }
 		// 3-C. add outstandings to list dtos
 		for(String invoiceId : invoiceIds){
 			List<OutstandingDTO> stands = outstandingService.getOutstandingtByInvoiceId(Long.parseLong(invoiceId));

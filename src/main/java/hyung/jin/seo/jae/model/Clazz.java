@@ -70,7 +70,12 @@ public class Clazz{ // bridge table between Course & Cycle
 	@Column
 	private boolean active;
 
-	@OneToMany(mappedBy = "clazz", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "clazz", cascade = {
+		CascadeType.PERSIST,
+	   CascadeType.MERGE,
+	   CascadeType.REFRESH,
+	   CascadeType.DETACH
+   	})
     private Set<Enrolment> enrolments = new HashSet<>();
 
 

@@ -17,8 +17,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.Column;
-import javax.persistence.CascadeType;
 
 @Getter
 @Setter
@@ -26,45 +27,26 @@ import javax.persistence.CascadeType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="Enrolment")
-public class Enrolment{ // bridge table between Student & Class
+@Table(name="Material")
+public class Material{ // bridge table between Invoice & Book
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
     
-	// @ManyToOne(cascade = CascadeType.ALL)
-	@ManyToOne
-	@JoinColumn(name = "studentId")
-	private Student student;
-	
-	// @ManyToOne(cascade = CascadeType.ALL)
-	@ManyToOne
-	@JoinColumn(name = "clazzId")
-	private Clazz clazz;
-
 	@ManyToOne
 	@JoinColumn(name = "invoiceId")
 	private Invoice invoice;
 	
-	// auto update to current date
+	@ManyToOne
+	@JoinColumn(name = "bookId")
+	private Book book;
+	
 	@CreationTimestamp
     private LocalDate registerDate;
 
-	@Column
-	private boolean cancelled;
-
-	@Column(length = 100)
-    private String cancellationReason;
-
-	@Column
-	private int startWeek;
-
-	@Column
-	private int endWeek;
-
-	@Column
-	private boolean old;
+	@CreatedDate
+    private LocalDate paymentDate;
 
 	@Column(length = 100)
     private String info;

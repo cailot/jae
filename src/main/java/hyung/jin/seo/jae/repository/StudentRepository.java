@@ -26,7 +26,7 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
 	void setEndDateToNull(Long id);
 
 	@Query(value = "SELECT DISTINCT c.year FROM Cycle c WHERE c.id IN (SELECT l.cycleId FROM Class l WHERE l.id IN (SELECT e.clazzId FROM Enrolment e WHERE e.studentId = ?1))", nativeQuery = true)
-    List<Integer> findYearsByStudentId(Long id);	
+        List<Integer> findYearsByStudentId(Long id);	
 
 	// retrieve active student by state, branch & grade called from studentList.jsp
 	@Query(value = "SELECT new hyung.jin.seo.jae.dto.StudentDTO(s.id, s.firstName, s.lastName, s.grade, s.contactNo1, s.contactNo2, s.email1, s.email2, s.state, s.branch, s.registerDate) FROM Student s WHERE s.state LIKE ?1 AND s.branch LIKE ?2 AND s.grade LIKE ?3 AND s.endDate IS NULL")

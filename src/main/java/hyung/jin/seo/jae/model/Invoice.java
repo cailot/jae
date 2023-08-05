@@ -1,6 +1,7 @@
 package hyung.jin.seo.jae.model;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -74,20 +75,32 @@ public class Invoice{
 	}
 
 	// Unidirectional ManyToMany
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {
-		CascadeType.PERSIST,
+    // @ManyToMany(fetch = FetchType.LAZY, cascade = {
+	// 	CascadeType.PERSIST,
+	// 	CascadeType.MERGE,
+	// 	CascadeType.REFRESH,
+	// 	CascadeType.DETACH
+	// })
+    // @JoinTable(name="Invoice_Book",
+    // 	joinColumns = @JoinColumn(name="invoiceId"),
+    // 	inverseJoinColumns = @JoinColumn(name="bookId")
+    // )
+    // private Set<Book> books = new LinkedHashSet<>();
+
+	// public void addBook(Book book){
+	// 	books.add(book);
+	// }
+
+	@OneToMany(mappedBy = "invoice", cascade = {
+     	CascadeType.PERSIST,
 		CascadeType.MERGE,
 		CascadeType.REFRESH,
 		CascadeType.DETACH
 	})
-    @JoinTable(name="Invoice_Book",
-    	joinColumns = @JoinColumn(name="invoiceId"),
-    	inverseJoinColumns = @JoinColumn(name="bookId")
-    )
-    private Set<Book> books = new LinkedHashSet<>();
+    private Set<Material> materials = new HashSet<>();
 
-	public void addBook(Book book){
-		books.add(book);
+	public void addMaterial(Material material){
+		materials.add(material);
 	}
 
 	// auto update to current date
