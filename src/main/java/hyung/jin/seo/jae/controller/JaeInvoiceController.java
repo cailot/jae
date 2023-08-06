@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import hyung.jin.seo.jae.dto.BookDTO;
 import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.InvoiceDTO;
 import hyung.jin.seo.jae.dto.MaterialDTO;
@@ -39,6 +38,7 @@ import hyung.jin.seo.jae.service.OutstandingService;
 import hyung.jin.seo.jae.service.PaymentService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 import hyung.jin.seo.jae.utils.JaeUtils;
+import io.micrometer.core.instrument.util.StringUtils;
 
 @Controller
 @RequestMapping("invoice")
@@ -337,9 +337,19 @@ public class JaeInvoiceController {
 	// register new invoice
 	@PostMapping("/issue/{studentId}")
 	@ResponseBody
-	public InvoiceDTO issueInvoice(@PathVariable("studentId") Long studentId) {
+	public InvoiceDTO issueInvoice(@PathVariable("studentId") Long studentId, @RequestBody(required = false) String info, HttpSession session) {
 		// 1. get latest invoice by student id
-		InvoiceDTO dto = invoiceService.getInvoiceDTOByStudentId(studentId); 
+		InvoiceDTO dto = invoiceService.getInvoiceDTOByStudentId(studentId);
+		// 2. update invoice if info exists
+		if(StringUtils.isNotBlank(info)){
+			Invoice invoice = invoiceService.findInvoiceById(dto.getId());
+			invoice.setInfo(info);
+			invoiceService.updateInvoice(invoice, dto.getId());
+		}
+		// 3. set payment elements related to invoice into session
+		session.setAttribute(JaeConstants.PAYMENT_INVOICE, dto);
+
+		// 4. return dto
 		return dto;
 	}
 

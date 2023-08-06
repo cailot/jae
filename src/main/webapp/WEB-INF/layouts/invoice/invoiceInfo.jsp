@@ -123,6 +123,12 @@ function addOutstandingToInvoiceListTable(data) {
 	newOS.append($('<td colspan="4" class="smaller-table-font">').text(data.paid + ' Paid'));
 	// set editable attribute to true if the amount is not fully paid	
 	newOS.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.remaining).toFixed(2)));
+	// newOS.append($('<td class="smaller-table-font text-center">')
+    // .addClass('amount')
+    // .css('color', data.remaining > 0 ? 'red' : '')
+    // .css('font-weight', data.remaining > 0 ? 'bold' : '')
+    // .text((data.remaining).toFixed(2)));
+
 	newOS.append($('<td class="smaller-table-font paid-date">').text(data.registerDate));
 	newOS.append($('<td>').addClass('hidden-column paid').text(data.paid));
 	// if data.info is not empty, then display filled icon, otherwise display empty icon
@@ -192,7 +198,6 @@ function updateOutstandingAmount(){
 
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Update Receivable Amount
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,13 +257,15 @@ function displayPayment(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Display Receipt in another tab
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function displayReceiptInNewTab(){
+function displayPaymentInfoInNewTab(paymentType){
   var invoiceId = $('#hiddenId').val();
   var studentId = $('#formId').val();
   var firstName = $('#formFirstName').val();
   var lastName = $('#formLastName').val();
-  var url = '/receipt?invoiceId=' + invoiceId + '&studentId=' + studentId + '&firstName=' + firstName + '&lastName=' + lastName;
-  var win = window.open(url, '_blank');
+//   var url = '/receipt?invoiceId=' + invoiceId + '&studentId=' + studentId + '&firstName=' + firstName + '&lastName=' + lastName;
+var url = '/' + paymentType + '?invoiceId=' + invoiceId + '&studentId=' + studentId + '&firstName=' + firstName + '&lastName=' + lastName;
+    
+var win = window.open(url, '_blank');
   win.focus();
 }
 
@@ -300,7 +307,7 @@ function makePayment(){
 			document.getElementById('makePayment').reset();
 			$('#paymentModal').modal('toggle');	
 			// display receipt
-			displayReceiptInNewTab();
+			displayPaymentInfoInNewTab('receipt');
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
@@ -372,33 +379,31 @@ function createInvoice(){
 					
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Issue Latest Invoice
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 function issueInvoice(){
+	var studentId = $('#formId').val();
+	var info = $('#invoiceInfo').val();
+	let encodeInfo = encodeDecodeString(info).encoded;
 
-var studentId = $('#formId').val();
-
-// Send AJAX to server
-$.ajax({
-	url : '${pageContext.request.contextPath}/invoice/issue/' + studentId,
-	type : 'POST',
-	dataType : 'json',
-	data : JSON.stringify(enrols),
-	contentType : 'application/json',
-	success : function(invoice) {
-		// update invoiceId to hiddenId
-		$("#hiddenId").val(invoice.id);
-		// Display the success alert
-		$("#invoiceId").val(invoice.id);
-		$("#invoiceCredit").val(invoice.credit);
-		$("#invoiceDiscount").val(invoice.discount);
-		$("#invoicePaid").val(invoice.paidAmount);
-		$("#invoiceTotal").val(invoice.amount);
-		$("#invoiceRegisterDate").val(invoice.registerDate);
-		$('#invoiceModal').modal('toggle');		
-	},
-	error : function(xhr, status, error) {
-		console.log('Error : ' + error);
-	}
-});	
+	$.ajax({
+		url : '${pageContext.request.contextPath}/invoice/issue/' + studentId,
+		type : 'POST',
+		data : encodeInfo,
+		contentType : 'application/json',
+		success : function(response) {
+			// flush old data in the dialogue
+			document.getElementById('showInvoice').reset();
+			// disappear invoice dialogue
+			$('#invoiceModal').modal('toggle');
+			// show invoice in another tab
+			displayPaymentInfoInNewTab('invoice');
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});	
 				
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -441,21 +446,10 @@ function addInformation(){
 			$('#invoiceListTable > tbody > tr').each(function() {
 					if(dataType === ENROLMENT){
 						if ($(this).find('.enrolment-match').text() === (dataType + '|' + dataId)) {
-						// debugger;
-							if(isNotBlank(info)){
-								$(this).find('.memo').html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'' + encodeInfo + '\')"></i>');
-							}else{
-								$(this).find('.memo').html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'\')"></i>');
-							} 
+							(isNotBlank(info)) ? $(this).find('.memo').html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'' + encodeInfo + '\')"></i>') : $(this).find('.memo').html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(ENROLMENT, ' + dataId + ', \'\')"></i>');		
 						}
 					}else if(dataType === OUTSTANDING){
 						if ($(this).find('.outstanding-match').text() === (dataType + '|' + dataId)) {
-							// debugger;
-							// if(isNotBlank(info)){
-							// 	$(this).find('.memo').html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(OUTSTANDING, ' + dataId + ', \'' + encodeInfo + '\')"></i>');
-							// }else{
-							// 	$(this).find('.memo').html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(OUTSTANDING, ' + dataId + ', \'\')"></i>');
-							// }
 							(isNotBlank(info)) ? $(this).find('.memo').html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(OUTSTANDING, ' + dataId + ', \'' + encodeInfo + '\')"></i>') : $(this).find('.memo').html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(OUTSTANDING, ' + dataId + ', \'\')"></i>');
 						}
 					}else if(dataType === BOOK){
@@ -488,12 +482,6 @@ function addInformation(){
 						<div class="col-md-2">
 							<p><mark><strong class="text-danger" id="rxAmount" name="rxAmount">0.00</strong></mark></p>
 						</div>
-						<!-- <div class="col-md-4">
-							<p>Outstanding: </p>
-						</div>
-						<div class="col-md-2">
-							<p><strong class="text-primary" id="outstandingAmount" name="outstandingAmount">0.00</strong></p>
-						</div> -->
 					</div>
 				</div>
 				<div class="col md-auto">
@@ -501,7 +489,8 @@ function addInformation(){
 					<button type="button" class="btn btn-block btn-primary btn-sm" id="paymentBtn" onclick="displayPayment()">Payment</button>
 				</div>
 				<div class="col md-auto">
-					<button type="button" class="btn btn-block btn-primary btn-sm" id="invoiceBtn" onclick="issueInvoice()">Invoice</button>
+					<button type="button" class="btn btn-block btn-primary btn-sm"  data-toggle="modal" data-target="#invoiceModal">Invoice</button> 
+					<!-- <button type="button" class="btn btn-block btn-primary btn-sm" id="invoiceBtn" onclick="issueInvoice()">Invoice</button> -->
 				</div>
 				<div class="col md-auto">
 					<button type="button" class="btn btn-block btn-primary btn-sm"
@@ -632,35 +621,21 @@ function addInformation(){
 		<div class="modal-content">
 			<div class="modal-body">
 				<section class="fieldset rounded border-primary">
-				<header class="text-primary font-weight-bold">Tax Invoice</header>
+				<header class="text-primary font-weight-bold">Invoice</header>
+				<br>
+				Other Information
 				<form id="showInvoice">
 					<div class="form-row mt-4">
-						<div class="col-md-4">
-							<input type="text" class="form-control" id="invoiceId" name="invoiceId">
+						<div class="col-md-12">
+							<textarea class="form-control" id="invoiceInfo" name="invoiceInfo" style="height: 8rem;"></textarea>
 						</div>
-						<div class="col-md-4">
-							<input type="text" class="form-control" id="invoiceCredit" name="invoiceCredit">
-						</div>
-						<div class="col-md-4">
-							<input type="text" class="form-control" id="invoiceDiscount" name="invoiceDiscount">
-						</div>						
 					</div>
-					<div class="form-row mt-4">
-						<div class="col-md-4">
-							<input type="text" class="form-control" id="invoicePaid" name="invoicePaid">
-						</div>
-						<div class="col-md-4">
-							<input type="text" class="form-control" id="invoiceTotal" name="invoiceTotal">
-						</div>
-						<div class="col-md-4">
-							<input type="text" class="form-control" id="invoiceRegisterDate" name="invoiceRegisterDate">
-						</div>						
+					<!-- <input type="hidden" id="invoId" name="invoId"></input> -->
+					<div class="d-flex justify-content-end mt-4">
+						<button type="button" class="btn btn-primary" onclick="issueInvoice()">OK</button>&nbsp;&nbsp;
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('showInvoice').reset();">Cancel</button>
 					</div>
-				</form>		
-				<div class="d-flex justify-content-end">
-    				<!-- <button type="submit" class="btn btn-primary" onclick="updatePayment()">Save</button>&nbsp;&nbsp; -->
-    				<button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('showInvoice').reset();">Cancel</button>
-				</div>	
+				</form>	
 				</section>
 			</div>
 		</div>
@@ -694,7 +669,6 @@ function addInformation(){
 		</div>
 	</div>
 </div>
-
 
 
 <!-- Bootstrap Editable Table JavaScript -->
