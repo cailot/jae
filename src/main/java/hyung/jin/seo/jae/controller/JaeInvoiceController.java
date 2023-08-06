@@ -27,6 +27,7 @@ import hyung.jin.seo.jae.dto.OutstandingDTO;
 import hyung.jin.seo.jae.dto.PaymentDTO;
 import hyung.jin.seo.jae.model.Enrolment;
 import hyung.jin.seo.jae.model.Invoice;
+import hyung.jin.seo.jae.model.Material;
 import hyung.jin.seo.jae.model.Outstanding;
 import hyung.jin.seo.jae.model.Payment;
 import hyung.jin.seo.jae.service.BookService;
@@ -251,7 +252,10 @@ public class JaeInvoiceController {
 			// 15-1. set MaterialDTO payment date
 			for(MaterialDTO material : materials){
 				material.setPaymentDate(JaeUtils.getToday());
-				//dtos.add(book);
+				// material update
+				Material mat = materialService.getMaterial(Long.parseLong(material.getId()));
+				mat.setPaymentDate(LocalDate.now());
+				materialService.updateMaterial(mat, Long.parseLong(material.getId()));
 			}
 			// 16-1. set MaterialDTO objects into session for payment receipt
 			session.setAttribute(JaeConstants.PAYMENT_MATERIALS, materials);
@@ -310,7 +314,10 @@ public class JaeInvoiceController {
 			// 19-2. set BookDTO payment date
 			for(MaterialDTO material : materials){
 				material.setPaymentDate(JaeUtils.getToday());
-				//dtos.add(book);
+				// material update
+				Material mat = materialService.getMaterial(Long.parseLong(material.getId()));
+				mat.setPaymentDate(LocalDate.now());
+				materialService.updateMaterial(mat, Long.parseLong(material.getId()));
 			}
 			// 20-2. set BookDTO objects into session for payment receipt
 			session.setAttribute(JaeConstants.PAYMENT_MATERIALS, materials);
@@ -358,6 +365,14 @@ public class JaeInvoiceController {
 			outstandingService.updateOutstanding(outstanding, dataId);
 			// 4-2. return flag
 			return ResponseEntity.ok("Outstanding Success");
+		}else if(JaeConstants.BOOK.equalsIgnoreCase(dataType)){
+			// 2-3. get Material
+			Material material = materialService.getMaterial(dataId);
+			// 3-3. update Material
+			material.setInfo(info);
+			materialService.updateMaterial(material, dataId);
+			// 4-2. return flag
+			return ResponseEntity.ok("Material Success");
 		}else{
 			return ResponseEntity.ok("Error");
 		}

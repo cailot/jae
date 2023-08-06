@@ -1,15 +1,18 @@
 package hyung.jin.seo.jae.service.impl;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.checkerframework.checker.units.qual.m;
+import javax.persistence.EntityNotFoundException;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.dto.MaterialDTO;
 import hyung.jin.seo.jae.model.Material;
-import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.repository.MaterialRepository;
 import hyung.jin.seo.jae.service.MaterialService;
 
@@ -49,8 +52,26 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 	
 	@Override
+	@Transactional
 	public Material addMaterial(Material material) {
 		Material add = materialRepository.save(material);
 		return add;
 	}
+
+	@Override
+	@Transactional
+	public Material updateMaterial(Material stand, Long id) {
+		// search by getId
+		Material existing = materialRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Material not found"));
+		// Update the existing record
+		// paymentDate
+		LocalDate newPaymentDate = stand.getPaymentDate();
+		existing.setPaymentDate(newPaymentDate);
+		// info
+		if(!StringUtils.equalsIgnoreCase(StringUtils.defaultString(stand.getInfo()), StringUtils.defaultString(existing.getInfo()))){
+			existing.setInfo(StringUtils.defaultString(stand.getInfo()));
+		}
+		// update the existing record
+		Material updated = materialRepository.save(existing);
+		return updated;	}
 }

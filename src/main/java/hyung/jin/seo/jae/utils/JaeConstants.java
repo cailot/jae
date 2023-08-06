@@ -116,6 +116,10 @@ public interface JaeConstants {
 
 	String OUTSTANDING = "Outstanding";
 
+	String BOOK = "Book";
+
+	String MATERIAL = "Material";
+
 	String PAYMENT_ENROLMENTS = "enrolments";
 
 	String PAYMENT_OUTSTANDINGS = "outstandings";

@@ -23,7 +23,7 @@ $(document).ready(
 			// console.log(response);
 	      },
 	      error: function(jqXHR, textStatus, errorThrown) {
-	        // handle error
+	        console.log('Error : ' + errorThrown);
 	      }
 	    });
 
@@ -36,12 +36,6 @@ $(document).ready(
 			// listEtcs(grade);
 		});
 		
-		// when page loads, search course fees for grade 'p2' as first entry --> No need as there is no student selected yet
-		// listElearns('p2');
-		// listCourses('p2');
-		// listBooks('p2');
-		// listEtcs('p2');
-
 		// remove records from basket when click on delete icon
 		$('#basketTable').on('click', 'a', function(e) {
 			e.preventDefault();
@@ -206,39 +200,22 @@ function associateOnline(){
 		return parseInt(id);
 	});
 
-	// if elearningData is not empty, make the AJAX enrolment for eLearning 
 	// Make the AJAX enrolment for eLearning
-	if(elearningData.length > 0){
-		$.ajax({
-			url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
-			method: 'POST',
-			data: JSON.stringify(elearningData),
-			contentType: 'application/json',
-			success: function(response) {
-				// Handle the response
-				// console.log(response);
-			},
-			error: function(xhr, status, error) {
-				// Handle the error
-				console.error(error);
-			}
-		});
-	}
-	// $.ajax({
-	// 	url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
-	// 	method: 'POST',
-	// 	data: JSON.stringify(elearningData),
-	// 	contentType: 'application/json',
-	// 	success: function(response) {
-	// 		// Handle the response
-	// 		// console.log(response);
-	// 	},
-	// 	error: function(xhr, status, error) {
-	// 		// Handle the error
-	// 		console.error(error);
-	// 	}
-	// });
-
+	$.ajax({
+		url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
+		method: 'POST',
+		data: JSON.stringify(elearningData),
+		contentType: 'application/json',
+		success: function(response) {
+			// Handle the response
+			// console.log(response);
+		},
+		error: function(xhr, status, error) {
+			// Handle the error
+			console.error(error);
+		}
+	});
+	
 	// Make the AJAX enrolment for class
 	$.ajax({
 		url: '${pageContext.request.contextPath}/student/associateClazz/' + studentId,
@@ -253,7 +230,6 @@ function associateOnline(){
 				addEnrolmentToInvoiceListTable(value);
 			});
 	
-
 			// nested ajax for book after creating or updating invoice
 			// Make the AJAX enrolment for book
 			$.ajax({
@@ -407,31 +383,11 @@ function addBookToBasket(value){
 	row.append($('<td class="smaller-table-font col-10 name" colspan="6">').text(value.name)); // description
 	row.append($('<td class="smaller-table-font">').addClass('hidden-column').addClass('fee').text(value.price)); // price
 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
-	//$('#basketTable > tbody').append(row);
 	$('#basketTable > tbody').prepend(row);
 	// Automatically dismiss the alert after 2 seconds
 	showAlertMessage('addAlert', '<center><i class="bi bi-book"></i> &nbsp;&nbsp' + value.name +' added to My Lecture</center>');
 }
 
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Add book to invoice
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-// function addBookToInvoice(value){
-// 	var row = $('<tr>');
-// 	row.append($('<td>').addClass('hidden-column').addClass('data-type').text(BOOK + '|' + value.id)); // 0
-// 	row.append($('<td class="text-center"><i class="bi bi-book" title="book"></i></td>')); // item
-// 	row.append($('<td class="smaller-table-font" colspan="5">').text(value.name)); // description
-// 	row.append($('<td class="smaller-table-font" colspan="4">').addClass('fee').text(Number(value.price).toFixed(2)));// price
-// 	row.append($('<td class="smaller-table-font text-center">').addClass('amount').text(Number(value.price).toFixed(2)));// Total
-// 	row.append($('<td class="smaller-table-font">').text('0'));// Date
-// 	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
-// 	//$('#invoiceListTable > tbody').append(row);
-// 	$('#invoiceListTable > tbody').prepend(row);
-
-// 	// Automatically dismiss the alert after 2 seconds
-// 	showAlertMessage('addAlert', '<center><i class="bi bi-book"></i> &nbsp;&nbsp' + value.name +' added to My Lecture</center>');
-// }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve Enroloment & Update Invoice Table

@@ -158,8 +158,7 @@ function addBookToInvoiceListTable(data) {
 	row.append($('<td class="smaller-table-font">').text(data.paymentDate));// payment date
 
 	// if data.info is not empty, then display filled icon, otherwise display empty icon	
-	row.append($("<td class='col-1'>").html('<i class="bi bi-trash"></i>')); // Action
-		
+	isNotBlank(data.info) ? row.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'BOOK' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : row.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'BOOK' + ', ' +  data.id + ', \'\')"></i>'));	
 	// if any existing row's invoice-match value is same as the new row's invoice-match value, then remove the existing row
 	$('#invoiceListTable > tbody > tr').each(function() {
 		if ($(this).find('.book-match').text() === row.find('.book-match').text()) {
@@ -424,12 +423,11 @@ function addInformation(){
 	var info = $('#information').val();
 	
 	let encodeInfo = encodeDecodeString(info).encoded;
-	//console.log('addInformation check : ' + encodeInfo);
+	console.log('addInformation check : ' + encodeInfo);
 
 	$.ajax({
 		url : '${pageContext.request.contextPath}/invoice/updateInfo/' + dataType + '/' + dataId,
 		type : 'POST',
-		//dataType : 'json',
 		data : encodeInfo,
 		contentType : 'application/json',
 		success : function(response) {
@@ -459,6 +457,10 @@ function addInformation(){
 							// 	$(this).find('.memo').html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(OUTSTANDING, ' + dataId + ', \'\')"></i>');
 							// }
 							(isNotBlank(info)) ? $(this).find('.memo').html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(OUTSTANDING, ' + dataId + ', \'' + encodeInfo + '\')"></i>') : $(this).find('.memo').html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(OUTSTANDING, ' + dataId + ', \'\')"></i>');
+						}
+					}else if(dataType === BOOK){
+						if ($(this).find('.book-match').text() === (dataType + '|' + dataId)) {
+							(isNotBlank(info)) ? $(this).find('.memo').html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(BOOK, ' + dataId + ', \'' + encodeInfo + '\')"></i>') : $(this).find('.memo').html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(BOOK, ' + dataId + ', \'\')"></i>');
 						}
 					}
 				}

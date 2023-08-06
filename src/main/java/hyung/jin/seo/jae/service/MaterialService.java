@@ -18,6 +18,9 @@ public interface MaterialService {
 	// add Material
 	Material addMaterial(Material material);
 
+	// update Material
+	Material updateMaterial(Material stand, Long id);
+
 	// return total count
 	long checkCount();
 

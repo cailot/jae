@@ -293,7 +293,7 @@
                             PAID IN FULL
                         </c:when>
                         <c:otherwise>
-                            ${finalTotal - paidTotal}
+                            <fmt:formatNumber value="${finalTotal - paidTotal}" pattern="#0.00" />
                         </c:otherwise>
                     </c:choose>
                 </td>
