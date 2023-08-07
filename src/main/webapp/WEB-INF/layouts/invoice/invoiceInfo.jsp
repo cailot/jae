@@ -262,10 +262,8 @@ function displayPaymentInfoInNewTab(paymentType){
   var studentId = $('#formId').val();
   var firstName = $('#formFirstName').val();
   var lastName = $('#formLastName').val();
-//   var url = '/receipt?invoiceId=' + invoiceId + '&studentId=' + studentId + '&firstName=' + firstName + '&lastName=' + lastName;
-var url = '/' + paymentType + '?invoiceId=' + invoiceId + '&studentId=' + studentId + '&firstName=' + firstName + '&lastName=' + lastName;
-    
-var win = window.open(url, '_blank');
+  var url = '/' + paymentType + '?invoiceId=' + invoiceId + '&studentId=' + studentId + '&firstName=' + firstName + '&lastName=' + lastName;  
+  var win = window.open(url, '_blank');
   win.focus();
 }
 
@@ -380,6 +378,28 @@ function createInvoice(){
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Display Invoice Dialogue With Information
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function displayInvoiceInformation(){
+	var studentId = $('#formId').val();
+	$.ajax({
+		url : '${pageContext.request.contextPath}/invoice/getInfo/' + studentId,
+		type : 'GET',
+		success : function(response) {
+			// assign info into invoiceInfo
+			console.log('-->' + response);
+			document.getElementById('invoiceInfo').value = response;
+			// show invoice dialogue
+			$('#invoiceModal').modal('toggle');
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});	
+				
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Issue Latest Invoice
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 function issueInvoice(){
@@ -428,7 +448,7 @@ function addInformation(){
 	var info = $('#information').val();
 	
 	let encodeInfo = encodeDecodeString(info).encoded;
-	console.log('addInformation check : ' + encodeInfo);
+	// console.log('addInformation check : ' + encodeInfo);
 
 	$.ajax({
 		url : '${pageContext.request.contextPath}/invoice/updateInfo/' + dataType + '/' + dataId,
@@ -489,8 +509,8 @@ function addInformation(){
 					<button type="button" class="btn btn-block btn-primary btn-sm" id="paymentBtn" onclick="displayPayment()">Payment</button>
 				</div>
 				<div class="col md-auto">
-					<button type="button" class="btn btn-block btn-primary btn-sm"  data-toggle="modal" data-target="#invoiceModal">Invoice</button> 
-					<!-- <button type="button" class="btn btn-block btn-primary btn-sm" id="invoiceBtn" onclick="issueInvoice()">Invoice</button> -->
+					<!-- <button type="button" class="btn btn-block btn-primary btn-sm"  data-toggle="modal" data-target="#invoiceModal">Invoice</button>  -->
+					<button type="button" class="btn btn-block btn-primary btn-sm" id="invoiceBtn" onclick="displayInvoiceInformation()">Invoice</button>
 				</div>
 				<div class="col md-auto">
 					<button type="button" class="btn btn-block btn-primary btn-sm"

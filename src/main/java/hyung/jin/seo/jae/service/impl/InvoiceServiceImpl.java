@@ -48,7 +48,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 	// find Invoice by id
 	@Override
-	public InvoiceDTO getInvoice(Long id) {
+	public InvoiceDTO findInvoiceById(Long id) {
 		Invoice invoice = invoiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Enrolment not found"));
 		InvoiceDTO dto = new InvoiceDTO(invoice);
 		return dto;
@@ -93,7 +93,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public Invoice findInvoiceById(Long id) {
+	public Invoice getInvoice(Long id) {
 		return invoiceRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Enrolment not found"));
 	}
 

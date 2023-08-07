@@ -40,7 +40,7 @@ public class OutstandingServiceImpl implements OutstandingService {
 	}
 
 	@Override
-	public List<OutstandingDTO> getOutstandingtByInvoiceId(Long invoiceId) {
+	public List<OutstandingDTO> getOutstandingtByInvoice(Long invoiceId) {
 		List<OutstandingDTO> dtos = outstandingRepository.findByInvoiceId(invoiceId);
 		return dtos;
 	}

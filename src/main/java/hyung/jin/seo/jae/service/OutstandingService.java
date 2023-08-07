@@ -17,7 +17,7 @@ public interface OutstandingService {
     Outstanding getOutstanding(Long id);
 
 	// get Outstanding by invoice Id
-	List<OutstandingDTO> getOutstandingtByInvoiceId(Long invoiceId);
+	List<OutstandingDTO> getOutstandingtByInvoice(Long invoiceId);
 
 	// add Oustanding
 	Outstanding addOutstanding(Outstanding stand);

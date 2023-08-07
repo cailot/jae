@@ -60,7 +60,7 @@ public class JaeEnrolmentController {
 		// 3. when returns, dtos keep order of materials, enrolments, outstandings
 		// 3-A. get materials by invoice id and add to list dtos
 		for(String invoiceId : invoiceIds){
-			List<MaterialDTO> materials = materialService.findMaterialByInvoiceId(Long.parseLong(invoiceId));
+			List<MaterialDTO> materials = materialService.findMaterialByInvoice(Long.parseLong(invoiceId));
 			for(MaterialDTO material : materials){
 				dtos.add(material);
 			}
@@ -71,7 +71,7 @@ public class JaeEnrolmentController {
 		// }
 		// 3-C. add outstandings to list dtos
 		for(String invoiceId : invoiceIds){
-			List<OutstandingDTO> stands = outstandingService.getOutstandingtByInvoiceId(Long.parseLong(invoiceId));
+			List<OutstandingDTO> stands = outstandingService.getOutstandingtByInvoice(Long.parseLong(invoiceId));
 			for(OutstandingDTO stand : stands){
 				dtos.add(stand);
 			}

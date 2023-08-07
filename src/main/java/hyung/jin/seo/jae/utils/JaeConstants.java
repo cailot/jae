@@ -128,4 +128,6 @@ public interface JaeConstants {
 
 	String PAYMENT_HEADER = "receiptHeader";
 
+	String INVOICE_INFO = "invoiceInfo";
+
 }

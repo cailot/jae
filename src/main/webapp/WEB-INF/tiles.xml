@@ -43,10 +43,23 @@
 		<put-attribute name="body" value="/WEB-INF/layouts/setting/adminSetting.jsp" />
 	</definition>
 
+
+
+	<!-- Payment Base -->
+	<definition name="payment.definition" template="/WEB-INF/layouts/payment.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="body" value="" />
+	</definition>
+
 	<!-- Receipt -->
-	<definition name="receiptPage" template="/WEB-INF/layouts/payment.jsp">
+	<definition name="receiptPage" extends="payment.definition">
 		<put-attribute name="title" value="James An College Receipt Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/invoice/receipt.jsp" />
 	</definition>
 	
+	<!-- Invoice -->
+	<definition name="invoicePage" extends="payment.definition">
+		<put-attribute name="title" value="James An College Invoice Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/invoice/invoice.jsp" />
+	</definition>
 </tiles-definitions>

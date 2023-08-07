@@ -20,58 +20,6 @@
    String today = dateFormat.format(date);
 
 %>
-<!-- <style>
-#background{
-    position:absolute;
-    z-index:0;
-    background:white;
-    display:block;
-    min-height:50%; 
-    min-width:50%;
-    color:yellow;
-}
-#bg-text
-{
-    color:lightgrey;
-    font-size:120px;
-    transform:rotate(300deg);
-    -webkit-transform:rotate(300deg);
-}
-#invoice1{
-    position:absolute;
-    z-index:1;
-}
-</style> -->
-
-<!-- Add the watermark styles -->
-<style>
-    .watermark-container {
-        position: absolute;
-        top: 150;
-        left: 50;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        pointer-events: none;
-        z-index: 9999; /* Ensure it appears on top of other content */
-        visibility: visible; /* Show the watermark by default */
-        opacity: 1; /* Make the watermark fully opaque by default */
-    }
-
-    .watermark {
-        font-size: 150px;
-        font-weight: bold;
-        color: rgba(250, 2, 2, 0.2);
-        transform: rotate(330deg);
-    }
-</style>
-
-
-<!-- <div id="background">
-    <p id="bg-text">Received</p>
-</div> -->
 
 <div class="toolbar no-print">
     <div class="text-right pt-3">
@@ -94,15 +42,10 @@
 </div>
 
 <div id="invoice">
-    <!-- Watermark Container -->
-    <div class="watermark-container">
-        <div class="watermark">RECEIVED</div>
-    </div>
-
     <div class="invoice WordSection1" style="min-width: 1080px; padding-top: 35px; padding-bottom: 35px; font-family: 'arial',sans-serif;">
         <table style="width: 90%; margin: 0 auto; border-collapse: collapse; table-layout: fixed; border: 0; color: #444;">
             <tr>
-                <td style="vertical-align: middle; padding: 35px 0; text-align: left; font-family: 'arial', sans-serif; font-size: 35px; color:#3f4254; font-weight: 700 !important;background: none; border: 0;">RECEIPT</td>
+                <td style="vertical-align: middle; padding: 35px 0; text-align: left; font-family: 'arial', sans-serif; font-size: 35px; color:#3f4254; font-weight: 700 !important;background: none; border: 0;">TAX INVOICE</td>
                 <td style="width: 450px; padding: 35px 0; vertical-align: middle; border: 0;">
                     <img style="width:450px; vertical-align: top;" src="https://jacelearning.com/Content/invoicelogo.jpg" alt="JAC" />
                     <p style="margin-top: 8px; font-size: 13px;font-weight:600;line-height:1.5">
@@ -248,12 +191,12 @@
                     </c:forEach>
                 </c:if>
 
-                <!-- <tr>
-                    <td colspan='6' style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: left;'><b>Other Information</b>, Paid Date :  02/07/2023</td>
-                </tr> -->
-                <tr>
-                    <td colspan='6' style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: left;'></td>
-                </tr>
+                <c:if test="${not empty sessionScope.invoiceInfo}">
+                    <c:set var="invoiceInfo" value="${sessionScope.invoiceInfo}" />
+                    <tr>
+                        <td colspan='6' style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: left;'><c:out value="${invoiceInfo}" /></td>
+                    </tr>
+                </c:if>
 
             </tbody>
         </table>

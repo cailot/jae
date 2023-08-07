@@ -40,7 +40,7 @@ public class MaterialServiceImpl implements MaterialService {
 	}
 
 	@Override
-	public List<MaterialDTO> findMaterialByInvoiceId(Long id) {
+	public List<MaterialDTO> findMaterialByInvoice(Long id) {
 		List<MaterialDTO> dtos = materialRepository.findMaterialByInvoiceId(id);
 		return dtos;
 	}

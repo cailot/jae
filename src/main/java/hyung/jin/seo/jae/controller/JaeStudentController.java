@@ -300,7 +300,7 @@ public class JaeStudentController {
 			// 	}
 			// }
 			// 2. find Invoice if Enrolment is invoiced
-			Invoice invoice = invoiceService.findInvoiceById(invoiceId);
+			Invoice invoice = invoiceService.getInvoice(invoiceId);
 
 			// update Invoice in case of any change from client
 
