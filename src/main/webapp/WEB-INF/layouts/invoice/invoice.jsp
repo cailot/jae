@@ -194,7 +194,7 @@
                 <c:if test="${not empty sessionScope.invoiceInfo}">
                     <c:set var="invoiceInfo" value="${sessionScope.invoiceInfo}" />
                     <tr>
-                        <td colspan='6' style='height: 40px; padding: 10px 5px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: left;'><c:out value="${invoiceInfo}" /></td>
+                        <td colspan='6' style='height: 40px; padding: 10px; font-size: 14px; font-weight: bold; border: 1px solid #444; text-align: left;'>Other Information : <c:out value="${invoiceInfo}" /></td>
                     </tr>
                 </c:if>
 

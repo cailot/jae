@@ -387,7 +387,7 @@ function displayInvoiceInformation(){
 		type : 'GET',
 		success : function(response) {
 			// assign info into invoiceInfo
-			console.log('-->' + response);
+			// console.log(response);
 			document.getElementById('invoiceInfo').value = response;
 			// show invoice dialogue
 			$('#invoiceModal').modal('toggle');
