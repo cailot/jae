@@ -20,7 +20,7 @@ $(document).ready(
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function addEnrolmentToInvoiceListTable(data) {
+function addEnrolmentToInvoiceList(data) {
 	// console.log(data);
 	// set invoiceId into hiddenId
 	$('#hiddenId').val(data.invoiceId);
@@ -111,7 +111,7 @@ function addEnrolmentToInvoiceListTable(data) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Add Outstanding to invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function addOutstandingToInvoiceListTable(data) {
+function addOutstandingToInvoiceList(data) {
 	// console.log('addOutstandingToInvoiceListTable - ' + JSON.stringify(data));
 	// set invoiceId into hiddenId
 	$('#hiddenId').val(data.invoiceId);
@@ -122,7 +122,7 @@ function addOutstandingToInvoiceListTable(data) {
 	newOS.append($('<td colspan="5" class="smaller-table-font">').text('Outstanding'));
 	newOS.append($('<td colspan="4" class="smaller-table-font">').text(data.paid + ' Paid'));
 	// set editable attribute to true if the amount is not fully paid	
-	newOS.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.remaining).toFixed(2)));
+	newOS.append($('<td class="smaller-table-font text-center text-primary">').addClass('amount').text((data.remaining).toFixed(2)));
 	// newOS.append($('<td class="smaller-table-font text-center">')
     // .addClass('amount')
     // .css('color', data.remaining > 0 ? 'red' : '')
@@ -150,7 +150,7 @@ function addOutstandingToInvoiceListTable(data) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Add Book to invoiceListTable
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function addBookToInvoiceListTable(data) {
+function addBookToInvoiceList(data) {
 	// console.log(data);
 	$('#hiddenId').val(data.invoiceId);
 	var row = $('<tr>');
@@ -173,7 +173,42 @@ function addBookToInvoiceListTable(data) {
 	});
 
 	$('#invoiceListTable > tbody').prepend(row);
+	// update Receivable Amount
+	updateReceivableAmount();
+}
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Remove Enrolemnts from invoiceListTable
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function removeEnrolmentFromInvoiceList() {
+	$('#invoiceListTable > tbody > tr').each(function() {
+		var hiddens = $(this).find('.enrolment-match').text();
+		if(hiddens.indexOf('|') !== -1){
+			var hiddenValues = hiddens.split('|');
+			//console.log(hiddenValues[1]);
+			if(hiddenValues[0] === ENROLMENT){
+				$(this).remove();
+			}
+		}
+	});
+	// update Receivable Amount
+	updateReceivableAmount();
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Remove Books from invoiceListTable
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function removeBookFromInvoiceList() {
+	$('#invoiceListTable > tbody > tr').each(function() {
+		var hiddens = $(this).find('.book-match').text();
+		if(hiddens.indexOf('|') !== -1){
+			var hiddenValues = hiddens.split('|');
+			//console.log(hiddenValues[1]);
+			if(hiddenValues[0] === BOOK){
+				$(this).remove();
+			}
+		}
+	});
 	// update Receivable Amount
 	updateReceivableAmount();
 }
@@ -292,13 +327,13 @@ function makePayment(){
 				// debugger;
 				if (value.hasOwnProperty('extra')) {
 					// It is an EnrolmentDTO object
-					addEnrolmentToInvoiceListTable(value);
+					addEnrolmentToInvoiceList(value);
 				}else if (value.hasOwnProperty('remaining')) {
 					// It is an OutstandingDTO object
-					addOutstandingToInvoiceListTable(value);
+					addOutstandingToInvoiceList(value);
 				}else{
 					// It is a BookDTO object
-					addBookToInvoiceListTable(value);
+					addBookToInvoiceList(value);
 				}
 			});
 			// reset payment dialogue info
@@ -542,7 +577,7 @@ function addInformation(){
 									<th class="smaller-table-font">DC$</th>
 									<th class="smaller-table-font">Amount</th>
 									<th class="smaller-table-font">Date</th>
-									<th class="smaller-table-font" data-orderable="false">Action</th>
+									<th class="smaller-table-font" data-orderable="false">Note</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -643,7 +678,7 @@ function addInformation(){
 				<section class="fieldset rounded border-primary">
 				<header class="text-primary font-weight-bold">Invoice</header>
 				<br>
-				Other Information
+				The following message will appear on the invoice.
 				<form id="showInvoice">
 					<div class="form-row mt-4">
 						<div class="col-md-12">

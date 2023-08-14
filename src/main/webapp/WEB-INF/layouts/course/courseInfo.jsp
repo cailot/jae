@@ -223,13 +223,19 @@ function associateOnline(){
 		data: JSON.stringify(enrolData),
 		contentType: 'application/json',
 		success: function(response) {
+			//debugger;
+			if(response.length >0){
+				$.each(response, function(index, value){
+					// update the invoice table
+					// console.log(value);
+					addEnrolmentToInvoiceList(value);
+				});
+			}else{
+				// console.log('No enrolment');
+				// remove enrolments from invoice table
+				removeEnrolmentFromInvoiceList();
 
-			$.each(response, function(index, value){
-				// update the invoice table
-				// console.log(value);
-				addEnrolmentToInvoiceListTable(value);
-			});
-	
+			}
 			// nested ajax for book after creating or updating invoice
 			// Make the AJAX enrolment for book
 			$.ajax({
@@ -239,16 +245,25 @@ function associateOnline(){
 				contentType: 'application/json',
 				success: function(response) {
 					// Handle the response
-					$.each(response, function(index, value){
-						//addBookToInvoice(value);
-						addBookToInvoiceListTable(value);
-					});
+					if(response.length >0){
+						$.each(response, function(index, value){
+							//addBookToInvoice(value);
+							addBookToInvoiceList(value);
+						});
+					}else{
+						// remove books from invoice table
+						removeBookFromInvoiceList();
+					}
 				},
 				error: function(xhr, status, error) {
 					// Handle the error
 					console.error(error);
 				}
 			});
+
+			// check how many rows in basketTable table
+			var rowCount = $('#basketTable tbody tr').length;
+			console.log(rowCount);
 
 			// Handle the response
 			// console.log(response);
@@ -417,10 +432,10 @@ function retrieveEnrolment(studentId){
 					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>'));
 					$('#basketTable > tbody').append(row);	
 					// update invoice table with Enrolment
-					addEnrolmentToInvoiceListTable(value);
+					addEnrolmentToInvoiceList(value);
 				} else if (value.hasOwnProperty('remaining')) { // It is an OutstandingDTO object
 					// update invoice table with Outstanding
-					addOutstandingToInvoiceListTable(value);
+					addOutstandingToInvoiceList(value);
 				}else{  // Book
 					// update my lecture table
 					var row = $('<tr class="d-flex">');
@@ -430,7 +445,7 @@ function retrieveEnrolment(studentId){
 					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
 					$('#basketTable > tbody').append(row);
 					// update invoice table with Book
-					addBookToInvoiceListTable(value);
+					addBookToInvoiceList(value);
 				}
 			});
 		},
@@ -539,7 +554,7 @@ function showAlertMessage(elementId, message) {
 				<div class="col-md-12">
 					<nav>
                           <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-								<a class="nav-item nav-link active" id="nav-basket-tab" data-toggle="tab" href="#nav-basket" role="tab" aria-controls="nav-basket" aria-selected="true">My Lecture</a>
+								<a class="nav-item nav-link active" id="nav-basket-tab" data-toggle="tab" href="#nav-basket" role="tab" aria-controls="nav-basket" aria-selected="true">Lecture</a>
 								<a class="nav-item nav-link" id="nav-elearn-tab" data-toggle="tab" href="#nav-elearn" role="tab" aria-controls="nav-elearn" aria-selected="true">e-Learning</a>
                             	<a class="nav-item nav-link" id="nav-fee-tab" data-toggle="tab" href="#nav-fee" role="tab" aria-controls="nav-fee" aria-selected="true">Course</a>
                               	<a class="nav-item nav-link" id="nav-book-tab" data-toggle="tab" href="#nav-book" role="tab" aria-controls="nav-book" aria-selected="false">Books</a>
