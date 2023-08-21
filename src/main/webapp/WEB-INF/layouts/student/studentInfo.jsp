@@ -573,21 +573,21 @@
 				<input type="text" class="form-control" style="background-color: #FCF7CA;" id="formKeyword" name="formKeyword" placeholder="ID or Name" />
 			</div>
 			<div class="col-md-4">
-				<button type="button" class="btn btn-block btn-primary" onclick="searchStudent()">Search</button>
+				<button type="button" class="btn btn-block btn-warning" onclick="searchStudent()">Search</button>
 			</div>
 		</div>
 		<div class="form-row mt-3">
 			<div class="col mx-auto">
-				<button type="button" class="btn btn-block btn-success" data-toggle="modal" data-target="#registerModal">New</button>
+				<button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#registerModal">New</button>
 			</div>
 			<div class="col mx-auto">
-				<button type="button" class="btn btn-block btn-warning" onclick="updateStudentInfo()">Save</button>
+				<button type="button" class="btn btn-block btn-info" onclick="updateStudentInfo()">Update</button>
 			</div>
 			<div class="col mx-auto">
 				<button type="button" class="btn btn-block btn-danger" data-toggle="modal" data-target="#deactivateModal">Suspend</button>
 			</div>
 			<div class="col mx-auto">
-				<button type="button" class="btn btn-block btn-info" onclick="clearStudentForm()">Clear</button>
+				<button type="button" class="btn btn-block btn-success" onclick="clearStudentForm()">Clear</button>
 			</div>
 		</div>
 		<div class="form-row mt-3">

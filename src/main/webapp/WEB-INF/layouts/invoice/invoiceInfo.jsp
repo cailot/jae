@@ -34,21 +34,21 @@ function addEnrolmentToInvoiceList(data) {
     row.append($('<td>').addClass('hidden-column').addClass('enrolment-match').text(ENROLMENT + '|' + data.id));
     row.append($('<td class="text-center"><i class="bi bi-mortarboard" title="class"></i></td>'));
     row.append($('<td class="smaller-table-font">').text('[' + data.grade.toUpperCase() +'] ' + data.name));
-    row.append($('<td class="smaller-table-font">').text(data.year));
+    row.append($('<td class="smaller-table-font text-center">').text(data.year));
     
 	// set editable attribute to true if the amount is not fully paid	
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('start-week').text(data.startWeek)) : row.append($('<td class="smaller-table-font text-center">').addClass('start-week').text(data.startWeek));
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('end-week').text(data.endWeek)) : row.append($('<td class="smaller-table-font text-center">').addClass('end-week').text(data.endWeek));
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('weeks').text(data.endWeek - data.startWeek + 1)) : row.append($('<td class="smaller-table-font text-center" >').addClass('weeks').text(data.endWeek - data.startWeek + 1));
-    row.append($('<td class="smaller-table-font text-center">').addClass('price').text((data.price).toFixed(2)));
+    row.append($('<td class="smaller-table-font text-right">').addClass('price').text((data.price).toFixed(2)));
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('credit').text(data.credit)) : row.append($('<td class="smaller-table-font text-center">').addClass('credit').text(data.credit));
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').text('0 %')) : row.append($('<td class="smaller-table-font text-center">').text('0 %'));
 	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('discount').text(data.discount)) : row.append($('<td class="smaller-table-font text-center">').addClass('discount').text(data.discount));
 	//(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-center">').addClass('amount').text((data.amount).toFixed(2)).attr("id", "amountCell"));
 	var amount = (data.endWeek - data.startWeek + 1) * data.price;
-	(needPay) ? row.append($('<td class="smaller-table-font text-center" contenteditable="true">').addClass('amount').text(amount.toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-center">').addClass('amount').text(amount.toFixed(2)).attr("id", "amountCell"));
+	(needPay) ? row.append($('<td class="smaller-table-font text-right" contenteditable="true">').addClass('amount').text(amount.toFixed(2)).attr("id", "amountCell")) : row.append($('<td class="smaller-table-font text-right">').addClass('amount').text(amount.toFixed(2)).attr("id", "amountCell"));
 
-	row.append($('<td class="smaller-table-font paid-date">').text(data.paymentDate));
+	row.append($('<td class="smaller-table-font paid-date text-center">').text(data.paymentDate));
 	row.append($('<td>').addClass('hidden-column paid').text(data.paid));
 	// if data.info is not empty, then display filled icon, otherwise display empty icon
 	isNotBlank(data.info) ? row.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : row.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'ENROLMENT' + ', ' +  data.id + ', \'\')"></i>'));
@@ -119,17 +119,27 @@ function addOutstandingToInvoiceList(data) {
 	var newOS = $('<tr>');
 	newOS.append($('<td>').addClass('hidden-column').addClass('outstanding-match').text(OUTSTANDING + '|' + data.id));
 	newOS.append($('<td class="text-center"><i class="bi bi-exclamation-circle" title="outstanding"></i></td>'));
-	newOS.append($('<td colspan="5" class="smaller-table-font">').text('Outstanding'));
-	newOS.append($('<td colspan="4" class="smaller-table-font">').text(data.paid + ' Paid'));
+	newOS.append($('<td class="smaller-table-font">').text('Outstanding'));
+	newOS.append($('<td>'));
+	newOS.append($('<td>'));
+	newOS.append($('<td>'));
+	newOS.append($('<td>'));
+		
+	// newOS.append($('<td colspan="4" class="smaller-table-font">').text(data.paid + ' Paid'));
+	newOS.append($('<td class="smaller-table-font text-right">').html(data.paid + ' <i class="bi bi-check2-circle text-danger" title="paid"></i>'));
+	newOS.append($('<td>'));
+	newOS.append($('<td>'));
+	newOS.append($('<td>'));
+	
 	// set editable attribute to true if the amount is not fully paid	
-	newOS.append($('<td class="smaller-table-font text-center text-primary">').addClass('amount').text((data.remaining).toFixed(2)));
+	newOS.append($('<td class="smaller-table-font text-right text-primary">').addClass('amount').text((data.remaining).toFixed(2)));
 	// newOS.append($('<td class="smaller-table-font text-center">')
     // .addClass('amount')
     // .css('color', data.remaining > 0 ? 'red' : '')
     // .css('font-weight', data.remaining > 0 ? 'bold' : '')
     // .text((data.remaining).toFixed(2)));
 
-	newOS.append($('<td class="smaller-table-font paid-date">').text(data.registerDate));
+	newOS.append($('<td class="smaller-table-font text-center paid-date">').text(data.registerDate));
 	newOS.append($('<td>').addClass('hidden-column paid').text(data.paid));
 	// if data.info is not empty, then display filled icon, otherwise display empty icon
 	isNotBlank(data.info) ? newOS.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : newOS.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'OUTSTANDING' + ', ' +  data.id + ', \'\')"></i>'));
@@ -156,12 +166,19 @@ function addBookToInvoiceList(data) {
 	var row = $('<tr>');
 	row.append($('<td>').addClass('hidden-column').addClass('book-match').text(BOOK + '|' + data.id)); // 0
 	row.append($('<td class="text-center"><i class="bi bi-book" title="book"></i></td>')); // item
-	row.append($('<td class="smaller-table-font" colspan="5">').text(data.name)); // description
-	row.append($('<td class="smaller-table-font">').addClass('fee').text(Number(data.price).toFixed(2)));// price
-	row.append($('<td class="smaller-table-font" colspan="3">'));
-	row.append($('<td class="smaller-table-font text-center">').addClass('amount').text(Number(data.price).toFixed(2)));// Total	
+	row.append($('<td class="smaller-table-font">').text(data.name)); // description
+	row.append($('<td>'));
+	row.append($('<td>'));
+	row.append($('<td>'));
+	row.append($('<td>'));
+	row.append($('<td class="smaller-table-font text-right">').addClass('fee').text(Number(data.price).toFixed(2)));// price
+	row.append($('<td>'));
+	row.append($('<td>'));
+	row.append($('<td>'));
+	
+	row.append($('<td class="smaller-table-font text-right">').addClass('amount').text(Number(data.price).toFixed(2)));// Total	
 	row.append($('<td>').addClass('hidden-column paid').text(0)); // 0	
-	row.append($('<td class="smaller-table-font">').text(data.paymentDate));// payment date
+	row.append($('<td class="smaller-table-font text-center">').text(data.paymentDate));// payment date
 
 	// if data.info is not empty, then display filled icon, otherwise display empty icon	
 	isNotBlank(data.info) ? row.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text-fill text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'BOOK' + ', ' +  data.id + ', \'' + data.info + '\')"></i>')) : row.append($("<td class='col-1 memo text-center'>").html('<i class="bi bi-chat-square-text text-primary" title="Internal Memo" onclick="displayAddInfo(' + 'BOOK' + ', ' +  data.id + ', \'\')"></i>'));	

@@ -141,9 +141,9 @@ function listBooks(grade) {
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Associate eLearnings with Student	
+//		Associate registration with Student	
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-function associateOnline(){
+function associateRegistration(){
 	// get id from 'formId'
 	const studentId = $('#formId').val();
 	// if id is null, show alert and return
@@ -263,7 +263,7 @@ function associateOnline(){
 
 			// check how many rows in basketTable table
 			var rowCount = $('#basketTable tbody tr').length;
-			console.log(rowCount);
+			// console.log(rowCount);
 
 			// Handle the response
 			// console.log(response);
@@ -276,23 +276,253 @@ function associateOnline(){
 		}
 	});
 
-	
-	// // Make the AJAX enrolment for book
-	// $.ajax({
-	// 	url: '${pageContext.request.contextPath}/student/associateBook/' + studentId,
-	// 	method: 'POST',
-	// 	data: JSON.stringify(bookData),
-	// 	contentType: 'application/json',
-	// 	success: function(response) {
-	// 		// Handle the response
-	// 		console.log(response);
-	// 	},
-	// 	error: function(xhr, status, error) {
-	// 		// Handle the error
-	// 		console.error(error);
-	// 	}
-	// });
+	// reload registered enrolment info
+	// clearEnrolmentBasket();
+	// reloadEnrolment(studentId);
 
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Update registration with Student	
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+// function updateRegistration(){
+// 	// get id from 'formId'
+// 	const studentId = $('#formId').val();
+// 	// if id is null, show alert and return
+// 	if (studentId == null || studentId == '') {
+// 		//warn if student id  is empty
+// 		$('#warning-alert .modal-body').text('Please search student before apply');
+// 		$('#warning-alert').modal('toggle');
+// 		return;	
+// 	}
+
+// 	var elearnings = [];
+// 	var enrolData = [];
+// 	var books = [];
+
+// 	$('#basketTable tbody tr').each(function() {
+// 		// in case of update, enrolId is not null
+// 		//debugger;
+// 		var enrolId = null;
+// 		var bookId = null;
+// 		var hiddens = $(this).find('.data-type').text();
+// 		if(hiddens.indexOf('|') !== -1){
+// 			var hiddenValues = hiddens.split('|');
+// 			// if hiddenValues[0] is ELEARNING, push hiddenValues[1] to elearnings array
+// 			if(hiddenValues[0] === ELEARNING){
+// 				elearnings.push(hiddenValues[1]);
+// 				// how to jump to next <tr>
+// 				return true;
+// 			}else if(hiddenValues[0] === BOOK){
+// 				books.push(hiddenValues[1]);
+// 				return true;
+// 			}else if(hiddenValues[0] === CLASS){
+// 				enrolId = hiddenValues[1];
+// 			}
+// 		}
+// 		enrolData.clazzId =  $(this).find('.clazzChoice').val();
+// 		// find value of next td whose class is 'start-year'
+// 		enrolData.startWeek = $(this).find('.start-week').text();
+// 		enrolData.endWeek = $(this).find('.end-week').text();
+// 		var clazz = {
+// 			"id" : enrolId,
+// 			"startWeek" : enrolData.startWeek,
+// 			"endWeek" : enrolData.endWeek,
+// 			"clazzId" : enrolData.clazzId
+// 		};
+// 		enrolData.push(clazz);
+// 		// how to jump to next <tr>				
+// 		return true;	
+// 	});
+
+// 	var elearningData = elearnings.map(function(id) {
+//     	return parseInt(id);
+// 	});
+// 	var bookData = books.map(function(id){
+// 		return parseInt(id);
+// 	});
+
+// 	// Make the AJAX enrolment for eLearning
+// 	$.ajax({
+// 		url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
+// 		method: 'POST',
+// 		data: JSON.stringify(elearningData),
+// 		contentType: 'application/json',
+// 		success: function(response) {
+// 			// Handle the response
+// 			// console.log(response);
+// 		},
+// 		error: function(xhr, status, error) {
+// 			// Handle the error
+// 			console.error(error);
+// 		}
+// 	});
+	
+// 	// Make the AJAX enrolment for class
+// 	$.ajax({
+// 		url: '${pageContext.request.contextPath}/student/updateClazz/' + studentId,
+// 		method: 'POST',
+// 		data: JSON.stringify(enrolData),
+// 		contentType: 'application/json',
+// 		success: function(response) {
+// 			//debugger;
+// 			if(response.length >0){
+// 				$.each(response, function(index, value){
+// 					// update the invoice table
+// 					// console.log(value);
+// 					addEnrolmentToInvoiceList(value);
+// 				});
+// 			}else{
+// 				// console.log('No enrolment');
+// 				// remove enrolments from invoice table
+// 				removeEnrolmentFromInvoiceList();
+
+// 			}
+// 			// nested ajax for book after creating or updating invoice
+// 			// Make the AJAX enrolment for book
+// 			$.ajax({
+// 				url: '${pageContext.request.contextPath}/student/associateBook/' + studentId,
+// 				method: 'POST',
+// 				data: JSON.stringify(bookData),
+// 				contentType: 'application/json',
+// 				success: function(response) {
+// 					// Handle the response
+// 					if(response.length >0){
+// 						$.each(response, function(index, value){
+// 							//addBookToInvoice(value);
+// 							addBookToInvoiceList(value);
+// 						});
+// 					}else{
+// 						// remove books from invoice table
+// 						removeBookFromInvoiceList();
+// 					}
+// 				},
+// 				error: function(xhr, status, error) {
+// 					// Handle the error
+// 					console.error(error);
+// 				}
+// 			});
+
+// 			// check how many rows in basketTable table
+// 			var rowCount = $('#basketTable tbody tr').length;
+// 			// console.log(rowCount);
+
+// 			// Handle the response
+// 			// console.log(response);
+// 			$('#success-alert .modal-body').html('ID : <b>' + studentId + '</b> enrolment saved successfully');
+// 			$('#success-alert').modal('toggle');
+// 		},
+// 		error: function(xhr, status, error) {
+// 			// Handle the error
+// 			console.error(error);
+// 		}
+// 	});
+
+// }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Delete registration with Student	
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function deleteRegistration(){
+	// get id from 'formId'
+	const studentId = $('#formId').val();
+	// if id is null, show alert and return
+	if (studentId == null || studentId == '') {
+		//warn if student id  is empty
+		$('#warning-alert .modal-body').text('Please search student before apply');
+		$('#warning-alert').modal('toggle');
+		return;	
+	}
+
+	var elearnings = [];
+	var enrolData = [];
+	var books = [];
+
+	var elearningData = elearnings.map(function(id) {
+    	return parseInt(id);
+	});
+	var bookData = books.map(function(id){
+		return parseInt(id);
+	});
+
+	// Make the AJAX enrolment for eLearning
+	$.ajax({
+		url: '${pageContext.request.contextPath}/student/associateElearning/' + studentId,
+		method: 'POST',
+		data: JSON.stringify(elearningData),
+		contentType: 'application/json',
+		success: function(response) {
+			// Handle the response
+			// console.log(response);
+		},
+		error: function(xhr, status, error) {
+			// Handle the error
+			console.error(error);
+		}
+	});
+	
+	// Make the AJAX enrolment for class
+	$.ajax({
+		url: '${pageContext.request.contextPath}/student/associateClazz/' + studentId,
+		method: 'POST',
+		data: JSON.stringify(enrolData),
+		contentType: 'application/json',
+		success: function(response) {
+			//debugger;
+			if(response.length >0){
+				$.each(response, function(index, value){
+					// update the invoice table
+					// console.log(value);
+					addEnrolmentToInvoiceList(value);
+				});
+			}else{
+				// console.log('No enrolment');
+				// remove enrolments from invoice table
+				removeEnrolmentFromInvoiceList();
+
+			}
+			// nested ajax for book after creating or updating invoice
+			// Make the AJAX enrolment for book
+			$.ajax({
+				url: '${pageContext.request.contextPath}/student/associateBook/' + studentId,
+				method: 'POST',
+				data: JSON.stringify(bookData),
+				contentType: 'application/json',
+				success: function(response) {
+					// Handle the response
+					if(response.length >0){
+						$.each(response, function(index, value){
+							//addBookToInvoice(value);
+							addBookToInvoiceList(value);
+						});
+					}else{
+						// remove books from invoice table
+						removeBookFromInvoiceList();
+					}
+				},
+				error: function(xhr, status, error) {
+					// Handle the error
+					console.error(error);
+				}
+			});
+
+			// check how many rows in basketTable table
+			// var rowCount = $('#basketTable tbody tr').length;
+			// console.log(rowCount);
+
+			// Handle the response
+			// console.log(response);
+			$('#success-alert .modal-body').html('ID : <b>' + studentId + '</b> enrolment saved successfully');
+			$('#success-alert').modal('toggle');
+		},
+		error: function(xhr, status, error) {
+			// Handle the error
+			console.error(error);
+		}
+	});
+
+	// clear lecture basket
+	clearEnrolmentBasket();
 
 }
 
@@ -306,7 +536,7 @@ function addElearningToBasket(value){
 	row.append($('<td>').addClass('hidden-column').addClass('data-type').text(ELEARNING + '|' + value.id));
 	row.append($('<td class="col-1"><i class="bi bi-laptop" title="e-learning"></i></td>'));
 	row.append($('<td class="smaller-table-font col-10" colspan="6">').text('[' + value.grade.toUpperCase() + '] ' + value.name));
-	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete eLearning"><i class="bi bi-trash"></i></a>'));
+	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete e-learning"><i class="bi bi-trash"></i></a>'));
 	// $('#basketTable > tbody').append(row);
 	$('#basketTable > tbody').prepend(row);
 
@@ -355,7 +585,7 @@ function addClassToBasket(value) {
 		row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('start-week').text(start_week));
 		row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('end-week').text(end_week));
 		row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('weeks').text(weeks));
-		row.append($('<td class="col-1">').html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>'));
+		row.append($('<td class="col-1">').html('<a href="javascript:void(0)" title="Delete class"><i class="bi bi-trash"></i></a>'));
 		
 		var startWeekCell = row.find('.start-week');
 		var endWeekCell = row.find('.end-week');
@@ -397,7 +627,7 @@ function addBookToBasket(value){
 	row.append($('<td class="col-1"><i class="bi bi-book" title="book"></i></td>')); // item
 	row.append($('<td class="smaller-table-font col-10 name" colspan="6">').text(value.name)); // description
 	row.append($('<td class="smaller-table-font">').addClass('hidden-column').addClass('fee').text(value.price)); // price
-	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
+	row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete book"><i class="bi bi-trash"></i></a>')); // Action
 	$('#basketTable > tbody').prepend(row);
 	// Automatically dismiss the alert after 2 seconds
 	showAlertMessage('addAlert', '<center><i class="bi bi-book"></i> &nbsp;&nbsp' + value.name +' added to My Lecture</center>');
@@ -429,7 +659,7 @@ function retrieveEnrolment(studentId){
 					row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('start-week').text(value.startWeek));
 					row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('end-week').text(value.endWeek));
 					row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').text(value.endWeek - value.startWeek + 1));
-					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>'));
+					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete class"><i class="bi bi-trash"></i></a>'));
 					$('#basketTable > tbody').append(row);	
 					// update invoice table with Enrolment
 					addEnrolmentToInvoiceList(value);
@@ -442,7 +672,7 @@ function retrieveEnrolment(studentId){
 					row.append($('<td>').addClass('hidden-column').addClass('data-type').text(BOOK + '|' + value.id)); // 0
 					row.append($('<td class="col-1"><i class="bi bi-book" title="book"></i></td>')); // item
 					row.append($('<td class="smaller-table-font col-10">').text(value.name)); // description
-					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>')); // Action
+					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete book"><i class="bi bi-trash"></i></a>')); // Action
 					$('#basketTable > tbody').append(row);
 					// update invoice table with Book
 					addBookToInvoiceList(value);
@@ -466,10 +696,81 @@ function retrieveEnrolment(studentId){
 				row.append($('<td>').addClass('hidden-column').addClass('data-type').text(ELEARNING + '|' + value.id));
 				row.append($('<td class="col-1"><i class="bi bi-laptop" title="e-learning"></i></td>'));
 				row.append($('<td class="smaller-table-font col-10" colspan="6">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
-				// row.append($('<td class="smaller-table-font">').text(''));
-				// row.append($('<td class="smaller-table-font">').text(''));
-				// row.append($('<td class="smaller-table-font">').text(''));
-				row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete Class"><i class="bi bi-trash"></i></a>'));
+				row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete e-learning"><i class="bi bi-trash"></i></a>'));
+				$('#basketTable > tbody').append(row);	
+
+			});
+		},
+		error: function(xhr, status, error) {
+			// Handle the error
+			console.error(error);
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Reload Enroloment Table
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+function reloadEnrolment(studentId){
+	// get the enrolment
+	$.ajax({
+		url: '${pageContext.request.contextPath}/enrolment/search/student/' + studentId,
+		method: 'GET',
+		success: function(response) {
+			// Handle the response
+			$.each(response, function(index, value){
+				
+				//debugger;
+				// It is an EnrolmentDTO object		
+				if (value.hasOwnProperty('extra')) {
+					// update my lecture table
+					var row = $('<tr class="d-flex">');
+					row.append($('<td>').addClass('hidden-column').addClass('data-type').text(CLASS + '|' + value.id));
+					row.append($('<td class="col-1"><i class="bi bi-mortarboard" title="class"></i></td>'));
+					row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
+					row.append($('<td class="smaller-table-font col-2">').text(value.day));
+					row.append($('<td class="smaller-table-font col-1">').text(value.year));
+					row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('start-week').text(value.startWeek));
+					row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('end-week').text(value.endWeek));
+					row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').text(value.endWeek - value.startWeek + 1));
+					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete class"><i class="bi bi-trash"></i></a>'));
+					$('#basketTable > tbody').append(row);	
+					// update invoice table with Enrolment
+					//addEnrolmentToInvoiceList(value);
+				// } else if (value.hasOwnProperty('remaining')) { // It is an OutstandingDTO object
+				// 	// update invoice table with Outstanding
+				// 	addOutstandingToInvoiceList(value);
+				}else{  // Book
+					// update my lecture table
+					var row = $('<tr class="d-flex">');
+					row.append($('<td>').addClass('hidden-column').addClass('data-type').text(BOOK + '|' + value.id)); // 0
+					row.append($('<td class="col-1"><i class="bi bi-book" title="book"></i></td>')); // item
+					row.append($('<td class="smaller-table-font col-10">').text(value.name)); // description
+					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete book"><i class="bi bi-trash"></i></a>')); // Action
+					$('#basketTable > tbody').append(row);
+					// update invoice table with Book
+					//addBookToInvoiceList(value);
+				}
+			});
+		},
+		error: function(xhr, status, error) {
+			// Handle the error
+			console.error(error);
+		}
+	});
+	// get the elearning
+	$.ajax({
+		url: '${pageContext.request.contextPath}/elearning/search/student/' + studentId,
+		method: 'GET',
+		success: function(response) {
+			// Handle the response
+			$.each(response, function(index, value){
+				// console.log(value);	
+				var row = $("<tr class='d-flex'>");
+				row.append($('<td>').addClass('hidden-column').addClass('data-type').text(ELEARNING + '|' + value.id));
+				row.append($('<td class="col-1"><i class="bi bi-laptop" title="e-learning"></i></td>'));
+				row.append($('<td class="smaller-table-font col-10" colspan="6">').text('[' + value.grade.toUpperCase() +'] ' + value.name));
+				row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete e-learning"><i class="bi bi-trash"></i></a>'));
 				$('#basketTable > tbody').append(row);	
 
 			});
@@ -541,11 +842,20 @@ function showAlertMessage(elementId, message) {
 						<option value="vce">VCE</option>
 					</select>
 				</div>
-				<div class="col-md-8">
-					<p class="text-truncate text-center">To apply, please click on the Enrolment button</p>
+				<div class="col-md-2">
+					<p class="text-truncate text-center">Enrolment</p>
 				</div>
 				<div class="col-md-2">
-					<button type="button" class="btn btn-block btn-primary btn-sm" data-toggle="modal" onclick="associateOnline()">Enrolment</button>
+					<button type="button" class="btn btn-block btn-primary btn-sm" data-toggle="modal" onclick="associateRegistration()">New</button>
+				</div>
+				<div class="col-md-2">
+					<button type="button" class="btn btn-block btn-info btn-sm" data-toggle="modal" onclick="associateRegistration()">Update</button>
+				</div>
+				<div class="col-md-2">
+					<button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal" onclick="deleteRegistration()">Delete</button>
+				</div>
+				<div class="col-md-2">
+					<button type="button" class="btn btn-block btn-success btn-sm" data-toggle="modal" onclick="clearEnrolmentBasket()">Clear</button>
 				</div>
 			</div>
 		</div>
