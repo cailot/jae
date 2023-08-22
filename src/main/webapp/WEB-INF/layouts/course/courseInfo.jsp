@@ -239,7 +239,7 @@ function associateRegistration(){
 			// nested ajax for book after creating or updating invoice
 			// Make the AJAX enrolment for book
 			$.ajax({
-				url: '${pageContext.request.contextPath}/student/associateBook/' + studentId,
+				url: '${pageContext.request.contextPath}/student/updateBook/' + studentId,
 				method: 'POST',
 				data: JSON.stringify(bookData),
 				contentType: 'application/json',
@@ -522,7 +522,8 @@ function deleteRegistration(){
 	});
 
 	// clear lecture basket
-	clearEnrolmentBasket();
+	//clearEnrolmentBasket();
+	//reloadEnrolment(studentId);
 
 }
 
@@ -669,7 +670,7 @@ function retrieveEnrolment(studentId){
 				}else{  // Book
 					// update my lecture table
 					var row = $('<tr class="d-flex">');
-					row.append($('<td>').addClass('hidden-column').addClass('data-type').text(BOOK + '|' + value.id)); // 0
+					row.append($('<td>').addClass('hidden-column').addClass('data-type').text(BOOK + '|' + value.bookId)); // 0
 					row.append($('<td class="col-1"><i class="bi bi-book" title="book"></i></td>')); // item
 					row.append($('<td class="smaller-table-font col-10">').text(value.name)); // description
 					row.append($("<td class='col-1'>").html('<a href="javascript:void(0)" title="Delete book"><i class="bi bi-trash"></i></a>')); // Action
@@ -716,7 +717,9 @@ function reloadEnrolment(studentId){
 	$.ajax({
 		url: '${pageContext.request.contextPath}/enrolment/search/student/' + studentId,
 		method: 'GET',
+		cache: false,
 		success: function(response) {
+			console.log('--> ' + response);
 			// Handle the response
 			$.each(response, function(index, value){
 				

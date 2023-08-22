@@ -77,6 +77,7 @@ public class JaeEnrolmentController {
 			}
 		}
 		// 4. return dtos mixed by enrolments and outstandings
+		System.out.println(dtos);
 		return dtos;
 	}
 

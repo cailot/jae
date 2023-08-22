@@ -277,7 +277,61 @@ public class JaeStudentController {
 		return dtos;
 	}
 
-
+	@PostMapping("/updateBook/{id}")
+	@ResponseBody
+	public List<MaterialDTO> updateBook(@PathVariable Long id, @RequestBody Long[] bookIds) {
+		List<MaterialDTO> dtos = new ArrayList<>();
+		// 1. get Invoice
+		Invoice invo = invoiceService.getInvoiceByStudentId(id);
+		// if no invoice or no book, return empty list
+		if((invo==null) || (bookIds==null)) return dtos;
+		
+		// 2. bring all registered Book - bookId & invoiceId
+		List<MaterialDTO> alreadys = materialService.findMaterialByInvoice(invo.getId());
+		// 3, store list for registered book Ids
+		List<Long> registeredIds = new ArrayList<Long>();
+		for(MaterialDTO dto : alreadys){
+			registeredIds.add(Long.parseLong(dto.getBookId()));
+		}
+		for(Long bookId : bookIds){
+			boolean isExist = false;
+			for(Long registeredId : registeredIds){
+			// 3-1. if bookId is in the list and passed parameters then skip - already exist
+				if(bookId == registeredId){
+					isExist = true;
+					registeredIds.remove(registeredId);
+					break;			
+				}	
+			}
+			if(isExist) continue; // keep outter loop
+			// 3-2. if bookId not in the list then add - new book
+			// 4-2. get Book
+			Book book = bookService.getBook(bookId);
+			// 5-2. update invoice amount
+			invo.setAmount(invo.getAmount() + book.getPrice());
+			// 6-2. create Material
+			Material material = new Material();
+			material.setBook(book);
+			material.setInvoice(invo);
+			// 7-2. save Material
+			material = materialService.addMaterial(material);		
+		}
+		// 3-3. if bookId is in the list but no passed then delete - delete book
+		for(Long deleteId : registeredIds){
+			// 4-3. get Book
+			Book book = bookService.getBook(deleteId);
+			// 5-3. update invoice amount
+			invo.setAmount(invo.getAmount() - book.getPrice());
+			// 6-3. remove Material by bookId & invoiceId
+			materialService.deleteMaterial(invo.getId(), deleteId);
+		}
+		// add MaterialDTO to return list
+		Set<Material> materials = invo.getMaterials();
+		for (Material material : materials) {
+			dtos.add(new MaterialDTO(material));
+		}
+		return dtos;
+	}
 
 	// as soon as Enrolment created or updated, it will trigger invoice
 	private List<EnrolmentDTO> triggerInvoice(Long studentId){

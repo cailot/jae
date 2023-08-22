@@ -73,5 +73,13 @@ public class MaterialServiceImpl implements MaterialService {
 		}
 		// update the existing record
 		Material updated = materialRepository.save(existing);
-		return updated;	}
+		return updated;	
+	}
+
+	@Override
+	@Transactional
+	public void deleteMaterial(Long invoiceId, Long bookId) {
+		//materialRepository.deleteMaterial(invoiceId, bookId);
+		materialRepository.deleteMaterialByInvoiceIdAndBookId(invoiceId, bookId);
+	}
 }

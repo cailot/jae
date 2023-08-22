@@ -164,7 +164,7 @@ function addBookToInvoiceList(data) {
 	// console.log(data);
 	$('#hiddenId').val(data.invoiceId);
 	var row = $('<tr>');
-	row.append($('<td>').addClass('hidden-column').addClass('book-match').text(BOOK + '|' + data.id)); // 0
+	row.append($('<td>').addClass('hidden-column').addClass('book-match').text(BOOK + '|' + data.bookId)); // 0
 	row.append($('<td class="text-center"><i class="bi bi-book" title="book"></i></td>')); // item
 	row.append($('<td class="smaller-table-font">').text(data.name)); // description
 	row.append($('<td>'));

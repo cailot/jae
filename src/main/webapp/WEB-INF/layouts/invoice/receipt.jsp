@@ -96,7 +96,7 @@
 <div id="invoice">
     <!-- Watermark Container -->
     <div class="watermark-container">
-        <div class="watermark">RECEIVED</div>
+        <div class="watermark">RECIEVED</div>
     </div>
 
     <div class="invoice WordSection1" style="min-width: 1080px; padding-top: 35px; padding-bottom: 35px; font-family: 'arial',sans-serif;">

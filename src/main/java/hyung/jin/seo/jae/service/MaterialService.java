@@ -21,6 +21,9 @@ public interface MaterialService {
 	// update Material
 	Material updateMaterial(Material stand, Long id);
 
+	// delete Material
+	void deleteMaterial(Long invoiceId, Long bookId);
+
 	// return total count
 	long checkCount();
 
