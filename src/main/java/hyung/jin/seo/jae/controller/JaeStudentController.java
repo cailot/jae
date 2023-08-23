@@ -202,84 +202,10 @@ public class JaeStudentController {
 		return dtos;
 	}
 
-	// @PostMapping("/updateClazz/{id}")
-	// @ResponseBody
-	// public List<EnrolmentDTO> updateClazz(@PathVariable Long id, @RequestBody EnrolmentDTO[] formData) {
-	// 	// 1. get student
-	// 	Student std = studentService.getStudent(id);
-	// 	// 2. get enrolmentIds by studentId
-	// 	List<Long> enrolmentIds = enrolmentService.findEnrolmentIdByStudentId(id);
-	// 	// 3. create or update Enrolment
-	// 	for(EnrolmentDTO data : formData) {
-	// 		try{
-	// 			// New Enrolment if no id comes in
-	// 			if(data.getId()==null) {
-	// 			// 4-A. associate clazz with student
-	// 			Clazz clazz = clazzService.getClazz(Long.parseLong(data.getClazzId()));
-	// 			// 5-A. create Enrolment
-	// 			Enrolment enrolment = new Enrolment();
-	// 			// 6-A. associate enrolment with clazz and student
-	// 			enrolment.setClazz(clazz);
-	// 			enrolment.setStudent(std);
-	// 			enrolment.setStartWeek(data.getStartWeek());
-	// 			enrolment.setEndWeek(data.getEndWeek());
-	// 			// 7-A. save enrolment
-	// 			enrolmentService.addEnrolment(enrolment);
-	// 			}else {	// Update Enrolment if id comes in
-	// 				// 4-B. get Enrolment
-	// 				Enrolment enrolment = data.convertToEnrolment();
-	// 				// 5-B. update Enrolment
-	// 				enrolment = enrolmentService.updateEnrolment(enrolment, enrolment.getId());
-	// 				// 6-B remove enrolmentId from enrolmentIds
-	// 				enrolmentIds.remove(enrolment.getId());
-	// 			}
-	// 		}catch(NoSuchElementException e){
-	// 			String message = "Error registering Course: " + e.getMessage();
-	// 			return null;
-	// 		}				
-	// 	}
-	// 	// 7. archive enrolments not in formData
-	// 	for(Long enrolmentId : enrolmentIds) {
-	// 		enrolmentService.archiveEnrolment(enrolmentId);
-	// 	}
-	// 	// 8. trigger Invoice
-	// 	List<EnrolmentDTO> dtos = triggerInvoice(id);
-	// 	// 9. return success
-	// 	return dtos;
-	// }
-
 	// associate book with Invoice
 	@PostMapping("/associateBook/{id}")
 	@ResponseBody
 	public List<MaterialDTO> associateBook(@PathVariable Long id, @RequestBody Long[] bookIds) {
-		List<MaterialDTO> dtos = new ArrayList<>();
-		// 1. get Invoice
-		Invoice invo = invoiceService.getInvoiceByStudentId(id);
-		// if no invoice or no book, return empty list
-		if((invo==null) || (bookIds==null)) return dtos;
-		// 2. create BookDTO list to return
-		for(Long bookId : bookIds) {
-			// 3. get Book
-			Book book = bookService.getBook(bookId);
-			// 4. update invoice amount
-			invo.setAmount(invo.getAmount() + book.getPrice());
-			// 5. create Material
-			Material material = new Material();
-			material.setBook(book);
-			material.setInvoice(invo);
-			// 6. save Material
-			material = materialService.addMaterial(material);
-		}
-		// 7. add MaterialDTO to return list
-		invo.getMaterials().forEach(material -> {
-			dtos.add(new MaterialDTO(material));
-		});	
-		return dtos;
-	}
-
-	@PostMapping("/updateBook/{id}")
-	@ResponseBody
-	public List<MaterialDTO> updateBook(@PathVariable Long id, @RequestBody Long[] bookIds) {
 		List<MaterialDTO> dtos = new ArrayList<>();
 		// 1. get Invoice
 		Invoice invo = invoiceService.getInvoiceByStudentId(id);
@@ -299,6 +225,13 @@ public class JaeStudentController {
 			// 3-1. if bookId is in the list and passed parameters then skip - already exist
 				if(bookId == registeredId){
 					isExist = true;
+					// add book price as re-initialized by Enrolment
+					Book book = bookService.getBook(bookId);
+					// System.out.println("Before - invo.getAmout() : " + invo.getAmount());
+					invo.setAmount(invo.getAmount() + book.getPrice());
+					// System.out.println("After - invo.getAmout() : " + invo.getAmount());
+					// amount update for invoice
+					invoiceService.updateInvoice(invo, invo.getId());
 					registeredIds.remove(registeredId);
 					break;			
 				}	
@@ -308,7 +241,11 @@ public class JaeStudentController {
 			// 4-2. get Book
 			Book book = bookService.getBook(bookId);
 			// 5-2. update invoice amount
+
+			// System.out.println("Before - invo.getAmout() : " + invo.getAmount());
 			invo.setAmount(invo.getAmount() + book.getPrice());
+			// System.out.println("After - invo.getAmout() : " + invo.getAmount());
+			
 			// 6-2. create Material
 			Material material = new Material();
 			material.setBook(book);
@@ -320,9 +257,7 @@ public class JaeStudentController {
 		for(Long deleteId : registeredIds){
 			// 4-3. get Book
 			Book book = bookService.getBook(deleteId);
-			// 5-3. update invoice amount
-			invo.setAmount(invo.getAmount() - book.getPrice());
-			// 6-3. remove Material by bookId & invoiceId
+			// 5-3. remove Material by bookId & invoiceId
 			materialService.deleteMaterial(invo.getId(), deleteId);
 		}
 		// add MaterialDTO to return list

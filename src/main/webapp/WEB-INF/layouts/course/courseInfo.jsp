@@ -239,21 +239,24 @@ function associateRegistration(){
 			// nested ajax for book after creating or updating invoice
 			// Make the AJAX enrolment for book
 			$.ajax({
-				url: '${pageContext.request.contextPath}/student/updateBook/' + studentId,
+				url: '${pageContext.request.contextPath}/student/associateBook/' + studentId,
 				method: 'POST',
 				data: JSON.stringify(bookData),
 				contentType: 'application/json',
 				success: function(response) {
+					// remove books from invoice table
+					removeBookFromInvoiceList();
 					// Handle the response
 					if(response.length >0){
 						$.each(response, function(index, value){
-							//addBookToInvoice(value);
+							// console.log(value);
 							addBookToInvoiceList(value);
 						});
-					}else{
-						// remove books from invoice table
-						removeBookFromInvoiceList();
 					}
+					// else{
+					// 	// remove books from invoice table
+					// 	removeBookFromInvoiceList();
+					// }
 				},
 				error: function(xhr, status, error) {
 					// Handle the error
@@ -522,7 +525,7 @@ function deleteRegistration(){
 	});
 
 	// clear lecture basket
-	//clearEnrolmentBasket();
+	clearEnrolmentBasket();
 	//reloadEnrolment(studentId);
 
 }
@@ -845,20 +848,18 @@ function showAlertMessage(elementId, message) {
 						<option value="vce">VCE</option>
 					</select>
 				</div>
-				<div class="col-md-2">
-					<p class="text-truncate text-center">Enrolment</p>
+				<div class="offset-md-4">
 				</div>
 				<div class="col-md-2">
-					<button type="button" class="btn btn-block btn-primary btn-sm" data-toggle="modal" onclick="associateRegistration()">New</button>
+					<button id="applyEnrolmentBtn" type="button" class="btn btn-block btn-primary btn-sm" data-toggle="modal" onclick="associateRegistration()">Enrolment</button>
+				
+		
 				</div>
 				<div class="col-md-2">
-					<button type="button" class="btn btn-block btn-info btn-sm" data-toggle="modal" onclick="associateRegistration()">Update</button>
+					<button id="deleteEnrolmentBtn" type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal" onclick="deleteRegistration()">Delete</button>
 				</div>
 				<div class="col-md-2">
-					<button type="button" class="btn btn-block btn-danger btn-sm" data-toggle="modal" onclick="deleteRegistration()">Delete</button>
-				</div>
-				<div class="col-md-2">
-					<button type="button" class="btn btn-block btn-success btn-sm" data-toggle="modal" onclick="clearEnrolmentBasket()">Clear</button>
+					<button id="clearEnrolmentBtn" type="button" class="btn btn-block btn-success btn-sm" data-toggle="modal" onclick="clearEnrolmentBasket()">Clear</button>
 				</div>
 			</div>
 		</div>
@@ -897,6 +898,32 @@ function showAlertMessage(elementId, message) {
 								</tbody>
 							</table>
 						</div>
+
+
+						<script>
+							// Function to check if tbody is empty and enable or disable the button
+							function checkTbodyEmpty() {
+							  // Get the tbody element
+							  var tbody = document.querySelector('#basketTable tbody');
+							  // If tbody is empty, disable the button
+							  if (tbody.children.length === 0) {
+								$('#applyEnrolmentBtn').prop('disabled', true);
+								$('#deleteEnrolmentBtn').prop('disabled', true);
+								$('#clearEnrolmentBtn').prop('disabled', true);
+							  } else {
+								$('#applyEnrolmentBtn').prop('disabled', false);
+								$('#deleteEnrolmentBtn').prop('disabled', false);
+								$('#clearEnrolmentBtn').prop('disabled', false);
+							  }
+							}
+							// Call the checkTbodyEmpty function initially
+							checkTbodyEmpty();
+							// Attach an event listener to the tbody that will trigger the checkTbodyEmpty function whenever its content changes
+							var tbody = document.querySelector('#basketTable tbody');
+							tbody.addEventListener('DOMSubtreeModified', checkTbodyEmpty);
+						</script>
+
+
 						<!-- e-Learning -->
 						<div class="tab-pane fade" id="nav-elearn" role="tabpanel" aria-labelledby="nav-elearn-tab">
 							<table class="table" id="elearnTable" name="elearnTable">
