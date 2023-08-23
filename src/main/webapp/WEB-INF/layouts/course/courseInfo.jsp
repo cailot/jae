@@ -90,7 +90,7 @@ function listCourses(grade) {
 		success : function(data) {
 			$.each(data, function(index, value) {
 				const cleaned = cleanUpJson(value);
-				// console.log(cleaned);
+				console.log(cleaned);
 				var row = $('<tr class="d-flex">');
 				row.append($('<td>').addClass('hidden-column').text(value.id));
 				row.append($('<td class="col-1"><i class="bi bi-mortarboard" title="class"></i></td>'));
@@ -178,6 +178,7 @@ function associateRegistration(){
 				enrolId = hiddenValues[1];
 			}
 		}
+
 		enrolData.clazzId =  $(this).find('.clazzChoice').val();
 		// find value of next td whose class is 'start-year'
 		enrolData.startWeek = $(this).find('.start-week').text();
@@ -577,13 +578,24 @@ function addClassToBasket(value) {
 		}
       
 		var row = $('<tr class="d-flex">');
-		row.append($('<td class="col-1"><i class="bi bi-mortarboard" title="class"></i></td>'));
-		row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() + '] '+ value.description));
-		// Create a dropdown list for value.day and id is option value
+		// dynamic clazz id assign
 		var dropdown = $('<select class="clazzChoice">');
 		$.each(data, function(index, clazz) {
-			dropdown.append($('<option>').text(clazz.day).val(clazz.id));
+			var option = $('<option>').text(clazz.day).val(clazz.id);
+			dropdown.append(option);
 		});
+		// Get the value of the first option
+		var initialValue = dropdown.find('option:first').val();
+		// Initialize the hidden column with the initial value
+		var hiddenColumn = $('<td>').addClass('hidden-column data-type').text(ENROLMENT + '|' + initialValue);
+		dropdown.on('change', function() {
+  			var selectedValue = $(this).val();
+  			// Update the hidden column's text with the selected value
+  			hiddenColumn.text(ENROLMENT + '|' + selectedValue);
+		});
+		row.append(hiddenColumn);
+		row.append($('<td class="col-1"><i class="bi bi-mortarboard" title="class"></i></td>'));
+		row.append($('<td class="smaller-table-font col-4">').text('[' + value.grade.toUpperCase() + '] ' + value.description));
 		row.append($('<td class="smaller-table-font col-2">').append(dropdown));
 		row.append($('<td class="smaller-table-font col-1">').text(value.year));
 		row.append($('<td class="smaller-table-font col-1 text-center" contenteditable="true">').addClass('start-week').text(start_week));
@@ -819,7 +831,21 @@ function showAlertMessage(elementId, message) {
 	);
 }
 </script>
+<style>
 
+/* Add this CSS to your stylesheet */
+.nav-tabs .nav-item.nav-link {
+  border: 2.5px solid transparent; /* Set the initial border width and color */
+  border-bottom-width: 0px; /* Increase the border width at the bottom */
+  border-radius: 5; /* Optional: Remove border radius if you want */
+}
+
+.nav-tabs .nav-item.nav-link.active {
+  border-color: #dee2e6; /* Change border color for active tab */
+}
+
+
+</style>
 <div class="modal-body">
 	<form id="courseRegister">
 		<div class="form-group">

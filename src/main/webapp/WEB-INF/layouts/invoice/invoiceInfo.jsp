@@ -581,20 +581,19 @@ function addInformation(){
 					<div class="table-wrap">
 						<table id="invoiceListTable" class="table table-striped table-bordered"><thead class="table-primary">
 								<tr>
-									<th class="smaller-table-font">Item</th>
-									<th class="smaller-table-font">Description</th>
-									<th class="smaller-table-font">Year</th>
-									<th class="smaller-table-font">Start</th>
-									<th class="smaller-table-font">End</th>
-									<th class="smaller-table-font">Wks</th>
-									<th class="smaller-table-font">Price</th>
-									<th class="smaller-table-font">Credit</th>
-									<!-- <th class="smaller-table-font">Cr.Date</th> -->
-									<th class="smaller-table-font">DC%</th>
-									<th class="smaller-table-font">DC$</th>
-									<th class="smaller-table-font">Amount</th>
-									<th class="smaller-table-font">Date</th>
-									<th class="smaller-table-font" data-orderable="false">Note</th>
+									<th class="smaller-table-font text-center">Item</th>
+									<th class="smaller-table-font text-center">Description</th>
+									<th class="smaller-table-font text-center">Year</th>
+									<th class="smaller-table-font text-center">Start</th>
+									<th class="smaller-table-font text-center">End</th>
+									<th class="smaller-table-font text-center">Wks</th>
+									<th class="smaller-table-font text-center">Price</th>
+									<th class="smaller-table-font text-center">Credit</th>
+									<th class="smaller-table-font text-center">DC%</th>
+									<th class="smaller-table-font text-center">DC$</th>
+									<th class="smaller-table-font text-center">Amount</th>
+									<th class="smaller-table-font text-center">Date</th>
+									<th class="smaller-table-font text-center" data-orderable="false">Note</th>
 								</tr>
 							</thead>
 							<tbody>

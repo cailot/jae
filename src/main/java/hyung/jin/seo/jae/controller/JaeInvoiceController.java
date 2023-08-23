@@ -29,7 +29,6 @@ import hyung.jin.seo.jae.model.Invoice;
 import hyung.jin.seo.jae.model.Material;
 import hyung.jin.seo.jae.model.Outstanding;
 import hyung.jin.seo.jae.model.Payment;
-import hyung.jin.seo.jae.service.BookService;
 import hyung.jin.seo.jae.service.CycleService;
 import hyung.jin.seo.jae.service.EnrolmentService;
 import hyung.jin.seo.jae.service.InvoiceService;
@@ -38,7 +37,6 @@ import hyung.jin.seo.jae.service.OutstandingService;
 import hyung.jin.seo.jae.service.PaymentService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 import hyung.jin.seo.jae.utils.JaeUtils;
-import io.micrometer.core.instrument.util.StringUtils;
 
 @Controller
 @RequestMapping("invoice")
@@ -49,9 +47,6 @@ public class JaeInvoiceController {
 
 	@Autowired
 	private EnrolmentService enrolmentService;
-
-	@Autowired
-	private BookService bookService;
 
 	@Autowired
 	private MaterialService materialService;
